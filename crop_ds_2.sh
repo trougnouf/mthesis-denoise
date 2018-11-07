@@ -58,7 +58,7 @@ do
 		((CURY+=CS))
 		if ((CURY+CS>${RES[1]}))
 		then
-			echo "${FN} cropped into $(((CROPCNT+1)))*${#ISOS} pieces."
+			echo "${FN} cropped into ${#ISOS}*$(((CROPCNT+1))) pieces."
 			exit 0
 		fi
 	fi
