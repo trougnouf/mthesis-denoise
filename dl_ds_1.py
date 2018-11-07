@@ -36,7 +36,7 @@ imglist = [
     'MuseeL-yombe,200,640,3200,6400',
     'MuseeL-roue,200,800,1250,6400',
     'MuseeL-hanging,200,500,4000,6400',
-    'MuseeL-snakeAndMast,200,2000,6400,H1',
+    'MuseeL-snakeAndMask,200,2000,6400,H1',
     'MuseeL-coral2,200,6400,H1,H2',
     'MuseeL-Vanillekipferl,200,6400,H1',
     'MuseeL-clam,200,6400,H1',
