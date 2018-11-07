@@ -29,16 +29,13 @@ then
 fi
 
 # parse isos, make dirs
-ISOS=$(ls dataset/${FN} | grep -o 'ISOH*[0-9]*')
-readarray -t ISOS<<<$ISOS
+ISOS=($(ls dataset/${FN} | grep -o 'ISOH*[0-9]*'))
 for iso in "${ISOS[@]}"
 do
 	mkdir -p "dataset_${CS}/${FN}/${iso}"
 done
 # resolution
-RES=$(file dataset/${FN}/$(ls dataset/${FN} | head -1) | grep -o -E '[0-9]{4,}x[0-9]{3,}')
-RES=$(grep -o -E '[0-9]+' <<< $RES)
-readarray RES<<<$RES
+RES=($(file dataset/${FN}/$(ls dataset/${FN} | head -1) | grep -o -E '[0-9]{4,}x[0-9]{3,}' | grep -o -E '[0-9]+'))
 # base filename
 BFN=$(file dataset/${FN}/$(ls dataset/${FN} | head -1) | grep -o -E '[A-Z]+_([0-9]*[a-z]*[A-Z]*-*)*')
 let CURX=CURY=CROPCNT=0
@@ -61,7 +58,7 @@ do
 		((CURY+=CS))
 		if ((CURY+CS>${RES[1]}))
 		then
-			echo "${FN} cropped into $(((CROPCNT+1))) pieces."
+			echo "${FN} cropped into $(((CROPCNT+1)))*${#ISOS} pieces."
 			exit 0
 		fi
 	fi
