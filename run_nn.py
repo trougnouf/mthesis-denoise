@@ -17,7 +17,7 @@ from dataset_torch_3 import DenoisingDataset
 # Params
 parser = argparse.ArgumentParser(description='PyTorch DnCNN')
 parser.add_argument('--model', default='DnCNN', type=str, help='choose a type of model')
-parser.add_argument('--batch_size', default=16, type=int, help='batch size')
+parser.add_argument('--batch_size', default=32, type=int, help='batch size')
 parser.add_argument('--train_data', default='dataset_64', type=str, help='path of train data')
 parser.add_argument('--epoch', default=180, type=int, help='number of train epoches')
 parser.add_argument('--lr', default=1e-3, type=float, help='initial learning rate for Adam')
@@ -27,11 +27,10 @@ batch_size = args.batch_size
 cuda = torch.cuda.is_available()
 n_epoch = args.epoch
 
-save_dir = os.path.join('models', args.model+'_' + 'cs' + args['train_data'].split('_')[-1])
-
-if not os.path.exists(save_dir):
-    os.mkdir(save_dir)
-
+save_dir = os.path.join('models', args.model+'_' + 'cs' + args.train_data.split('_')[-1])
+res_dir = 'res/'+args.model+'_'+args.train_data+'_'+str(args.batch_size)+'_'+str(args.lr)
+os.makedirs(save_dir, exist_ok=True)
+os.makedirs(res_dir, exist_ok=True)
 
 class DnCNN(nn.Module):
     def __init__(self, depth=17, n_channels=64, image_channels=3, use_bnorm=True, kernel_size=3):
@@ -140,8 +139,8 @@ if __name__ == '__main__':
                 print('%4d %4d / %4d loss = %2.4f' % (epoch+1, n_count, len(DDataset)//batch_size, loss.item()/batch_size))
         elapsed_time = time.time() - start_time
 
-        log('epcoh = %4d , loss = %4.4f , time = %4.2f s' % (epoch+1, epoch_loss/n_count, elapsed_time))
-        np.savetxt('train_result.txt', np.hstack((epoch+1, epoch_loss/n_count, elapsed_time)), fmt='%2.4f')
+        log('epoch = %4d , loss = %4.4f , time = %4.2f s' % (epoch+1, epoch_loss/n_count, elapsed_time))
+        np.savetxt(res_dir+'/train_result_'+str(epoch)+'.txt', np.hstack((epoch+1, epoch_loss/n_count, elapsed_time)), fmt='%2.4f')
         # torch.save(model.state_dict(), os.path.join(save_dir, 'model_%03d.pth' % (epoch+1)))
         torch.save(model, os.path.join(save_dir, 'model_%03d.pth' % (epoch+1)))
 
