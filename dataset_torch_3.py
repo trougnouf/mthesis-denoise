@@ -24,6 +24,7 @@ class DenoisingDataset(Dataset):
         self.start_indices = [0]
         self.Dsize = 0
         for iname in os.listdir(datadir):
+            print(iname)
             isos = sortISOs(os.listdir(datadir+'/'+iname))
             ncrops = len(os.listdir(datadir+'/'+iname+'/'+str(isos[0])))
             self.Dsize += ncrops
@@ -52,10 +53,6 @@ class DenoisingDataset(Dataset):
         niso = choice(img['isos'])
         yimg = Image.open(self.datadir+'/'+img['name']+'/'+niso+'/NIND_'
                           + img['name']+'_'+niso+'_'+str(crop_i)+'.jpg')
-        print(img['name'])
-        print(' i: ');print(i)
-        print(' reqindex: ');print(reqindex)
-        print(' crop_i: ');print(crop_i)
         return (self.__totensor__(ximg), self.__totensor__(yimg))
 
     def __len__(self):
