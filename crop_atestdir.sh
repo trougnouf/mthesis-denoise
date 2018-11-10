@@ -11,6 +11,7 @@
 DN=$2	# dirname
 CS=$1	# crop size
 
+
 if ! [[ "$CS" =~ ^[0-9]+$ ]] || ((CS%8!=0))
 then
 	echo "Syntax: bash $0 [CROPSIZE] [FILENAME] or bash $0 [CROPSIZE] run"
@@ -18,17 +19,23 @@ then
 	exit -1
 fi
 
-mkdir -p "${DN}_${CS}"
 images=($(ls ${DN}))
 for IMG in ${images[@]}
 	do
 	echo "${IMG}"
 	RES=($(file ${DN}/${IMG} | grep -o -E '[0-9]{4,}x[0-9]{3,}' | grep -o -E '[0-9]+'))
 	BASENAME="${IMG%.*}"
+	ISO=$(grep -o 'ISOH*[0-9]*' <<< ${IMG})
+	if [ ! "${ISO}" ]
+	then
+	    ISO=UNK
+	fi
+	mkdir -p "${DN}_${CS}/${ISO}"
+	
 	let CURY=CURX=CROPCNT=0
 	while (("$CURY"<${RES[1]}))
 	do
-		CROPPATH="${DN}_${CS}/${BASENAME}_${CROPCNT}.jpg"
+		CROPPATH="${DN}_${CS}/${ISO}/${BASENAME}_${CROPCNT}.jpg"
 		if [ ! -f "${CROPPATH}" ]
 		then
 			echo "jpegtran -crop ${CS}x${CS}+${CURX}+${CURY} -copy none -trim -optimize -outfile ${CROPPATH} ${DN}/${IMG}"
