@@ -97,7 +97,6 @@ class DnCNN(nn.Module):
                 init.constant_(m.weight, 1)
                 init.constant_(m.bias, 0)
 
-
 if __name__ == '__main__':
 
     args = parse_args()
@@ -141,9 +140,16 @@ if __name__ == '__main__':
         for im in os.listdir(os.path.join(args.set_dir, set_cur)):
             if im.endswith(".jpg") or im.endswith(".bmp") or im.endswith(".png"):
                 # x is normal, y is noisy
-                x = np.array(imread(os.path.join(args.set_dir, set_cur, im)), dtype=np.float32)/255.0
+                ypath = os.path.join(args.set_dir, set_cur, im)
+                if 'ISO' in ypath and not 'ISO200' in ypath:
+                    isoval = ypath.split('_')[-1][:-4]
+                    xpath = ypath.replace(isoval, 'ISO200)
+                    x = np.array(imread(xpath), dtype=np.float32)/255.0
+                else:
+                    xpath = None
+                    x=y
+                y = np.array(imread(ypath), dtype=np.float32)/255.0
                 np.random.seed(seed=0)  # for reproducibility
-                y = x  # Add Gaussian noise without clipping
                 y_ = torch.from_numpy(y).view(1, -1, y.shape[0], y.shape[1])
 
                 torch.cuda.synchronize()
@@ -156,22 +162,24 @@ if __name__ == '__main__':
                 torch.cuda.synchronize()
                 elapsed_time = time.time() - start_time
                 print('%10s : %10s : %2.4f second' % (set_cur, im, elapsed_time))
-
-                #psnr_x_ = compare_psnr(x, x_)
-                #ssim_x_ = compare_ssim(x, x_)
+                if xpath is not None:
+                    psnr_x_ = compare_psnr(x, x_)
+                    ssim_x_ = compare_ssim(x, x_)
                 if args.save_result:
                     name, ext = os.path.splitext(im)
                     show(np.hstack((y, x_)))  # show the image
                     save_result(x_, path=os.path.join(args.result_dir, set_cur, name+'_dncnn'+ext))  # save the denoised image
-                #psnrs.append(psnr_x_)
-                #ssims.append(ssim_x_)
-        #psnr_avg = np.mean(psnrs)
-        #ssim_avg = np.mean(ssims)
-        #psnrs.append(psnr_avg)
-        #ssims.append(ssim_avg)
-        #if args.save_result:
-        #    save_result(np.hstack((psnrs, ssims)), path=os.path.join(args.result_dir, set_cur, 'results.txt'))
-        #log('Datset: {0:10s} \n  PSNR = {1:2.2f}dB, SSIM = {2:1.4f}'.format(set_cur, psnr_avg, ssim_avg))
+                if xpath is not None:
+                    psnrs.append(psnr_x_)
+                    ssims.append(ssim_x_)
+            if xpath is not None:
+                psnr_avg = np.mean(psnrs)
+                ssim_avg = np.mean(ssims)
+                psnrs.append(psnr_avg)
+                ssims.append(ssim_avg)
+                if args.save_result:
+                    save_result(np.hstack((psnrs, ssims)), path=os.path.join(args.result_dir, set_cur, 'results.txt'))
+                    log('Datset: {0:10s} \n  PSNR = {1:2.2f}dB, SSIM = {2:1.4f}'.format(set_cur, psnr_avg, ssim_avg))
 
 
 
