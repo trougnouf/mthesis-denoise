@@ -65,7 +65,7 @@ def show(x, title=None, cbar=False, figsize=None):
 
 class DnCNN(nn.Module):
 
-    def __init__(self, depth=17, n_channels=64, image_channels=1, use_bnorm=True, kernel_size=3):
+    def __init__(self, depth=17, n_channels=64, image_channels=3, use_bnorm=True, kernel_size=3):
         super(DnCNN, self).__init__()
         kernel_size = 3
         padding = 1
