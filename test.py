@@ -31,8 +31,7 @@ from skimage.io import imread, imsave
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--set_dir', default='.', type=str, help='directory of test dataset')
-    parser.add_argument('--set_names', default=['testdata'], help='directory of test dataset')
+    parser.add_argument('--set_dir', default='testdata', type=str, help='directory of test dataset')
     parser.add_argument('--model_dir', default=os.path.join('models', 'DnCNN_cs64'), help='directory of the model')
     parser.add_argument('--model_name', default='notset', type=str, help='the model name')
     parser.add_argument('--result_dir', default='results', type=str, help='directory of test dataset')
@@ -130,56 +129,55 @@ if __name__ == '__main__':
     if not os.path.exists(args.result_dir):
         os.mkdir(args.result_dir)
 
-    for set_cur in args.set_names:
 
-        if not os.path.exists(os.path.join(args.result_dir, set_cur)):
-            os.mkdir(os.path.join(args.result_dir, set_cur))
-        psnrs = []
-        ssims = []
+    if not os.path.exists(os.path.join(args.result_dir, args.set_dir)):
+        os.mkdir(os.path.join(args.result_dir, args.set_dir))
+    psnrs = []
+    ssims = []
 
-        for im in os.listdir(os.path.join(args.set_dir, set_cur)):
-            if im.endswith(".jpg") or im.endswith(".bmp") or im.endswith(".png"):
-                # x is normal, y is noisy
-                ypath = os.path.join(args.set_dir, set_cur, im)
-                y = np.array(imread(ypath), dtype=np.float32)/255.0
-                if 'ISO' in ypath and not 'ISO200' in ypath:
-                    isoval = ypath[ypath.find('ISO'): ypath.find('_', ypath.find('ISO')) if ypath.find('_', ypath.find('ISO'))!=-1 else  ypath.find('.', ypath.find('ISO'))]
-                    xpath = ypath.replace(isoval, 'ISO200')
-                    x = np.array(imread(xpath), dtype=np.float32)/255.0
-                else:
-                    xpath = None
-                    x=y
-                np.random.seed(seed=0)  # for reproducibility
-                y_ = torch.from_numpy(y).view(1, -1, y.shape[0], y.shape[1])
+    for im in os.listdir(args.set_dir):
+        if im.endswith(".jpg") or im.endswith(".bmp") or im.endswith(".png"):
+            # x is normal, y is noisy
+            ypath = os.path.join(args.set_dir, im)
+            y = np.array(imread(ypath), dtype=np.float32)/255.0
+            if 'ISO' in ypath and not 'ISO200' in ypath:
+                isoval = ypath[ypath.find('ISO'): ypath.find('_', ypath.find('ISO')) if ypath.find('_', ypath.find('ISO'))!=-1 else  ypath.find('.', ypath.find('ISO'))]
+                xpath = ypath.replace(isoval, 'ISO200')
+                x = np.array(imread(xpath), dtype=np.float32)/255.0
+            else:
+                xpath = None
+                x=y
+            np.random.seed(seed=0)  # for reproducibility
+            y_ = torch.from_numpy(y).view(1, -1, y.shape[0], y.shape[1])
 
-                torch.cuda.synchronize()
-                start_time = time.time()
-                y_ = y_.cuda()
-                x_ = model(y_)  # inference
-                x_ = x_.view(y.shape[0], y.shape[1])
-                x_ = x_.cpu()
-                x_ = x_.detach().numpy().astype(np.float32)
-                torch.cuda.synchronize()
-                elapsed_time = time.time() - start_time
-                print('%10s : %10s : %2.4f second' % (set_cur, im, elapsed_time))
-                if xpath is not None:
-                    psnr_x_ = compare_psnr(x, x_)
-                    ssim_x_ = compare_ssim(x, x_)
-                if args.save_result:
-                    name, ext = os.path.splitext(im)
-                    show(np.hstack((y, x_)))  # show the image
-                    save_result(x_, path=os.path.join(args.result_dir, set_cur, name+'_dncnn'+ext))  # save the denoised image
-                if xpath is not None:
-                    psnrs.append(psnr_x_)
-                    ssims.append(ssim_x_)
+            torch.cuda.synchronize()
+            start_time = time.time()
+            y_ = y_.cuda()
+            x_ = model(y_)  # inference
+            x_ = x_.view(y.shape[0], y.shape[1])
+            x_ = x_.cpu()
+            x_ = x_.detach().numpy().astype(np.float32)
+            torch.cuda.synchronize()
+            elapsed_time = time.time() - start_time
+            print('%10s : %10s : %2.4f second' % (args.set_dir, im, elapsed_time))
             if xpath is not None:
-                psnr_avg = np.mean(psnrs)
-                ssim_avg = np.mean(ssims)
-                psnrs.append(psnr_avg)
-                ssims.append(ssim_avg)
-                if args.save_result:
-                    save_result(np.hstack((psnrs, ssims)), path=os.path.join(args.result_dir, set_cur, 'results.txt'))
-                    log('Datset: {0:10s} \n  PSNR = {1:2.2f}dB, SSIM = {2:1.4f}'.format(set_cur, psnr_avg, ssim_avg))
+                psnr_x_ = compare_psnr(x, x_)
+                ssim_x_ = compare_ssim(x, x_)
+            if args.save_result:
+                name, ext = os.path.splitext(im)
+                show(np.hstack((y, x_)))  # show the image
+                save_result(x_, path=os.path.join(args.result_dir, args.set_dir, name+'_dncnn'+ext))  # save the denoised image
+            if xpath is not None:
+                psnrs.append(psnr_x_)
+                ssims.append(ssim_x_)
+        if xpath is not None:
+            psnr_avg = np.mean(psnrs)
+            ssim_avg = np.mean(ssims)
+            psnrs.append(psnr_avg)
+            ssims.append(ssim_avg)
+            if args.save_result:
+                save_result(np.hstack((psnrs, ssims)), path=os.path.join(args.result_dir, args.set_dir, 'results.txt'))
+                log('Datset: {0:10s} \n  PSNR = {1:2.2f}dB, SSIM = {2:1.4f}'.format(args.set_dir, psnr_avg, ssim_avg))
 
 
 
