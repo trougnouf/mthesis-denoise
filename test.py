@@ -143,7 +143,7 @@ if __name__ == '__main__':
                 ypath = os.path.join(args.set_dir, set_cur, im)
                 if 'ISO' in ypath and not 'ISO200' in ypath:
                     isoval = ypath.split('_')[-1][:-4]
-                    xpath = ypath.replace(isoval, 'ISO200)
+                    xpath = ypath.replace(isoval, 'ISO200')
                     x = np.array(imread(xpath), dtype=np.float32)/255.0
                 else:
                     xpath = None
