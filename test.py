@@ -163,15 +163,15 @@ if __name__ == '__main__':
                     name, ext = os.path.splitext(im)
                     show(np.hstack((y, x_)))  # show the image
                     save_result(x_, path=os.path.join(args.result_dir, set_cur, name+'_dncnn'+ext))  # save the denoised image
-                psnrs.append(psnr_x_)
-                ssims.append(ssim_x_)
-        psnr_avg = np.mean(psnrs)
-        ssim_avg = np.mean(ssims)
-        psnrs.append(psnr_avg)
-        ssims.append(ssim_avg)
-        if args.save_result:
-            save_result(np.hstack((psnrs, ssims)), path=os.path.join(args.result_dir, set_cur, 'results.txt'))
-        log('Datset: {0:10s} \n  PSNR = {1:2.2f}dB, SSIM = {2:1.4f}'.format(set_cur, psnr_avg, ssim_avg))
+                #psnrs.append(psnr_x_)
+                #ssims.append(ssim_x_)
+        #psnr_avg = np.mean(psnrs)
+        #ssim_avg = np.mean(ssims)
+        #psnrs.append(psnr_avg)
+        #ssims.append(ssim_avg)
+        #if args.save_result:
+        #    save_result(np.hstack((psnrs, ssims)), path=os.path.join(args.result_dir, set_cur, 'results.txt'))
+        #log('Datset: {0:10s} \n  PSNR = {1:2.2f}dB, SSIM = {2:1.4f}'.format(set_cur, psnr_avg, ssim_avg))
 
 
 
