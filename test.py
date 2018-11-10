@@ -141,14 +141,14 @@ if __name__ == '__main__':
             if im.endswith(".jpg") or im.endswith(".bmp") or im.endswith(".png"):
                 # x is normal, y is noisy
                 ypath = os.path.join(args.set_dir, set_cur, im)
+                y = np.array(imread(ypath), dtype=np.float32)/255.0
                 if 'ISO' in ypath and not 'ISO200' in ypath:
-                    isoval = ypath.split('_')[-1][:-4]
+                    isoval = ypath[ypath.find('ISO'): ypath.find('_', ypath.find('ISO')) if ypath.find('_', ypath.find('ISO'))!=-1 else  ypath.find('.', ypath.find('ISO'))]
                     xpath = ypath.replace(isoval, 'ISO200')
                     x = np.array(imread(xpath), dtype=np.float32)/255.0
                 else:
                     xpath = None
                     x=y
-                y = np.array(imread(ypath), dtype=np.float32)/255.0
                 np.random.seed(seed=0)  # for reproducibility
                 y_ = torch.from_numpy(y).view(1, -1, y.shape[0], y.shape[1])
 
