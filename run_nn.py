@@ -21,19 +21,24 @@ parser.add_argument('--batch_size', default=32, type=int, help='batch size')
 parser.add_argument('--train_data', default='dataset_64', type=str, help='path of train data')
 parser.add_argument('--epoch', default=180, type=int, help='number of train epoches')
 parser.add_argument('--lr', default=1e-3, type=float, help='initial learning rate for Adam')
+parser.add_argument('--expname', default='notset', type=str, help='experiment name to save the results')
 args = parser.parse_args()
 
 batch_size = args.batch_size
 cuda = torch.cuda.is_available()
 n_epoch = args.epoch
 
-save_dir = os.path.join('models', args.model+'_' + 'cs' + args.train_data.split('_')[-1])
-res_dir = 'res/'+args.model+'_'+args.train_data+'_'+str(args.batch_size)+'_'+str(args.lr)
+if args.expname == 'notset':
+    save_dir = os.path.join('models', args.model+'_' + 'cs' + args.train_data.split('_')[-1])
+    res_dir = 'trainres/'+args.model+'_'+args.train_data+'_'+str(args.batch_size)+'_'+str(args.lr)
+else:
+    save_dir = os.path.join('models', args.expname)
+    res_dir = 'trainres/'+args.expname
 os.makedirs(save_dir, exist_ok=True)
 os.makedirs(res_dir, exist_ok=True)
 
 class DnCNN(nn.Module):
-    def __init__(self, depth=17, n_channels=64, image_channels=3, use_bnorm=True, kernel_size=3):
+    def __init__(self, depth=20, n_channels=64, image_channels=3, use_bnorm=True, kernel_size=3):
         super(DnCNN, self).__init__()
         kernel_size = 3
         padding = 1
@@ -41,12 +46,12 @@ class DnCNN(nn.Module):
 
         layers.append(nn.Conv2d(in_channels=image_channels, out_channels=n_channels,
                       kernel_size=kernel_size, padding=padding, bias=True))
-        layers.append(nn.ReLU(inplace=True))
+        layers.append(nn.RReLU(inplace=True))#TODO try SELU?
         for _ in range(depth-2):
             layers.append(nn.Conv2d(in_channels=n_channels, out_channels=n_channels,
                           kernel_size=kernel_size, padding=padding, bias=False))
             layers.append(nn.BatchNorm2d(n_channels, eps=0.0001, momentum=0.95))
-            layers.append(nn.ReLU(inplace=True))
+            layers.append(nn.RReLU(inplace=True))
         layers.append(nn.Conv2d(in_channels=n_channels, out_channels=image_channels,
                       kernel_size=kernel_size, padding=padding, bias=False))
         self.dncnn = nn.Sequential(*layers)
