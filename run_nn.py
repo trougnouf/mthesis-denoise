@@ -22,6 +22,7 @@ parser.add_argument('--train_data', default='dataset_64', type=str, help='path o
 parser.add_argument('--epoch', default=180, type=int, help='number of train epoches')
 parser.add_argument('--lr', default=1e-3, type=float, help='initial learning rate for Adam')
 parser.add_argument('--expname', default='notset', type=str, help='experiment name to save the results')
+parser.add_argument('--depth', default=20, type=int, help='number of layers')
 args = parser.parse_args()
 
 batch_size = args.batch_size
@@ -38,7 +39,7 @@ os.makedirs(save_dir, exist_ok=True)
 os.makedirs(res_dir, exist_ok=True)
 
 class DnCNN(nn.Module):
-    def __init__(self, depth=20, n_channels=64, image_channels=3, use_bnorm=True, kernel_size=3):
+    def __init__(self, depth=args.depth, n_channels=64, image_channels=3, use_bnorm=True, kernel_size=3):
         super(DnCNN, self).__init__()
         kernel_size = 3
         padding = 1

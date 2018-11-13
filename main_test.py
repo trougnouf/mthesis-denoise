@@ -128,7 +128,7 @@ if __name__ == '__main__':
     if torch.cuda.is_available():
         model = model.cuda()
 
-    set_names = os.listdir('testdata_128')
+    set_names = os.listdir(args.set_dir)
     for set_cur in set_names:
         if args.save_result:
             os.makedirs(os.path.join(args.result_dir, args.set_dir, set_cur), exist_ok=True)
