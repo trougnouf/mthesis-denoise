@@ -13,6 +13,7 @@ from torch.utils.data import DataLoader
 import torch.optim as optim
 from torch.optim.lr_scheduler import MultiStepLR
 from dataset_torch_3 import DenoisingDataset
+import datetime
 
 # Params
 parser = argparse.ArgumentParser(description='PyTorch DnCNN')
@@ -22,19 +23,25 @@ parser.add_argument('--train_data', default='datasets/train/dataset_96', type=st
 parser.add_argument('--epoch', default=180, type=int, help='number of train epoches')
 parser.add_argument('--lr', default=1e-3, type=float, help='initial learning rate for Adam')
 parser.add_argument('--expname', default='notset', type=str, help='experiment name to save the results')
+parser.add_argument('--result_dir', default='results/train', type=str, help='directory of test dataset')
+parser.add_argument('--models_dir', default='models', type=str, help='directory of test dataset')
 parser.add_argument('--depth', default=20, type=int, help='number of layers')
 args = parser.parse_args()
+
+# memory eg:
+# 3GB: res=48x48 bs=27
 
 batch_size = args.batch_size
 cuda = torch.cuda.is_available()
 n_epoch = args.epoch
 
 if args.expname == 'notset':
-    save_dir = os.path.join('models', args.model+'_' + 'cs' + args.train_data.split('_')[-1])
-    res_dir = 'trainres/'+args.model+'_'+args.train_data+'_'+str(args.batch_size)+'_'+str(args.lr)
+    expname = args.model+'_' + 'cs' + args.train_data.split('_')[-1]+str(args.batch_size)+'_'+str(args.lr)+'_'+datetime.datetime.now().isoformat()
 else:
-    save_dir = os.path.join('models', args.expname)
-    res_dir = 'trainres/'+args.expname
+    expname = args.expname+'_'+datetime.datetime.now().isoformat()
+
+save_dir = os.path.join('models', expname)
+res_dir = os.path.join(args.result_dir, args.expname)
 os.makedirs(save_dir, exist_ok=True)
 os.makedirs(res_dir, exist_ok=True)
 

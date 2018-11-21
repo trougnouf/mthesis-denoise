@@ -35,7 +35,7 @@ def parse_args():
     parser.add_argument('--sigma', default=25, type=int, help='noise level')
     parser.add_argument('--model_dir', default=os.path.join('models', 'DnCNN_cs64'), help='directory of the model')
     parser.add_argument('--model_name', default='notset', type=str, help='the model name, s.a. model_500.pth')
-    parser.add_argument('--result_dir', default='results', type=str, help='directory of test dataset')
+    parser.add_argument('--result_dir', default='results/test', type=str, help='directory of test dataset')
     parser.add_argument('--save_result', default=1, type=int, help='save the denoised image, 1 or 0')
     return parser.parse_args()
 
