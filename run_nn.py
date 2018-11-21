@@ -18,7 +18,7 @@ from dataset_torch_3 import DenoisingDataset
 parser = argparse.ArgumentParser(description='PyTorch DnCNN')
 parser.add_argument('--model', default='DnCNN', type=str, help='choose a type of model')
 parser.add_argument('--batch_size', default=32, type=int, help='batch size')
-parser.add_argument('--train_data', default='dataset_64', type=str, help='path of train data')
+parser.add_argument('--train_data', default='datasets/train/dataset_96', type=str, help='path of train data')
 parser.add_argument('--epoch', default=180, type=int, help='number of train epoches')
 parser.add_argument('--lr', default=1e-3, type=float, help='initial learning rate for Adam')
 parser.add_argument('--expname', default='notset', type=str, help='experiment name to save the results')
