@@ -22,7 +22,7 @@ parser.add_argument('--batch_size', default=32, type=int, help='batch size')
 parser.add_argument('--train_data', default='datasets/train/dataset_96', type=str, help='path to the train data (default: '+'datasets/train/dataset_96'+')')
 parser.add_argument('--epoch', default=512, type=int, help='number of train epoches')
 parser.add_argument('--lr', default=1e-3, type=float, help='initial learning rate for Adam')
-parser.add_argument('--expname', default='notset', type=str, help='experiment name to save the results')
+parser.add_argument('--expname', default='notset', type=str, help='experiment name to save the results or continue')
 parser.add_argument('--result_dir', default='results/train', type=str, help='directory of test dataset')
 parser.add_argument('--models_dir', default='models', type=str, help='directory of test dataset')
 parser.add_argument('--depth', default=20, type=int, help='number of layers')
@@ -43,7 +43,7 @@ torch.cuda.set_device(args.cuda_device)
 n_epoch = args.epoch
 
 if args.expname == 'notset':
-    expname = ''.join(sys.argv).replace('/','-')
+    expname = 'datasets/train/dataset_96'+''.join(sys.argv).replace('/','-')
 else:
     expname = args.expname
 expname = datetime.datetime.now().isoformat()[:-10]+'_'+expname
