@@ -1,6 +1,6 @@
+import os
 import argparse
 import re
-import os
 import glob
 import datetime
 import time
@@ -13,7 +13,6 @@ from torch.utils.data import DataLoader
 import torch.optim as optim
 from torch.optim.lr_scheduler import MultiStepLR
 from dataset_torch_3 import DenoisingDataset
-import datetime
 
 # Params
 parser = argparse.ArgumentParser(description='PyTorch DnCNN')
@@ -34,9 +33,8 @@ args = parser.parse_args()
 
 batch_size = args.batch_size
 cuda = torch.cuda.is_available()
+torch.cuda.set_device(args.cuda_device)
 n_epoch = args.epoch
-
-os.environ["CUDA_VISIBLE_DEVICES"]=str(args.cuda_device)
 
 if args.expname == 'notset':
     expname = args.model+'_' + 'cs' + args.train_data.split('_')[-1]+str(args.batch_size)+'_'+str(args.lr)+'_'+datetime.datetime.now().isoformat()
