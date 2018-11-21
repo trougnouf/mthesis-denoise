@@ -5,9 +5,9 @@
 #	args = CS run
 # input:
 #	args = CS FN
-#	dataset/{imagesets}/{dataset name}_{FN}_ISO{ISO values}.jpg
+#	datasets/dataset/{imagesets}/{dataset name}_{FN}_ISO{ISO values}.jpg
 # output:
-#	dataset_CS/{imagesets}/ISO{ISO values}/{dataset name}_{FN}_ISO{ISO values}_{crop number}.jpg
+#	datasets/dataset_CS/{imagesets}/ISO{ISO values}/{dataset name}_{FN}_ISO{ISO values}_{crop number}.jpg
 
 # args
 FN=$2	# filename
@@ -22,9 +22,11 @@ fi
 
 if [ "$FN" == "run" ]
 then
+    cd datasets
 	NTHREADS=$(grep -c ^processor /proc/cpuinfo)
 	echo "Running with $NTHREADS threads..."
-	ls dataset | xargs --max-procs=${NTHREADS} -n 1 bash $0 $1
+	ls dataset | xargs --max-procs=${NTHREADS} -n 1 bash ../$0 $1
+	cd ..
 	exit
 fi
 
