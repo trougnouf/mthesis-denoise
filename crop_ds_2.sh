@@ -12,6 +12,7 @@
 # args
 FN=$2	# filename
 CS=$1	# crop size
+DSDIR=datasets/dataset
 
 if ! [[ "$CS" =~ ^[0-9]+$ ]] || ((CS%8!=0))
 then
@@ -22,35 +23,33 @@ fi
 
 if [ "$FN" == "run" ]
 then
-    cd datasets
 	NTHREADS=$(grep -c ^processor /proc/cpuinfo)
 	echo "Running with $NTHREADS threads..."
-	ls dataset | xargs --max-procs=${NTHREADS} -n 1 bash ../$0 $1
-	cd ..
+	ls ${DSDIR} | xargs --max-procs=${NTHREADS} -n 1 bash ../$0 $1
 	exit
 fi
 
 # parse isos, make dirs
-ISOS=($(ls dataset/${FN} | grep -o 'ISOH*[0-9]*'))
+ISOS=($(ls ${DSDIR}/${FN} | grep -o 'ISOH*[0-9]*'))
 for iso in "${ISOS[@]}"
 do
-	mkdir -p "dataset_${CS}/${FN}/${iso}"
+	mkdir -p "${DSDIR}_${CS}/${FN}/${iso}"
 done
 # resolution
-RES=($(file dataset/${FN}/$(ls dataset/${FN} | head -1) | grep -o -E '[0-9]{4,}x[0-9]{3,}' | grep -o -E '[0-9]+'))
+RES=($(file ${DSDIR}/${FN}/$(ls ${DSDIR}/${FN} | head -1) | grep -o -E '[0-9]{4,}x[0-9]{3,}' | grep -o -E '[0-9]+'))
 # base filename
-BFN=$(file dataset/${FN}/$(ls dataset/${FN} | head -1) | grep -o -E '[A-Z]+_([0-9]*[a-z]*[A-Z]*-*)*')
+BFN=$(file ${DSDIR}/${FN}/$(ls ${DSDIR}/${FN} | head -1) | grep -o -E '[A-Z]+_([0-9]*[a-z]*[A-Z]*-*)*')
 let CURX=CURY=CROPCNT=0
 while (("$CURY"<${RES[1]}))
 do
 	for iso in "${ISOS[@]}"
 	do
-		CROPPATH="dataset_${CS}/${FN}/${iso}/${BFN}_${iso}_${CROPCNT}.jpg"
+		CROPPATH="${DSDIR}_${CS}/${FN}/${iso}/${BFN}_${iso}_${CROPCNT}.jpg"
 		if [ -f "${CROPPATH}" ]
 		then
 			continue
 		fi
-		jpegtran -crop ${CS}x${CS}+${CURX}+${CURY} -copy none -trim -optimize -outfile ${CROPPATH} dataset/${FN}/${BFN}_${iso}.jpg
+		jpegtran -crop ${CS}x${CS}+${CURX}+${CURY} -copy none -trim -optimize -outfile ${CROPPATH} ${DSDIR}/${FN}/${BFN}_${iso}.jpg
 	done
 	((CROPCNT++))
 	((CURX+=CS))
