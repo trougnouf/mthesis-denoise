@@ -34,7 +34,7 @@ def parse_args():
     parser.add_argument('--set_dir', default='testdata_128', type=str, help='directory of test dataset')
     parser.add_argument('--sigma', default=25, type=int, help='noise level')
     parser.add_argument('--model_dir', default=os.path.join('models', 'DnCNN_cs64'), help='directory of the model')
-    parser.add_argument('--model_name', default='notset', type=str, help='the model name')
+    parser.add_argument('--model_name', default='notset', type=str, help='the model name, s.a. model_500.pth')
     parser.add_argument('--result_dir', default='results', type=str, help='directory of test dataset')
     parser.add_argument('--save_result', default=1, type=int, help='save the denoised image, 1 or 0')
     return parser.parse_args()
@@ -104,11 +104,13 @@ if __name__ == '__main__':
 
     # model = DnCNN()
     if not os.path.exists(os.path.join(args.model_dir, args.model_name)):
+        model_name = sorted(os.listdir(args.model_dir))[-1]
         model = torch.load(os.path.join(args.model_dir, sorted(os.listdir(args.model_dir))[-1]))
         #model = torch.load(os.path.join(args.model_dir, 'model.pth'))
         # load weights into new model
         log('load trained model on Train400 dataset by kai')
     else:
+        model_name = args.model_name
         # model.load_state_dict(torch.load(os.path.join(args.model_dir, args.model_name)))
         model = torch.load(os.path.join(args.model_dir, args.model_name))
         log('load trained model')
@@ -131,7 +133,10 @@ if __name__ == '__main__':
     set_names = os.listdir(args.set_dir)
     for set_cur in set_names:
         if args.save_result:
-            os.makedirs(os.path.join(args.result_dir, args.set_dir, set_cur), exist_ok=True)
+            result_dir_img = os.path.join(args.result_dir, 'img', args.model_dir.split('/')[-1], model_name, args.set_dir, set_cur)
+            result_dir_txt = os.path.join(args.result_dir, 'txt', args.model_dir.split('/')[-1], model_name, args.set_dir)
+            os.makedirs(result_dir_img, exist_ok=True)
+            os.makedirs(result_dir_txt, exist_ok=True)
         if set_cur == 'ISO200' or set_cur == 'UNK':
             comparexy=False
         else:
@@ -168,7 +173,7 @@ if __name__ == '__main__':
                     name, ext = os.path.splitext(im)
                     #show(np.hstack((y, x_)))  # show the image
                     print(x_.shape)
-                    save_result(x_, path=os.path.join(args.result_dir, args.set_dir, set_cur, name+'_dncnn'+ext))  # save the denoised image
+                    save_result(x_, path=os.path.join(result_dir_img, name+'_dncnn'+ext))  # save the denoised image
                 if comparexy:
                     psnrs.append(psnr_x_)
                     ssims.append(ssim_x_)
@@ -178,7 +183,7 @@ if __name__ == '__main__':
             psnrs.append(psnr_avg)
             ssims.append(ssim_avg)
             if args.save_result:
-                save_result(np.hstack((psnrs, ssims)), path=os.path.join(args.result_dir, args.set_dir, set_cur+'_results.txt'))
+                save_result(np.hstack((psnrs, ssims)), path=os.path.join(result_dir_txt, set_cur+'_results.txt'))
             log('Datset: {0:10s} \n  PSNR = {1:2.2f}dB, SSIM = {2:1.4f}'.format(set_cur, psnr_avg, ssim_avg))
 
 
