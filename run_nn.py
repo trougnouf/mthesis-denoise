@@ -1,4 +1,5 @@
 import os
+import sys
 import argparse
 import re
 import glob
@@ -18,18 +19,23 @@ from dataset_torch_3 import DenoisingDataset
 parser = argparse.ArgumentParser(description='PyTorch DnCNN')
 parser.add_argument('--model', default='DnCNN', type=str, help='choose a type of model')
 parser.add_argument('--batch_size', default=32, type=int, help='batch size')
-parser.add_argument('--train_data', default='datasets/train/dataset_96', type=str, help='path of train data')
+parser.add_argument('--train_data', default='datasets/train/dataset_96', type=str, help='path to the train data (default: '+'datasets/train/dataset_96'+')')
 parser.add_argument('--epoch', default=512, type=int, help='number of train epoches')
 parser.add_argument('--lr', default=1e-3, type=float, help='initial learning rate for Adam')
 parser.add_argument('--expname', default='notset', type=str, help='experiment name to save the results')
 parser.add_argument('--result_dir', default='results/train', type=str, help='directory of test dataset')
 parser.add_argument('--models_dir', default='models', type=str, help='directory of test dataset')
 parser.add_argument('--depth', default=20, type=int, help='number of layers')
-parser.add_argument('--cuda_device', default=1, type=int, help='Device number (typically 0-3)')
+parser.add_argument('--cuda_device', default=0, type=int, help='Device number (typically 0-3)')
 args = parser.parse_args()
 
 # memory eg:
-# 2GB: res=48x48 bs=27 = 1932/1996
+# 1996: res48x48 bs27 = 1932/1996 5260s
+# 11172 d22 res96
+#   bs12 = 2335
+#   bs57 = 8883
+#   bs71 = 10813
+#   bs72 = 10941
 
 batch_size = args.batch_size
 cuda = torch.cuda.is_available()
@@ -37,12 +43,13 @@ torch.cuda.set_device(args.cuda_device)
 n_epoch = args.epoch
 
 if args.expname == 'notset':
-    expname = args.model+'_' + 'cs' + args.train_data.split('_')[-1]+str(args.batch_size)+'_'+str(args.lr)+'_'+datetime.datetime.now().isoformat()
+    expname = ''.join(sys.argv).replace('/','-')
 else:
-    expname = args.expname+'_'+datetime.datetime.now().isoformat()
+    expname = args.expname
+expname += '_'+datetime.datetime.now().isoformat()[:-10]
 
 save_dir = os.path.join('models', expname)
-res_dir = os.path.join(args.result_dir, args.expname)
+res_dir = os.path.join(args.result_dir, expname)
 os.makedirs(save_dir, exist_ok=True)
 os.makedirs(res_dir, exist_ok=True)
 
