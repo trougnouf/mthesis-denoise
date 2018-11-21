@@ -26,14 +26,17 @@ parser.add_argument('--expname', default='notset', type=str, help='experiment na
 parser.add_argument('--result_dir', default='results/train', type=str, help='directory of test dataset')
 parser.add_argument('--models_dir', default='models', type=str, help='directory of test dataset')
 parser.add_argument('--depth', default=20, type=int, help='number of layers')
+parser.add_argument('--cuda_device', default=1, type=int, help='Device number (typically 1-4)')
 args = parser.parse_args()
 
 # memory eg:
-# 3GB: res=48x48 bs=27
+# 2GB: res=48x48 bs=27 = 1932/1996
 
 batch_size = args.batch_size
 cuda = torch.cuda.is_available()
 n_epoch = args.epoch
+
+os.environ["CUDA_VISIBLE_DEVICES"]=args.cuda_device
 
 if args.expname == 'notset':
     expname = args.model+'_' + 'cs' + args.train_data.split('_')[-1]+str(args.batch_size)+'_'+str(args.lr)+'_'+datetime.datetime.now().isoformat()
