@@ -10,6 +10,8 @@ x = find clean image rather than noise
 implement a skip baseline
 compare loss w/ bs, #layers, res
 add compression
+script to reconstruct image
+test/train set maker
 
 ===== 2 =====
 how to calculate memory usage by file, batch_size, depth, channels

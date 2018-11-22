@@ -48,10 +48,11 @@ imglist = [
     'wall,200,640,6400',
     'Saint-Remi,200,6400,H1,H2,H3',
     'Saint-Remi-C,200,6400,H1,H2',
-    'books,200,1600,6400,H1,H2'
+    'books,200,1600,6400,H1,H2',
+    'bloop,200,3200,6400,H1',
     ]
-os.makedirs('dataset', exist_ok=True)
-os.chdir('dataset')
+os.makedirs('datasets/dataset', exist_ok=True)
+os.chdir('datasets/dataset')
 burl = 'https://commons.wikimedia.org/wiki/Special:Redirect/file/'
 for img in imglist:
     name, *isos = img.split(',')
