@@ -116,7 +116,7 @@ if __name__ == '__main__':
         # model.load_state_dict(torch.load(os.path.join(args.models_dir, args.model_fn)))
         model = torch.load(os.path.join(args.models_dir, args.model_fn))
     log('load '+args.expname+'/'+model_fn)
-    model = torch.load(os.path.join(args.models_dir, args,expname, model_fn))
+    model = torch.load(os.path.join(args.models_dir, args.expname, model_fn))
 #    params = model.state_dict()
 #    print(params.values())
 #    print(params.keys())
