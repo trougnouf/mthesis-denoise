@@ -25,7 +25,7 @@ parser.add_argument('--lr', default=1e-3, type=float, help='initial learning rat
 parser.add_argument('--expname', default='notset', type=str, help='experiment name to save the results or continue')
 parser.add_argument('--result_dir', default='results/train', type=str, help='directory of test dataset')
 parser.add_argument('--models_dir', default='models', type=str, help='directory of test dataset')
-parser.add_argument('--depth', default=20, type=int, help='number of layers')
+parser.add_argument('--depth', default=22, type=int, help='number of layers')
 parser.add_argument('--cuda_device', default=0, type=int, help='Device number (typically 0-3)')
 args = parser.parse_args()
 
