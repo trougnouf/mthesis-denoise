@@ -130,6 +130,6 @@ class MSSSIM(torch.nn.Module):
 
     def forward(self, img1, img2):
         # TODO: store window between calls if possible
-        ret= 1-msssim(img1, img2, window_size=self.window_size, size_average=self.size_average)
+        ret= -msssim(img1, img2, window_size=self.window_size, size_average=self.size_average)
         print(ret)
         return ret
