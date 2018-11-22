@@ -73,8 +73,8 @@ if __name__ == '__main__':
     if '.jpg' in set_names[0]:
         set_names = ['.']
     for set_cur in set_names:
-        result_dir_img = os.path.join(args.result_dir, model_path.split('/')[-2:], 'img', args.set_dir.split('/')[-1], set_cur)
-        result_dir_txt = os.path.join(args.result_dir, model_path.split('/')[-2:], 'txt', args.set_dir.split('/')[-1])
+        result_dir_img = os.path.join(args.result_dir, ''.join(model_path.split('/')[-2:]), 'img', args.set_dir.split('/')[-1], set_cur)
+        result_dir_txt = os.path.join(args.result_dir, ''.join(model_path.split('/')[-2:]), 'txt', args.set_dir.split('/')[-1])
         os.makedirs(result_dir_img, exist_ok=True)
         os.makedirs(result_dir_txt, exist_ok=True)
 
