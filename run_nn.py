@@ -46,7 +46,6 @@ if args.expname == 'notset':
     expname = datetime.datetime.now().isoformat()[:-10]+'_'.join(sys.argv).replace('/','-')
 else:
     expname = args.expname
-expname = datetime.datetime.now().isoformat()[:-10]+'_'+expname
 
 save_dir = os.path.join('models', expname)
 res_dir = os.path.join(args.result_dir, expname)
