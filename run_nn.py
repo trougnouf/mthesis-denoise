@@ -27,8 +27,8 @@ parser.add_argument('--result_dir', default='results/train', type=str, help='Dir
 parser.add_argument('--models_dir', default='models', type=str, help='Directory where models are saved/loaded (default: models)')
 parser.add_argument('--depth', default=22, type=int, help='Number of layers (default: 22)')
 parser.add_argument('--cuda_device', default=0, type=int, help='Device number (default: 0, typically 0-3)')
-parser.add_arguments('--n_channels', default=64, type=int, help='Number of channels (default: 64)')
-parser.add_arguments('--find_noise', default=True, type=bool, help='Model noise (True) or clean image (False)')
+parser.add_argument('--n_channels', default=64, type=int, help='Number of channels (default: 64)')
+parser.add_argument('--find_noise', default=True, type=bool, help='Model noise (True) or clean image (False)')
 args = parser.parse_args()
 
 # memory eg:
