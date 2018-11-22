@@ -109,14 +109,14 @@ if __name__ == '__main__':
     totensor = torchvision.transforms.ToTensor()
 
     # model = DnCNN()
-    if not os.path.exists(os.path.join(args.model_dir, args.expname, args.model_fn)):
-        model_fn = sorted(os.listdir(args.model_dir, args.expname))[-1]
+    if not os.path.exists(os.path.join(args.models_dir, args.expname, args.model_fn)):
+        model_fn = sorted(os.listdir(args.models_dir, args.expname))[-1]
     else:
         model_fn = args.model_fn
-        # model.load_state_dict(torch.load(os.path.join(args.model_dir, args.model_fn)))
-        model = torch.load(os.path.join(args.model_dir, args.model_fn))
+        # model.load_state_dict(torch.load(os.path.join(args.models_dir, args.model_fn)))
+        model = torch.load(os.path.join(args.models_dir, args.model_fn))
     log('load '+args.expname+'/'+model_fn)
-    model = torch.load(os.path.join(args.model_dir, args,expname, model_fn))
+    model = torch.load(os.path.join(args.models_dir, args,expname, model_fn))
 #    params = model.state_dict()
 #    print(params.values())
 #    print(params.keys())
