@@ -43,7 +43,7 @@ torch.cuda.set_device(args.cuda_device)
 n_epoch = args.epoch
 
 if args.expname == 'notset':
-    expname = datetime.datetime.now().isoformat()[:-10]+'_'.join(sys.argv).replace('/','-')
+    expname = datetime.datetime.now().isoformat()[:-10]+'_'+'_'.join(sys.argv).replace('/','-')
 else:
     expname = args.expname
 
