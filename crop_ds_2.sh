@@ -25,7 +25,7 @@ if [ "$FN" == "run" ]
 then
 	NTHREADS=$(grep -c ^processor /proc/cpuinfo)
 	echo "Running with $NTHREADS threads..."
-	ls ${DSDIR} | xargs --max-procs=${NTHREADS} -n 1 bash ../$0 $1
+	ls ${DSDIR} | xargs --max-procs=${NTHREADS} -n 1 bash $0 $1
 	exit
 fi
 
