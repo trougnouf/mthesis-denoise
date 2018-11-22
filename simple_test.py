@@ -159,6 +159,7 @@ if __name__ == '__main__':
                 #y = y.astype(np.float32)
                 #y_ = torch.from_numpy(y).view(1, -1, y.shape[0], y.shape[1])
                 y_ = totensor(Image.open(os.path.join(args.set_dir, set_cur, im)))
+                y_ = y_.view(1,-1,y_.shape[1], y_.shape[2])
                 torch.cuda.synchronize()
                 start_time = time.time()
                 y_ = y_.cuda()
