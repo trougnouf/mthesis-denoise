@@ -132,6 +132,8 @@ if __name__ == '__main__':
         model = model.cuda()
 
     set_names = os.listdir(args.set_dir)
+    if '.jpg' in set_names[0]:
+        set_names = ['.']
     for set_cur in set_names:
         if args.save_result:
             result_dir_img = os.path.join(args.result_dir, args.expname, model_fn, 'img', args.set_dir, set_cur)
