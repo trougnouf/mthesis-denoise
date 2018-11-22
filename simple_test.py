@@ -28,14 +28,14 @@ from PIL import Image
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--set_dir', default='datasets/test/testdata_128', type=str, help='directory of test dataset')
-    parser.add_argument('--model_dir', type=str, help='directory where .th models are saved')
-    parser.add_argument('--model_fn', type=str, help='the model filename, s.a. model_500.pth (latest model is autodetected)')
+    parser.add_argument('--model_dir', type=str, help='directory where .th models are saved (latest .th file is autodetected)')
+    parser.add_argument('--model_path', type=str, help='the model file path')
     parser.add_argument('--result_dir', default='results/test', type=str, help='directory where results are saved')
     parser.add_argument('--save_result', default=1, type=int, help='save the denoised image, 1 or 0')
     parser.add_argument('--cuda_device', default=0, type=int, help='Device number (default: 0, typically 0-3)')
     args = parser.parse_args()
-    if not args.model_dir:
-        parser.error('model_dir argument is required')
+    if not args.model_dir and not args.model_path:
+        parser.error('model_dir or model_path argument is required')
     return args
 
 
@@ -58,11 +58,10 @@ if __name__ == '__main__':
     args = parse_args()
     totensor = torchvision.transforms.ToTensor()
 
-    if not args.model_fn or not os.path.exists(os.path.join(args.model_dir, args.model_fn)):
-        model_fn = sorted(os.listdir(args.model_dir))[-1]
+    if not args.model_path:
+        model_path = os.path.join(args.model_dir, sorted(os.listdir(args.model_dir))[-1])
     else:
-        model_fn = args.model_fn
-    model_path = os.path.join(args.model_dir, model_fn)
+        model_path = args.model_path
     log('loading '+ model_path)
     model = torch.load(model_path, map_location='cuda:'+args.cuda_device)
     model.eval()  # evaluation mode
