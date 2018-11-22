@@ -32,7 +32,7 @@ def parse_args():
     parser.add_argument('--model_path', type=str, help='the model file path')
     parser.add_argument('--result_dir', default='results/test', type=str, help='directory where results are saved')
     parser.add_argument('--save_result', default=1, type=int, help='save the denoised image, 1 or 0')
-    parser.add_argument('--cuda_device', default='0', type=str, help='Device number (default: 0, typically 0-3)')
+    parser.add_argument('--cuda_device', default=0, type=int, help='Device number (default: 0, typically 0-3)')
     args = parser.parse_args()
     if not args.model_dir and not args.model_path:
         parser.error('model_dir or model_path argument is required')
@@ -56,6 +56,7 @@ def show(x, title=None, cbar=False, figsize=None):
 if __name__ == '__main__':
 
     args = parse_args()
+    torch.cuda.set_device(args.cuda_device)
     totensor = torchvision.transforms.ToTensor()
 
     if not args.model_path:
@@ -63,7 +64,7 @@ if __name__ == '__main__':
     else:
         model_path = args.model_path
     log('loading '+ model_path)
-    model = torch.load(model_path, map_location='cuda:'+args.cuda_device)
+    model = torch.load(model_path, map_location='cuda:'+str(args.cuda_device))
     model.eval()  # evaluation mode
     if torch.cuda.is_available():
         model = model.cuda()
