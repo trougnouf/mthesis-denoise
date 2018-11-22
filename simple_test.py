@@ -58,8 +58,8 @@ if __name__ == '__main__':
     args = parse_args()
     totensor = torchvision.transforms.ToTensor()
 
-    if not args.model_fn or not os.path.exists(os.path.join(args.models_dir, args.model_fn)):
-        model_fn = sorted(os.listdir(args.models_dir))[-1]
+    if not args.model_fn or not os.path.exists(os.path.join(args.model_dir, args.model_fn)):
+        model_fn = sorted(os.listdir(args.model_dir))[-1]
     else:
         model_fn = args.model_fn
     model_path = os.path.join(args.model_dir, model_fn)
