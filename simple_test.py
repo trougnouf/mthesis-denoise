@@ -28,15 +28,14 @@ from PIL import Image
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--set_dir', default='datasets/test/testdata_128', type=str, help='directory of test dataset')
-    parser.add_argument('--models_dir', default='models', type=str, help='root directory of models')
-    parser.add_argument('--expname', type=str, help='experiment name where the models are located')
-    parser.add_argument('--model_fn', default='notset', type=str, help='the model filename, s.a. model_500.pth (last file is autodetected)')
+    parser.add_argument('--model_dir', type=str, help='directory where .th models are saved')
+    parser.add_argument('--model_fn', type=str, help='the model filename, s.a. model_500.pth (latest model is autodetected)')
     parser.add_argument('--result_dir', default='results/test', type=str, help='directory where results are saved')
     parser.add_argument('--save_result', default=1, type=int, help='save the denoised image, 1 or 0')
     parser.add_argument('--cuda_device', default=0, type=int, help='Device number (default: 0, typically 0-3)')
     args = parser.parse_args()
-    if not args.expname:
-        parser.error('expname argument is required')
+    if not args.model_dir:
+        parser.error('model_dir argument is required')
     return args
 
 
@@ -59,12 +58,13 @@ if __name__ == '__main__':
     args = parse_args()
     totensor = torchvision.transforms.ToTensor()
 
-    if not os.path.exists(os.path.join(args.models_dir, args.expname, args.model_fn)):
-        model_fn = sorted(os.listdir(os.path.join(args.models_dir, args.expname)))[-1]
+    if not args.model_fn or not os.path.exists(os.path.join(args.models_dir, args.model_fn)):
+        model_fn = sorted(os.listdir(args.models_dir))[-1]
     else:
         model_fn = args.model_fn
-    log('load '+args.expname+'/'+model_fn)
-    model = torch.load(os.path.join(args.models_dir, args.expname, model_fn), map_location='cuda:'+args.cuda_device)
+    model_path = os.path.join(args.model_dir, model_fn)
+    log('loading '+ model_path)
+    model = torch.load(model_path, map_location='cuda:'+args.cuda_device)
     model.eval()  # evaluation mode
     if torch.cuda.is_available():
         model = model.cuda()
@@ -73,8 +73,8 @@ if __name__ == '__main__':
     if '.jpg' in set_names[0]:
         set_names = ['.']
     for set_cur in set_names:
-        result_dir_img = os.path.join(args.result_dir, args.expname, model_fn, 'img', args.set_dir.split('/')[-1], set_cur)
-        result_dir_txt = os.path.join(args.result_dir, args.expname, model_fn, 'txt', args.set_dir.split('/')[-1])
+        result_dir_img = os.path.join(args.result_dir, model_path.split('/')[-2:], 'img', args.set_dir.split('/')[-1], set_cur)
+        result_dir_txt = os.path.join(args.result_dir, model_path.split('/')[-2:], 'txt', args.set_dir.split('/')[-1])
         os.makedirs(result_dir_img, exist_ok=True)
         os.makedirs(result_dir_txt, exist_ok=True)
 
