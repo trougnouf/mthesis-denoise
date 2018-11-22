@@ -136,8 +136,8 @@ if __name__ == '__main__':
         set_names = ['.']
     for set_cur in set_names:
         if args.save_result:
-            result_dir_img = os.path.join(args.result_dir, args.expname, model_fn, 'img', args.set_dir, set_cur)
-            result_dir_txt = os.path.join(args.result_dir, args.expname, model_fn, 'txt', args.set_dir)
+            result_dir_img = os.path.join(args.result_dir, args.expname, model_fn, 'img', args.set_dir.split('/')[-1], set_cur)
+            result_dir_txt = os.path.join(args.result_dir, args.expname, model_fn, 'txt', args.set_dir.split('/')[-1])
             os.makedirs(result_dir_img, exist_ok=True)
             os.makedirs(result_dir_txt, exist_ok=True)
         if set_cur == 'ISO200' or set_cur == 'UNK':
