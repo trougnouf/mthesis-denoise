@@ -110,7 +110,7 @@ if __name__ == '__main__':
 
     # model = DnCNN()
     if not os.path.exists(os.path.join(args.models_dir, args.expname, args.model_fn)):
-        model_fn = sorted(os.listdir(args.models_dir, args.expname))[-1]
+        model_fn = sorted(os.listdir(os.path.join(args.models_dir, args.expname)))[-1]
     else:
         model_fn = args.model_fn
         # model.load_state_dict(torch.load(os.path.join(args.models_dir, args.model_fn)))
