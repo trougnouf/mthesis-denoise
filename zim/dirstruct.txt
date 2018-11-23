@@ -1,0 +1,25 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2018-11-23T14:36:05+01:00
+
+====== dirstruct ======
+Created Friday 23 November 2018
+
+* zim
+* libs
+* models
+* datasets
+	* dataset
+		* <setname>
+			* NIND_<setname>_ISO<isoval>.jpg
+	* train
+		* dataset_<cs>
+			* <setname>
+				* ISO<isoval>
+					* NIND_<setname>_ISO<isoval>_<cropnum>.jpg
+	* test
+		* testdata_<cs>
+			* <setname>
+				* ISO<isoval>
+					* NIND_<setname>_ISO<isoval>_<cropnum>.jpg
+	* noiseonly

@@ -41,3 +41,28 @@ class DnCNN(nn.Module):
             elif isinstance(m, nn.BatchNorm2d):
                 init.constant_(m.weight, 1)
                 init.constant_(m.bias, 0)
+
+class RedCNN(nn.Module):
+    def __init__(self):
+        super(RedCNN, self).__init__()
+        layers = []
+        self.redcnn = nn.Sequential(*layers)
+        self.__initialize_weights()
+    def forward(self, x):
+        if self.find_noise:
+            y = x
+            out = self.dncnn(x)
+            return y-out
+        else:
+            out = self.dncnn(x)
+            return out
+    def _initialize_weights(self):
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                init.orthogonal_(m.weight)
+                print('init weight')
+                if m.bias is not None:
+                    init.constant_(m.bias, 0)
+            elif isinstance(m, nn.BatchNorm2d):
+                init.constant_(m.weight, 1)
+                init.constant_(m.bias, 0)

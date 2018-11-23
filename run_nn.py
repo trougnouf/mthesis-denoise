@@ -7,13 +7,13 @@ import datetime
 import time
 import numpy as np
 import torch
-from nnModules import DnCNN
+import nnModules
 from torch.utils.data import DataLoader
 import torch.optim as optim
 from torch.optim.lr_scheduler import MultiStepLR
 from dataset_torch_3 import DenoisingDataset
 from torch.nn.modules.loss import _Loss
-import pytorch_msssim
+from utils import pytorch_msssim
 
 # Params
 parser = argparse.ArgumentParser(description='PyTorch DnCNN')
@@ -39,6 +39,7 @@ args = parser.parse_args()
 #   bs57 = 8883
 #   bs71 = 10813
 #   bs72 = 10941
+# python3 run_nn.py --batch_size 36 --cuda_device 1 --n_channels 128 --kernel_size 5 : 11071 MB
 
 batch_size = args.batch_size
 cuda = torch.cuda.is_available()
@@ -91,8 +92,12 @@ class sum_squared_error(_Loss):  # PyTorch 0.4.1
 if __name__ == '__main__':
     # model selection
     print('===> Building model')
-    model = DnCNN(depth=args.depth, n_channels=args.n_channels, find_noise=args.find_noise, kernel_size=args.kernel_size)
-
+    if args.model == 'DnCNN':
+        model = nnModules.DnCNN(depth=args.depth, n_channels=args.n_channels, find_noise=args.find_noise, kernel_size=args.kernel_size)
+    elif args.model == 'RedCNN':
+        model = nnModules.RedCNN()
+    else:
+        exit(args.model+' not implemented.')
     initial_epoch = findLastCheckpoint(save_dir=save_dir)  # load the last model in matconvnet style
     if initial_epoch > 0:
         print('resuming by loading epoch %03d' % initial_epoch)
