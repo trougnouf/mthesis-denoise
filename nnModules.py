@@ -2,7 +2,7 @@ import torch.nn as nn
 import torch.nn.init as init
 
 class DnCNN(nn.Module):
-    def __init__(self, depth=22, n_channels=64, image_channels=3, use_bnorm=True, kernel_size=3, find_noise=True):
+    def __init__(self, depth=22, n_channels=64, image_channels=3, use_bnorm=True, kernel_size=5, find_noise=True):
         super(DnCNN, self).__init__()
         kernel_size = 3
         padding = 1
