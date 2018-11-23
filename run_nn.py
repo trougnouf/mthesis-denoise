@@ -42,7 +42,6 @@ args = parser.parse_args()
 batch_size = args.batch_size
 cuda = torch.cuda.is_available()
 torch.cuda.set_device(args.cuda_device)
-n_epoch = args.epoch
 
 if args.expname == 'notset':
     expname = datetime.datetime.now().isoformat()[:-10]+'_'+'_'.join(sys.argv).replace('/','-')
@@ -110,8 +109,8 @@ if __name__ == '__main__':
     DDataset = DenoisingDataset(args.train_data)
     DLoader = DataLoader(dataset=DDataset, num_workers=8, drop_last=True, batch_size=batch_size, shuffle=True)
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
-    scheduler = MultiStepLR(optimizer, milestones=[30, 60, 90], gamma=0.2)  # learning rates
-    for epoch in range(initial_epoch, n_epoch):
+    scheduler = MultiStepLR(optimizer, milestones=[args.epoch*.02, args.epoch*.06, args.epoch*.14, args.epoch*.30, args.epoch*.62, args.epoch*.78, args.epoch*.86], gamma=0.5)  # learning rates
+    for epoch in range(initial_epoch, args.epoch):
         scheduler.step(epoch)  # step to the learning rate in this epcoh
         epoch_loss = 0
         start_time = time.time()
