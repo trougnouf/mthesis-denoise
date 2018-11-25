@@ -2,10 +2,11 @@ import numpy as np
 import os
 from torch.utils.data import Dataset
 import torch
-from PIL import Image
+from PIL import Image, ImageOps
 #from skimage import io
 from random import choice
 import torchvision
+from random import randint
 
 class DenoisingDataset(Dataset):
     def __init__(self, datadir):
@@ -35,12 +36,14 @@ class DenoisingDataset(Dataset):
             self.images.append(curimg)
 
     def __getitem__(self, reqindex):
+        # find crop #
         i = 0
         for img in self.images:
             if i+img['ncrops'] > reqindex:
                 crop_i = reqindex-i
                 break
             i += img['ncrops']
+        # get image file
         try:
             ximg = Image.open(self.datadir+'/'+img['name']+'/'+img['biso']
                               + '/NIND_'+img['name']+'_'+img['biso']+'_'
@@ -53,6 +56,24 @@ class DenoisingDataset(Dataset):
         niso = choice(img['isos'])
         yimg = Image.open(self.datadir+'/'+img['name']+'/'+niso+'/NIND_'
                           + img['name']+'_'+niso+'_'+str(crop_i)+'.jpg')
+        # data augmentation
+        random_decision = str(randint(0, 99))
+        if random_decision[0] == '0':
+            ximg = ximg.rotate(90)
+            yimg = yimg.rotate(90)
+        elif random_decision[0] == '1':
+            ximg = ximg.rotate(180)
+            yimg = yimg.rotate(180)
+        elif random_decision[0] == '2':
+            ximg = ximg.rotate(270)
+            yimg = yimg.rotate(270)
+        if random_decision[1] == '0' or random_decision[1] == '2':
+            ximg = ImageOps.flip(ximg)
+            yimg = ImageOps.flip(yimg)
+        if random_decision[1] == '1' or random_decision[1] == '2':
+            ximg = ImageOps.mirror(ximg)
+            yimg = ImageOps.mirror(yimg)
+        # return a tensor
         # PIL is H x W x C, totensor is C x H x W
         return (self.totensor(ximg), self.totensor(yimg))
 

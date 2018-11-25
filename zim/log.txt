@@ -1,0 +1,9 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2018-11-23T16:48:11+01:00
+
+====== log ======
+Created Friday 23 November 2018
+
+===== 11/23/2018 =====
+uncropper, launch 128-filter 5-filter, clean-up

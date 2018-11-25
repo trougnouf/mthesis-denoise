@@ -22,4 +22,26 @@ Created Friday 23 November 2018
 			* <setname>
 				* ISO<isoval>
 					* NIND_<setname>_ISO<isoval>_<cropnum>.jpg
-	* noiseonly
+			* noisyonly
+				* UNK
+					* <whatevs>_<cropnum>.jpg
+	* noisyonly
+* libs
+	* pytorch_msssim
+* resources
+	* git
+	* papers
+* results
+	* train
+		* <model>
+			* train_result_<num>.txt
+	* test
+		* <model>
+			* <modelfn>
+				* <testsetname>
+					* img
+						* <set>
+							* <imgname>_denoised.jpg (crop)
+						* <imgname>_denoised.jpg (uncropped)
+					* txt
+						* ???
