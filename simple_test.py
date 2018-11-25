@@ -42,16 +42,6 @@ def parse_args():
 def log(*args, **kwargs):
      print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S:"), *args, **kwargs)
 
-def show(x, title=None, cbar=False, figsize=None):
-    import matplotlib.pyplot as plt
-    plt.figure(figsize=figsize)
-    plt.imshow(x, interpolation='nearest', cmap='gray')
-    if title:
-        plt.title(title)
-    if cbar:
-        plt.colorbar()
-    plt.show()
-
 
 if __name__ == '__main__':
 

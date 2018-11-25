@@ -12,6 +12,8 @@ Created Friday 23 November 2018
 	* dataset
 		* <setname>
 			* NIND_<setname>_ISO<isoval>.jpg
+	* noisyonly
+		* <fn>.jpg
 	* train
 		* dataset_<cs>
 			* <setname>
@@ -23,9 +25,8 @@ Created Friday 23 November 2018
 				* ISO<isoval>
 					* NIND_<setname>_ISO<isoval>_<cropnum>.jpg
 			* noisyonly
-				* UNK
-					* <whatevs>_<cropnum>.jpg
-	* noisyonly
+				* <fn>
+					* <fn>_<cropnum>.jpg
 * libs
 	* pytorch_msssim
 * resources
