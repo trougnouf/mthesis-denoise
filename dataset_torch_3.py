@@ -7,6 +7,7 @@ from PIL import Image, ImageOps
 from random import choice
 import torchvision
 from random import randint
+from math import floor
 
 class DenoisingDataset(Dataset):
     def __init__(self, datadir):
@@ -57,20 +58,20 @@ class DenoisingDataset(Dataset):
         yimg = Image.open(self.datadir+'/'+img['name']+'/'+niso+'/NIND_'
                           + img['name']+'_'+niso+'_'+str(crop_i)+'.jpg')
         # data augmentation
-        random_decision = str(randint(0, 99))
-        if random_decision[0] == '0':
+        random_decision = randint(0, 99)
+        if random_decision % 10 == 0:
             ximg = ximg.rotate(90)
             yimg = yimg.rotate(90)
-        elif random_decision[0] == '1':
+        elif random_decision % 10 == 1:
             ximg = ximg.rotate(180)
             yimg = yimg.rotate(180)
-        elif random_decision[0] == '2':
+        elif random_decision % 10 == 2:
             ximg = ximg.rotate(270)
             yimg = yimg.rotate(270)
-        if random_decision[1] == '0' or random_decision[1] == '2':
+        if floor(random_decision/10) == 0 or floor(random_decision/10) == 2:
             ximg = ImageOps.flip(ximg)
             yimg = ImageOps.flip(yimg)
-        if random_decision[1] == '1' or random_decision[1] == '2':
+        if floor(random_decision/10) == 1 or floor(random_decision/10) == 2:
             ximg = ImageOps.mirror(ximg)
             yimg = ImageOps.mirror(yimg)
         # return a tensor
