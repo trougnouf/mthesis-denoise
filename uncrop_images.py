@@ -10,7 +10,7 @@ parser.add_argument('--ds_dir', default='datasets/dataset', type=str, help='Dire
 args = parser.parse_args()
 
 def find_original_img(curitem):
-    orname=(''.join(curitem.split('_0_dncnn'))).split('/')[-1]
+    orname=curitem.split('/')[-1].split('_0_')[0]+'.jpg'
     for root, dirs, files in os.walk(args.ds_dir):
         if orname in files:
             return os.path.join(root, orname)
@@ -28,7 +28,7 @@ def uncrop(crop_img_0, res):
             i = str(int(curx+cury*(res[0]/cs)))
             curcrop =  ('_'+i+'_').join(crop_img_0.split('_0_'))
             newimg.paste(Image.open(curcrop), box=(curx*cs, cury*cs,  curx*cs+cs, cury*cs+cs))
-    newpath = ('_fs_').join(crop_img_0.split('_0_'))
+    newpath = '_'.join(crop_img_0.split('_0_'))
     newimg.save(newpath, quality=100)
     print('Uncropped '+newpath+' ('+str(res)+')')
     return 0
