@@ -2,7 +2,7 @@ import torch.nn as nn
 import torch.nn.init as init
 
 class DnCNN(nn.Module):
-    def __init__(self, depth=22, n_channels=64, image_channels=3, use_bnorm=True, kernel_size=3, find_noise=True):
+    def __init__(self, depth=22, n_channels=64, image_channels=3, use_bnorm=True, kernel_size=3, find_noise=1):
         super(DnCNN, self).__init__()
         padding = int((kernel_size/2)-1)
         layers = []
@@ -22,7 +22,7 @@ class DnCNN(nn.Module):
         self._initialize_weights()
 
     def forward(self, x):
-        if self.find_noise:
+        if self.find_noise == 1:
             y = x
             out = self.dncnn(x)
             return y-out
