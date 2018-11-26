@@ -46,7 +46,8 @@ if __name__ == '__main__':
     totensor = torchvision.transforms.ToTensor()
 
     if not args.model_path:
-        model_path = os.path.join(args.model_dir, sorted(os.listdir(args.model_dir))[-1])
+        #model_path = os.path.join(args.model_dir, sorted(os.listdir(args.model_dir))[-1])
+        model_path = os.path.join(args.model_dir, "latest_model.pth")
     else:
         model_path = args.model_path
     log('loading '+ model_path)
