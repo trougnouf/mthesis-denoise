@@ -10,7 +10,7 @@ parser.add_argument('--ds_dir', default='datasets/dataset', type=str, help='Dire
 args = parser.parse_args()
 
 def find_original_img(curitem):
-    orname=(''.join(curitem.split('_0_dncnn'))).split('/')[-1]
+    orname=curitem.split('/')[-1].split('_0_')[0]+'.jpg'
     for root, dirs, files in os.walk(args.ds_dir):
         if orname in files:
             return os.path.join(root, orname)

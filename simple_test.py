@@ -27,7 +27,7 @@ from PIL import Image
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--set_dir', default='datasets/test/testdata_128', type=str, help='directory of test dataset')
+    parser.add_argument('--ds_dir', default='datasets/test/testdata_128', type=str, help='directory of test dataset (or any directory containing images to be denoised)')
     parser.add_argument('--model_dir', type=str, help='directory where .th models are saved (latest .th file is autodetected)')
     parser.add_argument('--model_path', type=str, help='the model file path')
     parser.add_argument('--result_dir', default='results/test', type=str, help='directory where results are saved')
@@ -37,10 +37,6 @@ def parse_args():
     if not args.model_dir and not args.model_path:
         parser.error('model_dir or model_path argument is required')
     return args
-
-
-def log(*args, **kwargs):
-     print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S:"), *args, **kwargs)
 
 
 if __name__ == '__main__':
@@ -59,28 +55,20 @@ if __name__ == '__main__':
     if torch.cuda.is_available():
         model = model.cuda()
 
-    set_names = os.listdir(args.set_dir)
-    if '.jpg' in set_names[0]:
-        set_names = ['.']
-    for set_cur in set_names:
-        result_dir_img = os.path.join(args.result_dir, ''.join(model_path.split('/')[-2:]), 'img', args.set_dir.split('/')[-1], set_cur)
-        result_dir_txt = os.path.join(args.result_dir, ''.join(model_path.split('/')[-2:]), 'txt', args.set_dir.split('/')[-1])
-        os.makedirs(result_dir_img, exist_ok=True)
-        os.makedirs(result_dir_txt, exist_ok=True)
-
-        for im in os.listdir(os.path.join(args.set_dir, set_cur)):
-            if im.endswith(".jpg") or im.endswith(".bmp") or im.endswith(".png"):
-                y_ = totensor(Image.open(os.path.join(args.set_dir, set_cur, im)))
-                y_ = y_.view(1,-1,y_.shape[1], y_.shape[2]) # TODO is this correct?
-                torch.cuda.synchronize()
-                start_time = time.time()
-                y_ = y_.cuda()
-                x_ = model(y_)  # inference
-                torch.cuda.synchronize()
-                elapsed_time = time.time() - start_time
-                print('%10s : %10s : %2.4f second' % (set_cur, im, elapsed_time))
-                name, ext = os.path.splitext(im)
-                torchvision.utils.save_image(x_, os.path.join(result_dir_img, name+'_dncnn'+ext))
+    for root, dirs, files in os.walk(args.ds_dir):
+        for name in files:
+            cur_img_sav_dir = os.path.join(args.result_dir, '/'.join(model_path.split('/')[-2:]), args.ds_dir.split('/')[-1], 'img', root.split(args.ds_dir)[-1])
+            os.path.makedirs(cur_img_sav_dir, exist_ok=True)
+            y_ = totensor(Image.open(os.path.join(root, name)))
+            y_ = y_.view(1,-1,y_.shape[1], y_.shape[2]) # TODO is this correct?
+            torch.cuda.synchronize()
+            start_time = time.time()
+            y_ = y_.cuda()
+            x_ = model(y_)
+            torch.cuda.synchronize()
+            elapsed_time = time.time() - start_time
+            torchvision.utils.save_image(x_, os.path.join(cur_img_sav_dir, name[:-4]+'_denoised.jpg'))
+            print('%10s : %10s : %2.4f second' % (set_cur, im, elapsed_time))
 
 
 
