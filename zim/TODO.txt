@@ -14,6 +14,8 @@ add compression
 test/train set maker
 compare perf of finding noise vs clean image
 
+kernel_size 5 fix RuntimeError: The size of tensor a (42) must match the size of tensor b (86) at non-singleton dimension 3
+
 ===== 2 =====
 how to calculate memory usage by file, batch_size, depth, channels
 	got some data
