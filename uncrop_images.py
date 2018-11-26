@@ -28,7 +28,7 @@ def uncrop(crop_img_0, res):
             i = str(int(curx+cury*(res[0]/cs)))
             curcrop =  ('_'+i+'_').join(crop_img_0.split('_0_'))
             newimg.paste(Image.open(curcrop), box=(curx*cs, cury*cs,  curx*cs+cs, cury*cs+cs))
-    newpath = ('_fs_').join(crop_img_0.split('_0_'))
+    newpath = '_'.join(crop_img_0.split('_0_'))
     newimg.save(newpath, quality=100)
     print('Uncropped '+newpath+' ('+str(res)+')')
     return 0
