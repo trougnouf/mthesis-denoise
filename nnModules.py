@@ -4,7 +4,7 @@ import torch.nn.init as init
 class DnCNN(nn.Module):
     def __init__(self, depth=22, n_channels=64, image_channels=3, use_bnorm=True, kernel_size=3, find_noise=True):
         super(DnCNN, self).__init__()
-        padding = (kernel_size/2)-1
+        padding = int((kernel_size/2)-1)
         layers = []
         self.find_noise = find_noise
 
