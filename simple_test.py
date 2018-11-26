@@ -50,7 +50,7 @@ if __name__ == '__main__':
         model_path = os.path.join(args.model_dir, "latest_model.pth")
     else:
         model_path = args.model_path
-    log('loading '+ model_path)
+    print('loading '+ model_path)
     model = torch.load(model_path, map_location='cuda:'+str(args.cuda_device))
     model.eval()  # evaluation mode
     if torch.cuda.is_available():
@@ -58,8 +58,8 @@ if __name__ == '__main__':
 
     for root, dirs, files in os.walk(args.ds_dir):
         for name in files:
-            cur_img_sav_dir = os.path.join(args.result_dir, '/'.join(model_path.split('/')[-2:]), args.ds_dir.split('/')[-1], 'img', root.split(args.ds_dir)[-1])
-            os.path.makedirs(cur_img_sav_dir, exist_ok=True)
+            cur_img_sav_dir = os.path.join(args.result_dir, '/'.join(model_path.split('/')[-2:]), args.ds_dir.split('/')[-1], 'img', './'+root.split(args.ds_dir)[-1])
+            os.makedirs(cur_img_sav_dir, exist_ok=True)
             y_ = totensor(Image.open(os.path.join(root, name)))
             y_ = y_.view(1,-1,y_.shape[1], y_.shape[2]) # TODO is this correct?
             torch.cuda.synchronize()
@@ -69,7 +69,7 @@ if __name__ == '__main__':
             torch.cuda.synchronize()
             elapsed_time = time.time() - start_time
             torchvision.utils.save_image(x_, os.path.join(cur_img_sav_dir, name[:-4]+'_denoised.jpg'))
-            print('%10s : %10s : %2.4f second' % (set_cur, im, elapsed_time))
+            print('%s : %2.4f second' % (name, elapsed_time))
 
 
 
