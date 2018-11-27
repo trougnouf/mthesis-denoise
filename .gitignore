@@ -5,3 +5,4 @@ old
 .crop_ds_2.sh.swp
 .test.py.swp
 models/*/model_*.pth
+doodling
