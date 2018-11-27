@@ -28,7 +28,7 @@ parser.add_argument('--models_dir', default='models', type=str, help='Directory 
 parser.add_argument('--depth', default=22, type=int, help='Number of layers (default: 22)')
 parser.add_argument('--cuda_device', default=0, type=int, help='Device number (default: 0, typically 0-3)')
 parser.add_argument('--n_channels', default=64, type=int, help='Number of channels (default: 64)')
-parser.add_argument('--find_noise', default=1, type=int, help='Model noise (1) or clean image (0)')
+parser.add_argument('--find_noise', action='store_true', help='Model noise if set otherwise generate clean image')
 parser.add_argument('--kernel_size', default=3, type=int, help='Kernel size')
 args = parser.parse_args()
 

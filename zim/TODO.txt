@@ -6,6 +6,7 @@ Creation-Date: 2018-11-21T22:47:51+01:00
 Created Wednesday 21 November 2018
 
 ===== 1 =====
+overwrite, uncrop switches
 
 implement a skip baseline
 compare loss w/ bs, #layers, res
