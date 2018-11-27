@@ -6,3 +6,4 @@ old
 .test.py.swp
 models/*/model_*.pth
 doodling
+results/test/
