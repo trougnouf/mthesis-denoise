@@ -10,10 +10,11 @@ import torch
 import nnModules
 from torch.utils.data import DataLoader
 import torch.optim as optim
-from torch.optim.lr_scheduler import MultiStepLR
+from torch.optim.lr_scheduler import MultiStepLR, LambdaLR
 from dataset_torch_3 import DenoisingDataset
 from torch.nn.modules.loss import _Loss
 from lib import pytorch_msssim
+from random import randint
 
 # Params
 parser = argparse.ArgumentParser(description='PyTorch DnCNN')
@@ -31,6 +32,7 @@ parser.add_argument('--n_channels', default=64, type=int, help='Number of channe
 parser.add_argument('--find_noise', action='store_true', help='Model noise if set otherwise generate clean image')
 parser.add_argument('--kernel_size', default=3, type=int, help='Kernel size')
 parser.add_argument('--docompression', type=str, help='Add compression to noisy images (random or [1-100], off if omitted)')
+parser.add_argument('--random_lr', action='store_true', help='Random learning rate')
 args = parser.parse_args()
 
 # memory eg:
@@ -119,7 +121,11 @@ if __name__ == '__main__':
     DDataset = DenoisingDataset(args.train_data, docompression=docompression)
     DLoader = DataLoader(dataset=DDataset, num_workers=8, drop_last=True, batch_size=batch_size, shuffle=True)
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
-    scheduler = MultiStepLR(optimizer, milestones=[args.epoch*.02, args.epoch*.06, args.epoch*.14, args.epoch*.30, args.epoch*.62, args.epoch*.78, args.epoch*.86], gamma=0.5)  # learning rates
+    if args.random_lr:
+        lrlambda = lambda epoch, lr=args.lr: randint(1,.1/lr)/randint(1,.1/lr)
+        scheduler = LambdaLR(optimizer, lrlambda)
+    else:
+        scheduler = MultiStepLR(optimizer, milestones=[args.epoch*.02, args.epoch*.06, args.epoch*.14, args.epoch*.30, args.epoch*.62, args.epoch*.78, args.epoch*.86], gamma=0.5)  # learning rates
     for epoch in range(initial_epoch, args.epoch):
         scheduler.step(epoch)  # step to the learning rate in this epcoh
         epoch_loss = 0

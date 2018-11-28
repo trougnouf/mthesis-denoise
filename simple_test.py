@@ -38,7 +38,7 @@ def parse_args():
     parser.add_argument('--cuda_device', default=0, type=int, help='Device number (default: 0, typically 0-3)')
     parser.add_argument('--overwrite', action='store_true', help='Overwrite existing images')
     parser.add_argument('--uncrop', action='store_true', help='Uncrop denoised images (run uncrop_images.py)')
-    parser.add_argument('--ds_dir', default='datasets/dataset', type=str, help='Directory with matching original images to get dimensions when running with uncrop')
+    parser.add_argument('--ds_dir', default='datasets', type=str, help='Directory with matching original images to get dimensions when running with uncrop')
     args = parser.parse_args()
     if not (args.model_dir or args.model_path or args.model_subdir):
         parser.error('model_dir, model_subdir, or model_path argument is required')
