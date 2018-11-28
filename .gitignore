@@ -7,3 +7,4 @@ old
 models/*/model_*.pth
 doodling
 results/test/
+lib/*/__pycache__
