@@ -122,7 +122,7 @@ if __name__ == '__main__':
     DLoader = DataLoader(dataset=DDataset, num_workers=8, drop_last=True, batch_size=batch_size, shuffle=True)
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
     if args.random_lr:
-        lrlambda = lambda epoch, lr=args.lr: randint(1,.1/lr)/randint(1,.1/lr)
+        lrlambda = lambda epoch, lr=args.lr: randint(1,.1/lr)/randint(1,1/lr)
         scheduler = LambdaLR(optimizer, lrlambda)
     else:
         scheduler = MultiStepLR(optimizer, milestones=[args.epoch*.02, args.epoch*.06, args.epoch*.14, args.epoch*.30, args.epoch*.62, args.epoch*.78, args.epoch*.86], gamma=0.5)  # learning rates
