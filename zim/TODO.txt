@@ -6,23 +6,25 @@ Creation-Date: 2018-11-21T22:47:51+01:00
 Created Wednesday 21 November 2018
 
 ===== 1 =====
-overwrite, uncrop switches
+
 
 implement a skip baseline
 compare loss w/ bs, #layers, res
 add compression
+grapher
+test w/o padding, check when grid takes place
 
-test/train set maker
-compare perf of finding noise vs clean image
 
-kernel_size 5 fix RuntimeError: The size of tensor a (42) must match the size of tensor b (86) at non-singleton dimension 3
+kernel_size 5 fix RuntimeError
 
-===== 2 =====
-how to calculate memory usage by file, batch_size, depth, channels
-	got some data
+
 
 
 ===== Done =====
+11/28/2018 overwrite, uncrop switches
+test/train set maker
+compare perf of finding noise vs clean image
+kernel_size 5 fix RuntimeError
 data augmentation 11/25/2018
 script to reconstruct image	2018-11-23
 x = find clean image rather than noise	2018-11-22
