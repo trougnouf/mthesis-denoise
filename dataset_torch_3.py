@@ -1,17 +1,16 @@
-import numpy as np
 import os
 from torch.utils.data import Dataset
-import torch
 from PIL import Image, ImageOps
-#from skimage import io
 from random import choice
 import torchvision
 from random import randint
 from math import floor
+from io import BytesIO
 
 class DenoisingDataset(Dataset):
-    def __init__(self, datadir):
+    def __init__(self, datadir, docompression=False):
         super(DenoisingDataset, self).__init__()
+        self.docompression = docompression
         self.totensor = torchvision.transforms.ToTensor()
 
         def sortISOs(rawISOs):
@@ -74,6 +73,14 @@ class DenoisingDataset(Dataset):
         if floor(random_decision/10) == 1 or floor(random_decision/10) == 2:
             ximg = ImageOps.mirror(ximg)
             yimg = ImageOps.mirror(yimg)
+        if self.docompression:
+            if self.docompression=='random':
+                quality = randint(1,100)
+            else:
+                quality = int(self.docompression)
+            imbuffer = BytesIO()
+            yimg.save(imbuffer, 'JPEG', quality=quality)
+            yimg = Image.open(imbuffer)
         # return a tensor
         # PIL is H x W x C, totensor is C x H x W
         return (self.totensor(ximg), self.totensor(yimg))

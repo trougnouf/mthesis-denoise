@@ -30,6 +30,7 @@ parser.add_argument('--cuda_device', default=0, type=int, help='Device number (d
 parser.add_argument('--n_channels', default=64, type=int, help='Number of channels (default: 64)')
 parser.add_argument('--find_noise', action='store_true', help='Model noise if set otherwise generate clean image')
 parser.add_argument('--kernel_size', default=3, type=int, help='Kernel size')
+parser.add_argument('--docompression', type=str, help='Add compression to noisy images (random or [1-100], off if omitted)')
 args = parser.parse_args()
 
 # memory eg:
@@ -74,6 +75,7 @@ def findLastCheckpoint(save_dir):
 def log(*args, **kwargs):
     print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S:"), *args, **kwargs)
 
+# This is not in use at the moment
 class sum_squared_error(_Loss):  # PyTorch 0.4.1
     """
     Definition: sum_squared_error = 1/2 * nn.MSELoss(reduction = 'sum')
@@ -86,8 +88,6 @@ class sum_squared_error(_Loss):  # PyTorch 0.4.1
         # return torch.sum(torch.pow(input-target,2), (0,1,2,3)).div_(2)
         return torch.nn.functional.mse_loss(input, target, size_average=None, reduce=None,
                                             reduction='sum').div_(2)
-
-
 
 if __name__ == '__main__':
     # model selection
@@ -112,7 +112,11 @@ if __name__ == '__main__':
         # device_ids = [0]
         # model = nn.DataParallel(model, device_ids=device_ids).cuda()
         # criterion = criterion.cuda()
-    DDataset = DenoisingDataset(args.train_data)
+    if not args.docompression:
+        docompression=False
+    else:
+        docompression=args.docompression
+    DDataset = DenoisingDataset(args.train_data, docompression=docompression)
     DLoader = DataLoader(dataset=DDataset, num_workers=8, drop_last=True, batch_size=batch_size, shuffle=True)
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
     scheduler = MultiStepLR(optimizer, milestones=[args.epoch*.02, args.epoch*.06, args.epoch*.14, args.epoch*.30, args.epoch*.62, args.epoch*.78, args.epoch*.86], gamma=0.5)  # learning rates
