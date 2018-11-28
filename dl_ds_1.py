@@ -50,6 +50,7 @@ imglist = [
     'Saint-Remi-C,200,6400,H1,H2',
     'books,200,1600,6400,H1,H2',
     'bloop,200,3200,6400,H1',
+    'schooltop,200,800,6400,H1,H2',
     ]
 os.makedirs('datasets/dataset', exist_ok=True)
 os.chdir('datasets/dataset')
