@@ -46,11 +46,10 @@ do
 	for iso in "${ISOS[@]}"
 	do
 		CROPPATH="${DESTDIR}/${SN}/${iso}/${BFN}_${iso}_${CROPCNT}.jpg"
-		if [ -f "${CROPPATH}" ]
+		if [ ! -f "${CROPPATH}" ]
 		then
-			continue
+			jpegtran -crop ${CS}x${CS}+${CURX}+${CURY} -copy none -trim -optimize -outfile ${CROPPATH} ${DSDIR}/${SN}/${BFN}_${iso}.jpg
 		fi
-		jpegtran -crop ${CS}x${CS}+${CURX}+${CURY} -copy none -trim -optimize -outfile ${CROPPATH} ${DSDIR}/${SN}/${BFN}_${iso}.jpg
 	done
 	((CROPCNT++))
 	((CURX+=CS))

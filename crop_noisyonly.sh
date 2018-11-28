@@ -12,7 +12,7 @@
 # args
 FN=$2	# filename
 CS=$1	# crop size
-DSDIR=datasets/noisyonly
+DSDIR="datasets/noisyonly"
 DESTDIR="datasets/test/testdata_${CS}/noisyonly"
 
 if ! [[ "$CS" =~ ^[0-9]+$ ]] || ((CS%8!=0))
@@ -30,6 +30,7 @@ then
 	exit
 fi
 
+echo Cropping ${FN}
 # resolution
 RES=($(file ${DSDIR}/${FN} | grep -o -E '[0-9]{4,}x[0-9]{3,}' | grep -o -E '[0-9]+'))
 # base filename
@@ -39,11 +40,10 @@ let CURX=CURY=CROPCNT=0
 while (("$CURY"<${RES[1]}))
 do
 	CROPPATH="$DESTDIR/${BFN}/${BFN}_${CROPCNT}.jpg"
-	if [ -f "${CROPPATH}" ]
+	if [ ! -f "${CROPPATH}" ]
 	then
-		continue
+		jpegtran -crop ${CS}x${CS}+${CURX}+${CURY} -copy none -trim -optimize -outfile ${CROPPATH} ${DSDIR}/${FN}
 	fi
-	jpegtran -crop ${CS}x${CS}+${CURX}+${CURY} -copy none -trim -optimize -outfile ${CROPPATH} ${DSDIR}/${FN}
 	((CROPCNT++))
 	((CURX+=CS))
 	if ((CURX+CS>${RES[0]}))
