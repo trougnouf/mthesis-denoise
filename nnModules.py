@@ -58,14 +58,14 @@ class RedCNN(nn.Module):
         layer = self.relu(self.conv_first(x))   #c1
         layer = self.relu(self.conv(layer))     #c2
         residuals.append(layer.clone())
-        for _ in range(floor(self.depth-6)/2):
+        for _ in range(int(floor(self.depth-6)/2)):
             layer = self.relu(self.conv(layer))
             layer = self.relu(self.conv(layer))
             residuals.append(layer.clone())
         layer = self.relu(self.conv(layer))     #clast
         layer = self.relu(self.deconv(layer))   #d1
         layer = self.relu(layer+residuals.pop())
-        for _ in range(floor(self.depth-6)/2):
+        for _ in range(int(floor(self.depth-6)/2)):
             layer = self.relu(self.deconv(layer))
             layer = self.relu(self.deconv(layer))
             layer = self.relu(layer+residuals.pop())
