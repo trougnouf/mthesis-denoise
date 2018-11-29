@@ -33,7 +33,7 @@ parser.add_argument('--n_channels', default=64, type=int, help='Number of channe
 parser.add_argument('--find_noise', action='store_true', help='Model noise if set otherwise generate clean image')
 parser.add_argument('--kernel_size', default=5, type=int, help='Kernel size')
 parser.add_argument('--docompression', type=str, help='Add compression to noisy images (random or [1-100], off if omitted)')
-parser.add_argument('--random_lr', action='store_true', help='Random learning rate')
+parser.add_argument('--random_lr', action='store_true', help='Random learning rate (changes after each epoch)')
 args = parser.parse_args()
 
 # memory eg:
@@ -44,6 +44,7 @@ args = parser.parse_args()
 #   bs71 = 10813
 #   bs72 = 10941
 # python3 run_nn.py --batch_size 36 --cuda_device 1 --n_channels 128 --kernel_size 5 : 11071 MB
+# python3 run_nn.py --model RedCNN --epoch 76 --cuda_device 3 --n_channels 128 --kernel_size 5 --batch_size 40 --depth 22: 11053 MB
 
 
 batch_size = args.batch_size

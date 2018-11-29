@@ -17,6 +17,7 @@ test w/o padding, check when grid takes place
 
 kernel_size 5 fix RuntimeError
 
+share weights at the beginning
 
 
 
