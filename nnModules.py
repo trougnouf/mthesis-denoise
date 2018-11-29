@@ -70,7 +70,7 @@ class RedCNN(nn.Module):
             layer = self.relu(self.deconv(layer))
             layer += residuals.pop()
         layer = self.relu(self.deconv(layer))
-        layer = self.deconv_last(self.relu(layer))
+        layer = self.relu(self.deconv_last(layer))
         layer += residuals.pop()
         layer = self.relu(layer)
         return layer
