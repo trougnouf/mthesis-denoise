@@ -45,7 +45,7 @@ class DnCNN(nn.Module):
 # based on https://arxiv.org/pdf/1603.05027.pdf ish
 class RedishCNN(nn.Module):
     def __init__(self, n_channels=128, image_channels=3, kernel_size=5, depth=30):
-        super(RedCNN, self).__init__()
+        super(RedishCNN, self).__init__()
         self.depth = depth
         self.bn = nn.BatchNorm2d(n_channels)
         self.conv_first = nn.Conv2d(in_channels=image_channels, out_channels=n_channels, kernel_size=kernel_size, stride=1, padding=0)
