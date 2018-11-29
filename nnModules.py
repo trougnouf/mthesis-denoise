@@ -46,7 +46,7 @@ class RedCNN(nn.Module):
     def __init__(self, n_channels=96, image_channels=3, depth=22):
         super(RedCNN, self).__init__()
         self.depth = depth
-        self.conv_first = nn.Conv2d(in_channels=image_channels, out_channels=out_channels, kernel_size=5, stride=1, padding=0)
+        self.conv_first = nn.Conv2d(in_channels=image_channels, out_channels=n_channels, kernel_size=5, stride=1, padding=0)
         self.conv = nn.Conv2d(n_channels, n_channels, kernel_size=5, stride=1, padding=0)
         self.deconv = nn.ConvTranspose2d(n_channels, n_channels, kernel_size=5, stride=1, padding=0)
         self.deconv_last = nn.ConvTranspose2d(n_channels, n_channels=image_channels, kernel_size=5, stride=1, padding=0)
