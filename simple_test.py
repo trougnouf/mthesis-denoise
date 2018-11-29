@@ -60,6 +60,8 @@ if __name__ == '__main__':
         model_path = os.path.join(model_path, sorted(os.listdir(model_path))[-1])
     if args.cs:
         noisy_dir = 'datasets/test/testdata_'+args.cs
+    else:
+        noisy_dir = args.noisy_dir
         
     torch.cuda.set_device(args.cuda_device)
     totensor = torchvision.transforms.ToTensor()
