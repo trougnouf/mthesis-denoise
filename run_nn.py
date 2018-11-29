@@ -52,9 +52,12 @@ cuda = torch.cuda.is_available()
 torch.cuda.set_device(args.cuda_device)
 
 def find_experiment():
+    exp = None
     bname = '_'.join(args).replace('/','-')
-    #for adir in os.listdir('models'):
-        #TODO
+    for adir in os.listdir(args.model_dir):
+        if adir[17:]==bname:
+            exp = adir
+    return exp
     
 
 if args.expname:
@@ -62,6 +65,8 @@ if args.expname:
 else:
     if args.resume:
         expname = find_experiment()
+        if expname == None:
+            sys.exit('Error: cannot resume experiment (404)')
     else:
         expname = datetime.datetime.now().isoformat()[:-10]+'_'+'_'.join(sys.argv).replace('/','-')
     
