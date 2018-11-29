@@ -116,6 +116,8 @@ if __name__ == '__main__':
         model = nnModules.DnCNN(depth=args.depth, n_channels=args.n_channels, find_noise=args.find_noise, kernel_size=args.kernel_size)
     elif args.model == 'RedCNN':
         model = nnModules.RedCNN(depth=args.depth, n_channels=args.n_channels, kernel_size=args.kernel_size)
+    elif args.model == 'RedishCNN':
+        model = nnModules.RedishCNN(depth=args.depth, n_channels=args.n_channels, kernel_size=args.kernel_size)
     else:
         exit(args.model+' not implemented.')
     initial_epoch = findLastCheckpoint(save_dir=save_dir)  # load the last model in matconvnet style
