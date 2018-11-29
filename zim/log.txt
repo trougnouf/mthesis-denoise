@@ -7,3 +7,5 @@ Created Friday 23 November 2018
 
 ===== 11/23/2018 =====
 uncropper, launch 128-filter 5-filter, clean-up
+
+11/29/2018 comparing test on different input size (48,160)w/static training (96)

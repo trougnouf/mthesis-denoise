@@ -31,6 +31,7 @@ from PIL import Image
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--noisy_dir', default='datasets/test/testdata_128', type=str, help='directory of test dataset (or any directory containing images to be denoised)')
+    parser.add_argument('--cs', type=str, help='crop size can be provided instead of noisy_dir: datasets/test/testdata_[CS]')
     parser.add_argument('--model_dir', type=str, help='directory where .th models are saved (latest .th file is autodetected)')
     parser.add_argument('--model_subdir', type=str, help='subdirectory where .th models are saved (latest .th file is autodetected, models dir is assumed)')
     parser.add_argument('--model_path', type=str, help='the specific model file path')
@@ -40,31 +41,37 @@ def parse_args():
     parser.add_argument('--uncrop', action='store_true', help='Uncrop denoised images (run uncrop_images.py)')
     parser.add_argument('--ds_dir', default='datasets', type=str, help='Directory with matching original images to get dimensions when running with uncrop')
     args = parser.parse_args()
-    if not (args.model_dir or args.model_path or args.model_subdir):
-        parser.error('model_dir, model_subdir, or model_path argument is required')
     return args
 
 
 if __name__ == '__main__':
 
+
+    
     args = parse_args()
-    torch.cuda.set_device(args.cuda_device)
-    totensor = torchvision.transforms.ToTensor()
     if args.model_path:
         model_path = args.model_path
-    else:
+    elif args.model_dir or args.model_subdir:
         model_dir = args.model_dir if args.model_dir else os.path.join('models', args.model_subdir)
         #model_path = os.path.join(args.model_dir, sorted(os.listdir(args.model_dir))[-1])
         model_path = os.path.join(model_dir, "latest_model.pth")
+    else:
+        model_path = os.path.join('models', sorted(os.listdir('models'))[-1])
+        model_path = os.path.join(model_path, sorted(os.listdir(model_path))[-1])
+    if args.cs:
+        noisy_dir = 'datasets/test/testdata_'+args.cs
+        
+    torch.cuda.set_device(args.cuda_device)
+    totensor = torchvision.transforms.ToTensor()
     print('loading '+ model_path)
     model = torch.load(model_path, map_location='cuda:'+str(args.cuda_device))
     model.eval()  # evaluation mode
     if torch.cuda.is_available():
         model = model.cuda()
 
-    for root, dirs, files in os.walk(args.noisy_dir):
+    for root, dirs, files in os.walk(noisy_dir):
         for name in files:
-            cur_img_sav_dir = os.path.join(args.result_dir, '/'.join(model_path.split('/')[-2:]), args.noisy_dir.split('/')[-1], 'img', './'+root.split(args.noisy_dir)[-1])
+            cur_img_sav_dir = os.path.join(args.result_dir, '/'.join(model_path.split('/')[-2:]), noisy_dir.split('/')[-1], 'img', './'+root.split(noisy_dir)[-1])
             cur_img_sav_path = os.path.join(cur_img_sav_dir, name[:-4]+'_denoised.jpg')
             if os.path.isfile(cur_img_sav_path) and not args.overwrite:
                 continue
@@ -81,7 +88,7 @@ if __name__ == '__main__':
             print('%s : %2.4f second' % (name, elapsed_time))
 
     if args.uncrop:
-        sys.argv.extend(['--crop_dir', os.path.join(args.result_dir, '/'.join(model_path.split('/')[-2:]), args.noisy_dir.split('/')[-1], 'img')])
+        sys.argv.extend(['--crop_dir', os.path.join(args.result_dir, '/'.join(model_path.split('/')[-2:]), noisy_dir.split('/')[-1], 'img')])
         from uncrop_images import *
 
 
