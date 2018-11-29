@@ -43,7 +43,7 @@ class DnCNN(nn.Module):
                 init.constant_(m.bias, 0)
 
 class RedCNN(nn.Module):
-    def __init__(self, n_channels=128, image_channels=3, kernel_size=5, depth=22):
+    def __init__(self, n_channels=128, image_channels=3, kernel_size=5, depth=30):
         super(RedCNN, self).__init__()
         self.depth = depth
         self.conv_first = nn.Conv2d(in_channels=image_channels, out_channels=n_channels, kernel_size=kernel_size, stride=1, padding=0)

@@ -45,6 +45,7 @@ args = parser.parse_args()
 #   bs72 = 10941
 # python3 run_nn.py --batch_size 36 --cuda_device 1 --n_channels 128 --kernel_size 5 : 11071 MB
 
+
 batch_size = args.batch_size
 cuda = torch.cuda.is_available()
 torch.cuda.set_device(args.cuda_device)
@@ -107,7 +108,7 @@ if __name__ == '__main__':
     if args.model == 'DnCNN':
         model = nnModules.DnCNN(depth=args.depth, n_channels=args.n_channels, find_noise=args.find_noise, kernel_size=args.kernel_size)
     elif args.model == 'RedCNN':
-        model = nnModules.RedCNN()
+        model = nnModules.RedCNN(depth=args.depth, n_channels=args.n_channels, kernel_size=args.kernel_size)
     else:
         exit(args.model+' not implemented.')
     initial_epoch = findLastCheckpoint(save_dir=save_dir)  # load the last model in matconvnet style
