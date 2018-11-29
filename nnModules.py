@@ -42,6 +42,7 @@ class DnCNN(nn.Module):
                 init.constant_(m.weight, 1)
                 init.constant_(m.bias, 0)
 
+
 class RedCNN(nn.Module):
     def __init__(self, n_channels=128, image_channels=3, kernel_size=5, depth=30):
         super(RedCNN, self).__init__()
@@ -54,23 +55,20 @@ class RedCNN(nn.Module):
 
     def forward(self, x):
         residuals = []
-        residuals.append(x.clone())
-        layer = self.relu(self.conv_first(x))
-        layer = self.relu(self.conv(layer))
+        layer = self.relu(self.conv_first(x))   #c1
+        layer = self.relu(self.conv(layer))     #c2
         residuals.append(layer.clone())
-        for _ in range(floor((self.depth-6)/2)):
+        for _ in range(floor(self.depth-6)/2):
             layer = self.relu(self.conv(layer))
             layer = self.relu(self.conv(layer))
             residuals.append(layer.clone())
-        layer = self.relu(self.conv(layer))
-        layer = self.relu(self.deconv(layer))
-        layer += residuals.pop()
-        for i in range(floor((self.depth-6)/2)):
+        layer = self.relu(self.conv(layer))     #clast
+        layer = self.relu(self.deconv(layer))   #d1
+        layer = self.relu(layer+residuals.pop())
+        for _ in range(floor(self.depth-6)/2):
             layer = self.relu(self.deconv(layer))
             layer = self.relu(self.deconv(layer))
-            layer += residuals.pop()
+            layer = self.relu(layer+residuals.pop())
         layer = self.relu(self.deconv(layer))
         layer = self.relu(self.deconv_last(layer))
-        layer += residuals.pop()
-        layer = self.relu(layer)
         return layer
