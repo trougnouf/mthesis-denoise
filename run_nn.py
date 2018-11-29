@@ -54,7 +54,7 @@ torch.cuda.set_device(args.cuda_device)
 def find_experiment():
     exp = None
     bname = ('_'.join(sys.argv).replace('/','-')).strip('_--resume')
-    for adir in os.listdir(args.model_dir):
+    for adir in os.listdir(args.models_dir):
         if adir[17:]==bname:
             exp = adir
     return exp
