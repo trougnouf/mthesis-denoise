@@ -73,11 +73,6 @@ else:
 
 save_dir = os.path.join('models', expname)
 res_dir = os.path.join(args.result_dir, expname)
-os.makedirs(save_dir, exist_ok=True)
-os.makedirs(res_dir, exist_ok=True)
-
-
-
 
 def findLastCheckpoint(save_dir):
     file_list = glob.glob(os.path.join(save_dir, 'model_*.pth'))
@@ -162,7 +157,8 @@ if __name__ == '__main__':
             if n_count % 10 == 0:
                 print('%4d %4d / %4d loss = %2.4f' % (epoch+1, n_count, len(DDataset)//batch_size, loss.item()/batch_size))
         elapsed_time = time.time() - start_time
-
+        os.makedirs(save_dir, exist_ok=True)
+        os.makedirs(res_dir, exist_ok=True)
         log('epoch = %4d , loss = %4.4f , time = %4.2f s' % (epoch+1, epoch_loss/n_count, elapsed_time))
         np.savetxt(res_dir+'/train_result_'+str(epoch)+'.txt', np.hstack((epoch+1, epoch_loss/n_count, elapsed_time)), fmt='%2.4f')
         # torch.save(model.state_dict(), os.path.join(save_dir, 'model_%03d.pth' % (epoch+1)))
