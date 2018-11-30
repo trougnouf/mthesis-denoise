@@ -91,6 +91,8 @@ if __name__ == '__main__':
 
     if args.uncrop:
         sys.argv.extend(['--crop_dir', os.path.join(args.result_dir, '/'.join(model_path.split('/')[-2:]), noisy_dir.split('/')[-1], 'img')])
+        if not '--ds_dir' in sys.argv:
+            sys.argv.extend(['--ds_dir', args.ds_dir])
         from uncrop_images import *
 
 
