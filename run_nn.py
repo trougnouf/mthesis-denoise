@@ -34,6 +34,7 @@ parser.add_argument('--find_noise', action='store_true', help='Model noise if se
 parser.add_argument('--kernel_size', default=5, type=int, help='Kernel size')
 parser.add_argument('--docompression', type=str, help='Add compression to noisy images (random or [1-100], off if omitted)')
 parser.add_argument('--random_lr', action='store_true', help='Random learning rate (changes after each epoch)')
+parser.add_argument('--lossf', default='MSSSIM', help='Loss class defined in lib/__init__.py')
 args = parser.parse_args()
 
 # memory eg:
@@ -90,20 +91,6 @@ def findLastCheckpoint(save_dir):
 def log(*args, **kwargs):
     print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S:"), *args, **kwargs)
 
-# This is not in use at the moment
-class sum_squared_error(_Loss):  # PyTorch 0.4.1
-    """
-    Definition: sum_squared_error = 1/2 * nn.MSELoss(reduction = 'sum')
-    The backward is defined as: input-target
-    """
-    def __init__(self, size_average=None, reduce=None, reduction='sum'):
-        super(sum_squared_error, self).__init__(size_average, reduce, reduction)
-
-    def forward(self, input, target):
-        # return torch.sum(torch.pow(input-target,2), (0,1,2,3)).div_(2)
-        return torch.nn.functional.mse_loss(input, target, size_average=None, reduce=None,
-                                            reduction='sum').div_(2)
-
 if __name__ == '__main__':
     # model selection
     print('===> Building model')
@@ -121,9 +108,12 @@ if __name__ == '__main__':
         # model.load_state_dict(torch.load(os.path.join(save_dir, 'model_%03d.pth' % initial_epoch)))
         model = torch.load(os.path.join(save_dir, 'model_%03d.pth' % initial_epoch))
     model.train()
-    # criterion = nn.MSELoss(reduction = 'sum')  # PyTorch 0.4.1
-    #criterion = sum_squared_error()
-    criterion = pytorch_msssim.MSSSIM()
+    if args.lossf == 'MSSSIM':
+        criterion = pytorch_msssim.MSSSIM()
+    elif args.lossf == 'MSSSIMandMSE':
+        criterion = pytorch_msssim.MSSSIMandMSE()
+    else:
+        exit('Error: requested loss function '+args.lossf+' has not been implemented.')
     if cuda:
         model = model.cuda()
         # device_ids = [0]

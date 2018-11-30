@@ -19,7 +19,8 @@ kernel_size 5 fix RuntimeError
 
 share weights at the beginning
 
-
+unsupervised denoising
+reduce artifacts w/stride (and mirroring?)
 
 ===== Done =====
 11/28/2018 overwrite, uncrop switches
