@@ -6,7 +6,7 @@ import argparse
 # Params
 parser = argparse.ArgumentParser(description='Images uncropper')
 parser.add_argument('--crop_dir', default='results/test', type=str, help='Directory where crops to be stitched are located')
-parser.add_argument('--ds_dir', default='datasets/dataset', type=str, help='Directory with matching original images to get dimensions')
+parser.add_argument('--ds_dir', default='datasets', type=str, help='Directory with matching original images to get dimensions')
 parser.add_argument('--overwrite', action='store_true', help='Overwrite existing images')
 args, _ = parser.parse_known_args()
 

@@ -60,6 +60,8 @@ if __name__ == '__main__':
         model_path = os.path.join(model_path, sorted(os.listdir(model_path))[-1])
     if args.cs:
         noisy_dir = 'datasets/test/testdata_'+args.cs
+    else:
+        noisy_dir = args.noisy_dir
         
     torch.cuda.set_device(args.cuda_device)
     totensor = torchvision.transforms.ToTensor()
@@ -89,6 +91,8 @@ if __name__ == '__main__':
 
     if args.uncrop:
         sys.argv.extend(['--crop_dir', os.path.join(args.result_dir, '/'.join(model_path.split('/')[-2:]), noisy_dir.split('/')[-1], 'img')])
+        if not '--ds_dir' in sys.argv:
+            sys.argv.extend(['--ds_dir', args.ds_dir])
         from uncrop_images import *
 
 

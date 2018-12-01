@@ -15,7 +15,6 @@ def create_window(window_size, channel=3):
     window = _2D_window.expand(channel, 1, window_size, window_size).contiguous()
     return window
 
-
 def ssim(img1, img2, window_size=11, window=None, size_average=True, full=False, val_range=None):
     # Value range can be different from 255. Other common ranges are 1 (sigmoid) and 2 (tanh).
     if val_range is None:
@@ -131,3 +130,16 @@ class MSSSIM(torch.nn.Module):
     def forward(self, img1, img2):
         # TODO: store window between calls if possible
         return 1-msssim(img1, img2, window_size=self.window_size, size_average=self.size_average)
+        
+class MSSSIMandMSE(torch.nn.Module):
+    def __init__(self, window_size=11, size_average=True, channel=3):
+        super(MSSSIM, self).__init__()
+        self.window_size = window_size
+        self.size_average = size_average
+        self.channel = channel
+
+    def forward(self, img1, img2):
+        # TODO: store window between calls if possible
+        res = 1-msssim(img1, img2, window_size=self.window_size, size_average=self.size_average)
+        res += torch.nn.functional.mse_loss(img1, img2, size_average=None, reduce=None,reduction='sum').div_(40000)     
+        return res
