@@ -25,7 +25,6 @@ imglist = [
     'MuseeL-fuite,200,320,4000,6400',
     'MuseeL-RGB,200,250,1000,6400',
     'MuseeL-Vincent,200,400,2500,6400',
-    'MuseeL-avelo,200,500,3200,6400',
     'MuseeL-ambon,200,640,2500,6400',
     'MuseeL-ram,200,800,1000,6400',
     'MuseeL-Ghysels,200,800,6400',
@@ -51,6 +50,13 @@ imglist = [
     'books,200,1600,6400,H1,H2',
     'bloop,200,3200,6400,H1',
     'schooltop,200,800,6400,H1,H2',
+    'Sint-Joris,200,1000,2500,6400,H1,H2,H3',
+    'claycreature,200,4000,6400,H1',
+    'claycreatures,200,1600,5000,6400,H1,H2,H3',
+    'claytools,200,5000,6400,H1,H2,H3',
+    'CourtineDeVillersDebris,200,2500,6400,H1,H2',
+    'Leonidas,200,400,3200,6400,H1',
+    'pastries,200,3200,6400,H1,H2',
     ]
 os.makedirs('datasets/dataset', exist_ok=True)
 os.chdir('datasets/dataset')

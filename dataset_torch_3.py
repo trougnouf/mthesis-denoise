@@ -12,7 +12,9 @@ class DenoisingDataset(Dataset):
         super(DenoisingDataset, self).__init__()
         self.docompression = docompression
         self.totensor = torchvision.transforms.ToTensor()
-
+        self.datadir = datadir
+        self.dataset = []
+        cs = int(datadir.split('_')[-2])
         def sortISOs(rawISOs):
             isos = []
             hisos = []
@@ -23,39 +25,18 @@ class DenoisingDataset(Dataset):
             isos = ['ISO'+str(iso) for iso in isos]
             isos.extend(hisos)
             return isos
-        self.datadir = datadir
-        self.images = []
-        self.start_indices = [0]
-        self.Dsize = 0
-        for iname in os.listdir(datadir):
-            print(iname)
-            isos = sortISOs(os.listdir(datadir+'/'+iname))
-            ncrops = len(os.listdir(datadir+'/'+iname+'/'+str(isos[0])))
-            self.Dsize += ncrops
-            curimg = {'name': iname, 'biso': str(isos[0]), 'isos': isos[1:], 'ncrops': ncrops}
-            self.images.append(curimg)
+        for aset in os.listdir(datadir):
+            isos = sortISOs(os.listdir(os.path.join(datadir,aset)))
+            for animg in os.listdir(os.path.join(datadir, aset, isos[0])):
+                if Image.open(os.path.join(datadir, aset, isos[0], animg)).size == (cs, cs):
+                    self.dataset.append([os.path.join(aset,'ISOBASE',animg).replace(isos[0],'ISOBASE'), isos])
 
     def __getitem__(self, reqindex):
-        # find crop #
-        i = 0
-        for img in self.images:
-            if i+img['ncrops'] > reqindex:
-                crop_i = reqindex-i
-                break
-            i += img['ncrops']
-        # get image file
-        try:
-            ximg = Image.open(self.datadir+'/'+img['name']+'/'+img['biso']
-                              + '/NIND_'+img['name']+'_'+img['biso']+'_'
-                              + str(crop_i)+'.jpg')
-        except FileNotFoundError:
-            print(' i: ');print(i)
-            print(' reqindex: ');print(reqindex)
-            print(' crop_i: ');print(crop_i)
-            print(self.images)
-        niso = choice(img['isos'])
-        yimg = Image.open(self.datadir+'/'+img['name']+'/'+niso+'/NIND_'
-                          + img['name']+'_'+niso+'_'+str(crop_i)+'.jpg')
+        img = self.dataset[reqindex]
+        xpath = os.path.join(self.datadir, img[0].replace('ISOBASE',img[1][0]))
+        ypath = os.path.join(self.datadir, img[0].replace('ISOBASE',choice(img[1][1:])))
+        ximg = Image.open(xpath)
+        yimg = Image.open(ypath)
         # data augmentation
         random_decision = randint(0, 99)
         if random_decision % 10 == 0:
@@ -86,4 +67,4 @@ class DenoisingDataset(Dataset):
         return (self.totensor(ximg), self.totensor(yimg))
 
     def __len__(self):
-        return self.Dsize
+        return len(self.dataset)

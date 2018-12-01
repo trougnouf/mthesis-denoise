@@ -26,7 +26,7 @@ NXCROPS=$((${RES[0]}/$UCS+1))
 NYCROPS=$((${RES[1]}/$UCS+1))
 let CURX=CURY=0
 
-while ((${CURY}<=${NYCROPS}))
+while ((${CURY}<${NYCROPS}))
 do
     # base cases
     let XCS=YCS=CS
@@ -36,7 +36,7 @@ do
     # starting from X=0 or Y=0
     if [ $CURX == 0 ]
     then
-        XCS=$((CS-(CS-UCS)/2))
+        XCS=$(($CS-($CS-$UCS)/2))
         XBEG=0
     fi
     if [ $CURY == 0 ]
@@ -44,21 +44,25 @@ do
         YCS=$((CS-(CS-UCS)/2))
         YBEG=0
     fi
+    # starting close to the end?
+    XCS=$((XCS<${RES[0]}-XBEG?XCS:${RES[0]}-XBEG))
+    YCS=$((YCS<${RES[1]}-YBEG?YCS:${RES[1]}-YBEG))
     # starting from Xlast or Ylast
-    if [ $CURX == $((NXCROPS-1)) ]
+    if [ $CURX == $(($NXCROPS-1)) ]
     then
-        XCS=$((${RES[0]}-XBEG))
-        CUCS=$((XCS-(CS-UCS)/2))
+        CUCS=$(($XCS-($CS-$UCS)/2))
     fi
-    if [ $CURY == $((NYCROPS-1)) ]
+    if [ $CURY == $(($NYCROPS-1)) ]
     then
-        YCS=$((${RES[1]}-YBEG))
-        CUCS=$(($CUCS<(YCS-(CS-UCS)/2)?$CUCS:(YCS-(CS-UCS)/2)))
+        CUCS=$(($CUCS<($YCS-($CS-$UCS)/2)?$CUCS:($YCS-($CS-$UCS)/2)))
     fi
     CPATH="${OUTDIR}/${BN}_${CURX}_${CURY}_${CUCS}.jpg"
 	if [ ! -f "${CPATH}" ]
 	then
-		jpegtran -crop ${XCS}x${YCS}+${XBEG}+${YBEG} -copy none -optimize -outfile ${CPATH} ${FP}
+		if ! jpegtran -crop ${XCS}x${YCS}+${XBEG}+${YBEG} -copy none -optimize -outfile ${CPATH} ${FP}
+		then
+		    echo "jpegtran -crop ${XCS}x${YCS}+${XBEG}+${YBEG} -copy none -optimize -outfile ${CPATH} ${FP}"
+	    fi
 	fi
 	((CURX++))
 	if ((CURX>=NXCROPS))

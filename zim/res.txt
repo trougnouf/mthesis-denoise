@@ -1,0 +1,9 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2018-11-30T10:53:15+01:00
+
+====== res ======
+Created Friday 30 November 2018
+
+2018-11-29T19:39_run_nn.py_--model_RedCNN_--epoch_76_--cuda_device_3_--n_channels_128_--kernel_size_5_--batch_size_38_--depth_22_--lr_5e-4
+[[NaN]] (high learning rate?), same w/ higher LR
