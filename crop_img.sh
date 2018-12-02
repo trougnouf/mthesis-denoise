@@ -59,9 +59,10 @@ do
     CPATH="${OUTDIR}/${BN}_${CURX}_${CURY}_${CUCS}.jpg"
 	if [ ! -f "${CPATH}" ]
 	then
-		if ! jpegtran -crop ${XCS}x${YCS}+${XBEG}+${YBEG} -copy none -optimize -outfile ${CPATH} ${FP}
+	    CMD="jpegtran -crop ${XCS}x${YCS}+${XBEG}+${YBEG} -copy none -optimize -outfile ${CPATH} ${FP}"
+		if ! $(${CMD})
 		then
-		    echo "jpegtran -crop ${XCS}x${YCS}+${XBEG}+${YBEG} -copy none -optimize -outfile ${CPATH} ${FP}"
+		    echo "${CMD}"
 	    fi
 	fi
 	((CURX++))
