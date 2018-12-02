@@ -15,7 +15,7 @@ todolist = []
 
 sets = os.listdir(args.dsdir)
 # structured dataset
-if os.path.isdir(sets[0]):
+if os.path.isdir(os.path.join(args.dsdir, sets[0])):
     for aset in sets:
         for image in os.listdir(os.path.join(args.dsdir, aset)):
             inpath=os.path.join(args.dsdir, aset, image)
