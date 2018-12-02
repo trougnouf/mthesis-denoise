@@ -71,3 +71,4 @@ for img in imglist:
         with open(fpath, 'wb') as f:
             f.write(requests.get(burl+fpath.split('/')[1]).content)
             print('Downloaded '+fpath.split('/')[1])
+            f.flush()
