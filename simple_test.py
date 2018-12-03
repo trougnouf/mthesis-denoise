@@ -55,7 +55,8 @@ if __name__ == '__main__':
     else:
         model_path = os.path.join('models', sorted(os.listdir('models'))[-1])
         model_path = os.path.join(model_path, sorted(os.listdir(model_path))[-1])
-    cs, ucs = [int(i) for i in args.noisy_dir.split('_')[-2:]]
+    noisy_dir = args.noisy_dir[:-1] if args.noisy_dir[-1] == '/' else args.noisy_dir
+    cs, ucs = [int(i) for i in noisy_dir.split('_')[-2:]]
     torch.cuda.set_device(args.cuda_device)
     totensor = torchvision.transforms.ToTensor()
     print('loading '+ model_path)
