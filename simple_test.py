@@ -74,7 +74,7 @@ if __name__ == '__main__':
             if xpos == 0:
                 xoffset = cs-img.width
             if ypos == 0:
-                yoffset = cs.img.height
+                yoffset = cs-img.height
             newimg.paste(img, (xoffset, yoffset))
             img = newimg
         return totensor(img)
