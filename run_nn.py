@@ -37,6 +37,8 @@ parser.add_argument('--random_lr', action='store_true', help='Random learning ra
 parser.add_argument('--lossf', default='MSSSIM', help='Loss class defined in lib/__init__.py')
 args = parser.parse_args()
 
+
+
 # memory eg:
 # 1996: res48x48 bs27 = 1932/1996 5260s
 # 11172 d22 res96
@@ -92,7 +94,6 @@ def log(*args, **kwargs):
     print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S:"), *args, **kwargs)
 
 if __name__ == '__main__':
-    # model selection
     print('===> Building model')
     if args.model == 'DnCNN':
         model = nnModules.DnCNN(depth=args.depth, n_channels=args.n_channels, find_noise=args.find_noise, kernel_size=args.kernel_size)
@@ -109,7 +110,7 @@ if __name__ == '__main__':
         model = torch.load(os.path.join(save_dir, 'model_%03d.pth' % initial_epoch))
     model.train()
     if args.lossf == 'MSSSIM':
-        criterion = pytorch_msssim.MSSSIM()
+        criterion = pytorch_msssim.MSSSIM(channel=3, crop_ps=.125)
     elif args.lossf == 'MSSSIMandMSE':
         criterion = pytorch_msssim.MSSSIMandMSE()
     else:
