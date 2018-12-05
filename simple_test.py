@@ -25,6 +25,7 @@ import sys
 import torch
 import torchvision
 from PIL import Image
+from uncrop_image import uncrop
 
 
 def parse_args():
@@ -80,11 +81,13 @@ if __name__ == '__main__':
         return totensor(img)
             
         
+    base_images = set()
     
     for root, dirs, files in os.walk(noisy_dir):
         for name in files:
             cur_img_sav_dir = os.path.join(args.result_dir, '/'.join(model_path.split('/')[-2:]), noisy_dir.split('/')[-1], 'img', './'+root.split(noisy_dir)[-1])
             cur_img_sav_path = os.path.join(cur_img_sav_dir, name[:-4]+'_denoised.jpg')
+            base_images.add(cur_img_sav_dir)
             if os.path.isfile(cur_img_sav_path) and not args.overwrite:
                 continue
             os.makedirs(cur_img_sav_dir, exist_ok=True)
@@ -101,9 +104,7 @@ if __name__ == '__main__':
             print('%s : %2.4f second' % (name, elapsed_time))
 
     if args.uncrop:
-        sys.argv.extend(['--crop_dir', os.path.join(args.result_dir, '/'.join(model_path.split('/')[-2:]), noisy_dir.split('/')[-1], 'img')])
-        if not '--ds_dir' in sys.argv:
-            sys.argv.extend(['--ds_dir', args.ds_dir])
-        from uncrop_images import *
+        for adir in base_images:
+            uncrop(adir)
 
 

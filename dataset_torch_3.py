@@ -13,8 +13,9 @@ class DenoisingDataset(Dataset):
         self.docompression = docompression
         self.totensor = torchvision.transforms.ToTensor()
         self.datadir = datadir
+        # each dataset element is ["<SETNAME>/ISOBASE/NIND_<SETNAME>_ISOBASE_<XNUM>_<YNUM>_<UCS>.jpg", [<ISOVAL1>,...,<ISOVALN>]]
         self.dataset = []
-        cs = int(datadir.split('_')[-2])
+        self.cs, self.ucs = [int(i) for i in datadir.split('_')[-2:]]
         def sortISOs(rawISOs):
             isos = []
             hisos = []
@@ -28,15 +29,35 @@ class DenoisingDataset(Dataset):
         for aset in os.listdir(datadir):
             isos = sortISOs(os.listdir(os.path.join(datadir,aset)))
             for animg in os.listdir(os.path.join(datadir, aset, isos[0])):
-                if Image.open(os.path.join(datadir, aset, isos[0], animg)).size == (cs, cs):
+                # check for min size
+                if all(d >= self.ucs for d in Image.open(os.path.join(datadir, aset, isos[0], animg)).size):
                     self.dataset.append([os.path.join(aset,'ISOBASE',animg).replace(isos[0],'ISOBASE'), isos])
 
-    def __getitem__(self, reqindex):
-        img = self.dataset[reqindex]
+    def get_and_pad(self, index):
+        img = self.dataset[index]
         xpath = os.path.join(self.datadir, img[0].replace('ISOBASE',img[1][0]))
         ypath = os.path.join(self.datadir, img[0].replace('ISOBASE',choice(img[1][1:])))
         ximg = Image.open(xpath)
         yimg = Image.open(ypath)
+        if all(d == self.cs for d in ximg.size):
+            return (ximg, yimg)
+        xnum, ynum, ucs = [int(i) for i in img[0].strip('.jpg').split('_')[-3:]]
+        if xnum == 0:
+            # pad left
+            ximg = ximg.crop((-self.cs+ximg.width, 0, ximg.width, ximg.height))
+            yimg = yimg.crop((-self.cs+yimg.width, 0, yimg.width, yimg.height))
+        if ynum == 0:
+            # pad top
+            ximg = ximg.crop((0, -self.cs+ximg.height, ximg.width, ximg.height))
+            yimg = yimg.crop((0, -self.cs+yimg.height, yimg.width, yimg.height))
+        if ximg.width < self.cs or ximg.height < self.cs:
+            # pad right and bottom
+            ximg = ximg.crop((0, 0, self.cs, self.cs))
+            yimg = yimg.crop((0, 0, self.cs, self.cs))
+        return (ximg, yimg)
+
+    def __getitem__(self, reqindex):
+        ximg, yimg = self.get_and_pad(reqindex)
         # data augmentation
         random_decision = randint(0, 99)
         if random_decision % 10 == 0:

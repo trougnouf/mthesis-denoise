@@ -126,8 +126,10 @@ class MSSSIM(torch.nn.Module):
         self.window_size = window_size
         self.size_average = size_average
         self.channel = channel
+        self.crop_ps = crop_ps
 
     def forward(self, img1, img2):
+        print(img1.size()) # DBG
         # TODO: store window between calls if possible
         cropindices = [(int(self.crop_ps*i), int((1-self.crop_ps)*i)) for i in img1.shape[1:3]]
         return 1-msssim(img1[:,cropindices[0][0]:cropindices[0][1], cropindices[1][0]:cropindices[1][1]], img2[:,cropindices[0][0]:cropindices[0][1], cropindices[1][0]:cropindices[1][1]], window_size=self.window_size, size_average=self.size_average)

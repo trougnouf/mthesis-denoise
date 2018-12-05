@@ -12,21 +12,21 @@ from math import floor
 
 def get_attr(fn, attr):
     if attr == 'xcnt':
-        return fn.split('_')[-4]
+        return int(fn.split('_')[-4])
     elif attr == 'ycnt':
-        return fn.split('_')[-3]
+        return int(fn.split('_')[-3])
     elif attr == 'ucs':
-        return fn.split('_')[-2]
+        return int(fn.split('_')[-2])
         
-def get_crop_at(crops,xcnt,ycnt):
-    for crop in crops:
-        if get_attr(crop, 'xcnt') == str(xcnt) and get_attr(crop, 'ycnt') == str(ycnt):
-            return crop
 
 def uncrop(crop_dir):
     crops = [os.path.join(crop_dir, crop) for crop in os.listdir(crop_dir)]
-    lastx = max([int(get_attr(crop, 'xcnt')) for crop in crops])
-    lasty = max([int(get_attr(crop, 'ycnt')) for crop in crops])
+    def get_crop_at(xcnt,ycnt):
+        for crop in crops:
+            if get_attr(crop, 'xcnt') == xcnt and get_attr(crop, 'ycnt') == ycnt:
+                return crop
+    lastx = max([get_attr(crop, 'xcnt') for crop in crops])
+    lasty = max([get_attr(crop, 'ycnt') for crop in crops])
     remx = get_attr(get_crop_at(lastx, 1), 'ucs')
     remy = get_attr(get_crop_at(1, lasty), 'ucs')
     stducs = get_attr(get_crop_at(1, 1), 'ucs')
@@ -36,14 +36,20 @@ def uncrop(crop_dir):
     newimg = Image.new('RGB', (width, height))
     for cropfn in crops:
         cropimg = Image.open(cropfn)
-        cropleft = croptop = (cs-stducs)/2
+
         absleft = get_attr(cropfn, 'xcnt')*stducs
         abstop = get_attr(cropfn, 'ycnt')*stducs
         absright = min(absleft+stducs, width)
-        cropright = min(stducs+cropleft, absright-absleft)
         absbot = min(abstop+stducs, height)
-        cropbot = min(stducs+croptop, absbot-abstop)
-        cropimg.crop((cropleft, croptop, cropright, cropbot))
+
+        #croplength = absright - absleft
+        #cropheight = absbottom - abstop
+
+        cropleft = croptop = (cs-stducs)/2
+
+        cropright = min(stducs+cropleft, absright-absleft+cropleft)
+        cropbot = min(stducs+croptop, absbot-abstop+cropleft)
+        cropimg = cropimg.crop((cropleft, croptop, cropright, cropbot))
         newimg.paste(cropimg, (absleft, abstop, absright, absbot))
     newpath = (crop_dir if crop_dir[-1]!='/' else crop_dir[:-1])+'.jpg'
     newimg.save(newpath, quality=100)
