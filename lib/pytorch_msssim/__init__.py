@@ -131,7 +131,6 @@ class MSSSIM(torch.nn.Module):
     def forward(self, img1, img2):
         dmin, dmax = int(img1.shape[-1]*self.crop_ps), int(img1.shape[-1]*(1-self.crop_ps))
         # TODO: store window between calls if possible
-        cropindices = [(int(self.crop_ps*i), int((1-self.crop_ps)*i)) for i in img1.shape[1:3]]
         return 1-msssim(img1[:,:,dmin:dmax, dmin:dmax], img2[:,:,dmin:dmax, dmin:dmax], window_size=self.window_size, size_average=self.size_average)
 
 class MSSSIMandMSE(torch.nn.Module):
