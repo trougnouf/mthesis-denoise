@@ -68,6 +68,7 @@ def ssim(img1, img2, window_size=11, window=None, size_average=True, full=False,
 
 
 def msssim(img1, img2, window_size=11, size_average=True, val_range=None, normalize=True):
+    print(img1.size()) # DBG
     device = img1.device
     weights = torch.FloatTensor([0.0448, 0.2856, 0.3001, 0.2363, 0.1333]).to(device)
     levels = weights.size()[0]
@@ -132,8 +133,8 @@ class MSSSIM(torch.nn.Module):
         print(img1.size()) # DBG
         # TODO: store window between calls if possible
         cropindices = [(int(self.crop_ps*i), int((1-self.crop_ps)*i)) for i in img1.shape[1:3]]
-        return 1-msssim(img1[:,cropindices[0][0]:cropindices[0][1], cropindices[1][0]:cropindices[1][1]], img2[:,cropindices[0][0]:cropindices[0][1], cropindices[1][0]:cropindices[1][1]], window_size=self.window_size, size_average=self.size_average)
-        
+        return 1-msssim(img1[:,:,cropindices[0][0]:cropindices[0][1], cropindices[1][0]:cropindices[1][1]], img2[:,:,cropindices[0][0]:cropindices[0][1], cropindices[1][0]:cropindices[1][1]], window_size=self.window_size, size_average=self.size_average)
+
 class MSSSIMandMSE(torch.nn.Module):
     def __init__(self, window_size=11, size_average=True, channel=3):
         super(MSSSIM, self).__init__()
