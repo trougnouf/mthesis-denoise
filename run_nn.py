@@ -110,7 +110,7 @@ if __name__ == '__main__':
         model = torch.load(os.path.join(save_dir, 'model_%03d.pth' % initial_epoch))
     model.train()
     if args.lossf == 'MSSSIM':
-        criterion = pytorch_msssim.MSSSIM(channel=3, crop_ps=.125)
+        criterion = pytorch_msssim.MSSSIM(channel=3)
     elif args.lossf == 'MSSSIMandMSE':
         criterion = pytorch_msssim.MSSSIMandMSE()
     else:
@@ -126,6 +126,8 @@ if __name__ == '__main__':
         docompression=args.docompression
     DDataset = DenoisingDataset(args.train_data, docompression=docompression)
     DLoader = DataLoader(dataset=DDataset, num_workers=8, drop_last=True, batch_size=batch_size, shuffle=True)
+    loss_crop_lb = int((DDataset.cs-DDataset.ucs)/2)
+    loss_crop_up = loss_crop_lb+DDataset.ucs
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
     if args.random_lr:
         lrlambda = lambda epoch, lr=args.lr: randint(1,.1/lr)/randint(1,1/lr)
@@ -141,7 +143,8 @@ if __name__ == '__main__':
             optimizer.zero_grad()
             if cuda:
                 batch_x, batch_y = batch_yx[1].cuda(), batch_yx[0].cuda()
-            loss = criterion(model(batch_y), batch_x)
+
+            loss = criterion(model(batch_y)[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], batch_x[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up])
             epoch_loss += loss.item()
             loss.backward()
             optimizer.step()

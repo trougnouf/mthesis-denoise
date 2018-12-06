@@ -5,8 +5,18 @@ Creation-Date: 2018-11-21T22:47:51+01:00
 ====== TODO ======
 Created Wednesday 21 November 2018
 
-===== 1 =====
+move losscrop to criterion for more flexibility
+compare with MSE or MSEcombined
 
+__Table of measurements (how is it trained, how is it validated)__
+	compare w/psnr on training data
+
+===== 1 =====
+run: DnCNN, Redish w/ higher learning rate, compression (3), compression 60
+
+quantitative test and graph (and test w/ compression)
+
+compression test
 
 implement a skip baseline
 compare loss w/ bs, #layers, res
@@ -14,15 +24,13 @@ add compression
 grapher
 test w/o padding, check when grid takes place
 
-
-kernel_size 5 fix RuntimeError
-
 share weights at the beginning
 
 unsupervised denoising
 reduce artifacts w/stride (and mirroring?)
 
 ===== Done =====
+12/05/2018 and - overlapping training and testing, RedCNN, RedishCNN 
 11/28/2018 overwrite, uncrop switches
 test/train set maker
 compare perf of finding noise vs clean image
