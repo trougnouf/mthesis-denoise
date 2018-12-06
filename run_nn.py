@@ -12,7 +12,6 @@ from torch.utils.data import DataLoader
 import torch.optim as optim
 from torch.optim.lr_scheduler import MultiStepLR, LambdaLR
 from dataset_torch_3 import DenoisingDataset
-from torch.nn.modules.loss import _Loss
 from lib import pytorch_msssim
 from random import randint
 
