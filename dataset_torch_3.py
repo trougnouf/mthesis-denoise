@@ -17,7 +17,7 @@ class DenoisingDataset(Dataset):
         self.dataset = []
         self.cs, self.ucs = [int(i) for i in datadir.split('_')[-2:]]
         def sortISOs(rawISOs):
-            if '0' in rawISOs:  # handle non-ISO cases (where base is simply '0')
+            if any(i[0]=='0' for i in rawISOs)
                 return sorted(rawISOs)
             isos = []
             hisos = []
