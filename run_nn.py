@@ -98,10 +98,8 @@ if __name__ == '__main__':
         model = nnModules.DnCNN(depth=args.depth, n_channels=args.n_channels, find_noise=args.find_noise, kernel_size=args.kernel_size)
     elif args.model == 'RedCNN':
         model = nnModules.RedCNN(depth=args.depth, n_channels=args.n_channels, kernel_size=args.kernel_size)
-        model.apply(nnModules.init_weights)
     elif args.model == 'RedishCNN':
         model = nnModules.RedishCNN(depth=args.depth, n_channels=args.n_channels, kernel_size=args.kernel_size)
-        model.apply(nnModules.init_weights)
     else:
         exit(args.model+' not implemented.')
     initial_epoch = findLastCheckpoint(save_dir=save_dir)  # load the last model in matconvnet style
@@ -109,6 +107,8 @@ if __name__ == '__main__':
         print('resuming by loading epoch %03d' % initial_epoch)
         # model.load_state_dict(torch.load(os.path.join(save_dir, 'model_%03d.pth' % initial_epoch)))
         model = torch.load(os.path.join(save_dir, 'model_%03d.pth' % initial_epoch))
+    elif args.model != 'DnCNN':
+        model.apply(nnModules.init_weights)
     model.train()
     if args.lossf == 'MSSSIM':
         criterion = pytorch_msssim.MSSSIM(channel=3)
@@ -138,7 +138,7 @@ if __name__ == '__main__':
     elif args.scheduler == 'multistep':
         scheduler = MultiStepLR(optimizer, milestones=[args.epoch*.02, args.epoch*.06, args.epoch*.14, args.epoch*.30, args.epoch*.62, args.epoch*.78, args.epoch*.86], gamma=0.5)  # learning rates
     else:
-        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=1, verbose=True, factor=.5, cooldown=1)
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=1, verbose=True, factor=.5, cooldown=1, threshold=1e-8)
         lossval = 1
     for epoch in range(initial_epoch, args.epoch):
         if args.scheduler == 'plateau':
