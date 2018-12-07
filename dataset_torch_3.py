@@ -33,12 +33,12 @@ class DenoisingDataset(Dataset):
             for animg in os.listdir(os.path.join(datadir, aset, isos[0])):
                 # check for min size
                 if all(d >= self.ucs for d in Image.open(os.path.join(datadir, aset, isos[0], animg)).size):
-                    self.dataset.append([os.path.join(aset,'ISOBASE',animg).replace(isos[0],'ISOBASE'), isos])
+                    self.dataset.append([os.path.join(aset,'ISOBASE',animg).replace('_'+isos[0]+'_','_ISOBASE_'), isos])
 
     def get_and_pad(self, index):
         img = self.dataset[index]
-        xpath = os.path.join(self.datadir, img[0].replace('ISOBASE',img[1][0]))
-        ypath = os.path.join(self.datadir, img[0].replace('ISOBASE',choice(img[1][1:])))
+        xpath = os.path.join(self.datadir, img[0].replace('_ISOBASE_','_'+img[1][0]+'_'))
+        ypath = os.path.join(self.datadir, img[0].replace('_ISOBASE_','_'+choice(img[1][1:])+'_'))
         ximg = Image.open(xpath)
         yimg = Image.open(ypath)
         if all(d == self.cs for d in ximg.size):
