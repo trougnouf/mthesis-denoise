@@ -64,8 +64,8 @@ nindlist = [
     'pastries,200,3200,6400,H1,H2',
     ]
 manset = [
-    'sky,0,denoised',
-    'lightclouds,0,denoised',
+    'lightclouds,0,naturalnoise',
+    'goldenhoursky,0,naturalnoise'
     ]
 os.makedirs('datasets/dataset', exist_ok=True)
 os.chdir('datasets/dataset')
