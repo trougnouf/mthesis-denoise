@@ -6,7 +6,7 @@ import subprocess
 parser = argparse.ArgumentParser(description='PyTorch DnCNN')
 parser.add_argument('--use_wget', action='store_true', help="Use wget instead of python's request library (more likely to succeed)")
 args = parser.parse_args()
-imglist = [
+nindlist = [
     'droid,200,800,3200,6400',
     'gnome,200,800,1600,6400',
     'Ottignies,200,640,3200,6400',
@@ -63,22 +63,29 @@ imglist = [
     'Leonidas,200,400,3200,6400,H1',
     'pastries,200,3200,6400,H1,H2',
     ]
+manset = [
+    'sky,0,denoised',
+    'lightclouds,0,denoised',
+    ]
 os.makedirs('datasets/dataset', exist_ok=True)
 os.chdir('datasets/dataset')
 burl = 'https://commons.wikimedia.org/wiki/Special:Redirect/file/'
-for img in imglist:
-    name, *isos = img.split(',')
-    os.makedirs(name, exist_ok=True)
-    for iso in isos:
-        fpath = name+'/NIND_'+name+'_ISO'+iso+'.jpg'
-        url = burl+fpath.split('/')[1]
-        if os.path.isfile(fpath):
-            continue
-        if args.use_wget:
-            subprocess.run(['wget', url, '-O', fpath])
-            # TODO add error checking
-        else:
-            with open(fpath, 'wb') as f:
-                f.write(requests.get(url).content)
-                print('Downloaded '+fpath.split('/')[1])
-                f.flush()
+def download(imlist, dsname, targetdir, prefix='ISO'):
+    for img in imlist:
+        name, *isos = img.split(',')
+        os.makedirs(name, exist_ok=True)
+        for iso in isos:
+            fpath = name+'/'+dsname+'_'+name+'_'+prefix+iso+'.jpg'
+            url = burl+fpath.split('/')[1]
+            if os.path.isfile(fpath):
+                continue
+            if args.use_wget:
+                subprocess.run(['wget', url, '-O', fpath])
+                # TODO add error checking
+            else:
+                with open(fpath, 'wb') as f:
+                    f.write(requests.get(url).content)
+                    print('Downloaded '+fpath.split('/')[1])
+                    f.flush()
+download(nindlist, 'NIND', 'datasets/dataset')
+download(manset, 'MAND', 'datasets/dataset', prefix='')

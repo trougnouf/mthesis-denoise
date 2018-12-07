@@ -13,10 +13,12 @@ class DenoisingDataset(Dataset):
         self.docompression = docompression
         self.totensor = torchvision.transforms.ToTensor()
         self.datadir = datadir
-        # each dataset element is ["<SETNAME>/ISOBASE/NIND_<SETNAME>_ISOBASE_<XNUM>_<YNUM>_<UCS>.jpg", [<ISOVAL1>,...,<ISOVALN>]]
+        # each dataset element is ["<SETNAME>/ISOBASE/<DSNAME>_<SETNAME>_ISOBASE_<XNUM>_<YNUM>_<UCS>.jpg", [<ISOVAL1>,...,<ISOVALN>]]
         self.dataset = []
         self.cs, self.ucs = [int(i) for i in datadir.split('_')[-2:]]
         def sortISOs(rawISOs):
+            if '0' in rawISOs:  # handle non-ISO cases (where base is simply '0')
+                return sorted(rawISOs)
             isos = []
             hisos = []
             for iso in rawISOs:
