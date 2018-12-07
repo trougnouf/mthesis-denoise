@@ -112,6 +112,8 @@ if __name__ == '__main__':
         criterion = pytorch_msssim.MSSSIM(channel=3)
     elif args.lossf == 'MSSSIMandMSE':
         criterion = pytorch_msssim.MSSSIMandMSE()
+    elif args.lossf == 'MSE':
+        criterion = torch.nn.MSELoss()
     else:
         exit('Error: requested loss function '+args.lossf+' has not been implemented.')
     if cuda:
