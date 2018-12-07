@@ -2,6 +2,11 @@ import torch.nn as nn
 import torch.nn.init as init
 from math import floor
 
+def init_weights(m):
+    if type(m) == nn.Linear:
+        nn.init.xavier_uniform(m.weight)
+        m.bias.data.fill_(0.01)
+
 class DnCNN(nn.Module):
     def __init__(self, depth=22, n_channels=64, image_channels=3, use_bnorm=True, kernel_size=3, find_noise=True):
         super(DnCNN, self).__init__()

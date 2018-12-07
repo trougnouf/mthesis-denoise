@@ -32,7 +32,7 @@ parser.add_argument('--n_channels', default=128, type=int, help='Number of chann
 parser.add_argument('--find_noise', action='store_true', help='Model noise if set otherwise generate clean image')
 parser.add_argument('--kernel_size', default=5, type=int, help='Kernel size')
 parser.add_argument('--docompression', type=str, help='Add compression to noisy images (random or [1-100], off if omitted)')
-parser.add_argument('--random_lr', action='store_true', help='Random learning rate (changes after each epoch)')
+parser.add_argument('--scheduler', default='plateau', type=str, help='Scheduler; adjusts learning rate. Options are plateau, multistep, random')
 parser.add_argument('--lossf', default='MSSSIM', help='Loss class defined in lib/__init__.py')
 args = parser.parse_args()
 
@@ -60,7 +60,7 @@ def find_experiment():
         if adir[17:]==bname:
             exp = adir
     return exp
-    
+
 
 if args.expname:
     expname = args.expname
@@ -71,7 +71,7 @@ else:
             sys.exit('Error: cannot resume experiment (404)')
     else:
         expname = datetime.datetime.now().isoformat()[:-10]+'_'+'_'.join(sys.argv).replace('/','-')
-    
+
 
 save_dir = os.path.join('models', expname)
 res_dir = os.path.join(args.result_dir, expname)
@@ -98,8 +98,10 @@ if __name__ == '__main__':
         model = nnModules.DnCNN(depth=args.depth, n_channels=args.n_channels, find_noise=args.find_noise, kernel_size=args.kernel_size)
     elif args.model == 'RedCNN':
         model = nnModules.RedCNN(depth=args.depth, n_channels=args.n_channels, kernel_size=args.kernel_size)
+        model.apply(nnModules.init_weights)
     elif args.model == 'RedishCNN':
         model = nnModules.RedishCNN(depth=args.depth, n_channels=args.n_channels, kernel_size=args.kernel_size)
+        model.apply(nnModules.init_weights)
     else:
         exit(args.model+' not implemented.')
     initial_epoch = findLastCheckpoint(save_dir=save_dir)  # load the last model in matconvnet style
@@ -130,13 +132,19 @@ if __name__ == '__main__':
     loss_crop_lb = int((DDataset.cs-DDataset.ucs)/2)
     loss_crop_up = loss_crop_lb+DDataset.ucs
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
-    if args.random_lr:
+    if args.scheduler == 'random':
         lrlambda = lambda epoch, lr=args.lr: randint(1,.1/lr)/randint(1,1/lr)
         scheduler = LambdaLR(optimizer, lrlambda)
-    else:
+    elif args.scheduler == 'multistep':
         scheduler = MultiStepLR(optimizer, milestones=[args.epoch*.02, args.epoch*.06, args.epoch*.14, args.epoch*.30, args.epoch*.62, args.epoch*.78, args.epoch*.86], gamma=0.5)  # learning rates
+    else:
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=1, verbose=True, factor=.5, cooldown=1)
+        lossval = 1
     for epoch in range(initial_epoch, args.epoch):
-        scheduler.step(epoch)  # step to the learning rate in this epcoh
+        if args.scheduler == 'plateau':
+            scheduler.step(lossval)
+        else:
+            scheduler.step(epoch)  # step to the learning rate in this epcoh
         epoch_loss = 0
         start_time = time.time()
 
@@ -151,6 +159,7 @@ if __name__ == '__main__':
             optimizer.step()
             if n_count % 10 == 0:
                 print('%4d %4d / %4d loss = %2.4f' % (epoch+1, n_count, len(DDataset)//batch_size, loss.item()/batch_size))
+        lossval = loss.item()
         elapsed_time = time.time() - start_time
         os.makedirs(save_dir, exist_ok=True)
         os.makedirs(res_dir, exist_ok=True)
