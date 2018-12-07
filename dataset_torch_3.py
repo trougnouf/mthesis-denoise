@@ -37,8 +37,8 @@ class DenoisingDataset(Dataset):
 
     def get_and_pad(self, index):
         img = self.dataset[index]
-        xpath = os.path.join(self.datadir, img[0].replace('_ISOBASE_','_'+img[1][0]+'_'))
-        ypath = os.path.join(self.datadir, img[0].replace('_ISOBASE_','_'+choice(img[1][1:])+'_'))
+        xpath = os.path.join(self.datadir, img[0].replace('_ISOBASE_','_'+img[1][0]+'_')).replace('/ISOBASE/','/'+img[1][0]+'/'))
+        ypath = os.path.join(self.datadir, img[0].replace('/ISOBASE/','/'+choice(img[1][1:])+'/'))
         ximg = Image.open(xpath)
         yimg = Image.open(ypath)
         if all(d == self.cs for d in ximg.size):
