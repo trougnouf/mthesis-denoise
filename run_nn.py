@@ -150,10 +150,10 @@ if __name__ == '__main__':
         epoch_loss = 0
         start_time = time.time()
 
-        for n_count, batch_yx in enumerate(DLoader):
+        for n_count, batch_xy in enumerate(DLoader):
             optimizer.zero_grad()
             if cuda:
-                batch_y, batch_x = batch_yx[1].cuda(), batch_yx[0].cuda()
+                batch_x, batch_y = batch_xy[0].cuda(), batch_xy[1].cuda()
 
             loss = criterion(model(batch_y)[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], batch_x[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up])
             if args.lossf == 'SSIM':

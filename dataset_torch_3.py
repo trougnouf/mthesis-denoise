@@ -31,6 +31,11 @@ class DenoisingDataset(Dataset):
         for aset in os.listdir(datadir):
             isos = sortISOs(os.listdir(os.path.join(datadir,aset)))
             for animg in os.listdir(os.path.join(datadir, aset, isos[0])):
+                # check for max size (in base-ISO only) just in case
+                for isoval in isos:
+                    if any(d > self.cs for d in Image.open(os.path.join(datadir, aset, isoval, animg)).size):
+                        print("Warning: excessive crop size for "+aset)
+
                 # check for min size
                 if all(d >= self.ucs for d in Image.open(os.path.join(datadir, aset, isos[0], animg)).size):
                     self.dataset.append([os.path.join(aset,'ISOBASE',animg).replace('_'+isos[0]+'_','_ISOBASE_'), isos])
