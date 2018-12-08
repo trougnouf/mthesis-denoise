@@ -34,6 +34,7 @@ parser.add_argument('--kernel_size', default=5, type=int, help='Kernel size')
 parser.add_argument('--docompression', type=str, help='Add compression to noisy images (random or [1-100], off if omitted)')
 parser.add_argument('--scheduler', default='plateau', type=str, help='Scheduler; adjusts learning rate. Options are plateau, multistep, random')
 parser.add_argument('--lossf', default='SSIM', help='Loss function (SSIM or MSE)')
+parser.add_argument('--time_limit', default=None, type=int, help='Time limit in seconds')
 args = parser.parse_args()
 
 
@@ -142,19 +143,19 @@ if __name__ == '__main__':
     else:
         scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=1, verbose=True, factor=.5, threshold=1e-8)
         lossval = 1
+    start_time = time.time()
     for epoch in range(initial_epoch, args.epoch):
         if args.scheduler == 'plateau':
             scheduler.step(lossval)
         else:
             scheduler.step(epoch)  # step to the learning rate in this epcoh
         epoch_loss = 0
-        start_time = time.time()
+        epoch_time = time.time()
 
         for n_count, batch_xy in enumerate(DLoader):
             optimizer.zero_grad()
             if cuda:
                 batch_x, batch_y = batch_xy[0].cuda(), batch_xy[1].cuda()
-
             loss = criterion(model(batch_y)[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], batch_x[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up])
             if args.lossf == 'SSIM':
                 loss = 1 - loss
@@ -164,7 +165,7 @@ if __name__ == '__main__':
             if n_count % 10 == 0:
                 print('%4d %4d / %4d loss = %2.4f' % (epoch+1, n_count, len(DDataset)//batch_size, loss.item()/batch_size))
         lossval = loss.item()
-        elapsed_time = time.time() - start_time
+        elapsed_time = time.time() - epoch_time
         os.makedirs(save_dir, exist_ok=True)
         os.makedirs(res_dir, exist_ok=True)
         log('epoch = %4d , loss = %4.4f , time = %4.2f s' % (epoch+1, epoch_loss/n_count, elapsed_time))
@@ -172,8 +173,7 @@ if __name__ == '__main__':
         # torch.save(model.state_dict(), os.path.join(save_dir, 'model_%03d.pth' % (epoch+1)))
         torch.save(model, os.path.join(save_dir, 'model_%03d.pth' % (epoch+1)))
         torch.save(model, os.path.join(save_dir, 'latest_model.pth'))
-
-
-
-
++       if args.time_limit is not None and args.time_limit < time.time() - start_time:
++           print('Time is up.')
++           break;
 
