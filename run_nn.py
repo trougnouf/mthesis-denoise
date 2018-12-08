@@ -138,7 +138,7 @@ if __name__ == '__main__':
     elif args.scheduler == 'multistep':
         scheduler = MultiStepLR(optimizer, milestones=[args.epoch*.02, args.epoch*.06, args.epoch*.14, args.epoch*.30, args.epoch*.62, args.epoch*.78, args.epoch*.86], gamma=0.5)  # learning rates
     else:
-        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=1, verbose=True, factor=.5, cooldown=1, threshold=1e-8)
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=1, verbose=True, factor=.5, threshold=1e-8)
         lossval = 1
     for epoch in range(initial_epoch, args.epoch):
         if args.scheduler == 'plateau':
