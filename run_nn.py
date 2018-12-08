@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader
 import torch.optim as optim
 from torch.optim.lr_scheduler import MultiStepLR, LambdaLR
 from dataset_torch_3 import DenoisingDataset
-from lib import pytorch_msssim
+from lib import pytorch_ssim
 from random import randint
 
 # Params
@@ -33,7 +33,7 @@ parser.add_argument('--find_noise', action='store_true', help='Model noise if se
 parser.add_argument('--kernel_size', default=5, type=int, help='Kernel size')
 parser.add_argument('--docompression', type=str, help='Add compression to noisy images (random or [1-100], off if omitted)')
 parser.add_argument('--scheduler', default='plateau', type=str, help='Scheduler; adjusts learning rate. Options are plateau, multistep, random')
-parser.add_argument('--lossf', default='MSSSIM', help='Loss class defined in lib/__init__.py')
+parser.add_argument('--lossf', default='SSIM', help='Loss function (SSIM or MSE)')
 args = parser.parse_args()
 
 
@@ -110,10 +110,12 @@ if __name__ == '__main__':
     elif args.model != 'DnCNN':
         model.apply(nnModules.init_weights)
     model.train()
-    if args.lossf == 'MSSSIM':
-        criterion = pytorch_msssim.MSSSIM(channel=3)
-    elif args.lossf == 'MSSSIMandMSE':
-        criterion = pytorch_msssim.MSSSIMandMSE()
+    #if args.lossf == 'MSSSIM':
+    #    criterion = pytorch_msssim.MSSSIM(channel=3)
+    #elif args.lossf == 'MSSSIMandMSE':
+    #    criterion = pytorch_msssim.MSSSIMandMSE()
+    if args.lossf == 'SSIM':
+        criterion = pytorch_ssim.SSIM()
     elif args.lossf == 'MSE':
         criterion = torch.nn.MSELoss()
     else:
@@ -154,6 +156,8 @@ if __name__ == '__main__':
                 batch_x, batch_y = batch_yx[1].cuda(), batch_yx[0].cuda()
 
             loss = criterion(model(batch_y)[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], batch_x[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up])
+            if args.lossf == 'SSIM':
+                loss = 1 - loss
             epoch_loss += loss.item()
             loss.backward()
             optimizer.step()
