@@ -199,7 +199,8 @@ class up(nn.Module):
         #  would be a nice idea if the upsampling could be learned too,
         #  but my machine do not have enough memory to handle all those weights
         if bilinear:
-            self.up = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)
+            #self.up = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)
+            print("Error: bilinear upsampling has been commented out, this should not occur.")
         else:
             self.up = nn.ConvTranspose2d(in_ch//2, in_ch//2, 2, stride=2)
 
