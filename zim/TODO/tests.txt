@@ -1,0 +1,19 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2018-12-12T19:46:27+01:00
+
+====== tests ======
+Created Wednesday 12 December 2018
+
+default: SSIM loss, train on train-data, test on test-data, test against base-ISO no-compression, pick a model after the first set of test
+
+Train all-ISO on train-data with SSIM	Test all-ISO on train-data with PSNR
+
+train all-ISO								test all-ISO
+train ISO800								test all-ISO
+train ISO6400							test all-ISO
+
+train all-ISO + all-compressions			test each ISO + each compression
+train all-ISO + 30 compression			test each ISO + each compression
+train all-ISO + 60 compression			test each ISO + each compression
+train on base-ISO + all-compressions	test each ISO + each compressions

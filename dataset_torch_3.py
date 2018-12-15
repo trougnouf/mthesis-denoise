@@ -3,19 +3,22 @@ from torch.utils.data import Dataset
 from PIL import Image, ImageOps
 from random import choice
 import torchvision
-from random import randint
+from random import randint, uniform
 from math import floor
 from io import BytesIO
 
 class DenoisingDataset(Dataset):
-    def __init__(self, datadir, docompression=False):
+    # images can be 'ISO>200', 'ISO>200_compressed' (w/ compressionlv), 'ISO200_artificial_noise' (w/sigma)
+    def __init__(self, datadir, ysource='ISO>200', compressionlv=None, sigmamin=0, sigmamax=55):
         super(DenoisingDataset, self).__init__()
-        self.docompression = docompression
         self.totensor = torchvision.transforms.ToTensor()
         self.datadir = datadir
+        self.ysource=ysource
         # each dataset element is ["<SETNAME>/ISOBASE/<DSNAME>_<SETNAME>_ISOBASE_<XNUM>_<YNUM>_<UCS>.jpg", [<ISOVAL1>,...,<ISOVALN>]]
         self.dataset = []
         self.cs, self.ucs = [int(i) for i in datadir.split('_')[-2:]]
+        self.compressionl = compressionlv
+        self.sigmamin, self.sigmamax = sigmamin, sigmamax
         def sortISOs(rawISOs):
             if any([i[0]=='0' for i in rawISOs]):
                 return sorted(rawISOs)
@@ -30,11 +33,12 @@ class DenoisingDataset(Dataset):
             return isos
         for aset in os.listdir(datadir):
             isos = sortISOs(os.listdir(os.path.join(datadir,aset)))
+            if 'ISO200' in self.ysource:    # base-iso only (eg y=x+artificial noise)
+                isos = [isos[0], isos[0]]
             for animg in os.listdir(os.path.join(datadir, aset, isos[0])):
-                # check for max size (in base-ISO only) just in case
+                # verify that no base-ISO image exceeds CS just because
                 if any(d > self.cs for d in Image.open(os.path.join(datadir, aset, isos[0], animg)).size):
                         print("Warning: excessive crop size for "+aset)
-
                 # check for min size
                 if all(d >= self.ucs for d in Image.open(os.path.join(datadir, aset, isos[0], animg)).size):
                     self.dataset.append([os.path.join(aset,'ISOBASE',animg).replace('_'+isos[0]+'_','_ISOBASE_'), isos])
@@ -82,17 +86,19 @@ class DenoisingDataset(Dataset):
         if floor(random_decision/10) == 1 or floor(random_decision/10) == 2:
             ximg = ImageOps.mirror(ximg)
             yimg = ImageOps.mirror(yimg)
-        if self.docompression:
-            if self.docompression=='random':
+        if 'compressed' in self.ysource:
+            if self.compressionlv=='random':
                 quality = randint(1,100)
             else:
-                quality = int(self.docompression)
+                quality = int(self.compressionlv)
             imbuffer = BytesIO()
             yimg.save(imbuffer, 'JPEG', quality=quality)
             yimg = Image.open(imbuffer)
         # return a tensor
         # PIL is H x W x C, totensor is C x H x W
+        if 'artificial_noise' in self.ysource:
+            noise = torch.randn(yimg.shape).mul_(uniform(self.minsigma, self.maxsigma)/255)
+            yimg = torch.abs(yimg+noise)
         return (self.totensor(ximg), self.totensor(yimg))
-
     def __len__(self):
         return len(self.dataset)

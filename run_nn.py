@@ -31,7 +31,10 @@ parser.add_argument('--cuda_device', default=0, type=int, help='Device number (d
 parser.add_argument('--n_channels', default=128, type=int, help='Number of channels (default: 128)')
 parser.add_argument('--find_noise', action='store_true', help='Model noise if set otherwise generate clean image')
 parser.add_argument('--kernel_size', default=5, type=int, help='Kernel size')
-parser.add_argument('--docompression', type=str, help='Add compression to noisy images (random or [1-100], off if omitted)')
+parser.add_argument('--ysource', default='ISO>200', type=str, help="Noise (y-images) source (possible values are 'ISO>200', 'ISO>200_compressed' (w/ compressionlv), 'ISO200_artificial_noise' (w/sigma))")
+parser.add_argument('--compressionlv', type=str, default='random', help='Compression level (random or [1-100], only if compressed set in ysource)')
+parser.add_argument('--sigmamin', type=int, default=0, help='Minimum sigma value, only if artificial_noise set in ysource')
+parser.add_argument('--sigmamax', type=int, default=55, help='Maximum sigma value, only if artificial_noise set in ysource')
 parser.add_argument('--scheduler', default='plateau', type=str, help='Scheduler; adjusts learning rate. Options are plateau, multistep, random')
 parser.add_argument('--lossf', default='SSIM', help='Loss function (SSIM or MSE)')
 parser.add_argument('--time_limit', default=None, type=int, help='Time limit in seconds')
@@ -128,11 +131,7 @@ if __name__ == '__main__':
         # device_ids = [0]
         # model = nn.DataParallel(model, device_ids=device_ids).cuda()
         # criterion = criterion.cuda()
-    if not args.docompression:
-        docompression=False
-    else:
-        docompression=args.docompression
-    DDataset = DenoisingDataset(args.train_data, docompression=docompression)
+    DDataset = DenoisingDataset(args.train_data, ysource=args.ysource, compressionlv=args.compressionlv, sigmamin=args.sigmamin, sigmamax=args.sigmamax)
     DLoader = DataLoader(dataset=DDataset, num_workers=8, drop_last=True, batch_size=batch_size, shuffle=True)
     loss_crop_lb = int((DDataset.cs-DDataset.ucs)/2)
     loss_crop_up = loss_crop_lb+DDataset.ucs
@@ -143,7 +142,7 @@ if __name__ == '__main__':
     elif args.scheduler == 'multistep':
         scheduler = MultiStepLR(optimizer, milestones=[args.epoch*.02, args.epoch*.06, args.epoch*.14, args.epoch*.30, args.epoch*.62, args.epoch*.78, args.epoch*.86], gamma=0.5)  # learning rates
     else:
-        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=1, verbose=True, factor=.5, threshold=1e-8)
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=1, verbose=True, factor=.75, threshold=1e-8)
         lossval = 1
     start_time = time.time()
     for epoch in range(initial_epoch, args.epoch):
