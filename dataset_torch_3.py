@@ -1,11 +1,11 @@
 import os
 from torch.utils.data import Dataset
 from PIL import Image, ImageOps
-from random import choice
 import torchvision
-from random import randint, uniform
+from random import randint, uniform, choice
 from math import floor
 from io import BytesIO
+import torch
 
 class DenoisingDataset(Dataset):
     # images can be 'ISO>200', 'ISO>200_compressed' (w/ compressionlv), 'ISO200_artificial_noise' (w/sigma)
