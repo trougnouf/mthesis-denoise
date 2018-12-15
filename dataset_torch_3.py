@@ -8,45 +8,64 @@ from io import BytesIO
 import torch
 
 class DenoisingDataset(Dataset):
-    # images can be 'ISO>200', 'ISO>200_compressed' (w/ compressionlv), 'ISO200_artificial_noise' (w/sigma)
-    def __init__(self, datadir, ysource='ISO>200', compressionlv=None, sigmamin=0, sigmamax=55):
+    def __init__(self, datadir, yisx=False, compressionmin=100, compressionmax=100, sigmamin=0, sigmamax=0):
         super(DenoisingDataset, self).__init__()
         self.totensor = torchvision.transforms.ToTensor()
         self.datadir = datadir
-        self.ysource=ysource
         # each dataset element is ["<SETNAME>/ISOBASE/<DSNAME>_<SETNAME>_ISOBASE_<XNUM>_<YNUM>_<UCS>.jpg", [<ISOVAL1>,...,<ISOVALN>]]
         self.dataset = []
         self.cs, self.ucs = [int(i) for i in datadir.split('_')[-2:]]
-        self.compressionl = compressionlv
+        self.compressionmin, self.compressionmax = compressionmin, compressionmax
         self.sigmamin, self.sigmamax = sigmamin, sigmamax
+        # Sort ISO values (eg ISO200, ISO6400, ...), handles ISOH1, ISOH2, ..., ISOHn as last, handles ISO200-n, ISO6400-n, ... as usable duplicates
         def sortISOs(rawISOs):
             if any([i[0]=='0' for i in rawISOs]):
-                return sorted(rawISOs)
+                biso, *isos = sorted(rawISOs)
+                return [biso], isos
             isos = []
+            bisos = []
             hisos = []
+            dupisos = {}
             for iso in rawISOs:
-                hisos.append(iso) if 'H' in iso else isos.append(int(iso[3:]))
-            isos = sorted(isos)
+                if 'H' in iso:
+                    hisos.append(iso)
+                else:
+                    isos.append(int(iso[3:]))
+                    if '-' in iso:
+                        isoval, repid = iso[3:].split('-')
+                        if isoval in dupisos:
+                            dupisos[isoval].append(repid)
+                        else:
+                            dupisos[isoval] = [repid]
+            bisos,*isos = sorted(isos)
+            bisos = [bisos]
+            while(bisos[0]==isos[0]):
+                bisos.append(isos.pop(0)+'-'+dupisos[bisos[0]].pop())
+            for dupiso in dupisos.keys():
+                for repid in dupisos[dupiso]:
+                    isos[isos.index(int(dupiso))] = dupiso+'-'+repid
             hisos = sorted(hisos)
             isos = ['ISO'+str(iso) for iso in isos]
+            bisos = ['ISO'+str(iso) for iso in bisos]
             isos.extend(hisos)
-            return isos
+            return bisos, isos
         for aset in os.listdir(datadir):
-            isos = sortISOs(os.listdir(os.path.join(datadir,aset)))
-            if 'ISO200' in self.ysource:    # base-iso only (eg y=x+artificial noise)
-                isos = [isos[0], isos[0]]
+            bisos, isos = sortISOs(os.listdir(os.path.join(datadir,aset)))
+            if yisx:
+                bisos = isos = bisos[0:1]
             for animg in os.listdir(os.path.join(datadir, aset, isos[0])):
                 # verify that no base-ISO image exceeds CS just because
                 if any(d > self.cs for d in Image.open(os.path.join(datadir, aset, isos[0], animg)).size):
                         print("Warning: excessive crop size for "+aset)
                 # check for min size
                 if all(d >= self.ucs for d in Image.open(os.path.join(datadir, aset, isos[0], animg)).size):
-                    self.dataset.append([os.path.join(aset,'ISOBASE',animg).replace('_'+isos[0]+'_','_ISOBASE_'), isos])
+                    self.dataset.append([os.path.join(aset,'ISOBASE',animg).replace('_'+isos[0]+'_','_ISOBASE_'), bisos,isos])
 
     def get_and_pad(self, index):
         img = self.dataset[index]
-        xpath = os.path.join(self.datadir, img[0].replace('_ISOBASE_','_'+img[1][0]+'_').replace('/ISOBASE/','/'+img[1][0]+'/'))
-        ychoice = choice(img[1][1:])
+        xchoice = choice(img[1])
+        xpath = os.path.join(self.datadir, img[0].replace('_ISOBASE_','_'+xchoice+'_').replace('/ISOBASE/','/'+xchoice+'/'))
+        ychoice = choice(img[2])
         ypath = os.path.join(self.datadir, img[0].replace('_ISOBASE_','_'+ychoice+'_').replace('/ISOBASE/','/'+ychoice+'/'))
         ximg = Image.open(xpath)
         yimg = Image.open(ypath)
@@ -86,18 +105,15 @@ class DenoisingDataset(Dataset):
         if floor(random_decision/10) == 1 or floor(random_decision/10) == 2:
             ximg = ImageOps.mirror(ximg)
             yimg = ImageOps.mirror(yimg)
-        if 'compressed' in self.ysource:
-            if self.compressionlv=='random':
-                quality = randint(1,100)
-            else:
-                quality = int(self.compressionlv)
+        if self.compressionmin < 100:
+            quality = randint(self.compressionmin, self.compressionmax)
             imbuffer = BytesIO()
             yimg.save(imbuffer, 'JPEG', quality=quality)
             yimg = Image.open(imbuffer)
         # return a tensor
         # PIL is H x W x C, totensor is C x H x W
         ximg, yimg = self.totensor(ximg), self.totensor(yimg)
-        if 'artificial_noise' in self.ysource:
+        if self.sigmamax > 0:
             noise = torch.randn(yimg.shape).mul_(uniform(self.sigmamin, self.sigmamax)/255)
             yimg = torch.abs(yimg+noise)
         return ximg, yimg
