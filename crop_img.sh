@@ -19,7 +19,7 @@ fi
 mkdir -p ${OUTDIR}
 NTHREADS=$(grep -c ^processor /proc/cpuinfo)
 echo "Cropping ${FP}..."
-RES=($(file ${FP} | grep -o -E '[0-9]{4,}x[0-9]{3,}' | grep -o -E '[0-9]+'))
+RES=($(file ${FP} | grep -o -E '[0-9]{3,}x[0-9]{3,}' | tail -1 | grep -o -E '[0-9]+'))
 BN=$(basename $FP);BN=${BN::-4}
 mkdir -p "${OUTDIR}"
 NXCROPS=$((${RES[0]}/$UCS+1))
