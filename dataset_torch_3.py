@@ -96,9 +96,10 @@ class DenoisingDataset(Dataset):
             yimg = Image.open(imbuffer)
         # return a tensor
         # PIL is H x W x C, totensor is C x H x W
+        ximg, yimg = self.totensor(ximg), self.totensor(yimg)
         if 'artificial_noise' in self.ysource:
             noise = torch.randn(yimg.shape).mul_(uniform(self.minsigma, self.maxsigma)/255)
             yimg = torch.abs(yimg+noise)
-        return (self.totensor(ximg), self.totensor(yimg))
+        return ximg, yimg
     def __len__(self):
         return len(self.dataset)
