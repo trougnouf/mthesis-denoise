@@ -62,6 +62,22 @@ nindlist = [
     'CourtineDeVillersDebris,200,2500,6400,H1,H2',
     'Leonidas,200,400,3200,6400,H1',
     'pastries,200,3200,6400,H1,H2',
+    'mugshot,200,6400,H1',
+    'holywater,200,1600,4000,6400,H1,H2,H3',
+    'chapel,200,1000,6400,H1,H2,H3',
+    'directions,200,640,640-2,1250,6400,6400-2,H1,H2,H3',
+    'drowning,200,800,6400,H1,H2,H3',
+    'keyboard,200,400,800,1600,3200,6400,H1,H2,H3',
+    'semicircle,200,320,640,1250,2500,5000,6400,H1,H2,H3',
+    'stairs,200,250,320,640,1250,2500,5000,6400,H1,H2',
+    'stefantiek,200,250,500,2000,6400,H1,H2',
+    'tree1,200,400,1600,3200,6400,H1,H2,H3',
+    'tree2,200,800,1600,3200,6400,H1,H2,H3',
+    'ursulines-building,200,250,400,1000,4000,6400,H1',
+    'ursulines-can,200,200-2,400,800,1600,3200,6400,H1,H2',
+    'ursulines-red,200,250,500,4000,6400,H1,H2',
+    'vlc,200,250,500,1000,3200,6400,H1,H2,H3',
+    'whistle,200,250,500,1000,2000,4000,6400,H1,H2,H3,H4',
     ]
 manset = [
     'lightclouds,0denoised,naturalnoise',
@@ -88,4 +104,4 @@ def download(imlist, dsname, targetdir, prefix='ISO'):
                     print('Downloaded '+fpath.split('/')[1])
                     f.flush()
 download(nindlist, 'NIND', 'datasets/dataset')
-download(manset, 'MAND', 'datasets/dataset', prefix='')
+#download(manset, 'MAND', 'datasets/dataset', prefix='')
