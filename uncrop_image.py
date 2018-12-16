@@ -12,6 +12,8 @@ def get_attr(fn, attr):
         return int(fn.split('_')[-3])
     elif attr == 'ucs':
         return int(fn.split('_')[-2])
+    elif attr == 'bfn':
+        return '_'.join(fn.split('_')[:-4]).split('/')[-1]
         
 
 def uncrop(crop_dir, ext='jpg'):
@@ -46,7 +48,8 @@ def uncrop(crop_dir, ext='jpg'):
         cropbot = min(stducs+croptop, absbot-abstop+cropleft)
         cropimg = cropimg.crop((cropleft, croptop, cropright, cropbot))
         newimg.paste(cropimg, (absleft, abstop, absright, absbot))
-    newpath = (crop_dir if crop_dir[-1]!='/' else crop_dir[:-1])+'.'+ext
+    newpath = os.path.join(crop_dir, '..', '..', get_attr(crops[0],'bfn')+'.'+ext)
+    #newpath = (crop_dir if crop_dir[-1]!='/' else crop_dir[:-1])+'.'+ext
     if ext == 'jpg':
         newimg.save(newpath, quality=100)
     else:

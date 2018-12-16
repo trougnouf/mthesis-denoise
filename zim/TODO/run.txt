@@ -1,0 +1,8 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2018-12-16T03:53:41+01:00
+
+====== run ======
+Created Sunday 16 December 2018
+
+lr 0.0003
