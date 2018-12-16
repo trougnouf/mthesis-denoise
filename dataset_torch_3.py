@@ -41,8 +41,9 @@ class DenoisingDataset(Dataset):
                         isos.append(int(iso[3:]))
             bisos,*isos = sorted(isos)
             bisos = [bisos]
+            # add duplicates
             while(bisos[0]==isos[0]):
-                bisos.append(isos.pop(0)+'-'+dupisos[bisos[0]].pop())
+                bisos.append(str(isos.pop(0))+'-'+dupisos[str(bisos[0])].pop())
             for dupiso in dupisos.keys():
                 for repid in dupisos[dupiso]:
                     isos[isos.index(int(dupiso))] = dupiso+'-'+repid
