@@ -7,6 +7,42 @@ from math import floor
 from io import BytesIO
 import torch
 
+# Sort ISO values (eg ISO200, ISO6400, ...), handles ISOH1, ISOH2, ..., ISOHn as last, handles ISO200-n, ISO6400-n, ... as usable duplicates
+def sortISOs(rawISOs):
+    if any([i[0]=='0' for i in rawISOs]):
+        biso, *isos = sorted(rawISOs)
+        return [biso], isos
+    isos = []
+    bisos = []
+    hisos = []
+    dupisos = {}
+    for iso in rawISOs:
+        if 'H' in iso:
+            hisos.append(iso)
+        else:
+            if '-' in iso:
+                isoval, repid = iso[3:].split('-')
+                isos.append(int(isoval))
+                if isoval in dupisos:
+                    dupisos[isoval].append(repid)
+                else:
+                    dupisos[isoval] = [repid]
+            else:
+                isos.append(int(iso[3:]))
+    bisos,*isos = sorted(isos)
+    bisos = [bisos]
+    # add duplicates
+    while(bisos[0]==isos[0]):
+        bisos.append(str(isos.pop(0))+'-'+dupisos[str(bisos[0])].pop())
+    for dupiso in dupisos.keys():
+        for repid in dupisos[dupiso]:
+            isos[isos.index(int(dupiso))] = dupiso+'-'+repid
+    hisos = sorted(hisos)
+    isos = ['ISO'+str(iso) for iso in isos]
+    bisos = ['ISO'+str(iso) for iso in bisos]
+    isos.extend(hisos)
+    return bisos, isos
+
 class DenoisingDataset(Dataset):
     def __init__(self, datadir, testreserve=[], yisx=False, compressionmin=100, compressionmax=100, sigmamin=0, sigmamax=0, test_reserve=[]):
         super(DenoisingDataset, self).__init__()
@@ -17,41 +53,6 @@ class DenoisingDataset(Dataset):
         self.cs, self.ucs = [int(i) for i in datadir.split('_')[-2:]]
         self.compressionmin, self.compressionmax = compressionmin, compressionmax
         self.sigmamin, self.sigmamax = sigmamin, sigmamax
-        # Sort ISO values (eg ISO200, ISO6400, ...), handles ISOH1, ISOH2, ..., ISOHn as last, handles ISO200-n, ISO6400-n, ... as usable duplicates
-        def sortISOs(rawISOs):
-            if any([i[0]=='0' for i in rawISOs]):
-                biso, *isos = sorted(rawISOs)
-                return [biso], isos
-            isos = []
-            bisos = []
-            hisos = []
-            dupisos = {}
-            for iso in rawISOs:
-                if 'H' in iso:
-                    hisos.append(iso)
-                else:
-                    if '-' in iso:
-                        isoval, repid = iso[3:].split('-')
-                        isos.append(int(isoval))
-                        if isoval in dupisos:
-                            dupisos[isoval].append(repid)
-                        else:
-                            dupisos[isoval] = [repid]
-                    else:
-                        isos.append(int(iso[3:]))
-            bisos,*isos = sorted(isos)
-            bisos = [bisos]
-            # add duplicates
-            while(bisos[0]==isos[0]):
-                bisos.append(str(isos.pop(0))+'-'+dupisos[str(bisos[0])].pop())
-            for dupiso in dupisos.keys():
-                for repid in dupisos[dupiso]:
-                    isos[isos.index(int(dupiso))] = dupiso+'-'+repid
-            hisos = sorted(hisos)
-            isos = ['ISO'+str(iso) for iso in isos]
-            bisos = ['ISO'+str(iso) for iso in bisos]
-            isos.extend(hisos)
-            return bisos, isos
         for aset in os.listdir(datadir):
             if aset in test_reserve:
                 print('Skipped '+aset+' (test reserve)')
