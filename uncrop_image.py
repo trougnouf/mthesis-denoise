@@ -4,11 +4,6 @@ import math
 import argparse
 from math import floor
 
-# Params
-#parser = argparse.ArgumentParser(description='Images uncropper. Takes a directory containing files named "[FN]_[X_CROPS_NUM]_[Y_CROPS_NUM]_[USEFUL CROP SIZE].jpg" as input, USEFUL_CROP_SIZE being a single integer (eg: 96)')
-
-
-
 
 def get_attr(fn, attr):
     if attr == 'xcnt':
@@ -19,7 +14,7 @@ def get_attr(fn, attr):
         return int(fn.split('_')[-2])
         
 
-def uncrop(crop_dir):
+def uncrop(crop_dir, ext='jpg'):
     crops = [os.path.join(crop_dir, crop) for crop in os.listdir(crop_dir)]
     def get_crop_at(xcnt,ycnt):
         for crop in crops:
@@ -51,13 +46,17 @@ def uncrop(crop_dir):
         cropbot = min(stducs+croptop, absbot-abstop+cropleft)
         cropimg = cropimg.crop((cropleft, croptop, cropright, cropbot))
         newimg.paste(cropimg, (absleft, abstop, absright, absbot))
-    newpath = (crop_dir if crop_dir[-1]!='/' else crop_dir[:-1])+'.jpg'
-    newimg.save(newpath, quality=100)
+    newpath = (crop_dir if crop_dir[-1]!='/' else crop_dir[:-1])+'.'+ext
+    if ext == 'jpg':
+        newimg.save(newpath, quality=100)
+    else:
+        newimg.save(newpath)
 
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Images uncropper. Takes a directory [SETNAME] which contains files named "[NAME]_[X_CROP_NUM]_[Y_CROP_NUM]_[USEFUL_CROP_SIZE]_denoised.jpg. Outputs [SETNAME].jpg"')
     parser.add_argument('--crops_dir', type=str, help='Directory where crops to be stitched are located', required=True)
+    parser.add_argument('--ext', default='jpg', type=str, help='Output file extension (eg jpg, tif, png)')
     args, _ = parser.parse_known_args()
     
-    uncrop(args.crops_dir)
+    uncrop(args.crops_dir, ext=args.ext)

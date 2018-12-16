@@ -38,6 +38,7 @@ def parse_args():
     parser.add_argument('--cuda_device', default=0, type=int, help='Device number (default: 0, typically 0-3)')
     parser.add_argument('--overwrite', action='store_true', help='Overwrite existing images')
     parser.add_argument('--uncrop', action='store_true', help='Uncrop denoised images (run uncrop_images.py)')
+    parser.add_argument('--ext', default='jpg', type=str, help='Output crops extension (default: jpg)')
     args = parser.parse_args()
     return args
 
@@ -86,14 +87,15 @@ if __name__ == '__main__':
     for root, dirs, files in os.walk(noisy_dir):
         for name in files:
             cur_img_sav_dir = os.path.join(args.result_dir, '/'.join(model_path.split('/')[-2:]), noisy_dir.split('/')[-1], 'img', './'+root.split(noisy_dir)[-1])
-            cur_img_sav_path = os.path.join(cur_img_sav_dir, name[:-4]+'_denoised.jpg')
+            cur_img_sav_path = os.path.join(cur_img_sav_dir, name[:-4]+'_denoised.')+args.ext
             base_images.add(cur_img_sav_dir)
             if os.path.isfile(cur_img_sav_path) and not args.overwrite:
                 continue
             os.makedirs(cur_img_sav_dir, exist_ok=True)
             y_ = get_and_pad_image(os.path.join(root, name))
             #y_ = totensor(Image.open(os.path.join(root, name)))
-            y_ = y_.view(1,-1,y_.shape[1], y_.shape[2]) # TODO is this correct?
+            #y_ = y_.view(1,-1,y_.shape[1], y_.shape[2]) # TODO is this correct?
+            y_ = y_.reshape([1]+list(img1.shape))
             torch.cuda.synchronize()
             start_time = time.time()
             y_ = y_.cuda()
@@ -105,6 +107,6 @@ if __name__ == '__main__':
 
     if args.uncrop:
         for adir in base_images:
-            uncrop(adir)
+            uncrop(adir, args.ext)
 
 

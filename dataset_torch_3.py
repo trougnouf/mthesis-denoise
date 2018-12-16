@@ -8,7 +8,7 @@ from io import BytesIO
 import torch
 
 class DenoisingDataset(Dataset):
-    def __init__(self, datadir, yisx=False, compressionmin=100, compressionmax=100, sigmamin=0, sigmamax=0):
+    def __init__(self, datadir, testreserve=[], yisx=False, compressionmin=100, compressionmax=100, sigmamin=0, sigmamax=0, test_reserve=[]):
         super(DenoisingDataset, self).__init__()
         self.totensor = torchvision.transforms.ToTensor()
         self.datadir = datadir
@@ -50,6 +50,9 @@ class DenoisingDataset(Dataset):
             isos.extend(hisos)
             return bisos, isos
         for aset in os.listdir(datadir):
+            if aset in test_reserve:
+                print('Skipping '+aset+' (test reserve)')
+                continue
             bisos, isos = sortISOs(os.listdir(os.path.join(datadir,aset)))
             if yisx:
                 bisos = isos = bisos[0:1]
@@ -60,6 +63,7 @@ class DenoisingDataset(Dataset):
                 # check for min size
                 if all(d >= self.ucs for d in Image.open(os.path.join(datadir, aset, isos[0], animg)).size):
                     self.dataset.append([os.path.join(aset,'ISOBASE',animg).replace('_'+isos[0]+'_','_ISOBASE_'), bisos,isos])
+            print('Added '+aset+str(bisos)+str(isos)+' to the dataset')
 
     def get_and_pad(self, index):
         img = self.dataset[index]

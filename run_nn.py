@@ -36,8 +36,10 @@ parser.add_argument('--compressionmin', type=str, default=100, help='Minimum com
 parser.add_argument('--compressionmax', type=int, default=100, help='Maximum compression level ([1,100], default=100)')
 parser.add_argument('--sigmamin', type=int, default=0, help='Minimum sigma value ([0,100], default=0)')
 parser.add_argument('--sigmamax', type=int, default=0, help='Maximum sigma value ([0,100], default=0)')
+parser.add_argument('--yisx', action='store_true', help='Use base ISO only if flag is set (useful to compare with sigmamax>0 artificial noise)')
 parser.add_argument('--scheduler', default='plateau', type=str, help='Scheduler; adjusts learning rate. Options are plateau, multistep, random. default: plateau (*.75 without patience)')
 parser.add_argument('--lossf', default='SSIM', help='Loss function (SSIM or MSE)')
+parser.add_argument('--test_reserve', nargs='*', help='Space separated list of image sets to be reserved for testing')
 args = parser.parse_args()
 
 
@@ -130,7 +132,7 @@ if __name__ == '__main__':
         # device_ids = [0]
         # model = nn.DataParallel(model, device_ids=device_ids).cuda()
         criterion = criterion.cuda()
-    DDataset = DenoisingDataset(args.train_data, compressionmin=args.compressionmin, compressionmax=args.compressionmax, sigmamin=args.sigmamin, sigmamax=args.sigmamax)
+    DDataset = DenoisingDataset(args.train_data, compressionmin=args.compressionmin, compressionmax=args.compressionmax, sigmamin=args.sigmamin, sigmamax=args.sigmamax, test_reserve=args.test_reserve, yisx=args.yisx)
     DLoader = DataLoader(dataset=DDataset, num_workers=8, drop_last=True, batch_size=batch_size, shuffle=True)
     loss_crop_lb = int((DDataset.cs-DDataset.ucs)/2)
     loss_crop_up = loss_crop_lb+DDataset.ucs

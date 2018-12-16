@@ -1,30 +1,10 @@
-# -*- coding: utf-8 -*-
-
-# =============================================================================
-#  @article{zhang2017beyond,
-#    title={Beyond a {Gaussian} denoiser: Residual learning of deep {CNN} for image denoising},
-#    author={Zhang, Kai and Zuo, Wangmeng and Chen, Yunjin and Meng, Deyu and Zhang, Lei},
-#    journal={IEEE Transactions on Image Processing},
-#    year={2017},
-#    volume={26}, 
-#    number={7}, 
-#    pages={3142-3155}, 
-#  }
-# by Kai Zhang (08/2018)
-# cskaizhang@gmail.com
-# https://github.com/cszn
-# modified on the code from https://github.com/SaoYan/DnCNN-PyTorch
-# =============================================================================
-
-# run this to test the model
+# run this to test the model on a single crop
 
 import argparse
 import os
-import time
 import torch
 import torchvision
 from PIL import Image
-from uncrop_image import uncrop
 
 
 def parse_args():
