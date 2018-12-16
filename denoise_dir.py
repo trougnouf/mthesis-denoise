@@ -8,6 +8,7 @@ import torch
 import torchvision
 from PIL import Image
 from uncrop_image import uncrop
+from loss import gen_score
 
 
 def parse_args():
@@ -19,7 +20,8 @@ def parse_args():
     parser.add_argument('--result_dir', default='results/test', type=str, help='directory where results are saved')
     parser.add_argument('--cuda_device', default=0, type=int, help='Device number (default: 0, typically 0-3)')
     parser.add_argument('--overwrite', action='store_true', help='Overwrite existing images')
-    parser.add_argument('--uncrop', action='store_true', help='Uncrop denoised images (run uncrop_images.py)')
+    parser.add_argument('--no_uncrop', action='store_true', help='Uncrop denoised images (run uncrop_images.py) unless this is set')
+    parser.add_argument('--no_scoring', action='store_true', help='Generate SSIM score and MSE loss unless this is set')
     parser.add_argument('--ext', default='jpg', type=str, help='Output crops extension (default: jpg)')
     args = parser.parse_args()
     return args
@@ -61,14 +63,17 @@ if __name__ == '__main__':
                 yoffset = cs-img.height
             newimg.paste(img, (xoffset, yoffset))
             img = newimg
+        img = totensor(img)
+        return img.reshape([1]+list(img.shape))
         return totensor(img)
             
         
     dest_dirs = set()
     
+    base_save_dir=os.path.join(args.result_dir, model_path.split('/')[-2])
     for root, dirs, files in os.walk(noisy_dir):
         for name in files:
-            cur_img_sav_dir = os.path.join(args.result_dir, '/'.join(model_path.split('/')[-2:]), noisy_dir.split('/')[-1], 'img', './'+root.split(noisy_dir)[-1])
+            cur_img_sav_dir = os.path.join(base_save_dir, root.split(noisy_dir)[-1][1:])
             cur_img_sav_path = os.path.join(cur_img_sav_dir, name[:-4]+'_denoised.')+args.ext
             dest_dirs.add(cur_img_sav_dir)
             if os.path.isfile(cur_img_sav_path) and not args.overwrite:
@@ -77,7 +82,7 @@ if __name__ == '__main__':
             y_ = get_and_pad_image(os.path.join(root, name))
             #y_ = totensor(Image.open(os.path.join(root, name)))
             #y_ = y_.view(1,-1,y_.shape[1], y_.shape[2]) # TODO is this correct?
-            y_ = y_.reshape([1]+list(img1.shape))
+            #y_ = y_.reshape([1]+list(img1.shape))
             torch.cuda.synchronize()
             start_time = time.time()
             y_ = y_.cuda()
@@ -87,8 +92,8 @@ if __name__ == '__main__':
             torchvision.utils.save_image(x_, cur_img_sav_path)
             print('%s : %2.4f second' % (name, elapsed_time))
 
-    if args.uncrop:
+    if not args.no_uncrop:
         for adir in dest_dirs:
             uncrop(adir, args.ext)
-
-
+    if not args.no_scoring:
+        gen_score(base_save_dir)
