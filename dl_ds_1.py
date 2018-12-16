@@ -12,7 +12,7 @@ nindlist = [
     'Ottignies,200,640,3200,6400',
     'MuseeL-turtle,200,800,1250,6400',
     'MuseeL-centrifuge,200,800,2000,6400',
-    'MuseeL-shell,400,800,6400',
+    'MuseeL-shell,200,400,800,6400',
     'MuseeL-coral,200,800,5000,6400',
     'MuseeL-head,200,640,3200,6400',
     'MuseeL-heads,200,400,3200,6400',

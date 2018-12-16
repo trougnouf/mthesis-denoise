@@ -33,7 +33,7 @@ else:
 processes = set()
 max_threads =args.max_threads if args.max_threads else cpu_count()
 for task in todolist:
-    print(task)
+    #print(task)#dbg
     processes.add(subprocess.Popen(task))
     if len(processes) >= max_threads:
         os.wait()

@@ -1,21 +1,3 @@
-# -*- coding: utf-8 -*-
-
-# =============================================================================
-#  @article{zhang2017beyond,
-#    title={Beyond a {Gaussian} denoiser: Residual learning of deep {CNN} for image denoising},
-#    author={Zhang, Kai and Zuo, Wangmeng and Chen, Yunjin and Meng, Deyu and Zhang, Lei},
-#    journal={IEEE Transactions on Image Processing},
-#    year={2017},
-#    volume={26}, 
-#    number={7}, 
-#    pages={3142-3155}, 
-#  }
-# by Kai Zhang (08/2018)
-# cskaizhang@gmail.com
-# https://github.com/cszn
-# modified on the code from https://github.com/SaoYan/DnCNN-PyTorch
-# =============================================================================
-
 # run this to test the model
 
 import argparse
@@ -82,13 +64,13 @@ if __name__ == '__main__':
         return totensor(img)
             
         
-    base_images = set()
+    dest_dirs = set()
     
     for root, dirs, files in os.walk(noisy_dir):
         for name in files:
             cur_img_sav_dir = os.path.join(args.result_dir, '/'.join(model_path.split('/')[-2:]), noisy_dir.split('/')[-1], 'img', './'+root.split(noisy_dir)[-1])
             cur_img_sav_path = os.path.join(cur_img_sav_dir, name[:-4]+'_denoised.')+args.ext
-            base_images.add(cur_img_sav_dir)
+            dest_dirs.add(cur_img_sav_dir)
             if os.path.isfile(cur_img_sav_path) and not args.overwrite:
                 continue
             os.makedirs(cur_img_sav_dir, exist_ok=True)
@@ -106,7 +88,7 @@ if __name__ == '__main__':
             print('%s : %2.4f second' % (name, elapsed_time))
 
     if args.uncrop:
-        for adir in base_images:
+        for adir in dest_dirs:
             uncrop(adir, args.ext)
 
 

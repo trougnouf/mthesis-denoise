@@ -30,13 +30,15 @@ class DenoisingDataset(Dataset):
                 if 'H' in iso:
                     hisos.append(iso)
                 else:
-                    isos.append(int(iso[3:]))
                     if '-' in iso:
                         isoval, repid = iso[3:].split('-')
+                        isos.append(int(isoval))
                         if isoval in dupisos:
                             dupisos[isoval].append(repid)
                         else:
                             dupisos[isoval] = [repid]
+                    else:
+                        isos.append(int(iso[3:]))
             bisos,*isos = sorted(isos)
             bisos = [bisos]
             while(bisos[0]==isos[0]):
@@ -51,7 +53,7 @@ class DenoisingDataset(Dataset):
             return bisos, isos
         for aset in os.listdir(datadir):
             if aset in test_reserve:
-                print('Skipping '+aset+' (test reserve)')
+                print('Skipped '+aset+' (test reserve)')
                 continue
             bisos, isos = sortISOs(os.listdir(os.path.join(datadir,aset)))
             if yisx:

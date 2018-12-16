@@ -1,4 +1,5 @@
 # run this to test the model on a single crop
+#TODO merge w/denoise_dir.py
 
 import argparse
 import os
