@@ -144,13 +144,8 @@ if __name__ == '__main__':
         scheduler = MultiStepLR(optimizer, milestones=[args.epoch*.02, args.epoch*.06, args.epoch*.14, args.epoch*.30, args.epoch*.62, args.epoch*.78, args.epoch*.86], gamma=0.5)  # learning rates
     else:
         scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=1, verbose=True, factor=.75, threshold=1e-8)
-        lossval = 1
     start_time = time.time()
     for epoch in range(initial_epoch, args.epoch):
-        if args.scheduler == 'plateau':
-            scheduler.step(lossval)
-        else:
-            scheduler.step(epoch)  # step to the learning rate in this epcoh
         epoch_loss = 0
         epoch_time = time.time()
 
@@ -162,11 +157,16 @@ if __name__ == '__main__':
             if args.lossf == 'SSIM':
                 loss = 1 - loss
             epoch_loss += loss.item()
+            loss_ten += loss.item()
             loss.backward()
             optimizer.step()
             if n_count % 10 == 0:
-                print('%4d %4d / %4d loss = %2.4f' % (epoch+1, n_count, len(DDataset)//batch_size, loss.item()/batch_size))
-        lossval = loss.item()
+                print('%4d %4d / %4d loss = %2.4f' % (epoch+1, n_count, len(DDataset)//batch_size, loss_ten/10))
+                loss_ten = 0
+        if args.scheduler == 'plateau':
+            scheduler.step(epoch_loss/n_count)
+        else:
+            scheduler.step(epoch)  # step to the learning rate in this epcoh
         elapsed_time = time.time() - epoch_time
         os.makedirs(save_dir, exist_ok=True)
         os.makedirs(res_dir, exist_ok=True)
