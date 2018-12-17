@@ -145,10 +145,10 @@ if __name__ == '__main__':
     else:
         scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=1, verbose=True, factor=.75, threshold=1e-8)
     start_time = time.time()
+    loss_ten=0
     for epoch in range(initial_epoch, args.epoch):
         epoch_loss = 0
         epoch_time = time.time()
-
         for n_count, batch_xy in enumerate(DLoader):
             optimizer.zero_grad()
             if cuda:
