@@ -6,6 +6,7 @@ old
 .test.py.swp
 models/*/model_*.pth
 doodling
-results/test/
+results/test/*/*.jpg
 results/*.xz
 lib/*/__pycache__
+*.xcf

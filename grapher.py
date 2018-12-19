@@ -28,6 +28,8 @@ data = dict()
 #load data
 #generate a graph for image
 
+components = args.components if args.components else ['Noisy', 'NIND', 'Artificial', 'BM3D']
+
 def find_relevant_experiments(component):
     experiments = os.listdir(args.res_dir)
     data[component] = {'resfiles': []}  # check existing if data is needed earlier
@@ -62,15 +64,15 @@ def parse_resfiles(component):
                 if newssim > oldssim:
                     data[component]['results'][image][isoval] = {'ssim': float(res[1]), 'mse': float(res[2]), 'exp': respath.split('/')[-2]}
 
-for component in args.components:
+for component in components:
     find_relevant_experiments(component)
     parse_resfiles(component)
 
-images = list(data[args.components[0]]['results'].keys())
+images = list(data[components[0]]['results'].keys())
 for image in images:
-    _, isos = sortISOs(list(data[args.components[0]]['results'][image].keys()))
+    _, isos = sortISOs(list(data[components[0]]['results'][image].keys()))
     #isos = baseisos + isos
-    for component in args.components:
+    for component in components:
         ssimscore = [data[component]['results'][image][iso]['ssim'] for iso in isos]
         plt.plot(isos, ssimscore, label=component, marker='.')
         plt.title(image)
