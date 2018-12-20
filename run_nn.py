@@ -111,7 +111,7 @@ if __name__ == '__main__':
             model = nnModules.UNet(3,3)
         # ugliness while I figure out memory issue
         else:
-            model = nnModules.RUNet(3,3)
+            model = nnModules.RRUNet(3,3)
 
     else:
         exit(args.model+' not implemented.')
