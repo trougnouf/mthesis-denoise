@@ -17,6 +17,7 @@ parser.add_argument('--nosave', action='store_true')
 parser.add_argument('--xaxis', type=str, default='ISO')
 parser.add_argument('--yaxis', type=str, default='SSIM')
 parser.add_argument('--components', nargs='+', help='space-separated line components (eg Noisy NIND Artificial BM3D')
+parser.add_argument('--metric', default='ssim', help='Metric shown (ssim, mse)')
 #parser.add_argument('--width', default=15, type=int)
 #parser.add_argument('--height', default=7, type=int)
 parser.add_argument('--run', default=None, type=int, help="Generate a single graph number")
@@ -73,10 +74,13 @@ for image in images:
     _, isos = sortISOs(list(data[components[0]]['results'][image].keys()))
     #isos = baseisos + isos
     for component in components:
-        ssimscore = [data[component]['results'][image][iso]['ssim'] for iso in isos]
+        ssimscore = [data[component]['results'][image][iso][args.metric] for iso in isos]
         plt.plot(isos, ssimscore, label=component, marker='.')
         plt.title(image)
-        plt.ylabel('SSIM score')
+        if args.metric == 'ssim':
+            plt.ylabel('SSIM score')
+        else:
+            plt.ylabel('MSE loss')
         plt.xlabel('ISO value')
     plt.grid()
     plt.legend()
