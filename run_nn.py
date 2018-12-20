@@ -40,6 +40,7 @@ parser.add_argument('--yisx', action='store_true', help='Use base ISO only if fl
 parser.add_argument('--scheduler', default='plateau', type=str, help='Scheduler; adjusts learning rate. Options are plateau, multistep, random. default: plateau (*.75 without patience)')
 parser.add_argument('--lossf', default='SSIM', help='Loss function (SSIM or MSE)')
 parser.add_argument('--test_reserve', nargs='*', help='Space separated list of image sets to be reserved for testing')
+parser.add_argument('--relu', default='relu', help='ReLU function (relu, rrelu)')
 args = parser.parse_args()
 
 
@@ -106,7 +107,7 @@ if __name__ == '__main__':
     elif args.model == 'RedishCNN':
         model = nnModules.RedishCNN(depth=args.depth, n_channels=args.n_channels, kernel_size=args.kernel_size)
     elif args.model == 'UNet':
-        model = nnModules.UNet(3,3)
+        model = nnModules.UNet(3,3, relu=args.relu)
     else:
         exit(args.model+' not implemented.')
     initial_epoch = findLastCheckpoint(save_dir=save_dir)  # load the last model in matconvnet style
@@ -137,6 +138,7 @@ if __name__ == '__main__':
     loss_crop_lb = int((DDataset.cs-DDataset.ucs)/2)
     loss_crop_up = loss_crop_lb+DDataset.ucs
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
+    # broken: non-integer stop for randrange()
     if args.scheduler == 'random':
         lrlambda = lambda epoch, lr=args.lr: randint(1,.1/lr)/randint(1,1/lr)
         scheduler = LambdaLR(optimizer, lrlambda)
