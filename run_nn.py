@@ -103,7 +103,7 @@ if __name__ == '__main__':
     if args.model == 'DnCNN':
         model = nnModules.DnCNN(depth=args.depth, n_channels=args.n_channels, find_noise=args.find_noise, kernel_size=args.kernel_size)
     elif args.model == 'RedCNN':
-        model = nnModules.RedCNN(depth=args.depth, n_channels=args.n_channels, kernel_size=args.kernel_size)
+        model = nnModules.RedCNN(depth=args.depth, n_channels=args.n_channels, kernel_size=args.kernel_size, relu=args.relu)
     elif args.model == 'RedishCNN':
         model = nnModules.RedishCNN(depth=args.depth, n_channels=args.n_channels, kernel_size=args.kernel_size)
     elif args.model == 'UNet':

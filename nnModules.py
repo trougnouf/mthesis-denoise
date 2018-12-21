@@ -84,14 +84,17 @@ class RedishCNN(nn.Module):
         return layer
 
 class RedCNN(nn.Module):
-    def __init__(self, n_channels=128, image_channels=3, kernel_size=5, depth=30):
+    def __init__(self, n_channels=128, image_channels=3, kernel_size=5, depth=30, relu='relu'):
         super(RedCNN, self).__init__()
         self.depth = depth
         self.conv_first = nn.Conv2d(in_channels=image_channels, out_channels=n_channels, kernel_size=kernel_size, stride=1, padding=0)
         self.conv = nn.Conv2d(n_channels, n_channels, kernel_size=kernel_size, stride=1, padding=0)
         self.deconv = nn.ConvTranspose2d(n_channels, n_channels, kernel_size=kernel_size, stride=1, padding=0)
         self.deconv_last = nn.ConvTranspose2d(in_channels=n_channels, out_channels=image_channels, kernel_size=kernel_size, stride=1, padding=0)
-        self.relu = nn.RReLU()
+        if relu == 'relu':
+            self.relu = nn.ReLU(inplace=True)
+        else:   # RReLU
+            self.relu = nn.RReLU(inplace=True)
 
     def forward(self, x):
         residuals = []
