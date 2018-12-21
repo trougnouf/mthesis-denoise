@@ -6,6 +6,7 @@ from random import random
 from math import floor
 from dataset_torch_3 import sortISOs
 import csv
+import json
 
 # Params
 parser = argparse.ArgumentParser(description='Grapher')
@@ -21,6 +22,8 @@ parser.add_argument('--metric', default='ssim', help='Metric shown (ssim, mse)')
 #parser.add_argument('--width', default=15, type=int)
 #parser.add_argument('--height', default=7, type=int)
 parser.add_argument('--run', default=None, type=int, help="Generate a single graph number")
+parser.add_argument('--noshow', action='store_true')
+parser.add_argument('--nojson', action='store_true')
 args = parser.parse_args()
 
 data = dict()
@@ -84,163 +87,9 @@ for image in images:
         plt.xlabel('ISO value')
     plt.grid()
     plt.legend()
-    plt.show()
-       # print(ssimscore)
-
-
-# x = component image
-
-
-
-#if args.xaxis == 'ISO':
-    # TODO moved to named function
- #   dirs = os.listdir(args.res_dir)
-    #for component in args.legend:
-
-
-
-
-
-#class Feature:
-#    def __init__(feature_names)
-
-# def get_res_i(path):
-#     indices = []
-#     for fn in os.listdir(path):
-#         if args.res_bfn in fn:
-#             indices.append(int(fn.split('_')[-1].split('.')[0]))
-#     return sorted(indices)
-
-
-#for expname in os.listdir(args.res_dir):
-#    expreslist = []
-#    for i in get_res_i(os.path.join(args.res_dir, expname)):
-#        ires = dict()
-#        with open(os.path.join(args.res_dir, expname, args.res_bfn+'_'+str(i)+'.txt')) as f:
-#            ires['epoch'] = float(f.readline())
-#            ires['loss'] = float(f.readline())
-#            ires['time'] = float(f.readline())
-#            if i > 0:
-#                ires['time'] += expreslist[-1]['time']
-#            expreslist.append(ires)
-#    results[expname] = expreslist
-
-# for expname in os.listdir(args.res_dir):
-    #expreslist = []
-#     epochl = []
-#     trainlossl = []
-#     testlossl = []
-#     timel = []
-#     for i in get_res_i(os.path.join(args.res_dir, expname)):
-        #ires = dict()
-#         with open(os.path.join(args.res_dir, expname, args.res_bfn+'_'+str(i)+'.txt')) as f:
-#             epochl.append(float(f.readline()))
-#             trainlossl.append(float(f.readline()))
-#             testlossl.append(float(f.readline()))
-#             timel.append(float(f.readline()))
-
-#     results[expname] = {'epochs': epochl, 'trainloss': trainlossl, 'testloss': testlossl, 'timel': timel}
-
-# def extract_feature_val(expname, feature_n):
-#     if type(feature_n) == str:
-#         return expname.split(feature_n)[-1].split('_')[1] if len(expname.split(feature_n))>1 else 'default'
-#     elif type(feature_n) == list:
-#         return ', '.join([expname.split(afeature)[-1].split('_')[1] if len(expname.split(afeature))>1 else 'default' for afeature in feature_n])
-
-
-# def graph(experiments, feature_n, save=True):
-#     for exp in experiments:
-#         color = [[random(), random(), random()]]
-#         feature_v = extract_feature_val(exp, feature_n)
-#         if 'lr' not in feature_n and 'initial_input' not in feature_n and 'n_channels' not in feature_n:
-#             plt.scatter(results[exp]["timel"], results[exp]["trainloss"], label=feature_v+' (training)', c=color, marker="^")
-#         plt.scatter(results[exp]["timel"], results[exp]["testloss"], label=feature_v+' (testing)', c=color, marker="v")
-#         plt.grid()
-#     plt.xlabel("time (s)")
-#     plt.ylabel("loss")
-
-    #plt.axis([0,300,0,1])
-#     plt.legend(title=str(feature_n))
-#     if not args.nosave:
-        #plt.figure(figsize=(args.width,args.height))
-#         os.makedirs(args.save_dir, exist_ok=True)
-#         plt.savefig(os.path.join(args.save_dir, ''.join(feature_n)+'.png'))
-#     if not args.nodisplay:
-#         plt.show()
-    # plotting
-
-# params = [
-#0
-# {
-#     'experiments': [
-#         '2018-12-09T19:37_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_DnCNN_--time_limit_300',
-#         '2018-12-09T19:42_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_RedCNN_--time_limit_300',
-#         '2018-12-09T19:47_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_UNet_--time_limit_300'],
-#     'feature_n': 'model'
-# }, {
-#     'experiments': [
-#         '2018-12-09T19:52_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_UNet_--time_limit_300_--initial_input_xwithmask_--network_input_random10',
-#         '2018-12-09T19:57_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_UNet_--time_limit_300_--initial_input_xwithmask_--network_input_prevoutput',
-#         '2018-12-09T20:02_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_UNet_--time_limit_300_--initial_input_xwithmask_--network_input_initial',
-#         '2018-12-09T20:07_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_UNet_--time_limit_300_--initial_input_random10_--network_input_prevoutput',
-#         '2018-12-09T20:12_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_UNet_--time_limit_300_--initial_input_random10_--network_input_initial',
-#         '2018-12-09T19:47_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_UNet_--time_limit_300_--initial_input_random10_--network_input_random10'],
-#     'feature_n': ['initial_input', 'network_input']
-# }, {
-#     'experiments': [
-#         '2018-12-09T20:17_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0002_--model_UNet_--time_limit_300',
-#         '2018-12-09T20:36_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0003_--model_UNet_--time_limit_300',
-#         '2018-12-09T20:41_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0004_--model_UNet_--time_limit_300',
-#         '2018-12-09T20:46_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0005_--model_UNet_--time_limit_300',
-#         '2018-12-09T20:51_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.000075_--model_UNet_--time_limit_300',
-#         '2018-12-09T20:57_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.00005_--model_UNet_--time_limit_300',
-#         '2018-12-09T21:02_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.000025_--model_UNet_--time_limit_300',
-#         '2018-12-09T21:07_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.00001_--model_UNet_--time_limit_300',
-#         '2018-12-09T19:47_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_UNet_--time_limit_300',
-#         '2018-12-10T01:55_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.001_--model_UNet_--time_limit_300',
-#         '2018-12-10T02:01_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.01_--model_UNet_--time_limit_300'
-#     ], 'feature_n': 'lr'
-# }, {
-#     'experiments': [
-#         '2018-12-09T21:12_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_RedCNN_--time_limit_300_--depth_20',
-#         '2018-12-09T21:17_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_RedCNN_--time_limit_300_--depth_18',
-#         '2018-12-09T21:22_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_RedCNN_--time_limit_300_--depth_16',
-#         '2018-12-09T19:42_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_RedCNN_--time_limit_300_--depth_22'
-#     ], 'feature_n': 'depth'
-# }, {
-#     'experiments': [
-#         '2018-12-09T21:27_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_RedCNN_--time_limit_300_--n_channels_112',
-#         '2018-12-09T21:32_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_RedCNN_--time_limit_300_--n_channels_96',
-#         '2018-12-09T21:37_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_RedCNN_--time_limit_300_--n_channels_80',
-#         '2018-12-09T21:42_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_RedCNN_--time_limit_300_--n_channels_144',
-#         '2018-12-09T21:47_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_RedCNN_--time_limit_300_--n_channels_160',
-#         '2018-12-09T21:52_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_RedCNN_--time_limit_300_--n_channels_176',
-#         '2018-12-09T19:42_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_RedCNN_--time_limit_300_--n_channels_128',
-#         '2018-12-10T02:13_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_RedCNN_--time_limit_300_--n_channels_32'
-#     ], 'feature_n': 'n_channels'
-# }, {
-#     'experiments': [
-#         '2018-12-09T21:57_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_RedCNN_--time_limit_300_--kernel_size_3',
-#         '2018-12-09T19:42_run_nn.py_--img_path_dataset-64-kate.png_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_RedCNN_--time_limit_300_--kernel_size_5'
-#     ], 'feature_n': 'kernel_size'
-# }, {
-#     'experiments': [
-#         '2018-12-09T22:02_run_nn.py_--img_path_dataset-64-NIND_MuseeL-snakeAndMask_ISO200_554.jpg_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_UNet_--time_limit_300',
-#         '2018-12-09T22:07_run_nn.py_--img_path_dataset-64-NIND_MuseeL-snakeAndMask_ISO2000_554.jpg_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_UNet_--time_limit_300',
-#         '2018-12-09T22:12_run_nn.py_--img_path_dataset-64-NIND_MuseeL-snakeAndMask_ISO6400_554.jpg_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_UNet_--time_limit_300',
-#         '2018-12-09T22:17_run_nn.py_--img_path_dataset-64-NIND_MuseeL-snakeAndMask_ISOH1_554.jpg_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_UNet_--time_limit_300'
-#     ], 'feature_n': 'snakeAndMask'
-# }, {
-#     'experiments': [
-#         '2018-12-09T22:22_run_nn.py_--img_path_dataset-64-NIND_MuseeL-snakeAndMask_ISO200_641.jpg_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_UNet_--time_limit_300',
-#         '2018-12-09T22:27_run_nn.py_--img_path_dataset-64-NIND_MuseeL-snakeAndMask_ISO2000_641.jpg_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_UNet_--time_limit_300',
-#         '2018-12-09T22:32_run_nn.py_--img_path_dataset-64-NIND_MuseeL-snakeAndMask_ISO6400_641.jpg_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_UNet_--time_limit_300',
-#         '2018-12-09T22:37_run_nn.py_--img_path_dataset-64-NIND_MuseeL-snakeAndMask_ISOH1_641.jpg_--mask_path_masks-64-mask1notrans.png_--lr_0.0001_--model_UNet_--time_limit_300'
-#     ], 'feature_n': 'snakeAndMask'
-# }]
-
-# if args.run is None:
-#     for exp in params:
-#         graph(**exp)
-# else:
-#     graph(**params[args.run])
+    if not args.noshow:
+        plt.show()
+# TODO use json to handle nested dicts
+if not args.nojson:
+    with open('data.json', 'w') as f:
+        json.dump(data, f)
