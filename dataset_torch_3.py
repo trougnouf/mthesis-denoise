@@ -54,7 +54,7 @@ class DenoisingDataset(Dataset):
         self.compressionmin, self.compressionmax = compressionmin, compressionmax
         self.sigmamin, self.sigmamax = sigmamin, sigmamax
         for aset in os.listdir(datadir):
-            if aset in test_reserve:
+            if test_reserve and aset in test_reserve:
                 print('Skipped '+aset+' (test reserve)')
                 continue
             bisos, isos = sortISOs(os.listdir(os.path.join(datadir,aset)))
