@@ -10,10 +10,11 @@ import torch
 import nnModules
 from torch.utils.data import DataLoader
 import torch.optim as optim
-from torch.optim.lr_scheduler import MultiStepLR, LambdaLR
+from torch.optim.lr_scheduler import MultiStepLR, LambdaLR, StepLR
 from dataset_torch_3 import DenoisingDataset
 from lib import pytorch_ssim
 from random import randint
+from torchvision import models
 
 # Params
 parser = argparse.ArgumentParser(description='PyTorch Denoising network trainer')
@@ -37,10 +38,13 @@ parser.add_argument('--compressionmax', type=int, default=100, help='Maximum com
 parser.add_argument('--sigmamin', type=int, default=0, help='Minimum sigma value ([0,100], default=0)')
 parser.add_argument('--sigmamax', type=int, default=0, help='Maximum sigma value ([0,100], default=0)')
 parser.add_argument('--yisx', action='store_true', help='Use base ISO only if flag is set (useful to compare with sigmamax>0 artificial noise)')
-parser.add_argument('--scheduler', default='plateau', type=str, help='Scheduler; adjusts learning rate. Options are plateau, multistep, random. default: plateau (*.75 without patience)')
+parser.add_argument('--scheduler', default='plateau', type=str, help='Scheduler; adjusts learning rate. Options are plateau, multistep, StepLR, random. default: plateau (*.75 without patience)')
+parser.add_argument('--lr_gamma', default=.75, type=float, help='Learning rate decrease rate for plateau, StepLR (default: 0.75)')
+parser.add_argument('--lr_step_size', default=1, type=int, help='Step size for StepLR, plateau scheduler')
 parser.add_argument('--lossf', default='SSIM', help='Loss function (SSIM or MSE)')
 parser.add_argument('--test_reserve', nargs='*', help='Space separated list of image sets to be reserved for testing')
 parser.add_argument('--relu', default='relu', help='ReLU function (relu, rrelu)')
+
 args = parser.parse_args()
 
 
@@ -99,6 +103,7 @@ def log(*args, **kwargs):
     print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S:"), *args, **kwargs)
 
 if __name__ == '__main__':
+    # Model
     print('===> Building model')
     if args.model == 'DnCNN':
         model = nnModules.DnCNN(depth=args.depth, n_channels=args.n_channels, find_noise=args.find_noise, kernel_size=args.kernel_size)
@@ -112,6 +117,8 @@ if __name__ == '__main__':
         # ugliness while I figure out memory issue
         else:
             model = nnModules.RRUNet(3,3)
+    elif args.model == 'exp':
+        model = models.densenet121()
 
     else:
         exit(args.model+' not implemented.')
@@ -123,6 +130,7 @@ if __name__ == '__main__':
     elif args.model != 'DnCNN':
         model.apply(nnModules.init_weights)
     model.train()
+    # Loss function
     #if args.lossf == 'MSSSIM':
     #    criterion = pytorch_msssim.MSSSIM(channel=3)
     #elif args.lossf == 'MSSSIMandMSE':
@@ -138,19 +146,28 @@ if __name__ == '__main__':
         # device_ids = [0]
         # model = nn.DataParallel(model, device_ids=device_ids).cuda()
         criterion = criterion.cuda()
+    # Dataset
     DDataset = DenoisingDataset(args.train_data, compressionmin=args.compressionmin, compressionmax=args.compressionmax, sigmamin=args.sigmamin, sigmamax=args.sigmamax, test_reserve=args.test_reserve, yisx=args.yisx)
     DLoader = DataLoader(dataset=DDataset, num_workers=8, drop_last=True, batch_size=batch_size, shuffle=True)
     loss_crop_lb = int((DDataset.cs-DDataset.ucs)/2)
     loss_crop_up = loss_crop_lb+DDataset.ucs
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
+    # Scheduler
     # broken: non-integer stop for randrange()
     if args.scheduler == 'random':
-        lrlambda = lambda epoch, lr=args.lr: randint(1,.1/lr)/randint(1,1/lr)
+        def lrlambda(epoch, lr=args.lr):
+            newlr = randint(1,int(.1/lr))/randint(1,1/int(lr))
+            print(newlr)
+            return newlr
+        #lrlambda = lambda epoch, lr=args.lr: randint(1,int(.1/lr))/randint(1,1/int(lr))
         scheduler = LambdaLR(optimizer, lrlambda)
     elif args.scheduler == 'multistep':
         scheduler = MultiStepLR(optimizer, milestones=[args.epoch*.02, args.epoch*.06, args.epoch*.14, args.epoch*.30, args.epoch*.62, args.epoch*.78, args.epoch*.86], gamma=0.5)  # learning rates
+    elif args.scheduler == 'StepLR':
+        scheduler = StepLR(optimizer, step_size = args.lr_step_size, gamma = args.lr_gamma)
     else:
-        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=1, verbose=True, factor=.75, threshold=1e-8)
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=args.lr_step_size, verbose=True, factor=args.lr_gamma, threshold=1e-8)
+
     start_time = time.time()
     loss_ten=0
     for epoch in range(initial_epoch, args.epoch):
