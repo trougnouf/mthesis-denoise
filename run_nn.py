@@ -118,7 +118,7 @@ if __name__ == '__main__':
         else:
             model = nnModules.RRUNet(3,3)
     elif args.model == 'exp':
-        model = models.densenet121()
+        model = models.resnet50()
 
     else:
         exit(args.model+' not implemented.')
