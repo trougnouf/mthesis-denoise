@@ -51,7 +51,7 @@ class DnCNN(nn.Module):
 
 # based on https://arxiv.org/pdf/1603.05027.pdf ish
 class RedishCNN(nn.Module):
-    def __init__(self, n_channels=128, image_channels=3, kernel_size=5, depth=30):
+    def __init__(self, n_channels=128, image_channels=3, kernel_size=5, depth=30, find_noise = False):
         super(RedishCNN, self).__init__()
         self.depth = depth
         self.bn = nn.BatchNorm2d(n_channels)
@@ -60,6 +60,7 @@ class RedishCNN(nn.Module):
         self.deconv = nn.ConvTranspose2d(n_channels, n_channels, kernel_size=kernel_size, stride=1, padding=0)
         self.deconv_last = nn.ConvTranspose2d(in_channels=n_channels, out_channels=image_channels, kernel_size=kernel_size, stride=1, padding=0)
         self.relu = nn.RReLU()
+        self.find_noise = find_noise
 
     def forward(self, x):
         residuals = []
@@ -81,10 +82,13 @@ class RedishCNN(nn.Module):
                 layer = self.deconv(layer)
             layer = self.relu(layer+residuals.pop())
         layer = self.relu(self.deconv_last(layer))
-        return layer
+        if self.find_noise:
+            return x - layer
+        else:
+            return layer
 
 class RedCNN(nn.Module):
-    def __init__(self, n_channels=128, image_channels=3, kernel_size=5, depth=30, relu='relu'):
+    def __init__(self, n_channels=128, image_channels=3, kernel_size=5, depth=30, relu='relu', find_noise = False):
         super(RedCNN, self).__init__()
         self.depth = depth
         self.conv_first = nn.Conv2d(in_channels=image_channels, out_channels=n_channels, kernel_size=kernel_size, stride=1, padding=0)
@@ -95,6 +99,7 @@ class RedCNN(nn.Module):
             self.relu = nn.ReLU(inplace=True)
         else:   # RReLU
             self.relu = nn.RReLU(inplace=True)
+        #self.find_noise = find_noise
 
     def forward(self, x):
         residuals = []
@@ -114,41 +119,45 @@ class RedCNN(nn.Module):
             layer = self.relu(layer+residuals.pop())
         layer = self.relu(self.deconv(layer))
         layer = self.relu(self.deconv_last(layer))
+        #if self.find_noise:
+        #    return x - layer
+        #else:
+        #    return layer
         return layer
 
 # because I can (not done yet)
-class DecEncCNN(nn.Module):
-    def __init__(self, n_channels=128, image_channels=3, kernel_size=5, depth=30):
-        super(DecEncCNN, self).__init__()
-        self.depth = depth
-        self.bn = nn.BatchNorm2d(n_channels)
-        self.conv_first = nn.Conv2d(in_channels=image_channels, out_channels=n_channels, kernel_size=kernel_size, stride=1, padding=0)
-        self.conv = nn.Conv2d(n_channels, n_channels, kernel_size=kernel_size, stride=1, padding=0)
-        self.deconv = nn.ConvTranspose2d(n_channels, n_channels, kernel_size=kernel_size, stride=1, padding=0)
-        self.deconv_last = nn.ConvTranspose2d(in_channels=n_channels, out_channels=image_channels, kernel_size=kernel_size, stride=1, padding=0)
-        self.relu = nn.RReLU()
+# class DecEncCNN(nn.Module):
+#     def __init__(self, n_channels=128, image_channels=3, kernel_size=5, depth=30):
+#         super(DecEncCNN, self).__init__()
+#         self.depth = depth
+#         self.bn = nn.BatchNorm2d(n_channels)
+#         self.conv_first = nn.Conv2d(in_channels=image_channels, out_channels=n_channels, kernel_size=kernel_size, stride=1, padding=0)
+#         self.conv = nn.Conv2d(n_channels, n_channels, kernel_size=kernel_size, stride=1, padding=0)
+#         self.deconv = nn.ConvTranspose2d(n_channels, n_channels, kernel_size=kernel_size, stride=1, padding=0)
+#         self.deconv_last = nn.ConvTranspose2d(in_channels=n_channels, out_channels=image_channels, kernel_size=kernel_size, stride=1, padding=0)
+#         self.relu = nn.RReLU()
 
-    def forward(self, x):
-        residuals = []
-        layer = self.relu(self.conv_first(x))   #c1
-        residuals.append(layer.clone())
-        for _ in range(int(floor(self.depth-6)/2)):
-            for _ in range(2):
-                layer = self.bn(layer)
-                layer = self.relu(layer)
-                layer = self.conv(layer)
-            residuals.append(layer.clone())
-        layer = self.relu(self.conv(layer))     #clast
-        layer = self.relu(self.deconv(layer))   #d1
-        layer = self.relu(layer+residuals.pop())
-        for _ in range(int(floor(self.depth-6)/2)):
-            for _ in range(2):
-                layer = self.bn(layer)
-                layer = self.relu(layer)
-                layer = self.deconv(layer)
-            layer = self.relu(layer+residuals.pop())
-        layer = self.relu(self.deconv_last(layer))
-        return layer
+#     def forward(self, x):
+#         residuals = []
+#         layer = self.relu(self.conv_first(x))   #c1
+#         residuals.append(layer.clone())
+#         for _ in range(int(floor(self.depth-6)/2)):
+#             for _ in range(2):
+#                 layer = self.bn(layer)
+#                 layer = self.relu(layer)
+#                 layer = self.conv(layer)
+#             residuals.append(layer.clone())
+#         layer = self.relu(self.conv(layer))     #clast
+#         layer = self.relu(self.deconv(layer))   #d1
+#         layer = self.relu(layer+residuals.pop())
+#         for _ in range(int(floor(self.depth-6)/2)):
+#             for _ in range(2):
+#                 layer = self.bn(layer)
+#                 layer = self.relu(layer)
+#                 layer = self.deconv(layer)
+#             layer = self.relu(layer+residuals.pop())
+#         layer = self.relu(self.deconv_last(layer))
+#         return layer
 
 # UNET from https://github.com/milesial/Pytorch-UNet/blob/master/unet/unet_model.py
 # sub-parts of the U-Net model
@@ -339,7 +348,7 @@ class outconv(nn.Module):
         return x
 
 class UNet(nn.Module):
-    def __init__(self, n_channels, n_classes):
+    def __init__(self, n_channels, n_classes, find_noise=False):
         super(UNet, self).__init__()
         self.inc = inconv(n_channels, 64)
         self.down1 = down(64, 128)
@@ -353,6 +362,8 @@ class UNet(nn.Module):
         self.outc = outconv(64, n_classes)
 
     def forward(self, x):
+        if self.find_noise:
+            y = x
         x1 = self.inc(x)
         x2 = self.down1(x1)
         x3 = self.down2(x2)
@@ -363,6 +374,8 @@ class UNet(nn.Module):
         x = self.up3(x, x2)
         x = self.up4(x, x1)
         x = self.outc(x)
+        if self.find_noise:
+            return y - F.sigmoid(x)
         return F.sigmoid(x)
 
 ############################################################################

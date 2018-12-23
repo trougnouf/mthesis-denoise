@@ -108,15 +108,15 @@ if __name__ == '__main__':
     if args.model == 'DnCNN':
         model = nnModules.DnCNN(depth=args.depth, n_channels=args.n_channels, find_noise=args.find_noise, kernel_size=args.kernel_size)
     elif args.model == 'RedCNN':
-        model = nnModules.RedCNN(depth=args.depth, n_channels=args.n_channels, kernel_size=args.kernel_size, relu=args.relu)
+        model = nnModules.RedCNN(depth=args.depth, n_channels=args.n_channels, kernel_size=args.kernel_size, relu=args.relu, find_noise=args.find_noise)
     elif args.model == 'RedishCNN':
-        model = nnModules.RedishCNN(depth=args.depth, n_channels=args.n_channels, kernel_size=args.kernel_size)
+        model = nnModules.RedishCNN(depth=args.depth, n_channels=args.n_channels, kernel_size=args.kernel_size, find_noise=args.find_noise)
     elif args.model == 'UNet':
         if args.relu == 'relu':
-            model = nnModules.UNet(3,3)
+            model = nnModules.UNet(3,3, find_noise=args.find_noise)
         # ugliness while I figure out memory issue
         else:
-            model = nnModules.RRUNet(3,3)
+            model = nnModules.RRUNet(3,3, find_noise=args.find_noise)
     elif args.model == 'exp':
         model = models.resnet50()
 
