@@ -360,6 +360,7 @@ class UNet(nn.Module):
         self.up3 = up(256, 64)
         self.up4 = up(128, 64)
         self.outc = outconv(64, n_classes)
+        self.find_noise = find_noise
 
     def forward(self, x):
         if self.find_noise:
