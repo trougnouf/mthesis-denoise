@@ -26,7 +26,7 @@ class DnCNN(nn.Module):
             layers.append(nn.Conv2d(in_channels=n_channels, out_channels=n_channels,
                           kernel_size=kernel_size, padding=padding, bias=False))
             layers.append(nn.BatchNorm2d(n_channels, eps=0.0001, momentum=0.95))
-            if relu == 'relu'
+            if relu == 'relu':
                 layers.append(nn.ReLU(inplace=True))
             else:
                 layers.append(nn.RReLU(inplace=True))
