@@ -18,7 +18,7 @@ class DnCNN(nn.Module):
 
         layers.append(nn.Conv2d(in_channels=image_channels, out_channels=n_channels,
                       kernel_size=kernel_size, padding=padding, bias=True))
-        if relu == 'relu'
+        if relu == 'relu':
             layers.append(nn.ReLU(inplace=True))
         else:
             layers.append(nn.RReLU(inplace=True))
