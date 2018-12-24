@@ -106,7 +106,7 @@ if __name__ == '__main__':
     # Model
     print('===> Building model')
     if args.model == 'DnCNN':
-        model = nnModules.DnCNN(depth=args.depth, n_channels=args.n_channels, find_noise=args.find_noise, kernel_size=args.kernel_size)
+        model = nnModules.DnCNN(depth=args.depth, n_channels=args.n_channels, find_noise=args.find_noise, kernel_size=args.kernel_size, relu=args.relu)
     elif args.model == 'RedCNN':
         model = nnModules.RedCNN(depth=args.depth, n_channels=args.n_channels, kernel_size=args.kernel_size, relu=args.relu, find_noise=args.find_noise)
     elif args.model == 'RedishCNN':
@@ -162,7 +162,8 @@ if __name__ == '__main__':
         #lrlambda = lambda epoch, lr=args.lr: randint(1,int(.1/lr))/randint(1,1/int(lr))
         scheduler = LambdaLR(optimizer, lrlambda)
     elif args.scheduler == 'multistep':
-        scheduler = MultiStepLR(optimizer, milestones=[args.epoch*.02, args.epoch*.06, args.epoch*.14, args.epoch*.30, args.epoch*.62, args.epoch*.78, args.epoch*.86], gamma=0.5)  # learning rates
+        #scheduler = MultiStepLR(optimizer, milestones=[args.epoch*.02, args.epoch*.06, args.epoch*.14, args.epoch*.30, args.epoch*.62, args.epoch*.78, args.epoch*.86], gamma=0.5)  # learning rates
+        scheduler = MultiStepLR(optimizer, milestones=[30,60,90], gamma=0.2)  # match DnCNN
     elif args.scheduler == 'StepLR':
         scheduler = StepLR(optimizer, step_size = args.lr_step_size, gamma = args.lr_gamma)
     else:
