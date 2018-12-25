@@ -10,10 +10,10 @@ import time
 import piexif
 import subprocess
 
-parser = argparse.ArgumentParser(description='Image cropper with overlap (relies on crop_img.sh)')
+parser = argparse.ArgumentParser(description='Image cropper with overlap')
 parser.add_argument('--cs', default=128, type=int, help='Tile size')
-parser.add_argument('--ucs', default=96, type=int, help='Useful tile size')
-parser.add_argument('-ol', '--overlap', default=8, type=int)
+parser.add_argument('--ucs', default=86, type=int, help='Useful tile size (should be <=.75*cs), a smaller value may result in less grid artifacts but costs computation time')
+parser.add_argument('-ol', '--overlap', default=4, type=int, help='Merge crops with this much overlap (Reduces grid artifacts, may reduce sharpness between crops, costs computation time)')
 parser.add_argument('-i', '--input', default='datasets/dataset', type=str, help='Input dataset directory. Default is datasets/dataset, for test try datasets/noisyonly')
 parser.add_argument('-o', '--output', default='out.tif', type=str, help='Output file with extension')
 parser.add_argument('-b', '--batch_size', type=int, default=1)
@@ -52,7 +52,6 @@ class OneImageDS(Dataset):
         crop = self.inimg.crop((x0+x0pad, y0+y0pad, x1-x1pad, y1-y1pad))
         ret.paste(crop, (x0pad, y0pad, self.cs-x1pad, self.cs-y1pad))
         usefuldim = (self.pad, self.pad, self.cs-max(self.pad,x1pad), self.cs-max(self.pad,y1pad))
-        #usefuldim = (self.pad, self.pad, self.cs-x1pad, self.cs-y1pad)
         usefulstart = (x0+self.pad, y0+self.pad)
         return self.totensor(ret), torch.IntTensor(usefuldim), torch.IntTensor(usefulstart)
     def __len__(self):
