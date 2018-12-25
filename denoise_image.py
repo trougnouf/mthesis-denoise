@@ -17,6 +17,7 @@ parser.add_argument('-ol', '--overlap', default=8, type=int)
 parser.add_argument('-i', '--input', default='datasets/dataset', type=str, help='Input dataset directory. Default is datasets/dataset, for test try datasets/noisyonly')
 parser.add_argument('-o', '--output', default='out.tif', type=str, help='Output file with extension')
 parser.add_argument('-b', '--batch_size', type=int, default=1)
+parser.add_argument('--debug', action='store_true', help='Debug (store all intermediate crops in ./dbg, display useful messages)')
 # TODO merge these / autodetect
 parser.add_argument('--model_dir', type=str, help='directory where .th models are saved (latest .th file is autodetected)')
 parser.add_argument('--model_subdir', type=str, help='subdirectory where .th models are saved (latest .th file is autodetected, models dir is assumed)')
@@ -75,7 +76,6 @@ if torch.cuda.is_available():
 ds = OneImageDS(args.input, args.cs, args.ucs, args.overlap)
 # multiple workers cannot access the same PIL object without crash
 DLoader = DataLoader(dataset=ds, num_workers=0, drop_last=False, batch_size=args.batch_size, shuffle=False)
-os.makedirs('tmp', exist_ok=True)
 topil = torchvision.transforms.ToPILImage()
 fswidth, fsheight = Image.open(args.input).size
 newimg = torch.zeros(3, fsheight, fswidth, dtype=torch.float32)
@@ -105,11 +105,12 @@ for n_count, ydat in enumerate(DLoader):
             tensimg = xbatch[i][:,ud[1]:ud[3], ud[0]:ud[2]].cpu().detach()
             absx0, absy0 = tuple(usefulstarts[i].tolist())
             tensimg = make_seamless_edges(tensimg, absx0, absy0)
-            # DBG:
-            #torchvision.utils.save_image(xbatch[i], 'dbg/crop'+str(n_count)+'_'+str(i)+'_1.jpg')
-            #torchvision.utils.save_image(tensimg, 'dbg/crop'+str(n_count)+'_'+str(i)+'_2.jpg')
-            #print(tensimg.shape)
-            #print((absx0,absy0,ud))
+            if args.debug:
+                os.makedirs('dbg', exist_ok=True)
+                torchvision.utils.save_image(xbatch[i], 'dbg/crop'+str(n_count)+'_'+str(i)+'_1.jpg')
+                torchvision.utils.save_image(tensimg, 'dbg/crop'+str(n_count)+'_'+str(i)+'_2.jpg')
+                print(tensimg.shape)
+                print((absx0,absy0,ud))
             newimg[:,absy0:absy0+tensimg.shape[1],absx0:absx0+tensimg.shape[2]] = newimg[:,absy0:absy0+tensimg.shape[1],absx0:absx0+tensimg.shape[2]].add(tensimg)
 torchvision.utils.save_image(newimg, args.output)
 if args.output[:-4] == '.jpg':
