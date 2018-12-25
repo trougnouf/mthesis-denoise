@@ -29,9 +29,9 @@ class OneImageDS(Dataset):
         self.width, self.height = self.inimg.size
         self.cs, self.ucs, self.ol = cs, ucs, ol    # crop size, useful crop size, overlap
         self.totensor = torchvision.transforms.ToTensor()
-        self.iperhl = floor((self.width - self.ucs) / (self.ucs - self.ol)+1) # i_per_hline, or crops per line
+        self.iperhl = ceil((self.width - self.ucs) / (self.ucs - self.ol)) # i_per_hline, or crops per line
         self.pad = int((self.cs - self.ucs) / 2)
-        ipervl = floor((self.height - self.ucs) / (self.ucs - self.ol)+1)
+        ipervl = ceil((self.height - self.ucs) / (self.ucs - self.ol))
         self.size = (self.iperhl+1) * (ipervl+1)
     def __getitem__(self, i):
         # x-y indices (0 to iperhl, 0 to ipervl)
@@ -87,7 +87,7 @@ def make_seamless_edges(tcrop, x0, y0):
         tcrop[:,0:args.overlap,:] = tcrop[:,0:args.overlap,:].div(2)
     if x0 + args.ucs < fswidth and args.overlap:#right
         tcrop[:,:,-args.overlap:] = tcrop[:,:,-args.overlap:].div(2)
-    if y0 + args.ucs < fswidth and args.overlap:#bottom
+    if y0 + args.ucs < fsheight and args.overlap:#bottom
         tcrop[:,-args.overlap:,:] = tcrop[:,-args.overlap:,:].div(2)
     return tcrop
 
