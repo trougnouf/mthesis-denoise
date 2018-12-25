@@ -78,6 +78,8 @@ nindlist = [
     'ursulines-red,200,250,500,4000,6400,H1,H2',
     'vlc,200,250,500,1000,3200,6400,H1,H2,H3',
     'whistle,200,250,500,1000,2000,4000,6400,H1,H2,H3,H4',
+    'Homarus-americanus,200,200-2,250,400,800,2000,3200,5000,6400,H1,H2',
+    'fruits,200,200-2,800,3200,5000,6400',
     ]
 manset = [
     'lightclouds,0denoised,naturalnoise',
