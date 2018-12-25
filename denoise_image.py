@@ -7,14 +7,16 @@ from PIL import Image
 from torch.utils.data import DataLoader
 from torch.utils.data import Dataset
 import time
-
+import piexif
+import subprocess
 
 parser = argparse.ArgumentParser(description='Image cropper with overlap (relies on crop_img.sh)')
 parser.add_argument('--cs', default=128, type=int, help='Tile size')
 parser.add_argument('--ucs', default=96, type=int, help='Useful tile size')
 parser.add_argument('-ol', '--overlap', default=8, type=int)
 parser.add_argument('-i', '--input', default='datasets/dataset', type=str, help='Input dataset directory. Default is datasets/dataset, for test try datasets/noisyonly')
-parser.add_argument('-bs', '--batch_size', type=int, default=1)
+parser.add_argument('-o', '--output', default='out.tif', type=str, help='Output file with extension')
+parser.add_argument('-b', '--batch_size', type=int, default=1)
 # TODO merge these / autodetect
 parser.add_argument('--model_dir', type=str, help='directory where .th models are saved (latest .th file is autodetected)')
 parser.add_argument('--model_subdir', type=str, help='subdirectory where .th models are saved (latest .th file is autodetected, models dir is assumed)')
@@ -27,9 +29,9 @@ class OneImageDS(Dataset):
         self.width, self.height = self.inimg.size
         self.cs, self.ucs, self.ol = cs, ucs, ol    # crop size, useful crop size, overlap
         self.totensor = torchvision.transforms.ToTensor()
-        self.iperhl = ceil((self.width - self.ucs) / (self.ucs - self.ol)) # i_per_hline, or crops per line
+        self.iperhl = floor((self.width - self.ucs) / (self.ucs - self.ol)+1) # i_per_hline, or crops per line
         self.pad = int((self.cs - self.ucs) / 2)
-        ipervl = ceil((self.height - self.ucs) / (self.ucs - self.ol))
+        ipervl = floor((self.height - self.ucs) / (self.ucs - self.ol)+1)
         self.size = (self.iperhl+1) * (ipervl+1)
     def __getitem__(self, i):
         # x-y indices (0 to iperhl, 0 to ipervl)
@@ -48,10 +50,9 @@ class OneImageDS(Dataset):
         y1pad = max(0, y1 - self.height)
         crop = self.inimg.crop((x0+x0pad, y0+y0pad, x1-x1pad, y1-y1pad))
         ret.paste(crop, (x0pad, y0pad, self.cs-x1pad, self.cs-y1pad))
-        usefuldim = (self.pad, self.pad, self.cs-self.pad, self.cs-self.pad)
+        usefuldim = (self.pad, self.pad, self.cs-max(self.pad,x1pad), self.cs-max(self.pad,y1pad))
+        #usefuldim = (self.pad, self.pad, self.cs-x1pad, self.cs-y1pad)
         usefulstart = (x0+self.pad, y0+self.pad)
-        #usefulstart = (x0+self.pad+x0pad, y0+self.pad+y0pad)
-        print(str((i, usefuldim, usefulstart)))
         return self.totensor(ret), torch.IntTensor(usefuldim), torch.IntTensor(usefulstart)
     def __len__(self):
         return self.size
@@ -76,19 +77,17 @@ ds = OneImageDS(args.input, args.cs, args.ucs, args.overlap)
 DLoader = DataLoader(dataset=ds, num_workers=0, drop_last=False, batch_size=args.batch_size, shuffle=False)
 os.makedirs('tmp', exist_ok=True)
 topil = torchvision.transforms.ToPILImage()
-#newimg = Image.new('RGB', Image.open(args.input).size)
 fswidth, fsheight = Image.open(args.input).size
 newimg = torch.zeros(3, fsheight, fswidth, dtype=torch.float32)
 
-def make_seamless_edges(tcrop, startcoord):
-    y0,x0 = startcoord
+def make_seamless_edges(tcrop, x0, y0):
     if x0 != 0:#left
         tcrop[:,:,0:args.overlap] = tcrop[:,:,0:args.overlap].div(2)
     if y0 != 0:#top
         tcrop[:,0:args.overlap,:] = tcrop[:,0:args.overlap,:].div(2)
-    if x0 + self.ucs < fswidth:#right
+    if x0 + args.ucs < fswidth and args.overlap:#right
         tcrop[:,:,-args.overlap:] = tcrop[:,:,-args.overlap:].div(2)
-    if y0 + self.ucs < fswidth:#bottom
+    if y0 + args.ucs < fswidth and args.overlap:#bottom
         tcrop[:,-args.overlap:,:] = tcrop[:,-args.overlap:,:].div(2)
     return tcrop
 
@@ -99,28 +98,23 @@ for n_count, ydat in enumerate(DLoader):
         ybatch = ybatch.cuda()
         xbatch = model(ybatch)
         torch.cuda.synchronize()
-        #torchvision.utils.save_image(xbatch, 'tmp/'+str(n_count)+'.jpg')
         for i in range(args.batch_size):
-        #print(usefulstarts)
-        #for xtens, usefuldim, usefulstart in (xbatch, usefuldims, usefulstarts):
-            #print(usefuldims[i])
-            #print(usefulstarts[i])
             ud = usefuldims[i]
             # pytorch represents images as [channels, height, width]
             # TODO test leaving on GPU longer
             tensimg = xbatch[i][:,ud[1]:ud[3], ud[0]:ud[2]].cpu().detach()
-
             absx0, absy0 = tuple(usefulstarts[i].tolist())
-            print(tensimg.shape)
-            #print(usefulstart)
-            #newimg.paste(topil(tensimg), usefulstart)
+            tensimg = make_seamless_edges(tensimg, absx0, absy0)
+            # DBG:
+            #torchvision.utils.save_image(xbatch[i], 'dbg/crop'+str(n_count)+'_'+str(i)+'_1.jpg')
+            #torchvision.utils.save_image(tensimg, 'dbg/crop'+str(n_count)+'_'+str(i)+'_2.jpg')
+            #print(tensimg.shape)
+            #print((absx0,absy0,ud))
             newimg[:,absy0:absy0+tensimg.shape[1],absx0:absx0+tensimg.shape[2]] = newimg[:,absy0:absy0+tensimg.shape[1],absx0:absx0+tensimg.shape[2]].add(tensimg)
-            # find ucs, starting points
-            #tensimg = xbatch[i]
-
-        #for yimg, usefuldim, usefulstart in xbatch, usefuldims, usefulstarts:
-        #    pilimg = topil(yimg[1,usefuldim])
-        #    newimg.paste(pilimg, usefulstart)
-torchvision.utils.save_image(newimg, 'tmp.jpg')
-#newimg.save('tmp.jpg')
+torchvision.utils.save_image(newimg, args.output)
+if args.output[:-4] == '.jpg':
+    piexif.transplant(args.input, args.output)
+else:
+    cmd = ['exiftool', '-TagsFromFile', args.input, args.output, '-overwrite_original']
+    subprocess.run(cmd)
 print('Elapsed time: '+str(time.time()-start_time)+' seconds')
