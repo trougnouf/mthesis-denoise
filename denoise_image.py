@@ -7,16 +7,16 @@ from PIL import Image
 from torch.utils.data import DataLoader
 from torch.utils.data import Dataset
 import time
-import piexif
+import piexif   # TODO make it optional
 import subprocess
 
 parser = argparse.ArgumentParser(description='Image cropper with overlap')
-parser.add_argument('--cs', default=128, type=int, help='Tile size')
+parser.add_argument('--cs', default=128, type=int, help='Tile size (model was probably trained with 128, different values will work with unknown results)')
 parser.add_argument('--ucs', default=86, type=int, help='Useful tile size (should be <=.75*cs), a smaller value may result in less grid artifacts but costs computation time')
 parser.add_argument('-ol', '--overlap', default=4, type=int, help='Merge crops with this much overlap (Reduces grid artifacts, may reduce sharpness between crops, costs computation time)')
-parser.add_argument('-i', '--input', default='datasets/dataset', type=str, help='Input dataset directory. Default is datasets/dataset, for test try datasets/noisyonly')
+parser.add_argument('-i', '--input', default='in.jpg', type=str, help='Input image file')
 parser.add_argument('-o', '--output', default='out.tif', type=str, help='Output file with extension')
-parser.add_argument('-b', '--batch_size', type=int, default=1)
+parser.add_argument('-b', '--batch_size', type=int, default=1)  # TODO >1 is broken
 parser.add_argument('--debug', action='store_true', help='Debug (store all intermediate crops in ./dbg, display useful messages)')
 # TODO merge these / autodetect
 parser.add_argument('--model_dir', type=str, help='directory where .th models are saved (latest .th file is autodetected)')
