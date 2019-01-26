@@ -5,6 +5,8 @@ CS=$1       # crop size (including overlap)
 UCS=$2      # useful crop size
 FP=$3       # input file path
 OUTDIR=$4   # directory where results are saved
+EXT=${FP,,}
+EXT=${EXT:(-3)}
 # output:
 # OUTDIR/[base filename]_XCROPN_YCROPN_USEFULCROPSIZE.jpg
 
@@ -19,7 +21,7 @@ fi
 mkdir -p ${OUTDIR}
 NTHREADS=$(grep -c ^processor /proc/cpuinfo)
 echo "Cropping ${FP}..."
-RES=($(file ${FP} | grep -o -E '[0-9]{3,}x[0-9]{3,}' | tail -1 | grep -o -E '[0-9]+'))
+RES=($(file ${FP} | grep -o -E '[0-9]{3,}( )*x( )*[0-9]{3,}' | tail -1 | grep -o -E '[0-9]+'))
 BN=$(basename $FP);BN=${BN::-4}
 mkdir -p "${OUTDIR}"
 NXCROPS=$((${RES[0]}/$UCS+1))
@@ -56,10 +58,14 @@ do
     then
         CUCS=$(($CUCS<($YCS-($CS-$UCS)/2)?$CUCS:($YCS-($CS-$UCS)/2)))
     fi
-    CPATH="${OUTDIR}/${BN}_${CURX}_${CURY}_${CUCS}.jpg"
+    CPATH="${OUTDIR}/${BN}_${CURX}_${CURY}_${CUCS}.${EXT}"
 	if [ ! -f "${CPATH}" ]
 	then
-	    CMD="jpegtran -crop ${XCS}x${YCS}+${XBEG}+${YBEG} -copy none -optimize -outfile ${CPATH} ${FP}"
+		if [ "$EXT" = "jpg" ]; then
+			CMD="jpegtran -crop ${XCS}x${YCS}+${XBEG}+${YBEG} -copy none -optimize -outfile ${CPATH} ${FP}"
+		else
+			CMD="convert -crop ${XCS}x${YCS}+${XBEG}+${YBEG} ${FP} ${CPATH}"
+        	fi
 		if ! $(${CMD})
 		then
 		    echo "${CMD}"
