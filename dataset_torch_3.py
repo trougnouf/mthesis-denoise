@@ -9,6 +9,10 @@ import torch
 
 # Sort ISO values (eg ISO200, ISO6400, ...), handles ISOH1, ISOH2, ..., ISOHn as last, handles ISO200-n, ISO6400-n, ... as usable duplicates
 def sortISOs(rawISOs):
+    # ISO directories can be ISO<NUM>[-REPEATNUM] or ISOH<NUM>[-REPEATNSUM]
+    # where ISO<lowest> (and possibly any -REPEATNUM, for example ISO200-1 and
+    # ISO200-2) is taken as the base ISO. Other naming conventions will also work
+    # so long as the base iso is first alphabetically
     if any([iso[3:] != 'ISO' for iso in rawISOs]):
         biso, *isos = sorted(rawISOs)
         return [biso], isos
@@ -62,19 +66,20 @@ class DenoisingDataset(Dataset):
                     bisos = isos = bisos[0:1]
                 for animg in os.listdir(os.path.join(datadir, aset, isos[0])):
                     # verify that no base-ISO image exceeds CS just because
-                    if any(d > self.cs for d in Image.open(os.path.join(datadir, aset, isos[0], animg)).size):
-                            print("Warning: excessive crop size for "+aset)
+                    # TODO check time-cost
+                    #if any(d > self.cs for d in Image.open(os.path.join(datadir, aset, isos[0], animg)).size):
+                    #        print("Warning: excessive crop size for "+aset)
                     # check for min size
                     if all(d >= self.ucs for d in Image.open(os.path.join(datadir, aset, isos[0], animg)).size):
-                        self.dataset.append([os.path.join(datadir,aset,'ISOBASE',animg).replace('_'+isos[0]+'_','_ISOBASE_'), bisos,isos])
+                        self.dataset.append([os.path.join(datadir,aset,'ISOBASE',animg).replace(isos[0]+'_','ISOBASE_'), bisos,isos])
                 print('Added '+aset+str(bisos)+str(isos)+' to the dataset')
 
     def get_and_pad(self, index):
         img = self.dataset[index]
         xchoice = choice(img[1])
-        xpath = os.path.join(img[0].replace('_ISOBASE_','_'+xchoice+'_').replace('/ISOBASE/','/'+xchoice+'/'))
+        xpath = os.path.join(img[0].replace('ISOBASE_',xchoice+'_').replace('/ISOBASE/','/'+xchoice+'/'))
         ychoice = choice(img[2])
-        ypath = os.path.join(img[0].replace('_ISOBASE_','_'+ychoice+'_').replace('/ISOBASE/','/'+ychoice+'/'))
+        ypath = os.path.join(img[0].replace('ISOBASE_',ychoice+'_').replace('/ISOBASE/','/'+ychoice+'/'))
         ximg = Image.open(xpath)
         yimg = Image.open(ypath)
         if all(d == self.cs for d in ximg.size):
