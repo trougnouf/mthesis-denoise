@@ -47,7 +47,7 @@ class DenoisingDataset(Dataset):
     def __init__(self, datadirs, testreserve=[], yisx=False, compressionmin=100, compressionmax=100, sigmamin=0, sigmamax=0, test_reserve=[]):
         super(DenoisingDataset, self).__init__()
         self.totensor = torchvision.transforms.ToTensor()
-        # each dataset element is ["<SETNAME>/ISOBASE/<DSNAME>_<SETNAME>_ISOBASE_<XNUM>_<YNUM>_<UCS>.jpg", [<ISOVAL1>,...,<ISOVALN>]]
+        # each dataset element is ["<DATADIR>/<SETNAME>/ISOBASE/<DSNAME>_<SETNAME>_ISOBASE_<XNUM>_<YNUM>_<UCS>.EXT", [<ISOVAL1>,...,<ISOVALN>]]
         self.dataset = []
         self.cs, self.ucs = [int(i) for i in datadirs[0].split('_')[-2:]]
         self.compressionmin, self.compressionmax = compressionmin, compressionmax
@@ -79,7 +79,7 @@ class DenoisingDataset(Dataset):
         yimg = Image.open(ypath)
         if all(d == self.cs for d in ximg.size):
             return (ximg, yimg)
-        xnum, ynum, ucs = [int(i) for i in img[0].strip('.jpg').split('_')[-3:]]
+        xnum, ynum, ucs = [int(i) for i in img[0].rpartition('.')[0].split('_')[-3:]]
         if xnum == 0:
             # pad left
             ximg = ximg.crop((-self.cs+ximg.width, 0, ximg.width, ximg.height))
