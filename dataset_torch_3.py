@@ -9,7 +9,7 @@ import torch
 
 # Sort ISO values (eg ISO200, ISO6400, ...), handles ISOH1, ISOH2, ..., ISOHn as last, handles ISO200-n, ISO6400-n, ... as usable duplicates
 def sortISOs(rawISOs):
-    if any([i[0]=='0' for i in rawISOs]):
+    if any([iso[3:] != 'ISO' for iso in rawISOs]):
         biso, *isos = sorted(rawISOs)
         return [biso], isos
     isos = []
@@ -17,9 +17,7 @@ def sortISOs(rawISOs):
     hisos = []
     dupisos = {}
     for iso in rawISOs:
-        if iso[3:] != 'ISO':
-            isos.append(iso)
-        elif 'H' in iso:
+        if 'H' in iso:
             hisos.append(iso)
         else:
             if '-' in iso:
