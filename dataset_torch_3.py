@@ -49,7 +49,7 @@ class DenoisingDataset(Dataset):
         self.totensor = torchvision.transforms.ToTensor()
         # each dataset element is ["<SETNAME>/ISOBASE/<DSNAME>_<SETNAME>_ISOBASE_<XNUM>_<YNUM>_<UCS>.jpg", [<ISOVAL1>,...,<ISOVALN>]]
         self.dataset = []
-        self.cs, self.ucs = [int(i) for i in datadir[0].split('_')[-2:]]
+        self.cs, self.ucs = [int(i) for i in datadirs[0].split('_')[-2:]]
         self.compressionmin, self.compressionmax = compressionmin, compressionmax
         self.sigmamin, self.sigmamax = sigmamin, sigmamax
         for datadir in datadirs:
