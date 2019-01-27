@@ -67,11 +67,15 @@ class DenoisingDataset(Dataset):
                 for animg in os.listdir(os.path.join(datadir, aset, isos[0])):
                     # verify that no base-ISO image exceeds CS just because
                     # TODO check time-cost
+
                     #if any(d > self.cs for d in Image.open(os.path.join(datadir, aset, isos[0], animg)).size):
                     #        print("Warning: excessive crop size for "+aset)
                     # check for min size
-                    if all(d >= self.ucs for d in Image.open(os.path.join(datadir, aset, isos[0], animg)).size):
+                    img4tests=Image.open(os.path.join(datadir, aset, isos[0], animg))
+                    if all(d >= self.ucs for d in img4test.size) and img4tests.getbands == ('R', 'G', 'B'):
                         self.dataset.append([os.path.join(datadir,aset,'ISOBASE',animg).replace(isos[0]+'_','ISOBASE_'), bisos,isos])
+                    else:
+                        print('Skipping '+os.path.join(datadir, aset, isos[0], animg))
                 print('Added '+aset+str(bisos)+str(isos)+' to the dataset')
 
     def get_and_pad(self, index):
