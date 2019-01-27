@@ -75,7 +75,8 @@ class DenoisingDataset(Dataset):
                     if all(d >= self.ucs for d in img4tests.size) and img4tests.getbands() == ('R', 'G', 'B'):
                         self.dataset.append([os.path.join(datadir,aset,'ISOBASE',animg).replace(isos[0]+'_','ISOBASE_'), bisos,isos])
                     else:
-                        print('Skipping '+os.path.join(datadir, aset, isos[0], animg))
+                        if img4tests.getbands() != ('R', 'G', 'B'):
+                            print('Skipping '+os.path.join(datadir, aset, isos[0], animg)+' (not RGB)')
                 print('Added '+aset+str(bisos)+str(isos)+' to the dataset')
 
     def get_and_pad(self, index):
