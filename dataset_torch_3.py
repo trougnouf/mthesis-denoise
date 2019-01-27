@@ -72,10 +72,8 @@ class DenoisingDataset(Dataset):
                     #        print("Warning: excessive crop size for "+aset)
                     # check for min size
                     img4tests=Image.open(os.path.join(datadir, aset, isos[0], animg))
-                    if all(d >= self.ucs for d in img4tests.size) and img4tests.getbands() == ('R', 'G', 'B'):
+                    if all(d >= self.ucs for d in img4tests.size):
                         self.dataset.append([os.path.join(datadir,aset,'ISOBASE',animg).replace(isos[0]+'_','ISOBASE_'), bisos,isos])
-                    else:
-                        if img4tests.getbands() != ('R', 'G', 'B'):
                             print('Skipping '+os.path.join(datadir, aset, isos[0], animg)+' (not RGB)')
                 print('Added '+aset+str(bisos)+str(isos)+' to the dataset')
 
@@ -86,7 +84,11 @@ class DenoisingDataset(Dataset):
         ychoice = choice(img[2])
         ypath = os.path.join(img[0].replace('ISOBASE_',ychoice+'_').replace('/ISOBASE/','/'+ychoice+'/'))
         ximg = Image.open(xpath)
+        if ximg.getbands() != ('R', 'G', 'B'):
+            ximg.convert('RGB')
         yimg = Image.open(ypath)
+        if yimg.getbands() != ('R', 'G', 'B'):
+            yimg.convert('RGB')
         if all(d == self.cs for d in ximg.size):
             return (ximg, yimg)
         xnum, ynum, ucs = [int(i) for i in img[0].rpartition('.')[0].split('_')[-3:]]
