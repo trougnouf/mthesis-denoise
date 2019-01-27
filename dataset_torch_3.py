@@ -133,6 +133,7 @@ class DenoisingDataset(Dataset):
         if self.sigmamax > 0:
             noise = torch.randn(yimg.shape).mul_(uniform(self.sigmamin, self.sigmamax)/255)
             yimg = torch.abs(yimg+noise)
+        print((ximg.shape, yimg.shape))#dbg
         return ximg, yimg
     def __len__(self):
         return len(self.dataset)
