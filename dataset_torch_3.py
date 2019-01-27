@@ -82,10 +82,10 @@ class DenoisingDataset(Dataset):
         ypath = os.path.join(img[0].replace('ISOBASE_',ychoice+'_').replace('/ISOBASE/','/'+ychoice+'/'))
         ximg = Image.open(xpath)
         if ximg.getbands() != ('R', 'G', 'B'):
-            ximg.convert('RGB')
+            ximg=ximg.convert('RGB')
         yimg = Image.open(ypath)
         if yimg.getbands() != ('R', 'G', 'B'):
-            yimg.convert('RGB')
+            yimg=yimg.convert('RGB')
         if all(d == self.cs for d in ximg.size):
             return (ximg, yimg)
         xnum, ynum, ucs = [int(i) for i in img[0].rpartition('.')[0].split('_')[-3:]]
@@ -133,7 +133,6 @@ class DenoisingDataset(Dataset):
         if self.sigmamax > 0:
             noise = torch.randn(yimg.shape).mul_(uniform(self.sigmamin, self.sigmamax)/255)
             yimg = torch.abs(yimg+noise)
-        print((ximg.shape, yimg.shape))#dbg
         return ximg, yimg
     def __len__(self):
         return len(self.dataset)
