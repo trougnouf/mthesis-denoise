@@ -20,7 +20,8 @@ from torchvision import models
 parser = argparse.ArgumentParser(description='PyTorch Denoising network trainer')
 parser.add_argument('--model', default='UNet', type=str, help='Model type (UNet, DnCNN, RedCNN)')
 parser.add_argument('--batch_size', default=32, type=int, help='batch size')
-parser.add_argument('--train_data', default='datasets/train/ds_128_96', type=str, help='Path to the pre-cropped training data (default: '+'datasets/train/dataset_128_96'+')')
+#parser.add_argument('--train_data', default='datasets/train/NIND_128_96', type=str, help='Path to the pre-cropped training data (default: '+'datasets/train/dataset_128_96'+')')
+parser.add_argument('--train_data', nargs='*', help='(space-separated) Path(s) to the pre-cropped training data (default: '+'datasets/train/NIND_128_96'+')')
 parser.add_argument('--epoch', default=32768, type=int, help='Number of train epoches')
 parser.add_argument('--time_limit', default=172800, type=int, help='Time limit in seconds')
 parser.add_argument('--lr', default=5e-4, type=float, help='Initial learning rate for Adam')
@@ -58,7 +59,10 @@ args = parser.parse_args()
 # python3 run_nn.py --batch_size 36 --cuda_device 1 --n_channels 128 --kernel_size 5 : 11071 MB
 # python3 run_nn.py --model RedCNN --epoch 76 --cuda_device 3 --n_channels 128 --kernel_size 5 --batch_size 40 --depth 22: 11053 MB
 
-
+if args.train_data == []:
+    train_data = ['datasets/train/NIND_128_96']
+else:
+    train_data = args.train_data
 batch_size = args.batch_size
 cuda = torch.cuda.is_available()
 torch.cuda.set_device(args.cuda_device)
@@ -82,7 +86,7 @@ else:
     else:
         expname = datetime.datetime.now().isoformat()[:-10]+'_'+'_'.join(sys.argv).replace('/','-')
 
-
+# TODO: limit length to avoid mkdir error
 save_dir = os.path.join('models', expname)
 res_dir = os.path.join(args.result_dir, expname)
 
@@ -147,7 +151,7 @@ if __name__ == '__main__':
         # model = nn.DataParallel(model, device_ids=device_ids).cuda()
         criterion = criterion.cuda()
     # Dataset
-    DDataset = DenoisingDataset(args.train_data, compressionmin=args.compressionmin, compressionmax=args.compressionmax, sigmamin=args.sigmamin, sigmamax=args.sigmamax, test_reserve=args.test_reserve, yisx=args.yisx)
+    DDataset = DenoisingDataset(train_data, compressionmin=args.compressionmin, compressionmax=args.compressionmax, sigmamin=args.sigmamin, sigmamax=args.sigmamax, test_reserve=args.test_reserve, yisx=args.yisx)
     DLoader = DataLoader(dataset=DDataset, num_workers=8, drop_last=True, batch_size=batch_size, shuffle=True)
     loss_crop_lb = int((DDataset.cs-DDataset.ucs)/2)
     loss_crop_up = loss_crop_lb+DDataset.ucs

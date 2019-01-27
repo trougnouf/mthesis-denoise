@@ -44,37 +44,37 @@ def sortISOs(rawISOs):
     return bisos, isos
 
 class DenoisingDataset(Dataset):
-    def __init__(self, datadir, testreserve=[], yisx=False, compressionmin=100, compressionmax=100, sigmamin=0, sigmamax=0, test_reserve=[]):
+    def __init__(self, datadirs, testreserve=[], yisx=False, compressionmin=100, compressionmax=100, sigmamin=0, sigmamax=0, test_reserve=[]):
         super(DenoisingDataset, self).__init__()
         self.totensor = torchvision.transforms.ToTensor()
-        self.datadir = datadir
         # each dataset element is ["<SETNAME>/ISOBASE/<DSNAME>_<SETNAME>_ISOBASE_<XNUM>_<YNUM>_<UCS>.jpg", [<ISOVAL1>,...,<ISOVALN>]]
         self.dataset = []
         self.cs, self.ucs = [int(i) for i in datadir.split('_')[-2:]]
         self.compressionmin, self.compressionmax = compressionmin, compressionmax
         self.sigmamin, self.sigmamax = sigmamin, sigmamax
-        for aset in os.listdir(datadir):
-            if test_reserve and aset in test_reserve:
-                print('Skipped '+aset+' (test reserve)')
-                continue
-            bisos, isos = sortISOs(os.listdir(os.path.join(datadir,aset)))
-            if yisx:
-                bisos = isos = bisos[0:1]
-            for animg in os.listdir(os.path.join(datadir, aset, isos[0])):
-                # verify that no base-ISO image exceeds CS just because
-                if any(d > self.cs for d in Image.open(os.path.join(datadir, aset, isos[0], animg)).size):
-                        print("Warning: excessive crop size for "+aset)
-                # check for min size
-                if all(d >= self.ucs for d in Image.open(os.path.join(datadir, aset, isos[0], animg)).size):
-                    self.dataset.append([os.path.join(aset,'ISOBASE',animg).replace('_'+isos[0]+'_','_ISOBASE_'), bisos,isos])
-            print('Added '+aset+str(bisos)+str(isos)+' to the dataset')
+        for datadir in datadirs:
+            for aset in os.listdir(datadir):
+                if test_reserve and aset in test_reserve:
+                    print('Skipped '+aset+' (test reserve)')
+                    continue
+                bisos, isos = sortISOs(os.listdir(os.path.join(datadir,aset)))
+                if yisx:
+                    bisos = isos = bisos[0:1]
+                for animg in os.listdir(os.path.join(datadir, aset, isos[0])):
+                    # verify that no base-ISO image exceeds CS just because
+                    if any(d > self.cs for d in Image.open(os.path.join(datadir, aset, isos[0], animg)).size):
+                            print("Warning: excessive crop size for "+aset)
+                    # check for min size
+                    if all(d >= self.ucs for d in Image.open(os.path.join(datadir, aset, isos[0], animg)).size):
+                        self.dataset.append([os.path.join(datadir,aset,'ISOBASE',animg).replace('_'+isos[0]+'_','_ISOBASE_'), bisos,isos])
+                print('Added '+aset+str(bisos)+str(isos)+' to the dataset')
 
     def get_and_pad(self, index):
         img = self.dataset[index]
         xchoice = choice(img[1])
-        xpath = os.path.join(self.datadir, img[0].replace('_ISOBASE_','_'+xchoice+'_').replace('/ISOBASE/','/'+xchoice+'/'))
+        xpath = os.path.join(img[0].replace('_ISOBASE_','_'+xchoice+'_').replace('/ISOBASE/','/'+xchoice+'/'))
         ychoice = choice(img[2])
-        ypath = os.path.join(self.datadir, img[0].replace('_ISOBASE_','_'+ychoice+'_').replace('/ISOBASE/','/'+ychoice+'/'))
+        ypath = os.path.join(img[0].replace('_ISOBASE_','_'+ychoice+'_').replace('/ISOBASE/','/'+ychoice+'/'))
         ximg = Image.open(xpath)
         yimg = Image.open(ypath)
         if all(d == self.cs for d in ximg.size):
