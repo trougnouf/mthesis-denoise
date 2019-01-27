@@ -17,7 +17,9 @@ def sortISOs(rawISOs):
     hisos = []
     dupisos = {}
     for iso in rawISOs:
-        if 'H' in iso or iso[3:] != 'ISO':
+        if iso[3:] != 'ISO':
+            isos.append(iso)
+        elif 'H' in iso:
             hisos.append(iso)
         else:
             if '-' in iso:
