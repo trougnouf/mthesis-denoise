@@ -12,12 +12,20 @@ def sortISOs(rawISOs):
     # ISO directories can be ISO<NUM>[-REPEATNUM] or ISOH<NUM>[-REPEATNSUM]
     # where ISO<lowest> (and possibly any -REPEATNUM, for example ISO200-1 and
     # ISO200-2) is taken as the base ISO. Other naming conventions will also work
-    # so long as the base iso is first alphabetically
-    if any([iso[3:] != 'ISO' for iso in rawISOs]):
-        biso, *isos = sorted(rawISOs)
-        return [biso], isos
+    # so long as the base iso is first alphabetically. GT* and ISO* can handle
+    # base ISOs
     isos = []
     bisos = []
+    if any([iso[3:] != 'ISO' for iso in rawISOs]):
+        for iso in rawISOs:
+            if 'GT' in iso:
+                biso.append(iso)
+            else:
+                isos.append(iso)
+        isos=sorted(isos)
+        if len(bisos)==0:
+            bisos.append(isos.pop(0))
+        return biso, isos
     hisos = []
     dupisos = {}
     for iso in rawISOs:
