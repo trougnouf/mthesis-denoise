@@ -5,8 +5,9 @@ import argparse
 import subprocess
 parser = argparse.ArgumentParser(description='PyTorch DnCNN')
 parser.add_argument('--use_wget', action='store_true', help="Use wget instead of python's request library (more likely to succeed)")
+parser.add_argument('--target_dir', default='datasets/NIND', type=str, help="Target directory (default: datasets/NIND)")
 args = parser.parse_args()
-nindlist = [
+nindlist8bit = [
     'droid,200,800,3200,6400',
     'gnome,200,800,1600,6400',
     'Ottignies,200,640,3200,6400',
@@ -78,19 +79,20 @@ nindlist = [
     'Homarus-americanus,200,200-2,250,400,800,2000,3200,5000,6400,H1,H2',
     'fruits,200,200-2,800,3200,5000,6400',
     ]
-manset = [
-    'lightclouds,0denoised,naturalnoise',
-    'goldenhoursky,0denoised,naturalnoise'
+nindlist16bit = [
+    'soap,200,200-2,400,800,3200,6400,H1,H2,H3,H4',
+    'kibbles,200,200-2,800,5000,6400,H1,H2,H3',
+    'bertrixtree,200,400,640,2500,4000,6400,H1',
     ]
-os.makedirs('datasets/dataset', exist_ok=True)
-os.chdir('datasets/dataset')
+os.makedirs(args.target_dir, exist_ok=True)
+os.chdir(args.target_dir)
 burl = 'https://commons.wikimedia.org/wiki/Special:Redirect/file/'
-def download(imlist, dsname, targetdir, prefix='ISO'):
+def download(imlist, dsname, targetdir, ext, prefix='ISO'):
     for img in imlist:
         name, *isos = img.split(',')
         os.makedirs(name, exist_ok=True)
         for iso in isos:
-            fpath = name+'/'+dsname+'_'+name+'_'+prefix+iso+'.jpg'
+            fpath = name+'/'+dsname+'_'+name+'_'+prefix+iso+'.'+ext
             url = burl+fpath.split('/')[1]
             if os.path.isfile(fpath):
                 continue
@@ -102,5 +104,5 @@ def download(imlist, dsname, targetdir, prefix='ISO'):
                     f.write(requests.get(url).content)
                     print('Downloaded '+fpath.split('/')[1])
                     f.flush()
-download(nindlist, 'NIND', 'datasets/dataset')
-#download(manset, 'MAND', 'datasets/dataset', prefix='')
+download(nindlist8bit, 'NIND', args.target_dir, ext='jpg')
+download(nindlist16bit, 'NIND', args.target_dir, ext='png')
