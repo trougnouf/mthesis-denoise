@@ -14,15 +14,28 @@ dsdir = args.dsdir.split('/')[-1]
 resdir = os.path.join(args.resdir, dsdir+'_'+str(args.cs)+'_'+str(args.ucs))
 todolist = []
 
-
+def findisoval(fn):
+    for split in fn.split('_'):
+        if 'ISO' in split or 'GT' in split or 'NOISY' in split:
+            return split
 
 sets = os.listdir(args.dsdir)
 # structured dataset
 if os.path.isdir(os.path.join(args.dsdir, sets[0])):
     for aset in sets:
+        isovals=[]
         for image in os.listdir(os.path.join(args.dsdir, aset)):
             inpath=os.path.join(args.dsdir, aset, image)
-            isoval=image.split('_')[0] if 'SIDD' in dsdir else image.split('_')[-1][:-4]
+            isoval=findisoval(image)
+            # rename duplicate isoval if any is encountered for easier processing (eg SIDD)
+            if isoval in isovals:
+                oldval=isoval
+                while isoval in isovals:
+                    isoval=isoval+'-2'
+                newpath = inpath.replace(oldval, isoval)
+                os.rename(inpath, inpath.replace(oldval, isoval))
+                inpath = newpath
+            isovals.append(isoval)
             outdir=os.path.join(resdir, aset, isoval)
             todolist.append(['bash', 'crop_img.sh', str(args.cs), str(args.ucs), inpath, outdir])
 # or simple image directory
