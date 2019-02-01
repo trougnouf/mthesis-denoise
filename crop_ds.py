@@ -17,7 +17,7 @@ todolist = []
 def findisoval(fn):
     for split in fn.split('_'):
         if 'ISO' in split or 'GT' in split or 'NOISY' in split:
-            return split
+            return split.split('.')[0]
 
 sets = os.listdir(args.dsdir)
 # structured dataset
