@@ -19,9 +19,9 @@ def findisoval(fn):
         if 'ISO' in split:
             return split.split('.')[0]
         elif 'GT' in split in split:
-            return fn[fn.find('GT'):]
+            return fn[fn.find('GT'):].split('.')[0]
         elif 'NOISY' in split:
-            return fn[fn.find('GT'):]
+            return fn[fn.find('NOISY'):].split('.')[0]
 
 sets = os.listdir(args.dsdir)
 # structured dataset
