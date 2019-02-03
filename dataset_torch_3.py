@@ -19,13 +19,13 @@ def sortISOs(rawISOs):
     if any([iso[3:] != 'ISO' for iso in rawISOs]):
         for iso in rawISOs:
             if 'GT' in iso:
-                biso.append(iso)
+                bisos.append(iso)
             else:
                 isos.append(iso)
         isos=sorted(isos)
         if len(bisos)==0:
             bisos.append(isos.pop(0))
-        return biso, isos
+        return bisos, isos
     hisos = []
     dupisos = {}
     for iso in rawISOs:
