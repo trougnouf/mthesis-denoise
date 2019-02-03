@@ -16,8 +16,12 @@ todolist = []
 
 def findisoval(fn):
     for split in fn.split('_'):
-        if 'ISO' in split or 'GT' in split or 'NOISY' in split:
+        if 'ISO' in split:
             return split.split('.')[0]
+        elif 'GT' in split in split:
+            return fn[fn.find('GT'):]
+        elif 'NOISY' in split:
+            return fn[fn.find('GT'):]
 
 sets = os.listdir(args.dsdir)
 # structured dataset
