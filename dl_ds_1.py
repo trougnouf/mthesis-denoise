@@ -86,6 +86,11 @@ nindlist16bit = [
     'BruegelLibraryS1,200,400,1000,2500,3200,5000,6400,H1,H2',
     'BruegelLibraryS2,200,500,1250,2500,5000,6400,H1,H2,H3,H4',
     'LaptopInLibrary,200,500,800,1600,2500,6400,H1,H2,H3',
+    'banana,200,250,500,800,1250,2000,4000,6400,H1,H2,H3',
+    'dustyrubberduck,200,1000,1250,2500,5000,6400,H1,H2',
+    'partiallyeatenbanana,200,640,1250,2500,4000,5000,6400,H1,H2,H3',
+    'corkboard,200,320,1000,2500,5000,6400,H1,H2,H3',
+    'fireextinguisher,200,200-2,200-3,800,3200,6400,H1,H2,H3',
     ]
 os.makedirs(args.target_dir, exist_ok=True)
 os.chdir(args.target_dir)
