@@ -59,7 +59,7 @@ args = parser.parse_args()
 # python3 run_nn.py --batch_size 36 --cuda_device 1 --n_channels 128 --kernel_size 5 : 11071 MB
 # python3 run_nn.py --model RedCNN --epoch 76 --cuda_device 3 --n_channels 128 --kernel_size 5 --batch_size 40 --depth 22: 11053 MB
 
-if args.train_data == []:
+if args.train_data = None or args.train_data == []:
     train_data = ['datasets/train/NIND_128_96']
 else:
     train_data = args.train_data
