@@ -76,13 +76,14 @@ class DenoisingDataset(Dataset):
                     print('Skipped '+aset+' (test reserve)')
                     continue
                 bisos, isos = sortISOs(os.listdir(os.path.join(datadir,aset)))
-                if yval == 'x':
-                    bisos = isos = bisos[0:1]
-                elif yval is not None:
-                    isos = keep_only_isoval_from_list(isos, yval)
-                    if len(isos) == 0:
-                        print('Skipped '+aset+' ('+yval+' not found)')
-                        continue
+                if yval is not None:
+                    if yval == 'x':
+                        bisos = isos = bisos[0:1]
+                    else:
+                        isos = keep_only_isoval_from_list(isos, yval)
+                        if len(isos) == 0:
+                            print('Skipped '+aset+' ('+yval+' not found)')
+                            continue
                 # TODO probably should replace this with filename check only or add check_dataset option
                 for animg in os.listdir(os.path.join(datadir, aset, isos[0])):
                     # check for min size
