@@ -56,7 +56,13 @@ def sortISOs(rawISOs):
     return bisos, isos
 
 class DenoisingDataset(Dataset):
-    def __init__(self, datadirs, testreserve=[], yisx=False, compressionmin=100, compressionmax=100, sigmamin=0, sigmamax=0, test_reserve=[]):
+    def __init__(self, datadirs, testreserve=[], yval=None, compressionmin=100, compressionmax=100, sigmamin=0, sigmamax=0, test_reserve=[]):
+        def keep_only_isoval_from_list(isos,keepval):
+            keptisos = []
+            for iso in isos:
+                if iso.endswith(keepval) or iso.endswith(keepval+'-'):
+                    keptisos.append(iso)
+            return keptisos
         super(DenoisingDataset, self).__init__()
         self.totensor = torchvision.transforms.ToTensor()
         # each dataset element is ["<DATADIR>/<SETNAME>/ISOBASE/<DSNAME>_<SETNAME>_ISOBASE_<XNUM>_<YNUM>_<UCS>.EXT", [<ISOVAL1>,...,<ISOVALN>]]
@@ -70,8 +76,14 @@ class DenoisingDataset(Dataset):
                     print('Skipped '+aset+' (test reserve)')
                     continue
                 bisos, isos = sortISOs(os.listdir(os.path.join(datadir,aset)))
-                if yisx:
+                if yval == 'x':
                     bisos = isos = bisos[0:1]
+                elif yval is not None:
+                    isos = keep_only_isoval_from_list(isos, yval)
+                    if len(isos) == 0:
+                        print('Skipped '+aset+' ('+yval+' not found)')
+                        continue
+                # TODO probably should replace this with filename check only or add check_dataset option
                 for animg in os.listdir(os.path.join(datadir, aset, isos[0])):
                     # check for min size
                     img4tests=Image.open(os.path.join(datadir, aset, isos[0], animg))
