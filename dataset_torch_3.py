@@ -16,7 +16,7 @@ def sortISOs(rawISOs):
     # base ISOs
     isos = []
     bisos = []
-    if any([iso[3:] != 'ISO' for iso in rawISOs]):
+    if any([iso[:3] != 'ISO' for iso in rawISOs]):
         for iso in rawISOs:
             if 'GT' in iso:
                 bisos.append(iso)
@@ -56,7 +56,7 @@ def sortISOs(rawISOs):
     return bisos, isos
 
 class DenoisingDataset(Dataset):
-    def __init__(self, datadirs, testreserve=[], yval=None, compressionmin=100, compressionmax=100, sigmamin=0, sigmamax=0, test_reserve=[]):
+    def __init__(self, datadirs, testreserve=[], yval=None, compressionmin=100, compressionmax=100, sigmamin=0, sigmamax=0, test_reserve=[], skip_sizecheck=False):
         def keep_only_isoval_from_list(isos,keepval):
             keptisos = []
             for iso in isos:
@@ -84,14 +84,21 @@ class DenoisingDataset(Dataset):
                         if len(isos) == 0:
                             print('Skipped '+aset+' ('+yval+' not found)')
                             continue
-                # TODO probably should replace this with filename check only or add check_dataset option
+                # check for min size
                 for animg in os.listdir(os.path.join(datadir, aset, isos[0])):
+                    if skip_sizecheck:
+                        imgdims = [int(animg.split('_')[-1].split('.')[0])]
+                    else:
+                        imgdims = Image.open(os.path.join(datadir, aset, isos[0], animg)).size
                     # check for min size
-                    img4tests=Image.open(os.path.join(datadir, aset, isos[0], animg))
-                    if all(d >= self.ucs for d in img4tests.size):
+                    #img4tests=Image.open(os.path.join(datadir, aset, isos[0], animg))
+                    if all(d >= self.ucs for d in imgdims):
                         self.dataset.append([os.path.join(datadir,aset,'ISOBASE',animg).replace(isos[0]+'_','ISOBASE_'), bisos,isos])
+                    else:   # dbg check for quick check, if nothing prints then the above test can safely be removed
+                        if int(animg.split('_')[-1].split('.')[0]) >= self.ucs:
+                            print('Warning: UCS FN does not match: '+animg.split('_')[-1].split('.')[0])
                     # verify that no base-ISO image exceeds CS just because
-                    if any(d > self.cs for d in img4tests.size):
+                    if any(d > self.cs for d in imgdims):
                         print("Warning: excessive crop size for "+aset)
                 print('Added '+aset+str(bisos)+str(isos)+' to the dataset')
 

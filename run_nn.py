@@ -45,6 +45,7 @@ parser.add_argument('--lr_step_size', default=1, type=int, help='Step size for S
 parser.add_argument('--lossf', default='SSIM', help='Loss function (SSIM or MSE)')
 parser.add_argument('--test_reserve', nargs='*', help='Space separated list of image sets to be reserved for testing')
 parser.add_argument('--relu', default='relu', help='ReLU function (relu, rrelu)')
+parser.add_argument('--skip_sizecheck', action='store_true', help='Skip crop size check for faster initial loading (rely on filename only)')
 
 args = parser.parse_args()
 
@@ -58,6 +59,7 @@ args = parser.parse_args()
 #   bs72 = 10941
 # python3 run_nn.py --batch_size 36 --cuda_device 1 --n_channels 128 --kernel_size 5 : 11071 MB
 # python3 run_nn.py --model RedCNN --epoch 76 --cuda_device 3 --n_channels 128 --kernel_size 5 --batch_size 40 --depth 22: 11053 MB
+# UNet: 11GB server BS=94, 8GB home BS=
 
 if args.train_data == None or args.train_data == []:
     train_data = ['datasets/train/NIND_128_96']
@@ -151,7 +153,7 @@ if __name__ == '__main__':
         # model = nn.DataParallel(model, device_ids=device_ids).cuda()
         criterion = criterion.cuda()
     # Dataset
-    DDataset = DenoisingDataset(train_data, compressionmin=args.compressionmin, compressionmax=args.compressionmax, sigmamin=args.sigmamin, sigmamax=args.sigmamax, test_reserve=args.test_reserve, yval=args.yval)
+    DDataset = DenoisingDataset(train_data, compressionmin=args.compressionmin, compressionmax=args.compressionmax, sigmamin=args.sigmamin, sigmamax=args.sigmamax, test_reserve=args.test_reserve, yval=args.yval, skip_sizecheck=args.skip_sizecheck)
     DLoader = DataLoader(dataset=DDataset, num_workers=8, drop_last=True, batch_size=batch_size, shuffle=True)
     loss_crop_lb = int((DDataset.cs-DDataset.ucs)/2)
     loss_crop_up = loss_crop_lb+DDataset.ucs
