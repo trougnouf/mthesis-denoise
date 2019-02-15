@@ -81694,3 +81694,12 @@ python3 run_nn.py --train_data datasets/train/SIDDmed_128_96 datasets/train/NIND
 
 
 python3 run_nn.py --train_data datasets/train/SIDDmed_128_96 datasets/train/NIND_128_96 --lr 3e-4 --cuda_device 1 --time_limit 259200 --batch_size 94 --test_reserve ursulines-red stefantiek ursulines-building MuseeL-Bobo CourtineDeVillersDebris # does SIDD reduce perf
+python3 crop_ds.py
+python3 run_nn.py --lr 3e-4 --cuda_device 0 --time_limit 259200 --batch_size 94 --test_reserve ursulines-red stefantiek ursulines-building MuseeL-Bobo CourtineDeVillersDebris --skip_sizecheck # NIND for report
+python3 run_nn.py --train_data datasets/train/SIDDmed_128_96 datasets/train/NIND_128_96 --lr 3e-4 --cuda_device 0 --time_limit 259200 --batch_size 94 --test_reserve ursulines-red stefantiek ursulines-building MuseeL-Bobo CourtineDeVillersDebris --skip_sizecheck# does SIDD reduce perf
+python3 run_nn.py --lr 3e-4 --cuda_device 0 --time_limit 259200 --batch_size 94 --test_reserve ursulines-red stefantiek ursulines-building MuseeL-Bobo CourtineDeVillersDebris --skip_sizecheck # NIND for report
+python3 run_nn.py --train_data datasets/train/SIDDmed_128_96 datasets/train/NIND_128_96 --lr 3e-4 --cuda_device 0 --time_limit 259200 --batch_size 94 --test_reserve ursulines-red stefantiek ursulines-building MuseeL-Bobo CourtineDeVillersDebris --skip_sizecheck # does SIDD reduce perf
+python3 crop_ds.py
+python3 run_nn.py --lr 3e-4 --cuda_device 0 --time_limit 259200 --batch_size 94 --test_reserve ursulines-red stefantiek ursulines-building MuseeL-Bobo CourtineDeVillersDebris --skip_sizecheck # NIND for report
+python3 run_nn.py --lr 3e-4 --cuda_device 0 --time_limit 259200 --batch_size 94 --test_reserve ursulines-red stefantiek ursulines-building MuseeL-Bobo CourtineDeVillersDebris --skip_sizecheck # NIND for report
+python3 run_nn.py --train_data datasets/train/SIDDmed_128_96 datasets/train/NIND_128_96 --lr 3e-4 --cuda_device 0 --time_limit 259200 --batch_size 94 --test_reserve ursulines-red stefantiek ursulines-building MuseeL-Bobo CourtineDeVillersDebris --skip_sizecheck # does SIDD reduce perf
