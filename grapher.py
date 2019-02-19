@@ -8,6 +8,8 @@ from dataset_torch_3 import sortISOs
 import csv
 import json
 
+# generate results from trained model with python denoise_dir.py --model_subdir <model>
+
 # Params
 parser = argparse.ArgumentParser(description='Grapher')
 parser.add_argument('--res_dir', default='results/test', type=str, help='Results directory')
@@ -32,7 +34,7 @@ data = dict()
 #load data
 #generate a graph for image
 
-components = args.components if args.components else ['Noisy', 'NIND', 'Artificial', 'BM3D']
+components = args.components if args.components else ['Noisy', 'NIND', 'Artificial', 'BM3D', 'ISO6400']
 
 def find_relevant_experiments(component):
     experiments = os.listdir(args.res_dir)
@@ -44,12 +46,18 @@ def find_relevant_experiments(component):
     if component == 'Noisy':
         return add_exp_to_data('GT')
     for experiment in experiments:
-        if component == 'NIND' and 'run_nn.py' in experiment and '--yisx' not in experiment:
+        if 'bm3d' in experiment:
+            if component == 'BM3D':
+                add_exp_to_data(experiment)
+        if 'ISO6400' in experiment:
+            if component == 'ISO6400':
+                add_exp_to_data(experiment)
+        elif '--yisx' in experiment and '--sigmamax' in experiment:
+            if component == 'Artificial':
+                add_exp_to_data(experiment)
+        elif component == 'NIND' and 'run_nn.py' in experiment:
             add_exp_to_data(experiment)
-        elif component == 'Artificial' and 'run_nn.py' in experiment and '--yisx' in experiment and '--sigmamax' in experiment:
-            add_exp_to_data(experiment)
-        elif component == 'BM3D' and 'bm3d' in experiment:
-            add_exp_to_data(experiment)
+
 
 def parse_resfiles(component):
     data[component]['results'] = {}
@@ -77,6 +85,7 @@ for image in images:
     _, isos = sortISOs(list(data[components[0]]['results'][image].keys()))
     #isos = baseisos + isos
     for component in components:
+        print(component+', '+image+', '+args.metric)
         ssimscore = [data[component]['results'][image][iso][args.metric] for iso in isos]
         plt.plot(isos, ssimscore, label=component, marker='.')
         plt.title(image)
