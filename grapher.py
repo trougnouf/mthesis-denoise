@@ -34,9 +34,9 @@ data = dict()
 #load data
 #generate a graph for image
 
-components = args.components if args.components else ['Noisy', 'NIND:XT-1 (UNet)', 'Artificial noise on NIND:XT-1 (UNet)', 'BM3D', 'NIND:XT-1 ISO6400 only (UNet)', 'Model noise on NIND:XT-1 (UNet)', 'NIND:X-T1+C500D + SIDD (UNet)', 'NIND:X-T1 (RedCNN)', 'NIND:X-T1+C500D (UNet)']
+components = args.components if args.components else ['Noisy', 'NIND:X-T1 (U-Net)', 'NIND:X-T1+C500D (U-Net)', 'NIND:X-T1+C500D + SIDD (U-Net)', 'BM3D', 'NIND:X-T1 ISO6400-only (U-Net)', 'Model noise on NIND:X-T1 (U-Net)', 'Artificial noise on NIND:X-T1 (U-Net)', 'SIDD (U-Net)', 'NIND:X-T1 (Red-Net)']
 
-def make_markers_dict(components = components, markers = ["$1$","$2$","$3$","$4$","$5$","$6$","$7$","$8$","$9$","$0$","$a$",".", "1", "2", "3", "4", "*", "+", "x", "$b$", "$c$"]):
+def make_markers_dict(components = components, markers = ["$0$","$1$","$2$","$3$","$4$","$5$","$6$","$7$","$8$","$9$","$a$",".", "1", "2", "3", "4", "*", "+", "x", "$b$", "$c$"]):
     markersdict = dict()
     i = 0
     for acomp in components:
@@ -61,7 +61,7 @@ def find_relevant_experiments(component):
             if component == 'BM3D':
                 add_exp_to_data(experiment)
         elif 'RedCNN' in experiment:
-            if 'RedCNN' in component:
+            if 'Red-Net' in component:
                 add_exp_to_data(experiment)
         elif 'ISO6400' in experiment:
             if 'ISO6400' in component:
@@ -72,14 +72,17 @@ def find_relevant_experiments(component):
         elif '--yisx' in experiment and '--sigmamax' in experiment:
             if 'Artificial' in component:
                 add_exp_to_data(experiment)
-        elif 'SIDD' in experiment:
-            if 'SIDD' in component:
+        elif 'SIDD' in experiment and 'NIND' in experiment:
+            if 'SIDD' in component and 'NIND' in component:
                 add_exp_to_data(experiment)
-        elif 'C500D' in experiment:
-            if 'C500D' in component:
+        elif 'SIDD' in experiment and 'NIND' not in experiment:
+            if 'SIDD' in component and 'NIND' not in experiment:
+                add_exp_to_data(experiment)
+        elif 'C500D' in experiment and 'SIDD' not in experiment:
+            if 'C500D' in component and 'SIDD' not in component:
                 add_exp_to_data(experiment)
         elif 'run_nn.py' in experiment:
-            if component == 'NIND:XT-1 (UNet)':
+            if component == 'NIND:X-T1 (U-Net)':
                 add_exp_to_data(experiment)
 
 

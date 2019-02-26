@@ -48,4 +48,4 @@ if __name__ == '__main__':
             cmd = ['python', 'denoise_image.py', '-i', inimg_path, '-o', outimg_path, '--model_path', model_path, '--ucs', '512', '--cs', '640']
             subprocess.call(cmd)
     if not args.no_scoring:
-        gen_score(denoised_save_dir)
+        gen_score(denoised_save_dir, args.noisy_dir)
