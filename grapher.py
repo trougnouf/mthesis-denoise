@@ -34,7 +34,18 @@ data = dict()
 #load data
 #generate a graph for image
 
-components = args.components if args.components else ['Noisy', 'NIND', 'Artificial', 'BM3D', 'ISO6400']
+components = args.components if args.components else ['Noisy', 'NIND:XT-1 (UNet)', 'Artificial noise on NIND:XT-1 (UNet)', 'BM3D', 'NIND:XT-1 ISO6400 only (UNet)', 'Model noise on NIND:XT-1 (UNet)', 'NIND:X-T1+C500D + SIDD (UNet)', 'NIND:X-T1 (RedCNN)', 'NIND:X-T1+C500D (UNet)']
+
+def make_markers_dict(components = components, markers = ["$1$","$2$","$3$","$4$","$5$","$6$","$7$","$8$","$9$","$0$","$a$",".", "1", "2", "3", "4", "*", "+", "x", "$b$", "$c$"]):
+    markersdict = dict()
+    i = 0
+    for acomp in components:
+        markersdict[acomp] = markers[i]
+        i += 1
+    return markersdict
+
+markers = make_markers_dict()
+
 
 def find_relevant_experiments(component):
     experiments = os.listdir(args.res_dir)
@@ -49,14 +60,27 @@ def find_relevant_experiments(component):
         if 'bm3d' in experiment:
             if component == 'BM3D':
                 add_exp_to_data(experiment)
-        if 'ISO6400' in experiment:
-            if component == 'ISO6400':
+        elif 'RedCNN' in experiment:
+            if 'RedCNN' in component:
+                add_exp_to_data(experiment)
+        elif 'ISO6400' in experiment:
+            if 'ISO6400' in component:
+                add_exp_to_data(experiment)
+        elif 'find_noise' in experiment:
+            if 'Model noise' in component:
                 add_exp_to_data(experiment)
         elif '--yisx' in experiment and '--sigmamax' in experiment:
-            if component == 'Artificial':
+            if 'Artificial' in component:
                 add_exp_to_data(experiment)
-        elif component == 'NIND' and 'run_nn.py' in experiment:
-            add_exp_to_data(experiment)
+        elif 'SIDD' in experiment:
+            if 'SIDD' in component:
+                add_exp_to_data(experiment)
+        elif 'C500D' in experiment:
+            if 'C500D' in component:
+                add_exp_to_data(experiment)
+        elif 'run_nn.py' in experiment:
+            if component == 'NIND:XT-1 (UNet)':
+                add_exp_to_data(experiment)
 
 
 def parse_resfiles(component):
@@ -85,15 +109,17 @@ for image in images:
     _, isos = sortISOs(list(data[components[0]]['results'][image].keys()))
     #isos = baseisos + isos
     for component in components:
-        print(component+', '+image+', '+args.metric)
-        ssimscore = [data[component]['results'][image][iso][args.metric] for iso in isos]
-        plt.plot(isos, ssimscore, label=component, marker='.')
-        plt.title(image)
-        if args.metric == 'ssim':
-            plt.ylabel('SSIM score')
-        else:
-            plt.ylabel('MSE loss')
-        plt.xlabel('ISO value')
+        try:
+            ssimscore = [data[component]['results'][image][iso][args.metric] for iso in isos]
+            plt.plot(isos, ssimscore, label=component, marker=markers[component])
+            plt.title(image)
+            if args.metric == 'ssim':
+                plt.ylabel('SSIM score')
+            else:
+                plt.ylabel('MSE loss')
+            plt.xlabel('ISO value')
+        except KeyError:
+            continue
     plt.grid()
     plt.legend()
     if not args.noshow:

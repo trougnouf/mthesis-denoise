@@ -7,8 +7,8 @@ from dataset_torch_3 import sortISOs
 import argparse
 
 totensor = torchvision.transforms.ToTensor()
-MSE = torch.nn.MSELoss()
-SSIM = pytorch_ssim.SSIM()
+MSE = torch.nn.MSELoss().cuda()
+SSIM = pytorch_ssim.SSIM().cuda()
 
 def find_gt_path(denoised_fn, gt_dir):
     dsname, setdir = denoised_fn.split('_')[0:2]
@@ -28,8 +28,8 @@ def gen_score(noisy_dir, gt_dir='datasets/test/ds_fs'):
         for noisy_img in files(noisy_dir):
             gtpath = find_gt_path(noisy_img, gt_dir)
             noisy_path = os.path.join(noisy_dir, noisy_img)
-            gtimg = totensor(Image.open(gtpath))
-            noisyimg = totensor(Image.open(noisy_path))
+            gtimg = totensor(Image.open(gtpath)).cuda()
+            noisyimg = totensor(Image.open(noisy_path)).cuda()
             gtimg = gtimg.reshape([1]+list(gtimg.shape))
             noisyimg = noisyimg.reshape([1]+list(noisyimg.shape))
             MSELoss = MSE(gtimg, noisyimg).item()
