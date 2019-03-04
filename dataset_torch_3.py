@@ -56,7 +56,7 @@ def sortISOs(rawISOs):
     return bisos, isos
 
 class DenoisingDataset(Dataset):
-    def __init__(self, datadirs, testreserve=[], yval=None, compressionmin=100, compressionmax=100, sigmamin=0, sigmamax=0, test_reserve=[], skip_sizecheck=False):
+    def __init__(self, datadirs, testreserve=[], yval=None, compressionmin=100, compressionmax=100, sigmamin=0, sigmamax=0, test_reserve=[], do_sizecheck=False):
         def keep_only_isoval_from_list(isos,keepval):
             keptisos = []
             for iso in isos:
@@ -86,7 +86,7 @@ class DenoisingDataset(Dataset):
                             continue
                 # check for min size
                 for animg in os.listdir(os.path.join(datadir, aset, isos[0])):
-                    if skip_sizecheck:
+                    if not do_sizecheck:
                         imgdims = [int(animg.split('_')[-1].split('.')[0])]
                     else:
                         imgdims = Image.open(os.path.join(datadir, aset, isos[0], animg)).size
