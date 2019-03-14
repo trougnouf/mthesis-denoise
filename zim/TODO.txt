@@ -5,6 +5,25 @@ Creation-Date: 2018-11-21T22:47:51+01:00
 ====== TODO ======
 Created Wednesday 21 November 2018
 
+because some denoising of the baseline is beneficial, make discriminator accept images which fall within 0.05 ssim of baseline
+
+discriminator:
+noisy / GT
+	true
+noisy / G(noisy)
+	false, unless GT available and > threshold
+		# deals with slight noise in the GT
+GT / G(GT)
+	false, unless > threshold
+		# deals with no noisy available
+
+original:
+noisy / GT
+	true
+noisy / G(noisy)
+	false
+
+
 move losscrop to criterion for more flexibility
 compare with MSE or MSEcombined
 
