@@ -27,7 +27,7 @@ parser.add_argument('--epoch_count', type=int, default=1, help='the starting epo
 parser.add_argument('--niter', type=int, default=100, help='# of iter at starting learning rate')
 parser.add_argument('--niter_decay', type=int, default=100, help='# of iter to linearly decay learning rate to zero')
 parser.add_argument('--lr', type=float, default=0.0002, help='initial learning rate for adam')
-parser.add_argument('--lr_policy', type=str, default='lambda', help='learning rate policy: lambda|step|plateau|cosine')
+parser.add_argument('--lr_policy', type=str, default='plateau', help='learning rate policy: lambda|step|plateau|cosine')
 parser.add_argument('--lr_decay_iters', type=int, default=50, help='multiply by a gamma every lr_decay_iters iterations')
 parser.add_argument('--beta1', type=float, default=0.5, help='beta1 for adam. default=0.5')
 parser.add_argument('--threads', type=int, default=4, help='number of threads for data loader to use')
@@ -49,6 +49,9 @@ parser.add_argument('--expname', type=str, help='Experiment name used to save an
 parser.add_argument('--resume', action='store_true', help='Look for an experiment with the same parameters and continue (to force continuing an experiment with different parameters use --expname instead)')
 parser.add_argument('--result_dir', default='results/train', type=str, help='Directory where results are stored (default: results/train)')
 parser.add_argument('--models_dir', default='models', type=str, help='Directory where models are saved/loaded (default: models)')
+parser.add_argument('--lr_gamma', default=.75, type=float, help='Learning rate decrease rate for plateau, StepLR (default: 0.75)')
+parser.add_argument('--lr_step_size', default=1, type=int, help='Step size for StepLR, plateau scheduler')
+
 
 
 args = parser.parse_args()
@@ -117,6 +120,9 @@ optimizer_d = optim.Adam(net_d.parameters(), lr=args.lr, betas=(args.beta1, 0.99
 net_g_scheduler = get_scheduler(optimizer_g, args)
 net_d_scheduler = get_scheduler(optimizer_d, args)
 
+loss_crop_lb = int((DDataset.cs-DDataset.ucs)/2)
+loss_crop_up = loss_crop_lb+DDataset.ucs
+
 start_time = time.time()
 for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
     # train
@@ -132,12 +138,13 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         optimizer_d.zero_grad()
 
         # train with fake
-        fake_ab = torch.cat((noisyimg, gnoisyimg), 1)
+        fake_ab = torch.cat((noisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]), 1)
+
         pred_fake = net_d.forward(fake_ab.detach())
         loss_d_fake = criterionGAN(pred_fake, False)
 
         # train with real
-        real_ab = torch.cat((noisyimg, cleanimg), 1)
+        real_ab = torch.cat((noisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]), 1)
         pred_real = net_d.forward(real_ab)
         loss_d_real = criterionGAN(pred_real, True)
 
@@ -155,12 +162,12 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         optimizer_g.zero_grad()
 
         # First, G(A) should fake the discriminator
-        fake_ab = torch.cat((noisyimg, gnoisyimg), 1)
+        fake_ab = torch.cat((noisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]), 1)
         pred_fake = net_d.forward(fake_ab)
         loss_g_gan = criterionGAN(pred_fake, True)
 
         # Second, G(A) = B
-        loss_g_l1 = criterionL1(gnoisyimg, cleanimg) * args.lamb
+        loss_g_l1 = criterionL1(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]) * args.lamb
 
         loss_g = loss_g_gan + loss_g_l1
 
