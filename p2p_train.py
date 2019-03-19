@@ -122,8 +122,8 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
     # train
     for iteration, batch in enumerate(training_data_loader, 1):
         # forward
-        real_a, real_b = batch[0].to(device), batch[1].to(device)
-        fake_b = net_g(real_a)
+        cleanimg, noisyimg = batch[0].to(device), batch[1].to(device)
+        gnoisyimg = net_g(noisyimg)
 
         ######################
         # (1) Update D network
@@ -132,12 +132,12 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         optimizer_d.zero_grad()
 
         # train with fake
-        fake_ab = torch.cat((real_a, fake_b), 1)
+        fake_ab = torch.cat((noisyimg, gnoisyimg), 1)
         pred_fake = net_d.forward(fake_ab.detach())
         loss_d_fake = criterionGAN(pred_fake, False)
 
         # train with real
-        real_ab = torch.cat((real_a, real_b), 1)
+        real_ab = torch.cat((noisyimg, cleanimg), 1)
         pred_real = net_d.forward(real_ab)
         loss_d_real = criterionGAN(pred_real, True)
 
@@ -155,12 +155,12 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         optimizer_g.zero_grad()
 
         # First, G(A) should fake the discriminator
-        fake_ab = torch.cat((real_a, fake_b), 1)
+        fake_ab = torch.cat((noisyimg, gnoisyimg), 1)
         pred_fake = net_d.forward(fake_ab)
         loss_g_gan = criterionGAN(pred_fake, True)
 
         # Second, G(A) = B
-        loss_g_l1 = criterionL1(fake_b, real_b) * args.lamb
+        loss_g_l1 = criterionL1(gnoisyimg, cleanimg) * args.lamb
 
         loss_g = loss_g_gan + loss_g_l1
 
