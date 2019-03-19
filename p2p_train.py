@@ -126,6 +126,8 @@ loss_crop_up = loss_crop_lb+DDataset.ucs
 start_time = time.time()
 for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
     # train
+    total_loss_d = 0
+    total_loss_g = 0
     for iteration, batch in enumerate(training_data_loader, 1):
         # forward
         cleanimg, noisyimg = batch[0].to(device), batch[1].to(device)
@@ -177,6 +179,9 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
 
         print("===> Epoch[{}]({}/{}): Loss_D: {:.4f} Loss_G: {:.4f}".format(
             epoch, iteration, len(training_data_loader), loss_d.item(), loss_g.item()))
+        total_loss_d += loss_d.item()
+        total_loss_g += loss_g.item()
+
 
     update_learning_rate(net_g_scheduler, optimizer_g)
     update_learning_rate(net_d_scheduler, optimizer_d)
