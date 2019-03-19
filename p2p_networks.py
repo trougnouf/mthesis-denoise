@@ -28,7 +28,7 @@ def get_scheduler(optimizer, opt):
     elif opt.lr_policy == 'step':
         scheduler = lr_scheduler.StepLR(optimizer, step_size=opt.lr_decay_iters, gamma=0.1)
     elif opt.lr_policy == 'plateau':
-        scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, factor=args.lr_gamma, verbose=True, threshold=1e-8, patience=args.lr_step_size)
+        scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, factor=opt.lr_gamma, verbose=True, threshold=1e-8, patience=opt.lr_step_size)
     elif opt.lr_policy == 'cosine':
         scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=opt.niter, eta_min=0)
     else:
