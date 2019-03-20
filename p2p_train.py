@@ -26,7 +26,7 @@ parser.add_argument('--ndf', type=int, default=64, help='discriminator filters i
 parser.add_argument('--epoch_count', type=int, default=1, help='the starting epoch count')
 parser.add_argument('--niter', type=int, default=100, help='# of iter at starting learning rate')
 parser.add_argument('--niter_decay', type=int, default=100, help='# of iter to linearly decay learning rate to zero')
-parser.add_argument('--lr', type=float, default=0.0002, help='initial learning rate for adam')
+parser.add_argument('--lr', type=float, default=0.0003, help='initial learning rate for adam')
 parser.add_argument('--lr_policy', type=str, default='plateau', help='learning rate policy: lambda|step|plateau|cosine')
 parser.add_argument('--lr_decay_iters', type=int, default=50, help='multiply by a gamma every lr_decay_iters iterations')
 parser.add_argument('--beta1', type=float, default=0.5, help='beta1 for adam. default=0.5')
