@@ -182,9 +182,8 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         total_loss_d += loss_d.item()
         total_loss_g += loss_g.item()
 
-
-    update_learning_rate(net_g_scheduler, optimizer_g)
-    update_learning_rate(net_d_scheduler, optimizer_d)
+    update_learning_rate(net_g_scheduler, optimizer_g, loss_total=total_loss_g)
+    update_learning_rate(net_d_scheduler, optimizer_d, loss_total=total_loss_d)
 
     # test
     #avg_psnr = 0
