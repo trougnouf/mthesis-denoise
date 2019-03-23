@@ -7,7 +7,10 @@ from PIL import Image
 from torch.utils.data import DataLoader
 from torch.utils.data import Dataset
 import time
-import piexif   # TODO make it optional
+try:
+    import piexif   # TODO make it optional
+except ImportError:
+    pass
 import subprocess
 
 parser = argparse.ArgumentParser(description='Image cropper with overlap')
@@ -19,6 +22,7 @@ parser.add_argument('-o', '--output', default='out.tif', type=str, help='Output 
 parser.add_argument('-b', '--batch_size', type=int, default=1)  # TODO >1 is broken
 parser.add_argument('--debug', action='store_true', help='Debug (store all intermediate crops in ./dbg, display useful messages)')
 parser.add_argument('--cuda_device', default=0, type=int, help='Device number (default: 0, typically 0-3)')
+parser.add_argument('--exif_method', default='piexif', type=str, help='How is exif data copied over? (piexif, exiftool, noexif)')
 # TODO merge these / autodetect
 parser.add_argument('--model_dir', type=str, help='directory where .th models are saved (latest .th file is autodetected)')
 parser.add_argument('--model_subdir', type=str, help='subdirectory where .th models are saved (latest .th file is autodetected, models dir is assumed)')
@@ -115,9 +119,9 @@ for n_count, ydat in enumerate(DLoader):
                 print((absx0,absy0,ud))
             newimg[:,absy0:absy0+tensimg.shape[1],absx0:absx0+tensimg.shape[2]] = newimg[:,absy0:absy0+tensimg.shape[1],absx0:absx0+tensimg.shape[2]].add(tensimg)
 torchvision.utils.save_image(newimg, args.output)
-if args.output[:-4] == '.jpg':
+if args.output[:-4] == '.jpg' and args.exif_method == 'piexif':
     piexif.transplant(args.input, args.output)
-else:
+else if args.exif_method is not 'noexif':
     cmd = ['exiftool', '-TagsFromFile', args.input, args.output, '-overwrite_original']
     subprocess.run(cmd)
 print('Elapsed time: '+str(time.time()-start_time)+' seconds')
