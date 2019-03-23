@@ -18,11 +18,14 @@ parser.add_argument('-i', '--input', default='in.jpg', type=str, help='Input ima
 parser.add_argument('-o', '--output', default='out.tif', type=str, help='Output file with extension')
 parser.add_argument('-b', '--batch_size', type=int, default=1)  # TODO >1 is broken
 parser.add_argument('--debug', action='store_true', help='Debug (store all intermediate crops in ./dbg, display useful messages)')
+parser.add_argument('--cuda_device', default=0, type=int, help='Device number (default: 0, typically 0-3)')
 # TODO merge these / autodetect
 parser.add_argument('--model_dir', type=str, help='directory where .th models are saved (latest .th file is autodetected)')
 parser.add_argument('--model_subdir', type=str, help='subdirectory where .th models are saved (latest .th file is autodetected, models dir is assumed)')
 parser.add_argument('--model_path', type=str, help='the specific model file path')
 args = parser.parse_args()
+
+torch.cuda.set_device(args.cuda_device)
 
 class OneImageDS(Dataset):
     def __init__(self, inimg, cs, ucs, ol):
