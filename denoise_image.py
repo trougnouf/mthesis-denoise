@@ -121,7 +121,7 @@ for n_count, ydat in enumerate(DLoader):
 torchvision.utils.save_image(newimg, args.output)
 if args.output[:-4] == '.jpg' and args.exif_method == 'piexif':
     piexif.transplant(args.input, args.output)
-else if args.exif_method is not 'noexif':
+elif args.exif_method is not 'noexif':
     cmd = ['exiftool', '-TagsFromFile', args.input, args.output, '-overwrite_original']
     subprocess.run(cmd)
 print('Elapsed time: '+str(time.time()-start_time)+' seconds')
