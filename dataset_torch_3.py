@@ -33,7 +33,7 @@ def sortISOs(rawISOs):
             hisos.append(iso)
         else:
             if '-' in iso:
-                isoval, repid = iso[3:].split('-')
+                isoval, _, repid = iso[3:].partition('-')
                 isos.append(int(isoval))
                 if isoval in dupisos:
                     dupisos[isoval].append(repid)
