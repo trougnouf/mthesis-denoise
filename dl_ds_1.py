@@ -17,7 +17,7 @@ nindlist8bit = [
     'MuseeL-coral,200,800,5000,6400',
     'MuseeL-head,200,640,3200,6400',
     'MuseeL-heads,200,400,3200,6400',
-    'MuseeL-mask,640,4000,6400',
+    'MuseeL-mask,200,640,4000,6400',
     'MuseeL-pig,200,500,2000,6400',
     'MuseeL-inspiredlotus,200,640,2500,6400',
     'MuseeL-pinklotus,200,800,4000,6400',
