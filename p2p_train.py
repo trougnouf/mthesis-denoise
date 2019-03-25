@@ -51,7 +51,7 @@ parser.add_argument('--result_dir', default='results/train', type=str, help='Dir
 parser.add_argument('--models_dir', default='models', type=str, help='Directory where models are saved/loaded (default: models)')
 parser.add_argument('--lr_gamma', default=.75, type=float, help='Learning rate decrease rate for plateau, StepLR (default: 0.75)')
 parser.add_argument('--lr_step_size', default=3, type=int, help='Step size for StepLR, plateau scheduler')
-
+parser.add_argument('--model', default='Resnet', type=str, help='Model type (UNet, Resnet)')
 
 
 args = parser.parse_args()
@@ -107,7 +107,7 @@ torch.cuda.set_device(args.cuda_device)
 device = torch.device("cuda:"+str(args.cuda_device))
 
 print('===> Building models')
-net_g = define_G(args.input_nc, args.output_nc, args.ngf, 'batch', False, 'normal', 0.02, gpu_id=device)
+net_g = define_G(args.input_nc, args.output_nc, args.ngf, 'batch', False, 'normal', 0.02, gpu_id=device, net_type=args.model)
 net_d = define_D(args.input_nc + args.output_nc, args.ndf, 'basic', gpu_id=device)
 
 criterionGAN = GANLoss().to(device)
