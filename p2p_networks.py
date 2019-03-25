@@ -3,6 +3,7 @@ import torch.nn as nn
 from torch.nn import init
 import functools
 from torch.optim import lr_scheduler
+from nnModules import UNet
 
 
 def get_norm_layer(norm_type='instance'):
@@ -73,12 +74,14 @@ def init_net(net, init_type='normal', init_gain=0.02, gpu_id='cuda:0'):
     return net
 
 
-def define_G(input_nc, output_nc, ngf, norm='batch', use_dropout=False, init_type='normal', init_gain=0.02, gpu_id='cuda:0'):
+def define_G(input_nc, output_nc, ngf, norm='batch', use_dropout=False, init_type='normal', init_gain=0.02, gpu_id='cuda:0', net_type='Resnet'):
     net = None
     norm_layer = get_norm_layer(norm_type=norm)
 
-    net = ResnetGenerator(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, n_blocks=9)
-   
+    if net_type == 'Resnet':
+        net = ResnetGenerator(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, n_blocks=9)
+    elif net_type == 'UNet':
+        net = UNet(input_nc, output_nc)
     return init_net(net, init_type, init_gain, gpu_id)
 
 
