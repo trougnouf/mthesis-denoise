@@ -100,7 +100,7 @@ root_path = "dataset/"
 #train_set = get_training_set(root_path + args.dataset, args.direction)
 #test_set = get_test_set(root_path + args.dataset, args.direction)
 DDataset = DenoisingDataset(train_data, compressionmin=args.compressionmin, compressionmax=args.compressionmax, sigmamin=args.sigmamin, sigmamax=args.sigmamax, test_reserve=args.test_reserve, yval=args.yval, do_sizecheck=args.do_sizecheck)
-training_data_loader = DataLoader(dataset=DDataset, num_workers=8, drop_last=True, batch_size=args.batch_size, shuffle=True)
+training_data_loader = DataLoader(dataset=DDataset, num_workers=args.threads, drop_last=True, batch_size=args.batch_size, shuffle=True)
 #testing_data_loader = DataLoader(dataset=test_set, num_workers=args.threads, batch_size=args.test_batch_size, shuffle=False)
 
 torch.cuda.set_device(args.cuda_device)
