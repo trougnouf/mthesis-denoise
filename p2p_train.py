@@ -50,7 +50,7 @@ parser.add_argument('--resume', action='store_true', help='Look for an experimen
 parser.add_argument('--result_dir', default='results/train', type=str, help='Directory where results are stored (default: results/train)')
 parser.add_argument('--models_dir', default='models', type=str, help='Directory where models are saved/loaded (default: models)')
 parser.add_argument('--lr_gamma', default=.75, type=float, help='Learning rate decrease rate for plateau, StepLR (default: 0.75)')
-parser.add_argument('--lr_step_size', default=2, type=int, help='Step size for StepLR, plateau scheduler')
+parser.add_argument('--lr_step_size', default=3, type=int, help='Step size for StepLR, plateau scheduler')
 
 
 
