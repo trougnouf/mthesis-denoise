@@ -12,6 +12,7 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
 import torch.backends.cudnn as cudnn
+from random import random
 
 from p2p_networks import define_G, define_D, GANLoss, get_scheduler, update_learning_rate
 
@@ -52,6 +53,7 @@ parser.add_argument('--models_dir', default='models', type=str, help='Directory 
 parser.add_argument('--lr_gamma', default=.75, type=float, help='Learning rate decrease rate for plateau, StepLR (default: 0.75)')
 parser.add_argument('--lr_step_size', default=3, type=int, help='Step size for StepLR, plateau scheduler')
 parser.add_argument('--model', default='Resnet', type=str, help='Model type (UNet, Resnet)')
+parser.add_argument('--D_ratio', default=1, type=float, help='Ratio of D to G ( (0,1], default 1)')
 
 
 args = parser.parse_args()
@@ -128,62 +130,71 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
     # train
     total_loss_d = 0
     total_loss_g = 0
+    num_train_d = 0
     for iteration, batch in enumerate(training_data_loader, 1):
+        discriminator_learns = random() < args.D_ratio
         # forward
         cleanimg, noisyimg = batch[0].to(device), batch[1].to(device)
         gnoisyimg = net_g(noisyimg)
+        if discriminator_learns:
 
-        ######################
-        # (1) Update D network
-        ######################
 
-        optimizer_d.zero_grad()
+            ######################
+            # (1) Update D network
+            ######################
 
-        # train with fake
-        fake_ab = torch.cat((noisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]), 1)
+            optimizer_d.zero_grad()
 
-        pred_fake = net_d.forward(fake_ab.detach())
-        loss_d_fake = criterionGAN(pred_fake, False)
+            # train with fake
+            fake_ab = torch.cat((noisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]), 1)
 
-        # train with real
-        real_ab = torch.cat((noisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]), 1)
-        pred_real = net_d.forward(real_ab)
-        loss_d_real = criterionGAN(pred_real, True)
+            pred_fake = net_d.forward(fake_ab.detach())
+            loss_d_fake = criterionGAN(pred_fake, False)
 
-        # Combined D loss
-        loss_d = (loss_d_fake + loss_d_real) * 0.5
+            # train with real
+            real_ab = torch.cat((noisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]), 1)
+            pred_real = net_d.forward(real_ab)
+            loss_d_real = criterionGAN(pred_real, True)
 
-        loss_d.backward()
+            # Combined D loss
+            loss_d = (loss_d_fake + loss_d_real) * 0.5
 
-        optimizer_d.step()
+            loss_d.backward()
 
-        ######################
-        # (2) Update G network
-        ######################
+            optimizer_d.step()
 
-        optimizer_g.zero_grad()
+            ######################
+            # (2) Update G network
+            ######################
+
+            optimizer_g.zero_grad()
+            loss_d_item = loss_d.item()
+            total_loss_d += loss_d_item
+            num_train_d += 1
+        else:
+            loss_d_item=None
 
         # First, G(A) should fake the discriminator
         fake_ab = torch.cat((noisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]), 1)
         pred_fake = net_d.forward(fake_ab)
-        loss_g_gan = criterionGAN(pred_fake, True)
-
+        #loss_g_gan = criterionGAN(pred_fake, True)
+        loss_g = criterionGAN(pred_fake, True)
         # Second, G(A) = B
-        loss_g_l1 = criterionL1(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]) * args.lamb
+        #loss_g_l1 = criterionL1(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]) * args.lamb
 
-        loss_g = loss_g_gan + loss_g_l1
+        #loss_g = loss_g_gan + loss_g_l1
 
         loss_g.backward()
 
         optimizer_g.step()
 
-        print("===> Epoch[{}]({}/{}): Loss_D: {:.4f} Loss_G: {:.4f}".format(
-            epoch, iteration, len(training_data_loader), loss_d.item(), loss_g.item()))
-        total_loss_d += loss_d.item()
+        loss_d_item_str = "{:.4f}".format(loss_d_item) if loss_d_item is not None else str(None)
+        print("===> Epoch[{}]({}/{}): Loss_D: {:s} Loss_G: {:.4f}".format(
+            epoch, iteration, len(training_data_loader), loss_d_item_str, loss_g.item()))
         total_loss_g += loss_g.item()
 
     update_learning_rate(net_g_scheduler, optimizer_g, loss_total=total_loss_g)
-    update_learning_rate(net_d_scheduler, optimizer_d, loss_total=total_loss_d)
+    update_learning_rate(net_d_scheduler, optimizer_d, loss_total=total_loss_d/num_train_d)
 
     # test
     #avg_psnr = 0
@@ -209,3 +220,4 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
     if args.time_limit is not None and args.time_limit < time.time() - start_time:
         print('Time is up.')
         break
+    
