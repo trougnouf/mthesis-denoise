@@ -136,7 +136,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         # forward
         cleanimg, noisyimg = batch[0].to(device), batch[1].to(device)
         gnoisyimg = net_g(noisyimg)
-        if discriminator_learns:
+        if discriminator_learns or iteration == 1:
 
 
             ######################
