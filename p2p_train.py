@@ -115,8 +115,8 @@ net_g = define_G(args.input_nc, args.output_nc, args.ngf, 'batch', False, 'norma
 net_d = define_D(args.input_nc + args.output_nc, args.ndf, 'basic', gpu_id=device)
 
 criterionGAN = GANLoss().to(device)
-criterionL1 = nn.L1Loss().to(device)
-criterionMSE = nn.MSELoss().to(device)
+#criterionL1 = nn.L1Loss().to(device)
+#criterionMSE = nn.MSELoss().to(device)
 criterianSSIM = pytorch_ssim.SSIM()
 
 # setup optimizer
