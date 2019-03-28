@@ -13,6 +13,8 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 import torch.backends.cudnn as cudnn
 from random import random
+import datetime
+from lib import pytorch_ssim
 
 from p2p_networks import define_G, define_D, GANLoss, get_scheduler, update_learning_rate
 
@@ -33,7 +35,7 @@ parser.add_argument('--lr_decay_iters', type=int, default=50, help='multiply by 
 parser.add_argument('--beta1', type=float, default=0.5, help='beta1 for adam. default=0.5')
 parser.add_argument('--threads', type=int, default=4, help='number of threads for data loader to use')
 parser.add_argument('--seed', type=int, default=123, help='random seed to use. Default=123')
-parser.add_argument('--lamb', type=int, default=10, help='weight on L1 term in objective')
+parser.add_argument('--lamb', type=float, default=0.5, help='weight on L1 term in objective')
 
 parser.add_argument('--train_data', nargs='*', help='(space-separated) Path(s) to the pre-cropped training data (default: '+'datasets/train/NIND_128_96'+')')
 parser.add_argument('--time_limit', default=172800, type=int, help='Time limit in seconds')
@@ -54,7 +56,7 @@ parser.add_argument('--lr_gamma', default=.75, type=float, help='Learning rate d
 parser.add_argument('--lr_step_size', default=3, type=int, help='Step size for StepLR, plateau scheduler')
 parser.add_argument('--model', default='Resnet', type=str, help='Model type (UNet, Resnet)')
 parser.add_argument('--D_ratio', default=1, type=float, help='Ratio of D to G ( (0,1], default 1)')
-
+parser.add_argument('--lr_min', default=0.00000005, type=float, help='Minimum learning rate (training stops when both lr are below threshold, default: 0.00000005)')
 
 args = parser.parse_args()
 
@@ -115,6 +117,7 @@ net_d = define_D(args.input_nc + args.output_nc, args.ndf, 'basic', gpu_id=devic
 criterionGAN = GANLoss().to(device)
 criterionL1 = nn.L1Loss().to(device)
 criterionMSE = nn.MSELoss().to(device)
+criterianSSIM = pytorch_ssim.SSIM()
 
 # setup optimizer
 optimizer_g = optim.Adam(net_g.parameters(), lr=args.lr, betas=(args.beta1, 0.999))
@@ -172,25 +175,24 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             total_loss_d += loss_d_item
             num_train_d += 1
         else:
-            loss_d_item=None
+            loss_d_item=float('nan')
 
         # First, G(A) should fake the discriminator
         fake_ab = torch.cat((noisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]), 1)
         pred_fake = net_d.forward(fake_ab)
-        #loss_g_gan = criterionGAN(pred_fake, True)
-        loss_g = criterionGAN(pred_fake, True)
+        loss_g_gan = criterionGAN(pred_fake, True)
+        #loss_g = criterionGAN(pred_fake, True)
         # Second, G(A) = B
         #loss_g_l1 = criterionL1(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]) * args.lamb
-
-        #loss_g = loss_g_gan + loss_g_l1
+        loss_g_ssim = (1-criterionL1(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up])) * args.lamb
+        loss_g = loss_g_gan + loss_g_ssim
 
         loss_g.backward()
 
         optimizer_g.step()
 
-        loss_d_item_str = "{:.4f}".format(loss_d_item) if loss_d_item is not None else str(None)
-        print("===> Epoch[{}]({}/{}): Loss_D: {:s} Loss_G: {:.4f}".format(
-            epoch, iteration, len(training_data_loader), loss_d_item_str, loss_g.item()))
+        print("===> Epoch[{}]({}/{}): Loss_D: {:.4f} Loss_G: {:.4f}".format(
+            epoch, iteration, len(training_data_loader), loss_d_item, loss_g.item()))
         total_loss_g += loss_g.item()
 
     update_learning_rate(net_g_scheduler, optimizer_g, loss_total=total_loss_g)
@@ -216,8 +218,10 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
     net_d_model_out_path = os.path.join(save_dir, "netD_model_epoch_%d.pth" % epoch)
     torch.save(net_g, net_g_model_out_path)
     torch.save(net_d, net_d_model_out_path)
-    print("Checkpoint saved to {}".format(save_dir))
+    print("Checkpoint saved to {} at {}".format(save_dir, datetime.datetime.now().isoformat()))
     if args.time_limit is not None and args.time_limit < time.time() - start_time:
         print('Time is up.')
         break
-    
+    elif optimizer_g.param_groups[0]['lr'] < args.lr_min and optimizer_d.param_groups[0]['lr'] < args.lr_min:
+        print('Minimum learning rate reached.')
+        break
