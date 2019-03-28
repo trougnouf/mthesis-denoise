@@ -117,7 +117,7 @@ net_d = define_D(args.input_nc + args.output_nc, args.ndf, 'basic', gpu_id=devic
 criterionGAN = GANLoss().to(device)
 #criterionL1 = nn.L1Loss().to(device)
 #criterionMSE = nn.MSELoss().to(device)
-criterianSSIM = pytorch_ssim.SSIM()
+criterionSSIM = pytorch_ssim.SSIM()
 
 # setup optimizer
 optimizer_g = optim.Adam(net_g.parameters(), lr=args.lr, betas=(args.beta1, 0.999))
@@ -184,7 +184,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         #loss_g = criterionGAN(pred_fake, True)
         # Second, G(A) = B
         #loss_g_l1 = criterionL1(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]) * args.lamb
-        loss_g_ssim = (1-criterionL1(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up])) * args.lamb
+        loss_g_ssim = (1-criterionSSIM(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up])) * args.lamb
         loss_g = loss_g_gan + loss_g_ssim
 
         loss_g.backward()
