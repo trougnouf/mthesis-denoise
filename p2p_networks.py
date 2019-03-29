@@ -20,25 +20,29 @@ def get_norm_layer(norm_type='instance'):
     return norm_layer
 
 
-def get_scheduler(optimizer, opt):
-    if opt.lr_policy == 'lambda':
-        def lambda_rule(epoch):
-            lr_l = 1.0 - max(0, epoch + opt.epoch_count - opt.niter) / float(opt.niter_decay + 1)
-            return lr_l
-        scheduler = lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda_rule)
-    elif opt.lr_policy == 'step':
-        scheduler = lr_scheduler.StepLR(optimizer, step_size=opt.lr_decay_iters, gamma=0.1)
-    elif opt.lr_policy == 'plateau':
-        scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, factor=opt.lr_gamma, verbose=True, threshold=1e-8, patience=opt.lr_step_size)
-    elif opt.lr_policy == 'cosine':
-        scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=opt.niter, eta_min=0)
+def get_scheduler(optimizer, opt, generator):
+    #if opt.lr_policy == 'lambda':
+    #    def lambda_rule(epoch):
+    #        lr_l = 1.0 - max(0, epoch + opt.epoch_count - opt.niter) / float(opt.niter_decay + 1)
+    #        return lr_l
+    #    scheduler = lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda_rule)
+    #elif opt.lr_policy == 'step':
+    #    scheduler = lr_scheduler.StepLR(optimizer, step_size=opt.lr_decay_iters, gamma=0.1)
+    if opt.lr_policy == 'plateau':
+        schedulerSSIM = lr_scheduler.ReduceLROnPlateau(optimizer, factor=opt.lr_gamma, verbose=True, threshold=1e-8, patience=opt.lr_step_size)
+        schedulerD = lr_scheduler.ReduceLROnPlateau(optimizer, factor=opt.lr_gamma, verbose=True, threshold=1e-8, patience=opt.lr_step_size)
+    #elif opt.lr_policy == 'cosine':
+    #    scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=opt.niter, eta_min=0)
     else:
         return NotImplementedError('learning rate policy [%s] is not implemented', opt.lr_policy)
-    return scheduler
+    if generator:
+        return {'D': schedulerD, 'SSIM': schedulerSSIM}
+    else:
+        return schedulerD
 
 
 # update learning rate (called once every epoch)
-def update_learning_rate(scheduler, optimizer, loss_total = None):
+def update_learning_rate(schedulers, optimizer, loss_total = None, D_incl=True):
     scheduler.step(metrics=loss_total)
     lr = optimizer.param_groups[0]['lr']
     print('learning rate = %.7f' % lr)

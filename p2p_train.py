@@ -57,6 +57,7 @@ parser.add_argument('--lr_step_size', default=3, type=int, help='Step size for S
 parser.add_argument('--model', default='Resnet', type=str, help='Model type (UNet, Resnet)')
 parser.add_argument('--D_ratio', default=1, type=float, help='Ratio of D to G ( (0,1], default 1)')
 parser.add_argument('--lr_min', default=0.00000005, type=float, help='Minimum learning rate (training stops when both lr are below threshold, default: 0.00000005)')
+parser.add_argument('--min_ssim_l', default=0.15, type=float, help='Minimum SSIM score before using GAN loss')
 
 args = parser.parse_args()
 
@@ -122,8 +123,8 @@ criterionSSIM = pytorch_ssim.SSIM()
 # setup optimizer
 optimizer_g = optim.Adam(net_g.parameters(), lr=args.lr, betas=(args.beta1, 0.999))
 optimizer_d = optim.Adam(net_d.parameters(), lr=args.lr, betas=(args.beta1, 0.999))
-net_g_scheduler = get_scheduler(optimizer_g, args)
-net_d_scheduler = get_scheduler(optimizer_d, args)
+net_g_scheduler = get_scheduler(optimizer_g, args, generator=True)
+net_d_scheduler = get_scheduler(optimizer_d, args, generator=False)
 
 loss_crop_lb = int((DDataset.cs-DDataset.ucs)/2)
 loss_crop_up = loss_crop_lb+DDataset.ucs
@@ -132,8 +133,11 @@ start_time = time.time()
 for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
     # train
     total_loss_d = 0
-    total_loss_g = 0
+    total_loss_g_D = 0
+    total_loss_g_SSIM = 0
     num_train_d = 0
+    num_train_g_D = 0
+    num_train_g_SSIM = 0
     for iteration, batch in enumerate(training_data_loader, 1):
         discriminator_learns = random() < args.D_ratio
         # forward
@@ -178,24 +182,38 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             loss_d_item=float('nan')
 
         # First, G(A) should fake the discriminator
-        fake_ab = torch.cat((noisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]), 1)
-        pred_fake = net_d.forward(fake_ab)
-        loss_g_gan = criterionGAN(pred_fake, False)
-        #loss_g = criterionGAN(pred_fake, True)
-        # Second, G(A) = B
-        #loss_g_l1 = criterionL1(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]) * args.lamb
-        loss_g_ssim = (1-criterionSSIM(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up])) * args.lamb
-        loss_g = loss_g_gan + loss_g_ssim
 
-        loss_g.backward()
+        loss_g_ssim = (1-criterionSSIM(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]))
+        print(loss_g_ssim.item())
+        if loss_g_ssim.item() < args.min_ssim_l:
+            loss_g_ssim *=  args.lamb
+            fake_ab = torch.cat((noisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]), 1)
+            pred_fake = net_d.forward(fake_ab)
+            loss_g_gan = criterionGAN(pred_fake, True)
+            print(loss_g_gan.item())
+            #loss_g = criterionGAN(pred_fake, True)
+            # Second, G(A) = B
+            #loss_g_l1 = criterionL1(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]) * args.lamb
+            loss_g = loss_g_gan + loss_g_ssim
+            loss_g.backward()
+            cur_loss = 'D'
+            loss_g_item = loss_g.item()
+            total_loss_g_D += loss_g_item
+            num_train_g_D += 1
+        else:
+            loss_g_ssim.backward()
+            cur_loss = 'SSIM'
+            loss_g_item = loss_g_ssim.item()
+            total_loss_g_SSIM += loss_g_item
+            num_train_g_SSIM += 1
 
         optimizer_g.step()
 
-        print("===> Epoch[{}]({}/{}): Loss_D: {:.4f} Loss_G: {:.4f}".format(
-            epoch, iteration, len(training_data_loader), loss_d_item, loss_g.item()))
-        total_loss_g += loss_g.item()
+        print("===> Epoch[{}]({}/{}): Loss_D: {:.4f} Loss_G: {:.4f} ({})".format(
+            epoch, iteration, len(training_data_loader), loss_d_item, loss_g_item, cur_loss))
 
-    update_learning_rate(net_g_scheduler, optimizer_g, loss_total=total_loss_g)
+    update_learning_rate(net_g_scheduler['D'], optimizer_g, loss_total=total_loss_g_D/num_train_g_D)
+    update_learning_rate(net_g_scheduler['SSIM'], optimizer_g, loss_total=total_loss_g_D/num_train_g_SSIM)
     update_learning_rate(net_d_scheduler, optimizer_d, loss_total=total_loss_d/num_train_d)
 
     # test
