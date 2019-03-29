@@ -180,7 +180,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         # First, G(A) should fake the discriminator
         fake_ab = torch.cat((noisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]), 1)
         pred_fake = net_d.forward(fake_ab)
-        loss_g_gan = criterionGAN(pred_fake, True)
+        loss_g_gan = criterionGAN(pred_fake, False)
         #loss_g = criterionGAN(pred_fake, True)
         # Second, G(A) = B
         #loss_g_l1 = criterionL1(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]) * args.lamb
