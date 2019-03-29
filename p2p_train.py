@@ -211,9 +211,10 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
 
         print("===> Epoch[{}]({}/{}): Loss_D: {:.4f} Loss_G: {:.4f} ({})".format(
             epoch, iteration, len(training_data_loader), loss_d_item, loss_g_item, cur_loss))
-
-    update_learning_rate(net_g_scheduler['D'], optimizer_g, loss_avg=total_loss_g_D/num_train_g_D)
-    update_learning_rate(net_g_scheduler['SSIM'], optimizer_g, loss_avg=total_loss_g_D/num_train_g_SSIM)
+    if num_train_g_D > num_train_g_SSIM:
+        update_learning_rate(net_g_scheduler['D'], optimizer_g, loss_avg=total_loss_g_D/num_train_g_D)
+    else:
+        update_learning_rate(net_g_scheduler['SSIM'], optimizer_g, loss_avg=total_loss_g_D/num_train_g_SSIM)
     update_learning_rate(net_d_scheduler, optimizer_d, loss_avg=total_loss_d/num_train_d)
 
     # test
