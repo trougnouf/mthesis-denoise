@@ -184,7 +184,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         # First, G(A) should fake the discriminator
 
         loss_g_ssim = (1-criterionSSIM(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]))
-        print(loss_g_ssim.item())
+        #print(loss_g_ssim.item())
         if loss_g_ssim.item() < args.min_ssim_l:
             loss_g_ssim *=  args.lamb
             fake_ab = torch.cat((noisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]), 1)
