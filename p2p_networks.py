@@ -42,8 +42,8 @@ def get_scheduler(optimizer, opt, generator):
 
 
 # update learning rate (called once every epoch)
-def update_learning_rate(schedulers, optimizer, loss_total = None, D_incl=True):
-    scheduler.step(metrics=loss_total)
+def update_learning_rate(scheduler, optimizer, loss_avg = None):
+    scheduler.step(metrics=loss_avg)
     lr = optimizer.param_groups[0]['lr']
     print('learning rate = %.7f' % lr)
 
