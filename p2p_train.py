@@ -193,7 +193,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             loss_g_ssim *=  args.lamb
             fake_ab = torch.cat((noisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]), 1)
             pred_fake = net_d.forward(fake_ab)
-            loss_g_gan = criterionGAN(pred_fake, True)
+            loss_g_gan = criterionGAN(pred_fake, True) * (1-args.lamb)
             #print(loss_g_gan.item())
             #loss_g = criterionGAN(pred_fake, True)
             # Second, G(A) = B
