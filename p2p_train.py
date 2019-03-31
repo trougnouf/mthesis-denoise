@@ -245,10 +245,13 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
     #print("===> Avg. PSNR: {:.4f} dB".format(avg_psnr / len(testing_data_loader)))
 
     #checkpoint
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir)
-    if not os.path.exists(res_dir):
-        os.makedirs(res_dir)
+    try:
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+    except OSError:
+        save_dir = save_dir[]
+    #if not os.path.exists(res_dir):
+    #    os.makedirs(res_dir)
     net_g_model_out_path = os.path.join(save_dir, "netG_model_epoch_%d.pth" % epoch)
     net_d_model_out_path = os.path.join(save_dir, "netD_model_epoch_%d.pth" % epoch)
     torch.save(net_g, net_g_model_out_path)
