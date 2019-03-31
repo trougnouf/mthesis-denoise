@@ -54,11 +54,11 @@ parser.add_argument('--result_dir', default='results/train', type=str, help='Dir
 parser.add_argument('--models_dir', default='models', type=str, help='Directory where models are saved/loaded (default: models)')
 parser.add_argument('--lr_gamma', default=.75, type=float, help='Learning rate decrease rate for plateau, StepLR (default: 0.75)')
 parser.add_argument('--lr_step_size', default=5, type=int, help='Step size for StepLR, patience for plateau scheduler')
-parser.add_argument('--model', default='Resnet', type=str, help='Model type (UNet, Resnet)')
+parser.add_argument('--model', default='UNet', type=str, help='Model type (UNet, Resnet)')
 parser.add_argument('--D_ratio', default=1, type=float, help='Ratio of D to G ( (0,1], default 1)')
 parser.add_argument('--lr_min', default=0.00000005, type=float, help='Minimum learning rate (training stops when both lr are below threshold, default: 0.00000005)')
 parser.add_argument('--min_ssim_l', default=0.15, type=float, help='Minimum SSIM score before using GAN loss')
-parser.add_argument('--post_fail_ssim_num', default=50, type=int, help='How many times SSIM is used exclusively when min_ssim_l threshold is not met')
+parser.add_argument('--post_fail_ssim_num', default=25, type=int, help='How many times SSIM is used exclusively when min_ssim_l threshold is not met')
 # TODO generalize the following
 parser.add_argument('--skip_d', action='store_true', help='Not using pre-denoised ground-truths if this is set')
 
