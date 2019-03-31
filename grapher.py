@@ -26,6 +26,7 @@ parser.add_argument('--metric', default='ssim', help='Metric shown (ssim, mse)')
 parser.add_argument('--run', default=None, type=int, help="Generate a single graph number")
 parser.add_argument('--noshow', action='store_true')
 parser.add_argument('--nojson', action='store_true')
+parser.add_argument('--mode', default='std', help='std, keywords')
 args = parser.parse_args()
 
 data = dict()
@@ -34,14 +35,35 @@ data = dict()
 #load data
 #generate a graph for image
 
-components = args.components if args.components else ['Noisy', 'NIND:X-T1 (U-Net)', 'NIND (L1+GAN)', 'NIND (GAN)', 'SIDD (U-Net)', 'BM3D', 'NIND:X-T1+C500D (U-Net)', 'NIND:X-T1+C500D + SIDD (U-Net)', 'NIND:X-T1 ISO6400-only (U-Net)', 'Artificial noise on NIND:X-T1 (U-Net)', 'Reconstruct noise on NIND:X-T1 (U-Net)', 'NIND:X-T1 (Red-Net)']
+if args.mode == 'std':
+    if args.components:
+        components = args.components
+    else:
+        components = ['Noisy', 'NIND:X-T1 (U-Net)', 'NIND (L1+GAN)', 'NIND (GAN)', 'SIDD (U-Net)', 'BM3D', 'NIND:X-T1+C500D (U-Net)', 'NIND:X-T1+C500D + SIDD (U-Net)', 'NIND:X-T1 ISO6400-only (U-Net)', 'Artificial noise on NIND:X-T1 (U-Net)', 'Reconstruct noise on NIND:X-T1 (U-Net)', 'NIND:X-T1 (Red-Net)']
+elif args.mode == 'keywords':
+    components = ['GT']
+    for experiment in os.listdir(args.res_dir):
+        for keyword in args.components:
+            if keyword in experiment:
+                components.append(experiment)
+    print(components)
 
-def make_markers_dict(components = components, markers = ["$0$","$1$","$2$","$3$","$4$","$5$","$6$","$7$","$8$","$9$","$a$",".", "1", "2", "3", "4", "*", "+", "x", "$b$", "$c$"]):
+def gen_markers():
+    markers = []
+    i = 0
+    while len(markers) < len(components):
+        markers.append("$%i$" % i)
+        i+=1
+    return markers
+
+def make_markers_dict(components = components, markers = gen_markers()):
     markersdict = dict()
     i = 0
     for acomp in components:
         markersdict[acomp] = markers[i]
         i += 1
+        if i >= len(markers):
+            i = 0
     return markersdict
 
 markers = make_markers_dict()
@@ -57,7 +79,10 @@ def find_relevant_experiments(component):
     if component == 'Noisy':
         return add_exp_to_data('GT')
     for experiment in experiments:
-        if 'bm3d' in experiment:
+        if args.mode == 'keywords':
+            if experiment == component:
+                add_exp_to_data(experiment)
+        elif 'bm3d' in experiment:
             if component == 'BM3D':
                 add_exp_to_data(experiment)
         elif 'p2p' in experiment and '--lamb_0' in experiment:
