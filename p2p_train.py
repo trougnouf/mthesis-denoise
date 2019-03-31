@@ -248,8 +248,9 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
     try:
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
-    except OSError:
-        save_dir = save_dir[]
+    except OSError as err:
+        save_dir = save_dir[0:255]
+        os.makedirs(save_dir)
     #if not os.path.exists(res_dir):
     #    os.makedirs(res_dir)
     net_g_model_out_path = os.path.join(save_dir, "netG_model_epoch_%d.pth" % epoch)
