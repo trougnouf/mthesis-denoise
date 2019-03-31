@@ -227,11 +227,11 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
     if num_train_g_D > num_train_g_SSIM:
         print('Generator average D_loss: '+str(total_loss_g_D/num_train_g_D))
         update_learning_rate(net_g_scheduler['D'], optimizer_g, loss_avg=total_loss_g_D/num_train_g_D)
+        update_learning_rate(net_d_scheduler, optimizer_d, loss_avg=total_loss_d/num_train_d)
     else:
-        print('Generator average SSIM loss: '+str(total_loss_g_SSIM/num_train_g_SSIM))
         update_learning_rate(net_g_scheduler['SSIM'], optimizer_g, loss_avg=total_loss_g_SSIM/num_train_g_SSIM)
+    print('Generator average SSIM loss: '+str(total_loss_g_SSIM/num_train_g_SSIM))
     print('Discriminator average loss: '+str(total_loss_d/num_train_d))
-    update_learning_rate(net_d_scheduler, optimizer_d, loss_avg=total_loss_d/num_train_d)
 
     # test
     #avg_psnr = 0
