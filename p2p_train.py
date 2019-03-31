@@ -58,7 +58,7 @@ parser.add_argument('--model', default='Resnet', type=str, help='Model type (UNe
 parser.add_argument('--D_ratio', default=1, type=float, help='Ratio of D to G ( (0,1], default 1)')
 parser.add_argument('--lr_min', default=0.00000005, type=float, help='Minimum learning rate (training stops when both lr are below threshold, default: 0.00000005)')
 parser.add_argument('--min_ssim_l', default=0.15, type=float, help='Minimum SSIM score before using GAN loss')
-parser.add_argument('--post_fail_ssim_num', default=50, help='How many times SSIM is used exclusively when min_ssim_l threshold is not met')
+parser.add_argument('--post_fail_ssim_num', default=50, type=int, help='How many times SSIM is used exclusively when min_ssim_l threshold is not met')
 # TODO generalize the following
 parser.add_argument('--skip_d', action='store_true', help='Not using pre-denoised ground-truths if this is set')
 
