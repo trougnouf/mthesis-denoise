@@ -53,11 +53,14 @@ parser.add_argument('--resume', action='store_true', help='Look for an experimen
 parser.add_argument('--result_dir', default='results/train', type=str, help='Directory where results are stored (default: results/train)')
 parser.add_argument('--models_dir', default='models', type=str, help='Directory where models are saved/loaded (default: models)')
 parser.add_argument('--lr_gamma', default=.75, type=float, help='Learning rate decrease rate for plateau, StepLR (default: 0.75)')
-parser.add_argument('--lr_step_size', default=3, type=int, help='Step size for StepLR, plateau scheduler')
+parser.add_argument('--lr_step_size', default=5, type=int, help='Step size for StepLR, patience for plateau scheduler')
 parser.add_argument('--model', default='Resnet', type=str, help='Model type (UNet, Resnet)')
 parser.add_argument('--D_ratio', default=1, type=float, help='Ratio of D to G ( (0,1], default 1)')
 parser.add_argument('--lr_min', default=0.00000005, type=float, help='Minimum learning rate (training stops when both lr are below threshold, default: 0.00000005)')
 parser.add_argument('--min_ssim_l', default=0.15, type=float, help='Minimum SSIM score before using GAN loss')
+parser.add_argument('--post_fail_ssim_num', default=50, help='How many times SSIM is used exclusively when min_ssim_l threshold is not met')
+# TODO generalize the following
+parser.add_argument('--skip_d', action='store_true', help='Not using pre-denoised ground-truths if this is set')
 
 args = parser.parse_args()
 
@@ -104,7 +107,7 @@ print('===> Loading datasets')
 root_path = "dataset/"
 #train_set = get_training_set(root_path + args.dataset, args.direction)
 #test_set = get_test_set(root_path + args.dataset, args.direction)
-DDataset = DenoisingDataset(train_data, compressionmin=args.compressionmin, compressionmax=args.compressionmax, sigmamin=args.sigmamin, sigmamax=args.sigmamax, test_reserve=args.test_reserve, yval=args.yval, do_sizecheck=args.do_sizecheck)
+DDataset = DenoisingDataset(train_data, compressionmin=args.compressionmin, compressionmax=args.compressionmax, sigmamin=args.sigmamin, sigmamax=args.sigmamax, test_reserve=args.test_reserve, yval=args.yval, do_sizecheck=args.do_sizecheck, skip_d=args.skip_d)
 training_data_loader = DataLoader(dataset=DDataset, num_workers=args.threads, drop_last=True, batch_size=args.batch_size, shuffle=True)
 #testing_data_loader = DataLoader(dataset=test_set, num_workers=args.threads, batch_size=args.test_batch_size, shuffle=False)
 
@@ -130,6 +133,7 @@ loss_crop_lb = int((DDataset.cs-DDataset.ucs)/2)
 loss_crop_up = loss_crop_lb+DDataset.ucs
 
 start_time = time.time()
+iterations_before_d = 0
 for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
     # train
     total_loss_d = 0
@@ -185,7 +189,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
 
         loss_g_ssim = (1-criterionSSIM(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]))
         #print(loss_g_ssim.item())
-        if loss_g_ssim.item() < args.min_ssim_l:
+        if loss_g_ssim.item() < args.min_ssim_l and iterations_before_d < 1:
             loss_g_ssim *=  args.lamb
             fake_ab = torch.cat((noisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]), 1)
             pred_fake = net_d.forward(fake_ab)
@@ -201,6 +205,8 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             total_loss_g_D += loss_g_item
             num_train_g_D += 1
         else:
+            if loss_g_ssim.item() > args.min_ssim_l:
+                iterations_before_d = args.post_fail_ssim_num
             loss_g_ssim.backward()
             cur_loss = 'SSIM'
             loss_g_item = loss_g_ssim.item()
@@ -212,9 +218,12 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         print("===> Epoch[{}]({}/{}): Loss_D: {:.4f} Loss_G: {:.4f} ({})".format(
             epoch, iteration, len(training_data_loader), loss_d_item, loss_g_item, cur_loss))
     if num_train_g_D > num_train_g_SSIM:
+        print('Generator average D_loss: '+str(total_loss_g_D/num_train_g_D))
         update_learning_rate(net_g_scheduler['D'], optimizer_g, loss_avg=total_loss_g_D/num_train_g_D)
     else:
+        print('Generator average SSIM loss: '+str(total_loss_g_SSIM/num_train_g_SSIM))
         update_learning_rate(net_g_scheduler['SSIM'], optimizer_g, loss_avg=total_loss_g_SSIM/num_train_g_SSIM)
+    print('Discriminator average loss: '+str(total_loss_d/num_train_d))
     update_learning_rate(net_d_scheduler, optimizer_d, loss_avg=total_loss_d/num_train_d)
 
     # test

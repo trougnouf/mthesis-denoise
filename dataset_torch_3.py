@@ -56,11 +56,17 @@ def sortISOs(rawISOs):
     return bisos, isos
 
 class DenoisingDataset(Dataset):
-    def __init__(self, datadirs, testreserve=[], yval=None, compressionmin=100, compressionmax=100, sigmamin=0, sigmamax=0, test_reserve=[], do_sizecheck=False):
+    def __init__(self, datadirs, testreserve=[], yval=None, compressionmin=100, compressionmax=100, sigmamin=0, sigmamax=0, test_reserve=[], do_sizecheck=False, skip_d=False):
         def keep_only_isoval_from_list(isos,keepval):
             keptisos = []
             for iso in isos:
                 if iso.endswith(keepval) or iso.endswith(keepval+'-'):
+                    keptisos.append(iso)
+            return keptisos
+        def remove_d_bisos_from_list(bisos):
+            keptisos = []
+            for iso in bisos:
+                if '-d' not in iso:
                     keptisos.append(iso)
             return keptisos
         super(DenoisingDataset, self).__init__()
@@ -84,6 +90,8 @@ class DenoisingDataset(Dataset):
                         if len(isos) == 0:
                             print('Skipped '+aset+' ('+yval+' not found)')
                             continue
+                if skip_d:
+                    bisos = remove_d_bisos_from_list(bisos)
                 # check for min size
                 for animg in os.listdir(os.path.join(datadir, aset, isos[0])):
                     if not do_sizecheck:
@@ -114,6 +122,9 @@ class DenoisingDataset(Dataset):
         yimg = Image.open(ypath)
         if yimg.getbands() != ('R', 'G', 'B'):
             yimg=yimg.convert('RGB')
+        if ximg.size != yimg.size:
+            print('Warning: crops do not match: '+xpath+', '+ypath)
+            return self.get_and_pad(index)
         if all(d == self.cs for d in ximg.size):
             return (ximg, yimg)
         xnum, ynum, ucs = [int(i) for i in img[0].rpartition('.')[0].split('_')[-3:]]
