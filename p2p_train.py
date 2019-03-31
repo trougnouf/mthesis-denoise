@@ -207,6 +207,8 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         else:
             if loss_g_ssim.item() > args.min_ssim_l:
                 iterations_before_d = args.post_fail_ssim_num
+            else:
+                iterations_before_d -= 1
             loss_g_ssim.backward()
             cur_loss = 'SSIM'
             loss_g_item = loss_g_ssim.item()
