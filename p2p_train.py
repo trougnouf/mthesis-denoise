@@ -59,8 +59,10 @@ parser.add_argument('--D_ratio', default=1, type=float, help='Ratio of D to G ( 
 parser.add_argument('--lr_min', default=0.00000005, type=float, help='Minimum learning rate (training stops when both lr are below threshold, default: 0.00000005)')
 parser.add_argument('--min_ssim_l', default=0.15, type=float, help='Minimum SSIM score before using GAN loss')
 parser.add_argument('--post_fail_ssim_num', default=25, type=int, help='How many times SSIM is used exclusively when min_ssim_l threshold is not met')
+parser.add_argument('--lr_update_min_D_ratio', default=0.25, type=float, help='Minimum use of the discriminator (vs SSIM) for LR reduction')
 # TODO generalize the following
 parser.add_argument('--skip_d', action='store_true', help='Not using pre-denoised ground-truths if this is set')
+
 
 args = parser.parse_args()
 
@@ -224,7 +226,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
 
         print("===> Epoch[{}]({}/{}): Loss_D: {:.4f} Loss_G: {} ({})".format(
             epoch, iteration, len(training_data_loader), loss_d_item, loss_g_item_str, cur_loss))
-    if num_train_g_D > num_train_g_SSIM:
+    if num_train_g_D > num_train_g_SSIM*args.lr_update_min_D_ratio:
         print('Generator average D_loss: '+str(total_loss_g_D/num_train_g_D))
         update_learning_rate(net_g_scheduler['D'], optimizer_g, loss_avg=total_loss_g_D/num_train_g_D)
         update_learning_rate(net_d_scheduler, optimizer_d, loss_avg=total_loss_d/num_train_d)
