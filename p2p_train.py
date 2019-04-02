@@ -137,10 +137,10 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
     # train
     total_loss_d = 0
     total_loss_g_D = 0
-    total_loss_g_SSIM = 0
+    total_loss_g_std = 0
     num_train_d = 0
     num_train_g_D = 0
-    num_train_g_SSIM = 0
+    num_train_g_std = 0
     for iteration, batch in enumerate(training_data_loader, 1):
         discriminator_learns = random() < args.D_ratio
         # forward
@@ -217,9 +217,9 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             loss_g = loss_g_ssim + loss_g_L1
             loss_g.backward()
             loss_g_item = loss_g.item()
-            total_loss_g_SSIM += loss_g_item
+            total_loss_g_std += loss_g_item
             loss_g_item_str += ') = {:.4f}'.format(loss_g_item)
-            num_train_g_SSIM += 1
+            num_train_g_std += 1
 
         optimizer_g.step()
 
@@ -227,12 +227,13 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             epoch, iteration, len(training_data_loader), loss_d_item, loss_g_item_str))
     if num_train_g_D > 5:
         update_learning_rate(net_d_scheduler, optimizer_d, loss_avg=total_loss_d/num_train_d)
-    if num_train_g_D > num_train_g_SSIM*args.lr_update_min_D_ratio:
+    if num_train_g_D > num_train_g_std*args.lr_update_min_D_ratio:
         print('Generator average D_loss: '+str(total_loss_g_D/num_train_g_D))
         update_learning_rate(net_g_scheduler['D'], optimizer_g, loss_avg=total_loss_g_D/num_train_g_D)
     else:
-        update_learning_rate(net_g_scheduler['SSIM'], optimizer_g, loss_avg=total_loss_g_SSIM/num_train_g_SSIM)
-    print('Generator average SSIM loss: '+str(total_loss_g_SSIM/num_train_g_SSIM))
+        update_learning_rate(net_g_scheduler['SSIM'], optimizer_g, loss_avg=total_loss_g_std/num_train_g_std)
+    if num_train_g_std > 0:
+        print('Generator average std loss: '+str(total_loss_g_std/num_train_g_std))
     print('Discriminator average loss: '+str(total_loss_d/num_train_d))
 
     # test
