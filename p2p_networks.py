@@ -5,6 +5,7 @@ import functools
 from torch.optim import lr_scheduler
 from nnModules import UNet
 
+# forked from
 
 def get_norm_layer(norm_type='instance'):
     if norm_type == 'batch':

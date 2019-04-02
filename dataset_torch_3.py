@@ -56,19 +56,22 @@ def sortISOs(rawISOs):
     return bisos, isos
 
 class DenoisingDataset(Dataset):
-    def __init__(self, datadirs, testreserve=[], yval=None, compressionmin=100, compressionmax=100, sigmamin=0, sigmamax=0, test_reserve=[], do_sizecheck=False, skip_d=False):
+    def __init__(self, datadirs, testreserve=[], yval=None, compressionmin=100, compressionmax=100, sigmamin=0, sigmamax=0, test_reserve=[], do_sizecheck=False, exact_reserve=True):
         def keep_only_isoval_from_list(isos,keepval):
             keptisos = []
             for iso in isos:
                 if iso.endswith(keepval) or iso.endswith(keepval+'-'):
                     keptisos.append(iso)
             return keptisos
-        def remove_d_bisos_from_list(bisos):
-            keptisos = []
-            for iso in bisos:
-                if '-d' not in iso:
-                    keptisos.append(iso)
-            return keptisos
+        def is_reserved(aset):
+            if exact_reserve:
+                if test_reserve and aset in test_reserve:
+                    return True
+                elif test_reserve:
+                    for skip_string in test_reserve:
+                        if skip_string in aset:
+                            return True
+            return False
         super(DenoisingDataset, self).__init__()
         self.totensor = torchvision.transforms.ToTensor()
         # each dataset element is ["<DATADIR>/<SETNAME>/ISOBASE/<DSNAME>_<SETNAME>_ISOBASE_<XNUM>_<YNUM>_<UCS>.EXT", [<ISOVAL1>,...,<ISOVALN>]]
@@ -78,7 +81,7 @@ class DenoisingDataset(Dataset):
         self.sigmamin, self.sigmamax = sigmamin, sigmamax
         for datadir in datadirs:
             for aset in os.listdir(datadir):
-                if test_reserve and aset in test_reserve:
+                if is_reserved(aset):
                     print('Skipped '+aset+' (test reserve)')
                     continue
                 bisos, isos = sortISOs(os.listdir(os.path.join(datadir,aset)))
@@ -90,8 +93,6 @@ class DenoisingDataset(Dataset):
                         if len(isos) == 0:
                             print('Skipped '+aset+' ('+yval+' not found)')
                             continue
-                if skip_d:
-                    bisos = remove_d_bisos_from_list(bisos)
                 # check for min size
                 for animg in os.listdir(os.path.join(datadir, aset, isos[0])):
                     if not do_sizecheck:
