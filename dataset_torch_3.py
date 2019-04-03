@@ -56,7 +56,7 @@ def sortISOs(rawISOs):
     return bisos, isos
 
 class DenoisingDataset(Dataset):
-    def __init__(self, datadirs, testreserve=[], yval=None, compressionmin=100, compressionmax=100, sigmamin=0, sigmamax=0, test_reserve=[], do_sizecheck=False, exact_reserve=True):
+    def __init__(self, datadirs, testreserve=[], yval=None, compressionmin=100, compressionmax=100, sigmamin=0, sigmamax=0, test_reserve=[], do_sizecheck=False, exact_reserve=False):
         def keep_only_isoval_from_list(isos,keepval):
             keptisos = []
             for iso in isos:
@@ -67,10 +67,10 @@ class DenoisingDataset(Dataset):
             if exact_reserve:
                 if test_reserve and aset in test_reserve:
                     return True
-                elif test_reserve:
-                    for skip_string in test_reserve:
-                        if skip_string in aset:
-                            return True
+            elif test_reserve:
+                for skip_string in test_reserve:
+                    if skip_string in aset:
+                        return True
             return False
         super(DenoisingDataset, self).__init__()
         self.totensor = torchvision.transforms.ToTensor()
