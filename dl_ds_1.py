@@ -5,8 +5,8 @@ import argparse
 import subprocess
 import sys
 import hashlib
-from datetime import datetime
 
+last_update = '2019-04-20'
 imageslist = {
     'XT1_8bit': {
         'images': [
@@ -124,7 +124,6 @@ imageslist = {
         ], 'ext': 'jpg'},
 }
 
-today = datetime.now().strftime('%Y-%m-%d')
 dlerrors = []
 
 apiurl = 'https://commons.wikimedia.org/w/api.php'
@@ -181,7 +180,7 @@ def get_img(bname, isoval, ext, attempts_left, datelimit, use_wget):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='NIND download script')
-    parser.add_argument('--datelimit', default=today, type=str, help='Latest date of upload, used to get a specific version of the dataset (default: %s)'%(today))
+    parser.add_argument('--datelimit', default=last_update, type=str, help='Latest date of upload, used to get a specific version of the dataset (default: %s)'%(last_update))
     parser.add_argument('--use_wget', action='store_true', help="Use wget instead of python's request library (more likely to succeed)")
     parser.add_argument('--target_dir', default='datasets/NIND', type=str, help="Target directory (default: datasets/NIND)")
     parser.add_argument('--sets2dl', nargs='*', help='Space separated list of image sets to download (default: %s)'%(' '.join(imageslist.keys())))
