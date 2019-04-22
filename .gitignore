@@ -10,3 +10,17 @@ results/test/*/*.jpg
 results/*.xz
 lib/*/__pycache__
 *.xcf
+*.tif
+*.jpg
+*.mat
+*.JPG
+*.pth
+tmp
+ntire
+*.png
+onetimescripts
+graphs
+datasets
+doodling.py
+*.zip
+*.xmp

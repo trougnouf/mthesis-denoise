@@ -30,6 +30,8 @@ compare with MSE or MSEcombined
 __Table of measurements (how is it trained, how is it validated)__
 	compare w/psnr on training data
 
+https://arxiv.org/pdf/1511.08861.pdf
+ssim+l1
 
 ===== 1 =====
 run: DnCNN, Redish w/ higher learning rate, compression (3), compression 60

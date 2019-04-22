@@ -64,7 +64,7 @@ parser.add_argument('--post_fail_ssim_num', default=25, type=int, help='How many
 parser.add_argument('--lr_update_min_D_ratio', default=0.2, type=float, help='Minimum use of the discriminator (vs SSIM) for LR reduction')
 parser.add_argument('--keep_D', action='store_true', help='Keep using the discriminator once its threshold has been reached')
 parser.add_argument('--not_conditional', action='store_true', help='Discriminator does not see noisy image')
-
+# TODO simpler discriminator architecture
 args = parser.parse_args()
 
 print(args)

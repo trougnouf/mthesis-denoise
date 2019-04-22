@@ -1,0 +1,29 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2019-04-02T12:18:35+02:00
+
+====== gan ======
+Created Tuesday 02 April 2019
+
+===== High-Resolution Image Synthesis and Semantic Manipulation with Conditional GANs =====
+coarse-to-fine generator
+G1: global generator
+G2: high res. uses info from G1
+train G1 first, then train together
+
+multi-scale discriminator
+train on downscaled image (eg D1 D2 D3 where D3 gets the full image)
+
+feature matching loss
+
+===== Improved Training of Wasserstein GANs =====
+https://arxiv.org/pdf/1704.00028.pdf
+https://github.com/jalola/improved-wgan-pytorch
+
+add L1
+
+talk: -d sucks, 
+thresh: only use D when SSIM has been good enough (thresh1) for thresh2 iterations
+
+
+grid search loss
