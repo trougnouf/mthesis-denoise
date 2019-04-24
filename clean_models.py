@@ -13,7 +13,7 @@ def find_latest_model(model_dir):
             last_model = model_file
     return last_model
 for model_dir in os.listdir('.'):
-    if os.path.isfile(model_dir):
+    if os.path.isfile(model_dir) or os.path.islink(model_dir):
         continue
     latest_model = find_latest_model(model_dir)
     for model_file in os.listdir(model_dir):
