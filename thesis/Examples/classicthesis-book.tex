@@ -1,0 +1,52 @@
+% book example for classicthesis.sty
+\RequirePackage{silence} % :-\
+    \WarningFilter{scrbook}{Usage of package `titlesec'}
+    \WarningFilter{titlesec}{Non standard sectioning command detected}
+\documentclass[11pt,paper=b5,footinclude,headinclude]{scrbook} % KOMA-Script book
+\usepackage[T1]{fontenc}
+\usepackage{lipsum}
+\usepackage[linedheaders=true]{../classicthesis} % ,manychapters
+%\usepackage[osf]{libertine}
+
+\begin{document}
+%   \pagestyle{scrheadings}
+%   \manualmark
+%   \markboth{\spacedlowsmallcaps{\contentsname}}{\spacedlowsmallcaps{\contentsname}}
+
+    \tableofcontents
+
+%   \automark[section]{chapter}
+%   \renewcommand{\chaptermark}[1]{\markboth{\spacedlowsmallcaps{#1}}{\spacedlowsmallcaps{#1}}}
+%   \renewcommand{\sectionmark}[1]{\markright{\thesection\enspace\spacedlowsmallcaps{#1}}}
+
+    % use \cleardoublepage here to avoid problems with pdfbookmark
+    \cleardoublepage\part{Test Part}\label{part:testpart}
+    \chapter{Some Testing}
+    We discuss in Part~\ref{part:testpart} the test results.
+
+    We discuss in Part~\textsc{\ref{part:testpart}} the test results.
+    \lipsum[1]
+
+    \chapter{Test Chapter \NoCaseChange{Ag}}
+    \lipsum[1]
+
+    \section{A Section}
+    \lipsum[1]
+
+    \chapter{Test Chapter DEF}
+    \lipsum[1]
+
+    \section{A Section}
+    \lipsum[1]
+
+%   \include{multiToC}
+
+    \appendix
+    \cleardoublepage\part{Appendix}
+    \chapter{Appendix Chapter}
+    \lipsum[1]
+
+    \section{A Section}
+    \lipsum[1]
+
+\end{document}

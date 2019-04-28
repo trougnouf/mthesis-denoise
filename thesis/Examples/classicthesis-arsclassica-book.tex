@@ -1,0 +1,35 @@
+% book example for classicthesis.sty
+\RequirePackage{silence} % :-\
+    \WarningFilter{scrbook}{Usage of package `titlesec'}
+    \WarningFilter{titlesec}{Non standard sectioning command detected}
+\documentclass[11pt,paper=b5,footinclude,headinclude]{scrbook} % KOMA-Script book
+\usepackage[T1]{fontenc}
+\usepackage{lipsum}
+\usepackage[style=arsclassica, parts=false]{classicthesis}
+
+\begin{document}
+
+    \tableofcontents
+
+    \chapter{Some Testing}
+    \lipsum[1]
+
+    \chapter{Test Chapter ABC}
+    \lipsum[1]
+
+    \section{A Section}
+    \lipsum[1]
+
+    \section{A Section}
+    \lipsum[1]
+
+    \section{A Section}
+    \lipsum[1]
+
+    \chapter{Test Chapter DEF}
+    \lipsum[1]
+
+    \section{A Section}
+    \lipsum[1]
+
+\end{document}

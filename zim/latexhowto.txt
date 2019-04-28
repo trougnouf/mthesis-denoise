@@ -1,0 +1,10 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2019-04-27T17:41:20+02:00
+
+====== latexhowto ======
+Created Saturday 27 April 2019
+
+acronym: \ac{}
+margin:	\marginpar{}
+acronym:	

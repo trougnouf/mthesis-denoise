@@ -1,0 +1,38 @@
+% cv example for classicthesis.sty
+\RequirePackage{silence} % :-\
+    \WarningFilter{scrartcl}{Usage of package `titlesec'}
+    \WarningFilter{titlesec}{Non standard sectioning command detected}
+\documentclass[fontsize=10pt,paper=a4]{scrartcl}
+\usepackage[LabelsAligned]{currvita} % nice cv style
+\usepackage{url}
+	\urlstyle{rm}
+\usepackage[ngerman]{babel}
+\usepackage[nochapters]{../classicthesis}
+
+\renewcommand*{\cvheadingfont}{\LARGE\color{Maroon}}
+\renewcommand*{\cvlistheadingfont}{\large}
+\renewcommand*{\cvlabelfont}{\itshape} % \qquad
+
+\areaset[current]{390pt}{730pt} % need some extra space
+%\usepackage[pass,showframe]{geometry}
+
+\begin{document}
+    \pagestyle{plain}
+    \begin{cv}{\spacedallcaps{Curriculum Vit\ae}}
+        %\pdfbookmark[1]{Pers\"onliche Daten}{PersDat}
+        \begin{cvlist}{\spacedlowsmallcaps{Pers\"onliche Daten}}\label{PersDat}  % should be fixed one day
+            \item   Andr\'e Miede
+            \item   Geboren am \dots\ \texttt{(-;} \\
+                    Europ\"aer, Deutsche Staatsb\"urgerschaft
+            \item   \url{http://www.miede.de} 
+        \end{cvlist}
+
+       % \clearpage
+        %\pdfbookmark[1]{Irgendwas}{irgendwas}
+        \begin{cvlist}{\spacedlowsmallcaps{Irgendwas}}\label{irgendwas}
+            \item[Fusce mauris]   Vestibulum luctus nibh at lectus. Sed bibendum, nulla a faucibus semper, leo velit ultricies tellus, ac venenatis arcu wisi vel nisl. Vestibulum diam. Aliquam pellentesque, augue quis sagittis posuere, turpis lacus congue quam, in hendrerit risus eros eget felis. 
+            \item[Nulla facilisi] Sed a turpis eu lacus commodo facilisis. Morbi fringilla, wisi in dignissim interdum, justo lectus sagittis dui, et vehicula libero dui cursus dui. Mauris tempor ligula sed lacus. Duis cursus enim ut augue. Cras ac magna. Cras nulla. Nulla egestas. 
+            \item[Curabitur a leo] Quisque egestas wisi eget nunc. Nam feugiat lacus vel est. Curabitur consectetuer.
+        \end{cvlist}
+    \end{cv}
+\end{document}

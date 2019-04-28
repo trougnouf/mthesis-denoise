@@ -1,0 +1,41 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2019-04-27T16:01:00+02:00
+
+====== schedule ======
+Created Saturday 27 April 2019
+
+intro 2, ds 2, arch1 2, arch2 2, results 2, conclusion 2, bib 1
+
+
+**1-20 writing** ~13
+27 (host + 1/4): intro
+28 (host+lift 1/2)
+30 (id: 1/2)
+2
+3
+4
+7 (host)
+9
+10
+11
+12
+14
+16
+17
+18 (grimbergen? 1/2)
+19
+**21-30 proofreading**~9.5
+21
+23
+24 (grimbergen? 1/2)
+25
+26
+28
+6
+7
+8
+9
+
+30,31,1,2 lfsa2210
+lfsa2210 4th

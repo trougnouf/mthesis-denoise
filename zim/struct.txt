@@ -1,0 +1,11 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2019-04-27T16:19:52+02:00
+
+====== struct ======
+Created Saturday 27 April 2019
+
+intro 2, ds 2, arch1 2, arch2 2, results 2, conclusion 2, bib 1
+
+intro:
+what is photographic noise
