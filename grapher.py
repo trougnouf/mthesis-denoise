@@ -26,7 +26,7 @@ parser.add_argument('--metric', default='ssim', help='Metric shown (ssim, mse)')
 parser.add_argument('--run', default=None, type=int, help="Generate a single graph number")
 parser.add_argument('--noshow', action='store_true')
 parser.add_argument('--nojson', action='store_true')
-parser.add_argument('--mode', default='std', help='std, keywords')
+parser.add_argument('--mode', default='std', help='std, keywords, all')
 args = parser.parse_args()
 
 data = dict()
@@ -39,13 +39,18 @@ if args.mode == 'std':
     if args.components:
         components = args.components
     else:
-        components = ['Noisy', 'NIND:X-T1 (U-Net)', 'NIND (L1+GAN)', 'NIND (GAN)', 'SIDD (U-Net)', 'BM3D', 'NIND:X-T1+C500D (U-Net)', 'NIND:X-T1+C500D + SIDD (U-Net)', 'NIND:X-T1 ISO6400-only (U-Net)', 'Artificial noise on NIND:X-T1 (U-Net)', 'Reconstruct noise on NIND:X-T1 (U-Net)', 'NIND:X-T1 (Red-Net)']
-elif args.mode == 'keywords':
+        components = ['Noisy', 'NIND:X-T1 (U-Net)', 'NIND (GAN)', 'NIND (cGAN)', 'SIDD (U-Net)', 'BM3D', 'NIND:X-T1+C500D (U-Net)', 'NIND:X-T1+C500D + SIDD (U-Net)', 'NIND:X-T1 ISO6400-only (U-Net)', 'Artificial noise on NIND:X-T1 (U-Net)', 'Reconstruct noise on NIND:X-T1 (U-Net)', 'NIND:X-T1 (Red-Net)']
+else:
     components = ['GT']
     for experiment in os.listdir(args.res_dir):
-        for keyword in args.components:
-            if keyword in experiment:
-                components.append(experiment)
+        if args.mode == 'all':
+            components.append(experiment)
+        elif args.mode == 'keywords':
+            for keyword in args.components:
+                if keyword in experiment:
+                    components.append(experiment)
+        else:
+            print('Error: unknown mode: '+args.mode)
     print(components)
 
 def gen_markers():
@@ -79,18 +84,19 @@ def find_relevant_experiments(component):
     if component == 'Noisy':
         return add_exp_to_data('GT')
     for experiment in experiments:
-        if args.mode == 'keywords':
+        if args.mode != 'std':
             if experiment == component:
                 add_exp_to_data(experiment)
         elif 'bm3d' in experiment:
             if component == 'BM3D':
                 add_exp_to_data(experiment)
-        elif 'p2p' in experiment and '--lamb_0' in experiment:
-            if component == 'NIND (GAN)':
-                add_exp_to_data(experiment)
         elif 'p2p' in experiment:
-            if component == 'NIND (L1+GAN)':
-                add_exp_to_data(experiment)
+            if 'not_conditional' in experiment:
+                if component == 'NIND (GAN)':
+                    add_exp_to_data(experiment)
+            else:
+                if component == 'NIND (cGAN)':
+                    add_exp_to_data(experiment)
         elif 'RedCNN' in experiment:
             if 'Red-Net' in component:
                 add_exp_to_data(experiment)
@@ -122,7 +128,7 @@ def parse_resfiles(component):
     for respath in data[component]['resfiles']:
         with open(respath) as f:
             for res in csv.reader(f):
-                image,iso = res[0].split('_')[1:3]
+                image, iso = res[0].split('_')[1:3]
                 isoval = iso.split('.')[0]
                 newssim, newmse = float(res[1]), float(res[2])
                 oldssim, oldmse = 0.0, 1.0
@@ -152,7 +158,8 @@ for image in images:
             else:
                 plt.ylabel('MSE loss')
             plt.xlabel('ISO value')
-        except KeyError:
+        except KeyError as err:
+            print(err)
             continue
     plt.grid()
     plt.legend()

@@ -102,6 +102,7 @@
 % ********************************************************************
 % General useful packages
 % ********************************************************************
+
 \usepackage{graphicx} %
 \usepackage{scrhack} % fix warnings when using KOMA with listings package
 \usepackage{xspace} % to get the spacing after macros right
@@ -130,6 +131,7 @@
 \newcommand{\tableheadline}[1]{\multicolumn{1}{l}{\spacedlowsmallcaps{#1}}}
 \newcommand{\myfloatalign}{\centering} % to be used with each float for alignment
 \usepackage{subfig}
+%\usepackage{caption}%added
 % ****************************************************************************************************
 
 
@@ -158,8 +160,8 @@
 }
 % ****************************************************************************************************
 
-
-
+% added packages go here?
+\usepackage{soul}
 
 % ****************************************************************************************************
 % 6. Last calls before the bar closes
@@ -169,6 +171,9 @@
 % ********************************************************************
 \usepackage{classicthesis}
 
+\makeatletter
+\newcommand\footnoteref[1]{\protected@xdef\@thefnmark{\ref{#1}}\@footnotemark}
+\makeatother
 
 % ********************************************************************
 % Fine-tune hyperreferences (hyperref should be called last)
