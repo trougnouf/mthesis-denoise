@@ -25,10 +25,10 @@ The images in a set are all pixel-aligned. Some of the scenes include multiple g
 The dataset is published in sRGB format on Wikimedia Commons, which is an open-platform that promotes continuous discussion and contribution.
 
 %ADDED
-We trained several convolutional neural network architectures presented in the literature, namely DnCNN \cite{dncnn}, RedNet \cite{rednet}, and U-Net \cite{unet}, and analysed different proposed methods such as DnCNN \cite{dncnn}'s residual learning. 
+We trained several convolutional neural network architectures presented in the literature, namely DnCNN \cite{dncnn}, \ac{RED-Net}, and U-Net \cite{unet}, and analysed different proposed methods such as DnCNN \cite{dncnn}'s residual learning. 
 
 In most tests a U-Net model was trained with the \ac{NIND} and validated over increasing ISO values; test sets were taken with the same Fujifilm X-T1, as well as a Canon EOS 500D DSLR camera to assess the generalization. We also attempted to combine other datasets with our training data to assess the potential loss in performance caused by generalization. %Do I need to list results here?% %We found good generalization which did not suffer a significant performance hit when compared to specialized models.
-Finally we investigated the use of Generative Adversarial Networks\cite{p2p} to solve issues such as unnatural face smoothing.
+Finally we investigated the use of Generative Adversarial Networks\cite{pix2pix} to solve issues such as unnatural face smoothing.
 %endoldintro
 
 %what/why/how (short)

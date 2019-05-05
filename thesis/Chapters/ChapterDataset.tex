@@ -3,7 +3,7 @@
 The Dataset chapter goes over some existing image noise datasets before delving into the Natural Image Noise Dataset.
 
 \section{Related work}
-The following works feature datasets made of ground-truth / noisy image sets. The static scenes approach is necessary to directly compare the level of degradation using a loss function such as the structural similarity index (SSIM) \cite{ssim} or the mean square error (MSE). 
+The following works feature datasets made of ground-truth / noisy image sets. The static scenes approach is necessary to directly compare the level of degradation using a loss function such as the \ac{SSIM} index or the \ac{MSE}. 
 \subsection{Darmstadt Noise Dataset}
 The Darmstadt Noise Dataset (DND) \cite{darmstadt}, containing 50 pairs of noisy-clean images from four cameras, was developed for the purpose of validating denoising algorithms using real data. Synthetic noise is typically used to train and test models, but it had been unclear whether the reported synthetic results translated to real improvements. Plötz and Roth showed that many modern denoising methods do not perform well on real data and that BM3D \cite{bm3d}, which was published in 2006, remains one of the best performing methods \cite{darmstadt}. RENOIR \cite{renoir} is a similar dataset that was published prior to the DND; however, Plötz and Roth noted spatial misalignments that reduced its effectivity. We have additionally found that the light sometimes differs between images in the same scene and that some photographs exhibit significant raw overexposure.
 \subsection{Learning to See in the Dark}

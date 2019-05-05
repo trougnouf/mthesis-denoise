@@ -1,12 +1,39 @@
 \chapter{Neural network architectures}
 
+This chapter introduces the notion of convolutional neural networks and their components, then goes over the specific network architectures we have worked with.
+
 \section{Convolutional neural networks}
-\marginpar{DRAFTy-as-heck}
 %- Introduce convolutional neural networks
 
-The denoising methods we use are based on convolutional neural networks. 
+We use deep convolutional neural networks which are neural networks based on the multilayer perceptron; that is, input data from one layer is sent to the neurons of the next layer and a dot product is performed between that input data and the next layer's learned weights. This process goes on for each layer. The main difference between a multilayer perceptrons and a \ac{CNN} is that a \ac{CNN} is not fully connected (that is neurons in one layer only receive a subset of the previous layer's neurons), instead, a \ac{CNN} takes advantage of the local spatial coherence of the input images to share weights and thus reduce the number of shared parameters.
 
-shared weights
+The first and last layer have the same shape as the input image, that is its height, width, and 3-channels representing the RGB color-space. Most layers are hidden layers between the first and last one and contain many more channels (also called feature maps). Hidden layers are usually convolution (or transposed convolution) layers, activation layers, or pooling layers.
+
+A loss function is applied to the output of the last layer, its gradient with respect to the network's weights is calculated with the backpropagation algorithm, and the Adam gradient-descent algorithm\cite{adam} adjusts the weights at the end of each batch training iteration. The learning rate needs to be fine-tuned to optimize fast learning without over-fitting.
+
+\subsection{Layers}
+
+\textbf{Convolution layers} have a receptive field that is determined by their \ac{k} (typical values for $\ac{k}$ are 3 and 5), a convolution layer applies $C$ convolutions (also called filters) to every $\ac{k}*\ac{k}$ area in the previous layer's width and height\footnote{assuming a stride of 1} (taking in every channel) and returns one value per convolution. The next layer's width and height is thus reduced unless padding is applied. Given an input layer's width or height dimension $d$ and the \ac{p}, a convolution layer's output size can be calculated as $d-\ac{k}+2\ac{p}+1$. Each filter is weighted and weights are learned parameters. The same stack of filters is applied on every $\ac{k}*\ac{k}$ area of a given layer, therefore convolutional neural networks have a largely reduced number of weight parameters.
+
+\textbf{Activation layers} introduce non-linearity, they apply an activation function to every value in the previous layer and the resulting layer has the same shape as its input layer. We use the Sigmoid ($\phi(z)={1\over{1+e^{-z}}}$) and \ac{ReLU} ($R(z)=\max(0,z)$) activation functions. 
+
+% add gradient descent, BN
+
+\subsection{Loss function}
+
+The loss function assigns a score the the generated images with respect to the provided ground-truth. Loss functions need not to simply compare the difference between generated and ground-truth pixels because there is no one-to-one mapping between clean and noisy images, therefore a loss function which only focuses on the difference between pixels favors denoised images whose pixels average the many acceptable values; i.e. the network is trained to generate blurry images. \cite{pix2pix}
+
+The \ac{MSE} (or $\ell 2$) measures the average squared difference between the generated and ground-truth pixels, it is a simple yet effective loss function. Similarly the $\ell 1$ loss measures the sum of the absolute differences between ground-truth and generated pixels, this typically favors blurrier results. The \ac{SSIM} index is another metric which puts weights on structural information that is more likely to be perceived in images, namely local changes in luminance, contrast, and structure. A loss may also be learned such as the discriminator in a \ac{GAN}.
+
+%https://arxiv.org/pdf/1511.08861.pdf
+Mixing different losses often appears to yield better results \cite{lossescomp}, although it is sometimes challenging to combine them because they are often scaled differently (and training may suffer a performance penalty when having to compute multiple losses). Another valid approach is to switch loss function once convergence has been attained with one. \cite{lossescomp} We typically use the \ac{SSIM} index in our standard models and a combination of loss functions in the more challenging \ac{GAN}.
+
+\marginpar{TODO: batch normalization}
 
 \section{Network architectures}
-- present dncnn, rednet, unet, 
+\subsection{DnCNN}
+DnCNN is a simple flat architecture \ac{CNN} architecture introduced in \cite{dncnn} to denoise images with residual learning. The network performs end-to-end denoising using only a convolution layer followed by \ac{BN} and a \ac{ReLU} activation layer at each depth level. The dimensions of the layers remain constant because the convolutions are padded appropriately ($\ac{p}={\ac{k}-1\over{2}}$). %The authors used a depth of 20 for blind gaussian denoising and set $\ac{k}=3$
+The main contribution introduced in \cite{dncnn} appears to be the use of residual learning to speed up learning by modeling and subtracting the residual noise rather than generating a clean image. The use of a simple DnCNN architecture may have been introduced to emphasize the effectiveness of residual learning. DnCNN is the first network we experimented with, and although most of our experiment focus on the subsequent networks, we tested the author's residual learning theory with our dataset of ISO noise and all three networks.
+\subsection{RED-Net}
+The \ac{RED-Net} architecture is a residual encoder-decoder network. The first half of the network encodes the image using convolutions without padding s.t. the layers' dimensions continuously decrease, then the second half of the network (decoder) is made of transposed convolution layers that increase the layers' dimensions up to the original image's height and width. A \ac{ReLU} activation layer is placed between every (de)convolution layer. What is referred to as a residual network differs from the residual learning of \cite{dncnn}, a residual network has skip connections which in the case of \cite{rednet} are placed every two convolution layers and connect them to transposed convolution layers of matching dimensions. These skip connections add details that may have been lost in the encoding process to the output of the transposed convolutions. 
+\subsection{U-Net}
