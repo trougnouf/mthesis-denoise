@@ -243,5 +243,75 @@ class UNet(nn.Module):
             return y - F.sigmoid(x)
         return F.sigmoid(x)
 
+#WIP
+class HunkyNet(nn.Module):
+    # suggested input size: 108. Possible sizes: 108+x*16
+    def __init__(self):
+        super(HandsomeNet, self).__init__()
+        self.enc1 = nn.Sequential(
+            nn.Conv2d(3, 64, 3)),
+            nn.BatchNorm2d(64),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(64, 64, 3)),
+            nn.BatchNorm2d(64),
+            nn.ReLU(inplace=True),
+        )
+        self.down = nn.MaxPool2d(2)
+        self.enc2 = nn.Sequential(
+            nn.Conv2d(64,128,3),
+            nn.BatchNorm2d(128),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(128,128,3)
+            nn.BatchNorm2d(128),
+            nn.ReLU(inplace=True),
+        )
+        # down
+        self.enc3 = nn.Sequential(
+            nn.Conv2d(128,256,3),
+            nn.BatchNorm2d(256),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(256,256,3),
+            nn.BatchNorm2d(256),
+            nn.ReLU(inplace=True),
+        )
+        # down
+        self.enc4 = nn.Sequential(
+        nn.Conv2d(256,512,3),
+        nn.BatchNorm2d(512),
+        nn.ReLU(inplace=True),
+        nn.Conv2d(512,512,3),
+        nn.BatchNorm2d(512),
+        nn.ReLU(inplace=True),
+        )
+        # down
+        self.encdec = nn.Sequential(
+            nn.Conv2d(512,1024,3),
+            nn.BatchNorm2d(1024),
+            nn.ReLU(inplace=True),
+            nn.ConvTranspose2d(1024,1024,3),
+            nn.BatchNorm2d(1024),
+            nn.ReLU(inplace=True),
+        )
+        self.up1 = nn.ConvTranspose2d(1024,1024,2,stride=2)
+        self.dec2 = nn.Sequential(
+            nn.ConvTranspose2d(1024,512,3),
+            nn.BatchNorm2d(512),
+            nn.ReLU(inplace=True),
+            nn.ConvTranspose2d(512,512,3),
+            nn.BatchNorm2d(512),
+            nn.ReLU(inplace=True),
+        )
+        self.up2 = nn.ConvTranspose2d(512,512,2,stride=2)
+        #TODO
+        self.dec4 = nn.ConvTranspose2d(512,256,3)
+        self.dec5 = nn.ConvTranspose2d(256,256,3)
+        self.up3 = nn.ConvTranspose2d(256,256,2,stride=2)
+        self.dec6 = nn.ConvTranspose2d(256,128,3)
+        self.dec7 = nn.ConvTranspose2d(128,128,3)
+        self.up4 = nn.ConvTranspose2d(128,128,2,stride=2)
+        self.dec8 = nn.ConvTranspose2d(128,64,3)
+        self.dec9 = nn.ConvTranspose2d(64,3,3)
 
-
+    def forward(self, x):
+        residuals = []
+        layer = 
