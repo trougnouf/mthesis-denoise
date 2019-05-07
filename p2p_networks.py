@@ -3,7 +3,7 @@ import torch.nn as nn
 from torch.nn import init
 import functools
 from torch.optim import lr_scheduler
-from nnModules import UNet
+from nnModules import UNet, HunkyDisc, HunkyNet
 
 # forked from
 
@@ -87,6 +87,8 @@ def define_G(input_nc, output_nc, ngf, norm='batch', use_dropout=False, init_typ
         net = ResnetGenerator(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, n_blocks=9)
     elif net_type == 'UNet':
         net = UNet(input_nc, output_nc)
+    elif net_type == 'HunkyNet':
+        net = HunkyNet()
     return init_net(net, init_type, init_gain, gpu_id)
 
 
@@ -250,6 +252,8 @@ def define_D(input_nc, ndf, netD,
         net = NLayerDiscriminator(input_nc, ndf, n_layers_D, norm_layer=norm_layer, use_sigmoid=use_sigmoid)
     elif netD == 'pixel':
         net = PixelDiscriminator(input_nc, ndf, norm_layer=norm_layer, use_sigmoid=use_sigmoid)
+    elif netD = 'HunkyDisc':
+        net = HunkyDisc(input_nc)
     else:
         raise NotImplementedError('Discriminator model name [%s] is not recognized' % net)
 

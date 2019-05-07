@@ -243,30 +243,38 @@ class UNet(nn.Module):
             return y - F.sigmoid(x)
         return F.sigmoid(x)
 
-#WIP
 class HunkyNet(nn.Module):
-    # suggested input size: 108. Possible sizes: 108+x*16
+    # possible input size: 224+int*16
     def __init__(self):
-        super(HandsomeNet, self).__init__()
+        super(HunkyNet, self).__init__()
         self.enc1 = nn.Sequential(
-            nn.Conv2d(3, 64, 3)),
+            nn.Conv2d(3, 64, 5),
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True),
-            nn.Conv2d(64, 64, 3)),
+            nn.Conv2d(64, 64, 5),
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True),
         )
         self.down = nn.MaxPool2d(2)
         self.enc2 = nn.Sequential(
-            nn.Conv2d(64,128,3),
-            nn.BatchNorm2d(128),
+            nn.Conv2d(64, 96, 3),
+            nn.BatchNorm2d(96),
             nn.ReLU(inplace=True),
-            nn.Conv2d(128,128,3)
-            nn.BatchNorm2d(128),
+            nn.Conv2d(96, 96, 3),
+            nn.BatchNorm2d(96),
             nn.ReLU(inplace=True),
         )
         # down
         self.enc3 = nn.Sequential(
+            nn.Conv2d(96,128,3),
+            nn.BatchNorm2d(128),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(128,128,3),
+            nn.BatchNorm2d(128),
+            nn.ReLU(inplace=True),
+        )
+        # down
+        self.enc4 = nn.Sequential(
             nn.Conv2d(128,256,3),
             nn.BatchNorm2d(256),
             nn.ReLU(inplace=True),
@@ -275,7 +283,7 @@ class HunkyNet(nn.Module):
             nn.ReLU(inplace=True),
         )
         # down
-        self.enc4 = nn.Sequential(
+        self.enc5 = nn.Sequential(
         nn.Conv2d(256,512,3),
         nn.BatchNorm2d(512),
         nn.ReLU(inplace=True),
@@ -292,26 +300,152 @@ class HunkyNet(nn.Module):
             nn.BatchNorm2d(1024),
             nn.ReLU(inplace=True),
         )
-        self.up1 = nn.ConvTranspose2d(1024,1024,2,stride=2)
+        self.up1 = nn.ConvTranspose2d(1024,512,2,stride=2)
         self.dec2 = nn.Sequential(
-            nn.ConvTranspose2d(1024,512,3),
+            # += clone
+            nn.BatchNorm2d(512),
+            nn.ReLU(inplace=True),
+            nn.ConvTranspose2d(512,512,3),
             nn.BatchNorm2d(512),
             nn.ReLU(inplace=True),
             nn.ConvTranspose2d(512,512,3),
             nn.BatchNorm2d(512),
             nn.ReLU(inplace=True),
         )
-        self.up2 = nn.ConvTranspose2d(512,512,2,stride=2)
-        #TODO
-        self.dec4 = nn.ConvTranspose2d(512,256,3)
-        self.dec5 = nn.ConvTranspose2d(256,256,3)
-        self.up3 = nn.ConvTranspose2d(256,256,2,stride=2)
-        self.dec6 = nn.ConvTranspose2d(256,128,3)
-        self.dec7 = nn.ConvTranspose2d(128,128,3)
-        self.up4 = nn.ConvTranspose2d(128,128,2,stride=2)
-        self.dec8 = nn.ConvTranspose2d(128,64,3)
-        self.dec9 = nn.ConvTranspose2d(64,3,3)
-
+        self.up2 = nn.ConvTranspose2d(512,256,2,stride=2)
+        self.dec3 = nn.Sequential(
+            # += clone
+            nn.BatchNorm2d(256),
+            nn.ReLU(inplace=True),
+            nn.ConvTranspose2d(256,256,3),
+            nn.BatchNorm2d(256),
+            nn.ReLU(inplace=True),
+            nn.ConvTranspose2d(256,256,3),
+            nn.BatchNorm2d(256),
+            nn.ReLU(inplace=True),
+        )
+        self.up3 = nn.ConvTranspose2d(256,128,2,stride=2)
+        self.dec4 = nn.Sequential(
+            # += clone
+            nn.BatchNorm2d(128),
+            nn.ReLU(inplace=True),
+            nn.ConvTranspose2d(128,128,3),
+            nn.BatchNorm2d(128),
+            nn.ReLU(inplace=True),
+            nn.ConvTranspose2d(128,128,3),
+            nn.BatchNorm2d(128),
+            nn.ReLU(inplace=True),
+        )
+        self.up4 = nn.ConvTranspose2d(128,96,2,stride=2)
+        self.dec5 = nn.Sequential(
+            # += clone
+            nn.BatchNorm2d(96),
+            nn.ReLU(inplace=True),
+            nn.ConvTranspose2d(96,96,3),
+            nn.BatchNorm2d(96),
+            nn.ReLU(inplace=True),
+            nn.ConvTranspose2d(96,96,3),
+            nn.BatchNorm2d(96),
+            nn.ReLU(inplace=True),
+        )
+        self.up5 = nn.ConvTranspose2d(96,64,2,stride=2)
+        self.dec6 = nn.Sequential(
+            # += clone
+            nn.BatchNorm2d(64),
+            nn.ReLU(inplace=True),
+            nn.ConvTranspose2d(64,64,5),
+            nn.BatchNorm2d(64),
+            nn.ReLU(inplace=True),
+            nn.ConvTranspose2d(64,3,5),
+            nn.Sigmoid(),
+        )
     def forward(self, x):
         residuals = []
-        layer = 
+        layer = self.enc1(x)
+        residuals.append(layer.clone())
+        layer = self.down(layer)
+        layer = self.enc2(layer)
+        residuals.append(layer.clone())
+        layer = self.down(layer)
+        layer = self.enc3(layer)
+        residuals.append(layer.clone())
+        layer = self.down(layer)
+        layer = self.enc4(layer)
+        residuals.append(layer.clone())
+        layer = self.down(layer)
+        layer = self.enc5(layer)
+        residuals.append(layer.clone())
+        layer = self.down(layer)
+        layer = self.encdec(layer)
+        layer = self.up1(layer)
+        layer = layer+residuals.pop()
+        layer = self.dec2(layer)
+        layer = self.up2(layer)
+        layer = layer+residuals.pop()
+        layer = self.dec3(layer)
+        layer = self.up3(layer)
+        layer = layer+residuals.pop()
+        layer = self.dec4(layer)
+        layer = self.up4(layer)
+        layer = layer+residuals.pop()
+        layer = self.dec5(layer)
+        layer = self.up5(layer)
+        layer = layer+residuals.pop()
+        layer = self.dec6(layer)
+        return layer
+
+# 256-px
+class HunkyDisc(nn.Module):
+    def __init__(self, input_channels):
+        super(HunkyDisc, self).__init__()
+        #256
+        self.enc = nn.Sequential(
+            nn.Conv2d(input_channels, 64, 5),
+            nn.BatchNorm2d(64),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(64, 64, 5),
+            nn.BatchNorm2d(64),
+            nn.ReLU(inplace=True),
+            # 248
+            nn.MaxPool2d(2),
+            # 124
+            nn.Conv2d(64, 96, 3),
+            nn.BatchNorm2d(96),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(96, 96, 3),
+            nn.BatchNorm2d(96),
+            nn.ReLU(inplace=True),
+            # 120
+            nn.MaxPool2d(2),
+            nn.Conv2d(96,128,3),
+            nn.BatchNorm2d(128),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(128,128,3),
+            nn.BatchNorm2d(128),
+            nn.ReLU(inplace=True),
+            # 56
+            nn.MaxPool2d(2),
+            nn.Conv2d(128,256,3),
+            nn.BatchNorm2d(256),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(256,256,3),
+            nn.BatchNorm2d(256),
+            nn.ReLU(inplace=True),
+            # 24
+            nn.MaxPool2d(2),
+            nn.Conv2d(256,512,3),
+            nn.BatchNorm2d(512),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512,512,3),
+            nn.BatchNorm2d(512),
+            nn.ReLU(inplace=True),
+            # 8
+            nn.MaxPool2d(2),
+            nn.Conv2d(512,1024,3),
+            nn.BatchNorm2d(1024),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(1024, 1, 2),
+            nn.Sigmoid(),
+        )
+    def forward(self, x):
+        return self.enc(x)
