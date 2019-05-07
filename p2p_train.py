@@ -132,8 +132,12 @@ optimizer_d = optim.Adam(net_d.parameters(), lr=args.lr, betas=(args.beta1, 0.99
 net_g_scheduler = get_scheduler(optimizer_g, args, generator=True)
 net_d_scheduler = get_scheduler(optimizer_d, args, generator=False)
 
-loss_crop_lb = int((DDataset.cs-DDataset.ucs)/2)
-loss_crop_up = loss_crop_lb+DDataset.ucs
+if args.netD != 'HunkyNet':
+    loss_crop_lb = int((DDataset.cs-DDataset.ucs)/2)
+    loss_crop_up = loss_crop_lb+DDataset.ucs
+else:   #tmp. make disc more flexible.
+    loss_crop_lb = 0
+    loss_crop_up = int(DDataset.cs)
 
 keep_D = False
 
