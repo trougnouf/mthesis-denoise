@@ -6,7 +6,7 @@ import subprocess
 import sys
 import hashlib
 
-last_update = '2019-04-20'
+last_update = '2019-05-08'
 imageslist = {
     'XT1_8bit': {
         'images': [

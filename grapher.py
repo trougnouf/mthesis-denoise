@@ -9,6 +9,8 @@ import csv
 import json
 
 # generate results from trained model with python denoise_dir.py --model_subdir <model>
+# python grapher.py --mode keywords --components p2p
+# add min date
 
 # Params
 parser = argparse.ArgumentParser(description='Grapher')

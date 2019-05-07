@@ -252,7 +252,7 @@ def define_D(input_nc, ndf, netD,
         net = NLayerDiscriminator(input_nc, ndf, n_layers_D, norm_layer=norm_layer, use_sigmoid=use_sigmoid)
     elif netD == 'pixel':
         net = PixelDiscriminator(input_nc, ndf, norm_layer=norm_layer, use_sigmoid=use_sigmoid)
-    elif netD = 'HunkyDisc':
+    elif netD == 'HunkyDisc':
         net = HunkyDisc(input_nc)
     else:
         raise NotImplementedError('Discriminator model name [%s] is not recognized' % net)
