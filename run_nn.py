@@ -157,7 +157,7 @@ if __name__ == '__main__':
     # Dataset
     #TODO replace num_workers
     DDataset = DenoisingDataset(train_data, compressionmin=args.compressionmin, compressionmax=args.compressionmax, sigmamin=args.sigmamin, sigmamax=args.sigmamax, test_reserve=args.test_reserve, yval=args.yval, do_sizecheck=args.do_sizecheck)
-    DLoader = DataLoader(dataset=DDataset, num_workers=1, drop_last=True, batch_size=batch_size, shuffle=True)
+    DLoader = DataLoader(dataset=DDataset, num_workers=8, drop_last=True, batch_size=batch_size, shuffle=True)
     loss_crop_lb = int((DDataset.cs-DDataset.ucs)/2)
     loss_crop_up = loss_crop_lb+DDataset.ucs
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
