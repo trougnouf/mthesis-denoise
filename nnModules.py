@@ -456,235 +456,235 @@ class HunNet(nn.Module):
         super(HunNet, self).__init__()
         self.enc160to158std = nn.Sequential(
             nn.Conv2d(3, 4*funit, 3),
-            nn.BatchNorm2d(4*funit),
+            #nn.BatchNorm2d(4*funit),
             nn.ReLU(inplace=True),
         )
         self.enc158to154std = nn.Sequential(
-            nn.Conv2d(4*funit, 3*funit, 3),
+            nn.Conv2d(4*funit, 3*funit, 3, bias=False),
             nn.BatchNorm2d(3*funit),
             nn.ReLU(inplace=True),
-            nn.Conv2d(3*funit, 3*funit, 3),
+            nn.Conv2d(3*funit, 3*funit, 3, bias=False),
             nn.BatchNorm2d(3*funit),
             nn.ReLU(inplace=True),
         )
         self.enc154to150std = nn.Sequential(
-            nn.Conv2d(6*funit, 4*funit, 3),
+            nn.Conv2d(6*funit, 4*funit, 3, bias=False),
             nn.BatchNorm2d(4*funit),
             nn.ReLU(inplace=True),
-            nn.Conv2d(4*funit, 4*funit, 3),
+            nn.Conv2d(4*funit, 4*funit, 3, bias=False),
             nn.BatchNorm2d(4*funit),
             nn.ReLU(inplace=True),
         )
         self.enc158to154dil = nn.Sequential(
-            nn.Conv2d(4*funit, 3*funit, 3, dilation=2),
+            nn.Conv2d(4*funit, 3*funit, 3, dilation=2, bias=False),
             nn.BatchNorm2d(3*funit),
             nn.ReLU(inplace=True),
         )
         self.enc154to150dil = nn.Sequential(
-            nn.Conv2d(6*funit, 4*funit, 3, dilation=2),
+            nn.Conv2d(6*funit, 4*funit, 3, dilation=2, bias=False),
             nn.BatchNorm2d(4*funit),
             nn.ReLU(inplace=True),
         )
         self.enc160to150dil = nn.Sequential(
-            nn.Conv2d(3, 2*funit, 3, dilation=5),
+            nn.Conv2d(3, 2*funit, 3, dilation=5, bias=False),
             nn.BatchNorm2d(2*funit),
             nn.ReLU(inplace=True),
         )
         self.enc150to50str = nn.Sequential(
-            nn.Conv2d(10*funit, 10*funit, 3, stride=3),
+            nn.Conv2d(10*funit, 10*funit, 3, stride=3, bias=False),
             nn.BatchNorm2d(10*funit),
             nn.ReLU(inplace=True),
         )
         self.enc50to46std = nn.Sequential(
-            nn.Conv2d(10*funit, 5*funit, 3),
+            nn.Conv2d(10*funit, 5*funit, 3, bias=False),
             nn.BatchNorm2d(5*funit),
             nn.ReLU(inplace=True),
-            nn.Conv2d(5*funit, 5*funit, 3),
+            nn.Conv2d(5*funit, 5*funit, 3, bias=False),
             nn.BatchNorm2d(5*funit),
             nn.ReLU(inplace=True),
         )
         self.enc46to42std = nn.Sequential(
-            nn.Conv2d(10*funit, 10*funit, 3),
-            nn.BatchNorm2d(10*funit),
+            nn.Conv2d(10*funit, 8*funit, 3, bias=False),
+            nn.BatchNorm2d(8*funit),
             nn.ReLU(inplace=True),
-            nn.Conv2d(10*funit, 10*funit, 3),
-            nn.BatchNorm2d(10*funit),
+            nn.Conv2d(8*funit, 8*funit, 3, bias=False),
+            nn.BatchNorm2d(8*funit),
             nn.ReLU(inplace=True),
         )
         self.enc50to46dil = nn.Sequential(
-            nn.Conv2d(10*funit, 5*funit, 3, dilation=2),
+            nn.Conv2d(10*funit, 5*funit, 3, dilation=2, bias=False),
             nn.BatchNorm2d(5*funit),
             nn.ReLU(inplace=True),
         )
         self.enc46to42dil = nn.Sequential(
-            nn.Conv2d(10*funit, 10*funit, 3, dilation=2),
-            nn.BatchNorm2d(10*funit),
+            nn.Conv2d(10*funit, 8*funit, 3, dilation=2, bias=False),
+            nn.BatchNorm2d(8*funit),
             nn.ReLU(inplace=True),
         )
         self.enc42to14str = nn.Sequential(
-            nn.Conv2d(20*funit, 20*funit, 3, stride=3),
-            nn.BatchNorm2d(20*funit),
+            nn.Conv2d(16*funit, 16*funit, 3, stride=3, bias=False),
+            nn.BatchNorm2d(16*funit),
             nn.ReLU(inplace=True),
         )
 
         self.enc14to10std = nn.Sequential(
-            nn.Conv2d(20*funit, 10*funit, 3),
-            nn.BatchNorm2d(10*funit),
+            nn.Conv2d(16*funit, 8*funit, 3, bias=False),
+            nn.BatchNorm2d(8*funit),
             nn.ReLU(inplace=True),
-            nn.Conv2d(10*funit, 10*funit, 3),
-            nn.BatchNorm2d(10*funit),
+            nn.Conv2d(8*funit, 8*funit, 3, bias=False),
+            nn.BatchNorm2d(8*funit),
             nn.ReLU(inplace=True),
         )
         self.enc10to6std = nn.Sequential(
-            nn.Conv2d(20*funit, 20*funit, 3),
-            nn.BatchNorm2d(20*funit),
+            nn.Conv2d(16*funit, 16*funit, 3, bias=False),
+            nn.BatchNorm2d(16*funit),
             nn.ReLU(inplace=True),
-            nn.Conv2d(20*funit, 20*funit, 3),
-            nn.BatchNorm2d(20*funit),
+            nn.Conv2d(16*funit, 16*funit, 3, bias=False),
+            nn.BatchNorm2d(16*funit),
             nn.ReLU(inplace=True),
         )
         self.enc14to10dil = nn.Sequential(
-            nn.Conv2d(20*funit, 10*funit, 3, dilation=2),
-            nn.BatchNorm2d(10*funit),
+            nn.Conv2d(16*funit, 8*funit, 3, dilation=2, bias=False),
+            nn.BatchNorm2d(8*funit),
             nn.ReLU(inplace=True),
         )
         self.enc10to6dil = nn.Sequential(
-            nn.Conv2d(20*funit, 20*funit, 3, dilation=2),
-            nn.BatchNorm2d(20*funit),
+            nn.Conv2d(16*funit, 16*funit, 3, dilation=2, bias=False),
+            nn.BatchNorm2d(16*funit),
             nn.ReLU(inplace=True),
         )
         self.enc6to3str = nn.Sequential(
-            nn.Conv2d(40*funit, 40*funit, 2, stride=2),
-            nn.BatchNorm2d(40*funit),
+            nn.Conv2d(32*funit, 32*funit, 2, stride=2, bias=False),
+            nn.BatchNorm2d(32*funit),
             nn.ReLU(inplace=True),
         )
         self.enc3to1std = nn.Sequential(
-            nn.Conv2d(40*funit, 40*funit, 3),
-            nn.BatchNorm2d(40*funit),
+            nn.Conv2d(32*funit, 32*funit, 3, bias=False),
+            nn.BatchNorm2d(32*funit),
             nn.ReLU(inplace=True),
         )
         self.dec1to3std = nn.Sequential(
-            # in: 40
-            # out: 40
-            nn.ConvTranspose2d(40*funit, 40*funit, 3),
-            nn.BatchNorm2d(40*funit),
+            # in: 32
+            # out: 32
+            nn.ConvTranspose2d(32*funit, 32*funit, 3, bias=False),
+            nn.BatchNorm2d(32*funit),
             nn.ReLU(inplace=True),
         )
         self.dec3to6str = nn.Sequential(
-            # in: 40+40
-            # out: 40
-            nn.ConvTranspose2d(80*funit, 40*funit, 2, stride=2),
-            nn.BatchNorm2d(40*funit),
+            # in: 32+32
+            # out: 32
+            nn.ConvTranspose2d(64*funit, 32*funit, 2, stride=2, bias=False),
+            nn.BatchNorm2d(32*funit),
             nn.ReLU(inplace=True),
         )
 
         self.dec6to10std = nn.Sequential(
-            # in: 40+40, out: 10
-            nn.ConvTranspose2d(80*funit, 10*funit, 3),
-            nn.BatchNorm2d(10*funit),
+            # in: 32+32, out: 8
+            nn.ConvTranspose2d(64*funit, 8*funit, 3, bias=False),
+            nn.BatchNorm2d(8*funit),
             nn.ReLU(inplace=True),
-            nn.ConvTranspose2d(10*funit, 10*funit, 3),
-            nn.BatchNorm2d(10*funit),
+            nn.ConvTranspose2d(8*funit, 8*funit, 3, bias=False),
+            nn.BatchNorm2d(8*funit),
             nn.ReLU(inplace=True),
         )
 
         self.dec6to10dil = nn.Sequential(
-            # in: 40+40, out: 10
-            nn.ConvTranspose2d(80*funit, 10*funit, 3, dilation=2),
-            nn.BatchNorm2d(10*funit),
+            # in: 32+32, out: 8
+            nn.ConvTranspose2d(64*funit, 8*funit, 3, dilation=2, bias=False),
+            nn.BatchNorm2d(8*funit),
             nn.ReLU(inplace=True),
         )
         self.dec10to14std = nn.Sequential(
-            # in: 20+20, out: 20
-            nn.ConvTranspose2d(40*funit, 10*funit, 3),
-            nn.BatchNorm2d(10*funit),
+            # in: 16+16, out: 8
+            nn.ConvTranspose2d(32*funit, 8*funit, 3, bias=False),
+            nn.BatchNorm2d(8*funit),
             nn.ReLU(inplace=True),
-            nn.ConvTranspose2d(10*funit, 10*funit, 3),
-            nn.BatchNorm2d(10*funit),
+            nn.ConvTranspose2d(8*funit, 8*funit, 3, bias=False),
+            nn.BatchNorm2d(8*funit),
             nn.ReLU(inplace=True),
 
         )
         self.dec10to14dil = nn.Sequential(
-            # in: 20+20, out:20
-            nn.ConvTranspose2d(40*funit, 10*funit, 3, dilation=2),
-            nn.BatchNorm2d(10*funit),
+            # in: 16+16, out:8
+            nn.ConvTranspose2d(32*funit, 8*funit, 3, dilation=2, bias=False),
+            nn.BatchNorm2d(8*funit),
             nn.ReLU(inplace=True),
         )
         self.dec14to42str = nn.Sequential(
-            # in: 20+20, out:20
-            nn.ConvTranspose2d(40*funit, 20*funit, 3, stride=3),
-            nn.BatchNorm2d(20*funit),
+            # in: 16+16, out:16
+            nn.ConvTranspose2d(32*funit, 16*funit, 3, stride=3, bias=False),
+            nn.BatchNorm2d(16*funit),
             nn.ReLU(inplace=True),
         )
         self.dec42to46std = nn.Sequential(
-            # in: 20+20, out: 5
-            nn.ConvTranspose2d(40*funit, 5*funit, 3),
+            # in: 16+16, out: 5
+            nn.ConvTranspose2d(32*funit, 5*funit, 3, bias=False),
             nn.BatchNorm2d(5*funit),
             nn.ReLU(inplace=True),
-            nn.ConvTranspose2d(5*funit, 5*funit, 3),
+            nn.ConvTranspose2d(5*funit, 5*funit, 3, bias=False),
             nn.BatchNorm2d(5*funit),
             nn.ReLU(inplace=True),
         )
         self.dec42to46dil = nn.Sequential(
-            # in: 20+20, out:5
-            nn.ConvTranspose2d(40*funit, 5*funit, 3, dilation=2),
+            # in: 16+16, out:5
+            nn.ConvTranspose2d(32*funit, 5*funit, 3, dilation=2, bias=False),
             nn.BatchNorm2d(5*funit),
             nn.ReLU(inplace=True),
         )
         self.dec46to50std = nn.Sequential(
             # in: 10+10, out: 5
-            nn.ConvTranspose2d(20*funit, 5*funit, 3),
+            nn.ConvTranspose2d(20*funit, 5*funit, 3, bias=False),
             nn.BatchNorm2d(5*funit),
             nn.ReLU(inplace=True),
-            nn.ConvTranspose2d(5*funit, 5*funit, 3),
+            nn.ConvTranspose2d(5*funit, 5*funit, 3, bias=False),
             nn.BatchNorm2d(5*funit),
             nn.ReLU(inplace=True),
         )
         self.dec46to50dil = nn.Sequential(
             # in: 10+10, out: 5
-            nn.ConvTranspose2d(20*funit, 5*funit, 3, dilation=2),
+            nn.ConvTranspose2d(20*funit, 5*funit, 3, dilation=2, bias=False),
             nn.BatchNorm2d(5*funit),
             nn.ReLU(inplace=True),
         )
         self.dec50to150str = nn.Sequential(
             # in: 10+10, out: 10
-            nn.ConvTranspose2d(20*funit, 10*funit, 3, stride=3),
+            nn.ConvTranspose2d(20*funit, 10*funit, 3, stride=3, bias=False),
             nn.BatchNorm2d(10*funit),
             nn.ReLU(inplace=True),
         )
         self.dec150to154std = nn.Sequential(
             # in: 10+10, out: 3
-            nn.ConvTranspose2d(20*funit, 3*funit, 3),
+            nn.ConvTranspose2d(20*funit, 3*funit, 3, bias=False),
             nn.BatchNorm2d(3*funit),
             nn.ReLU(inplace=True),
-            nn.ConvTranspose2d(3*funit, 3*funit, 3),
+            nn.ConvTranspose2d(3*funit, 3*funit, 3, bias=False),
             nn.BatchNorm2d(3*funit),
             nn.ReLU(inplace=True),
         )
         self.dec150to154dil = nn.Sequential(
             # in: 10+10, out: 3
-            nn.ConvTranspose2d(20*funit, 3*funit, 3, dilation=2),
+            nn.ConvTranspose2d(20*funit, 3*funit, 3, dilation=2, bias=False),
             nn.BatchNorm2d(3*funit),
             nn.ReLU(inplace=True),
         )
         self.dec154to158std = nn.Sequential(
-            # in: 6+6, out: 3
-            nn.ConvTranspose2d(12*funit, 3*funit, 3),
-            nn.BatchNorm2d(3*funit),
+            # in: 6+6, out: 2
+            nn.ConvTranspose2d(12*funit, 2*funit, 3, bias=False),
+            nn.BatchNorm2d(2*funit),
             nn.ReLU(inplace=True),
-            nn.ConvTranspose2d(3*funit, 3*funit, 3),
-            nn.BatchNorm2d(3*funit),
+            nn.ConvTranspose2d(2*funit, 2*funit, 3, bias=False),
+            nn.BatchNorm2d(2*funit),
             nn.ReLU(inplace=True),
         )
         self.dec154to158dil = nn.Sequential(
             # in: 6+6, out: 2
-            nn.ConvTranspose2d(12*funit, 2*funit, 3, dilation=2),
+            nn.ConvTranspose2d(12*funit, 2*funit, 3, dilation=2, bias=False),
             nn.BatchNorm2d(2*funit),
             nn.ReLU(inplace=True),
         )
         self.dec158to160std = nn.Sequential(
-            # in: 5+4
-            nn.ConvTranspose2d(9*funit, 3, 3),
+            # in: 4+4
+            nn.ConvTranspose2d(8*funit, 3, 3),
             nn.Sigmoid(),
         )
 
