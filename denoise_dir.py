@@ -20,8 +20,8 @@ def parse_args():
     parser.add_argument('--result_dir', default='results/test', type=str, help='directory where results are saved')
     parser.add_argument('--cuda_device', default=0, type=int, help='Device number (default: 0, typically 0-3)')
     parser.add_argument('--no_scoring', action='store_true', help='Generate SSIM score and MSE loss unless this is set')
-    parser.add_argument('--cs', type=int, default=640)
-    parser.add_argument('--ucs', type=int, default=512)
+    parser.add_argument('--cs', type=str, default='640')
+    parser.add_argument('--ucs', type=str, default='512')
     args = parser.parse_args()
     return args
 
@@ -49,7 +49,7 @@ if __name__ == '__main__':
         for animg in os.listdir(aset_indir):
             inimg_path = os.path.join(aset_indir, animg)
             outimg_path = os.path.join(denoised_save_dir, animg)
-            cmd = ['python', 'denoise_image.py', '-i', inimg_path, '-o', outimg_path, '--model_path', model_path, '--ucs', '512', '--cs', '640']
+            cmd = ['python', 'denoise_image.py', '-i', inimg_path, '-o', outimg_path, '--model_path', model_path, '--ucs', args.ucs, '--cs', args.cs]
             subprocess.call(cmd)
     if not args.no_scoring:
         gen_score(denoised_save_dir, args.noisy_dir)

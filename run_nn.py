@@ -127,6 +127,8 @@ if __name__ == '__main__':
         model = nnModules.HunkyNet()
     elif args.model == 'HunNet':
         model = nnModules.HunNet()
+    elif args.model == 'HuNet':
+        model = nnModules.HuNet()
     elif args.model == 'exp':
         model = models.resnet50()
 
@@ -160,7 +162,7 @@ if __name__ == '__main__':
     #TODO replace num_workers
     DDataset = DenoisingDataset(train_data, compressionmin=args.compressionmin, compressionmax=args.compressionmax, sigmamin=args.sigmamin, sigmamax=args.sigmamax, test_reserve=args.test_reserve, yval=args.yval, do_sizecheck=args.do_sizecheck)
     DLoader = DataLoader(dataset=DDataset, num_workers=8, drop_last=True, batch_size=batch_size, shuffle=True)
-    if args.model != 'HunNet':
+    if args.model == 'UNet':
         loss_crop_lb = int((DDataset.cs-DDataset.ucs)/2)
         loss_crop_up = loss_crop_lb+DDataset.ucs
     else:
