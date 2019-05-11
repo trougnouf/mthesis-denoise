@@ -125,6 +125,8 @@ if __name__ == '__main__':
             model = nnModules.RRUNet(3,3, find_noise=args.find_noise)
     elif args.model == 'HunkyNet':
         model = nnModules.HunkyNet()
+    elif args.model == 'HunNet':
+        model = nnModules.HunNet()
     elif args.model == 'exp':
         model = models.resnet50()
 

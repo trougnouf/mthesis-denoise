@@ -20,6 +20,8 @@ def parse_args():
     parser.add_argument('--result_dir', default='results/test', type=str, help='directory where results are saved')
     parser.add_argument('--cuda_device', default=0, type=int, help='Device number (default: 0, typically 0-3)')
     parser.add_argument('--no_scoring', action='store_true', help='Generate SSIM score and MSE loss unless this is set')
+    parser.add_argument('--cs', type=int, default=640)
+    parser.add_argument('--ucs', type=int, default=512)
     args = parser.parse_args()
     return args
 
@@ -30,8 +32,10 @@ if __name__ == '__main__':
         model_path = args.model_path
     elif args.model_dir or args.model_subdir:
         model_dir = args.model_dir if args.model_dir else os.path.join('models', args.model_subdir)
-        #model_path = os.path.join(args.model_dir, sorted(os.listdir(args.model_dir))[-1])
-        model_path = os.path.join(model_dir, "latest_model.pth")
+        if os.path.isfile(os.path.join(model_dir, "latest_model.pth")):
+            model_path = os.path.join(model_dir, "latest_model.pth")
+        else:
+    	    model_path = os.path.join(args.model_dir, sorted(os.listdir(args.model_dir))[-1])
     else:
         model_path = os.path.join('models', sorted(os.listdir('models'))[-1])
         model_path = os.path.join(model_path, sorted(os.listdir(model_path))[-1])
