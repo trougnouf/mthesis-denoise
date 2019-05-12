@@ -218,7 +218,7 @@ if __name__ == '__main__':
         np.savetxt(res_dir+'/train_result_'+str(epoch)+'.txt', np.hstack((epoch+1, epoch_loss/n_count, elapsed_time)), fmt='%2.4f')
         # torch.save(model.state_dict(), os.path.join(save_dir, 'model_%03d.pth' % (epoch+1)))
         torch.save(model, os.path.join(save_dir, 'model_%03d.pth' % (epoch+1)))
-        torch.save(model, os.path.join(save_dir, 'latest_model.pth'))
+        #torch.save(model, os.path.join(save_dir, 'latest_model.pth'))
         if args.time_limit is not None and args.time_limit < time.time() - start_time:
             print('Time is up.')
             break

@@ -783,6 +783,7 @@ class HunNet(nn.Module):
         del(dil154, upc158, cat154)
         return self.dec158to160std(cat158)
 
+#160
 class HuNet(nn.Module):
     def __init__(self):
         funit = 32
@@ -1116,7 +1117,7 @@ class HuNet(nn.Module):
         del(dil154, upc158, cat154)
         return self.dec158to160std(cat158)
 
-
+#160
 class HuDisc(nn.Module):
     def __init__(self):
         funit = 32

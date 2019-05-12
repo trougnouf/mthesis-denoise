@@ -36,8 +36,10 @@ parser.add_argument('--beta1', type=float, default=0.75, help='beta1 for adam. d
 parser.add_argument('--threads', type=int, default=4, help='number of threads for data loader to use')
 parser.add_argument('--seed', type=int, default=123, help='random seed to use. Default=123')
 
-parser.add_argument('--weight_ssim', type=float, default=0.4, help='weight on SSIM term in objective')
-parser.add_argument('--weight_L1', type=float, default=0.1, help='weight on L1 term in objective')
+parser.add_argument('--weight_ssim_0', type=float, default=0.4, help='weight on SSIM term in objective')
+parser.add_argument('--weight_L1_0', type=float, default=0.1, help='weight on L1 term in objective')
+parser.add_argument('--weight_ssim_1', type=float, default=0.4, help='weight on SSIM term in objective')
+parser.add_argument('--weight_L1_1', type=float, default=0.1, help='weight on L1 term in objective')
 parser.add_argument('--train_data', nargs='*', help='(space-separated) Path(s) to the pre-cropped training data (default: '+'datasets/train/NIND_160_128'+')')
 parser.add_argument('--time_limit', default=172800, type=int, help='Time limit in seconds')
 parser.add_argument('--find_noise', action='store_true', help='(DnCNN) Model noise if set, otherwise generate clean image')
@@ -132,14 +134,15 @@ optimizer_d = optim.Adam(net_d.parameters(), lr=args.lr, betas=(args.beta1, 0.99
 net_g_scheduler = get_scheduler(optimizer_g, args, generator=True)
 net_d_scheduler = get_scheduler(optimizer_d, args, generator=False)
 
-if args.netD != 'HunkyNet':
+if args.netD == 'UNet':
     loss_crop_lb = int((DDataset.cs-DDataset.ucs)/2)
     loss_crop_up = loss_crop_lb+DDataset.ucs
-else:   #tmp. make disc more flexible.
-    loss_crop_lb = 0
-    loss_crop_up = int(DDataset.cs)
+else:
+    loss_crop_lb = int((DDataset.cs-DDataset.ucs)/4)
+    loss_crop_up = int(DDataset.cs)-loss_crop_lb
 
-keep_D = False
+use_D = False
+# use ssim if not use_D and ssim weight0 or use_D and ssim weight1
 
 start_time = time.time()
 iterations_before_d = 0
@@ -202,15 +205,18 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
 
         # First, G(A) should fake the discriminator
 
+        #loss_g_ssim = (1-criterionSSIM(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]))
         loss_g_ssim = (1-criterionSSIM(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]))
         loss_g_L1 = criterionL1(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up])
         loss_g_item_str = 'L(SSIM: {:.4f}, L1: {:.4f}'.format(loss_g_ssim, loss_g_L1)
+        if (use_D and args.keep_D) or (loss_g_ssim.item() < args.min_ssim_l and iterations_before_d < 1):
+            use_D = True
+        else:
+            use_D = False
         # use D
-        if keep_D or (loss_g_ssim.item() < args.min_ssim_l and iterations_before_d < 1):
-            if args.keep_D:
-                keep_D = True
-            loss_g_ssim *=  args.weight_ssim
-            loss_g_L1 *= args.weight_L1
+        if use_D:
+            loss_g_ssim *=  args.weight_ssim_1
+            loss_g_L1 *= args.weight_L1_1
             if args.not_conditional:
                 fake_ab = gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]
                 pred_fake = net_d.forward(fake_ab)
@@ -219,7 +225,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
                 pred_fake = net_d.forward(fake_ab)
             loss_g_gan = criterionGAN(pred_fake, True)
             loss_g_item_str += ', D(G(y),y): {:.4f})'.format(loss_g_gan)
-            loss_g_gan *= (1-args.weight_ssim-args.weight_L1)
+            loss_g_gan *= (1-args.weight_ssim_1-args.weight_L1_1)
             #print(loss_g_gan.item())
             #loss_g = criterionGAN(pred_fake, True)
             # Second, G(A) = B
@@ -235,8 +241,8 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
                 iterations_before_d = args.post_fail_ssim_num
             else:
                 iterations_before_d -= 1
-            loss_g_ssim = loss_g_ssim / (args.weight_ssim+args.weight_L1) * args.weight_ssim
-            loss_g_L1 = loss_g_L1 / (args.weight_ssim+args.weight_L1) * args.weight_L1
+            loss_g_ssim *= args.weight_ssim_0
+            loss_g_L1 *= args.weight_L1_0
             loss_g = loss_g_ssim + loss_g_L1
             loss_g.backward()
             loss_g_item = loss_g.item()
