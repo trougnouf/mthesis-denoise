@@ -1018,7 +1018,7 @@ class HuNet(nn.Module):
         self.dec158to160std = nn.Sequential(
             # in: 4+2
             nn.ConvTranspose2d(6*funit, 3, 3),
-            nn.Sigmoid(),
+            #nn.Sigmoid(),
         )
 
 
@@ -1115,3 +1115,170 @@ class HuNet(nn.Module):
         cat158 = torch.cat([upc158, self.dec154to158std(cat154), self.dec154to158dil(dil154)], 1)
         del(dil154, upc158, cat154)
         return self.dec158to160std(cat158)
+
+
+class HuDisc(nn.Module):
+    def __init__(self):
+        funit = 32
+        super(HuDisc, self).__init__()
+        self.enc160to158std = nn.Sequential(
+            nn.Conv2d(3, 2*funit, 3),
+            #nn.BatchNorm2d(4*funit),
+            nn.ReLU(inplace=True),
+        )
+        self.enc158to154std = nn.Sequential(
+            nn.Conv2d(2*funit, 2*funit, 3, bias=False),
+            nn.BatchNorm2d(2*funit),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(2*funit, 2*funit, 3, bias=False),
+            nn.BatchNorm2d(2*funit),
+            nn.ReLU(inplace=True),
+        )
+        self.enc154to150std = nn.Sequential(
+            nn.Conv2d(4*funit, 3*funit, 3, bias=False),
+            nn.BatchNorm2d(3*funit),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(3*funit, 3*funit, 3, bias=False),
+            nn.BatchNorm2d(3*funit),
+            nn.ReLU(inplace=True),
+        )
+        self.enc158to154dil = nn.Sequential(
+            nn.Conv2d(2*funit, 2*funit, 3, dilation=2, bias=False),
+            nn.BatchNorm2d(2*funit),
+            nn.ReLU(inplace=True),
+        )
+        self.enc154to150dil = nn.Sequential(
+            nn.Conv2d(4*funit, 3*funit, 3, dilation=2, bias=False),
+            nn.BatchNorm2d(3*funit),
+            nn.ReLU(inplace=True),
+        )
+        self.enc160to150dil = nn.Sequential(
+            nn.Conv2d(3, 2*funit, 3, dilation=5, bias=False),
+            nn.BatchNorm2d(2*funit),
+            nn.ReLU(inplace=True),
+        )
+        self.enc150to50str = nn.Sequential(
+            nn.Conv2d(8*funit, 2*funit, 3, stride=3, bias=False),
+            nn.BatchNorm2d(2*funit),
+            nn.ReLU(inplace=True),
+        )
+        self.enc50to46std = nn.Sequential(
+            nn.Conv2d(2*funit, 2*funit, 3, bias=False),
+            nn.BatchNorm2d(2*funit),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(2*funit, 2*funit, 3, bias=False),
+            nn.BatchNorm2d(2*funit),
+            nn.ReLU(inplace=True),
+        )
+        self.enc46to42std = nn.Sequential(
+            nn.Conv2d(4*funit, 2*funit, 3, bias=False),
+            nn.BatchNorm2d(2*funit),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(2*funit, 2*funit, 3, bias=False),
+            nn.BatchNorm2d(2*funit),
+            nn.ReLU(inplace=True),
+        )
+        self.enc50to46dil = nn.Sequential(
+            nn.Conv2d(2*funit, 2*funit, 3, dilation=2, bias=False),
+            nn.BatchNorm2d(2*funit),
+            nn.ReLU(inplace=True),
+        )
+        self.enc46to42dil = nn.Sequential(
+            nn.Conv2d(4*funit, 2*funit, 3, dilation=2, bias=False),
+            nn.BatchNorm2d(2*funit),
+            nn.ReLU(inplace=True),
+        )
+        self.enc42to14str = nn.Sequential(
+            nn.Conv2d(4*funit, 2*funit, 3, stride=3, bias=False),
+            nn.BatchNorm2d(2*funit),
+            nn.ReLU(inplace=True),
+        )
+
+        self.enc14to10std = nn.Sequential(
+            nn.Conv2d(2*funit, 2*funit, 3, bias=False),
+            nn.BatchNorm2d(2*funit),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(2*funit, 2*funit, 3, bias=False),
+            nn.BatchNorm2d(2*funit),
+            nn.ReLU(inplace=True),
+        )
+        self.enc10to6std = nn.Sequential(
+            nn.Conv2d(4*funit, 2*funit, 3, bias=False),
+            nn.BatchNorm2d(2*funit),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(2*funit, 2*funit, 3, bias=False),
+            nn.BatchNorm2d(2*funit),
+            nn.ReLU(inplace=True),
+        )
+        self.enc14to10dil = nn.Sequential(
+            nn.Conv2d(2*funit, 2*funit, 3, dilation=2, bias=False),
+            nn.BatchNorm2d(2*funit),
+            nn.ReLU(inplace=True),
+        )
+        self.enc10to6dil = nn.Sequential(
+            nn.Conv2d(4*funit, 2*funit, 3, dilation=2, bias=False),
+            nn.BatchNorm2d(2*funit),
+            nn.ReLU(inplace=True),
+        )
+        self.enc6to3str = nn.Sequential(
+            nn.Conv2d(4*funit, 2*funit, 2, stride=2, bias=False),
+            nn.BatchNorm2d(2*funit),
+            nn.ReLU(inplace=True),
+        )
+        self.enc3to1std = nn.Sequential(
+            nn.Conv2d(2*funit, 1, 3),
+            nn.Sigmoid(),
+        )
+
+    def forward(self, x):
+        # 160 to 150
+        dil160 = x.clone()
+        std158 = self.enc160to158std(x)
+        del(x)
+        dil158 = std158.clone()
+        std154 = self.enc158to154std(std158)
+        del(std158)
+        dil154 = self.enc158to154dil(dil158)
+        del(dil158)
+        cat154 = torch.cat([std154, dil154], 1)
+        del(std154)
+        dil154 = cat154.clone()
+        std150 = self.enc154to150std(cat154)
+        del(cat154)
+        dil150 = self.enc154to150dil(dil154)
+        del(dil154)
+        dil3_150 = self.enc160to150dil(dil160)
+        del(dil160)
+
+        cat150 = torch.cat([std150, dil150, dil3_150], 1)
+        del(std150, dil150, dil3_150)
+        str50 = self.enc150to50str(cat150)
+        del(cat150)
+        dil50 = str50.clone()
+        std46 = self.enc50to46std(str50)
+        del(str50)
+        dil46 = self.enc50to46dil(dil50)
+        del(dil50)
+        cat46 = torch.cat([std46, dil46], 1)
+        del(std46)
+        dil46 = cat46.clone()
+
+        std42 = self.enc46to42std(cat46)
+        del(cat46)
+        dil42 = self.enc46to42dil(dil46)
+        del(dil46)
+
+        cat42 = torch.cat([std42, dil42], 1)
+        del(std42, dil42)
+        str14 = self.enc42to14str(cat42)
+        dil14 = str14.clone()
+        cat10 = torch.cat([self.enc14to10std(str14), self.enc14to10dil(dil14)], 1)
+        del(str14, dil14)
+        dil10 = cat10.clone()
+        cat6 = torch.cat([self.enc10to6std(cat10), self.enc10to6dil(dil10)], 1)
+        del(cat10, dil10)
+
+        str3 = self.enc6to3str(cat6)    # k2s2
+        del(cat6)
+        return self.enc3to1std(str3)
+
