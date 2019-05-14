@@ -1,0 +1,10 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2019-05-14T10:59:08+02:00
+
+====== meetings ======
+Created Tuesday 14 May 2019
+
+05/14/2019
+add intros (nn arch, gan)
+try avg pool in HuNet

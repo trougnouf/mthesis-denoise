@@ -37,3 +37,29 @@ The main contribution introduced in \cite{dncnn} appears to be the use of residu
 \subsection{RED-Net}
 The \ac{RED-Net} architecture is a residual encoder-decoder network. The first half of the network encodes the image using convolutions without padding s.t. the layers' dimensions continuously decrease, then the second half of the network (decoder) is made of transposed convolution layers that increase the layers' dimensions up to the original image's height and width. A \ac{ReLU} activation layer is placed between every (de)convolution layer. What is referred to as a residual network differs from the residual learning of \cite{dncnn}, a residual network has skip connections which in the case of \cite{rednet} are placed every two convolution layers and connect them to transposed convolution layers of matching dimensions. These skip connections add details that may have been lost in the encoding process to the output of the transposed convolutions. 
 \subsection{U-Net}
+The U-Net architecture is an encoder-decoder with skip connections originally designed for image segmentation. Its use in an image generator is possible by using the number of input color channels as output features and upsampling the resulting image. Each U-Net block applies two 3x3 convolutions followed by a parameter-free pooling operation that downsamples the image by a factor of two. The first block has 64 filters and the number of filters doubles after every pooling operation until there are 1024 filters. From this point the downsampling pooling operations are replaced with 2x2 upsampling transposed convolutions and the number of filters get halved every time, but the convolutions remain (as opposed to using transposed convolutions) so the layers' size remain smaller on the upsampling stage than it is originally. (This design results in corrupted borders which need to be discarded.) The U-Net architecture uses significantly less resources than conventional encoder-decoder networks and it is able to capture details at multiple frequencies.
+\subsection{HuNet}
+We designed a multi-scale architecture somewhat similar to U-Net whose aim is to be more adapted to the denoising problem at hand. Hu-Net uses the following concepts:
+\begin{figure}
+  \begin{center}
+    \animategraphics[width=\textwidth/2]{1}{gfx/dilation/frame-}{0}{8}
+    \caption{Dilated convolution}
+    \label{fig:dilated}
+  \end{center}
+\end{figure}
+\begin{itemize}
+  \item \textbf{Transposed convolution}: The blocks present in the upsampling stage use transposed convolutions rather than standard convolution in order to restore the original layers' size.
+  \item \textbf{Dilated convolution} adds space between each element of the convolution filter as shown on Figure \ref{fig:dilated}. This allows the receptive field to grow and the output layer's dimensions to shrink without increasing the number of parameters and computation steps.
+  \item \textbf{Stride} is the xy space the convolution filter moves between each step in a layer. The default convolution has a stride of one such that each element is seen three times in a 3x3 convolution. We apply convolution with a stride of three instead of using a 2x2 pooling operation to downsample the image between blocks, the resulting feature maps are downsampled by a factor of three with learnable parameters.
+  \item \textbf{Dense connections}: HuNet uses concatenated filters DenseNet
+  We concatenate the filters 
+  independent
+  we can output more features from 
+\end{itemize}
+combine these features to 
+Dilation of two and stride one means each pixel is still processed
+begin at 160 but compatible with xxx. 160-to-150
+transposed convolution
+dilation
+stride
+dense connections
