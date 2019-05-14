@@ -38,8 +38,8 @@ parser.add_argument('--seed', type=int, default=123, help='random seed to use. D
 
 parser.add_argument('--weight_ssim_0', type=float, default=0.4, help='weight on SSIM term in objective')
 parser.add_argument('--weight_L1_0', type=float, default=0.1, help='weight on L1 term in objective')
-parser.add_argument('--weight_ssim_1', type=float, default=0.4, help='weight on SSIM term in objective')
-parser.add_argument('--weight_L1_1', type=float, default=0.1, help='weight on L1 term in objective')
+parser.add_argument('--weight_ssim_1', type=float, help='weight on SSIM term in objective')
+parser.add_argument('--weight_L1_1', type=float, help='weight on L1 term in objective')
 parser.add_argument('--train_data', nargs='*', help='(space-separated) Path(s) to the pre-cropped training data (default: '+'datasets/train/NIND_160_128'+')')
 parser.add_argument('--time_limit', default=172800, type=int, help='Time limit in seconds')
 parser.add_argument('--find_noise', action='store_true', help='(DnCNN) Model noise if set, otherwise generate clean image')
@@ -69,6 +69,14 @@ parser.add_argument('--not_conditional', action='store_true', help='Discriminato
 parser.add_argument('--netD', default='basic', type=str, help='Discriminator network type (basic, HunkyDisc, HunkyDisc)')
 # TODO simpler discriminator architecture
 args = parser.parse_args()
+if args.weight_ssim_1 == None:
+    weight_ssim_1 = args.weight_ssim_0
+else:
+    weight_ssim_1 = args.weight_ssim_1
+if args.weight_L1_1 == None:
+    weight_L1_1 = args.weight_L1_0
+else:
+    weight_L1_1 = args.weight_L1_1
 
 print(args)
 
@@ -215,8 +223,8 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             use_D = False
         # use D
         if use_D:
-            loss_g_ssim *=  args.weight_ssim_1
-            loss_g_L1 *= args.weight_L1_1
+            loss_g_ssim *=  weight_ssim_1
+            loss_g_L1 *= weight_L1_1
             if args.not_conditional:
                 fake_ab = gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]
                 pred_fake = net_d.forward(fake_ab)
@@ -225,7 +233,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
                 pred_fake = net_d.forward(fake_ab)
             loss_g_gan = criterionGAN(pred_fake, True)
             loss_g_item_str += ', D(G(y),y): {:.4f})'.format(loss_g_gan)
-            loss_g_gan *= (1-args.weight_ssim_1-args.weight_L1_1)
+            loss_g_gan *= (1-weight_ssim_1-weight_L1_1)
             #print(loss_g_gan.item())
             #loss_g = criterionGAN(pred_fake, True)
             # Second, G(A) = B
