@@ -16,12 +16,14 @@ from lib import pytorch_ssim
 from random import randint
 from torchvision import models
 
+default_train_data = ['datasets/train/NIND_160_128']
+
 # Params
 parser = argparse.ArgumentParser(description='PyTorch Denoising network trainer')
 parser.add_argument('--model', default='UNet', type=str, help='Model type (UNet, DnCNN, RedCNN, HunkyNet)')
 parser.add_argument('--batch_size', default=32, type=int, help='batch size')
 #parser.add_argument('--train_data', default='datasets/train/NIND_128_96', type=str, help='Path to the pre-cropped training data (default: '+'datasets/train/dataset_128_96'+')')
-parser.add_argument('--train_data', nargs='*', help='(space-separated) Path(s) to the pre-cropped training data (default: '+'datasets/train/NIND_128_96'+')')
+parser.add_argument('--train_data', nargs='*', help='(space-separated) Path(s) to the pre-cropped training data (default: '+' '.join(default_train_data)+')')
 parser.add_argument('--epoch', default=32768, type=int, help='Number of train epoches')
 parser.add_argument('--time_limit', default=172800, type=int, help='Time limit in seconds')
 parser.add_argument('--lr', default=3e-4, type=float, help='Initial learning rate for Adam')
@@ -62,12 +64,15 @@ args = parser.parse_args()
 # UNet: 11GB server BS=94, 8GB home BS=
 
 if args.train_data == None or args.train_data == []:
-    train_data = ['datasets/train/NIND_128_96']
+    train_data = default_train_data
 else:
     train_data = args.train_data
 batch_size = args.batch_size
 cuda = torch.cuda.is_available()
-torch.cuda.set_device(args.cuda_device)
+if cuda:
+    torch.cuda.set_device(args.cuda_device)
+else:
+    print("Warning: running on CPU is not sane.")
 
 def find_experiment():
     exp = None
@@ -129,6 +134,8 @@ if __name__ == '__main__':
         model = nnModules.HunNet()
     elif args.model == 'HuNet':
         model = nnModules.HuNet()
+    elif args.model == 'HulNet':
+        model = nnModules.HulNet()
     elif args.model == 'exp':
         model = models.resnet50()
 
@@ -196,6 +203,8 @@ if __name__ == '__main__':
             optimizer.zero_grad()
             if cuda:
                 batch_x, batch_y = batch_xy[0].cuda(), batch_xy[1].cuda()
+            else:
+                batch_x, batch_y = batch_xy[0], batch_xy[1]
 
             loss = criterion(model(batch_y)[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], batch_x[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up])
             if args.lossf == 'SSIM':
