@@ -3,7 +3,7 @@ import torch.nn as nn
 from torch.nn import init
 import functools
 from torch.optim import lr_scheduler
-from nnModules import UNet, HunkyDisc, HunkyNet, HuNet, HuDisc
+from nnModules import UNet, HunkyDisc, HunkyNet, HuNet, HuDisc, Hul144Disc, HullNet
 
 # forked from
 
@@ -91,6 +91,8 @@ def define_G(input_nc, output_nc, ngf, norm='batch', use_dropout=False, init_typ
         net = HunkyNet()
     elif net_type == 'HuNet':
         net = HuNet()
+    elif net_type == 'HulNet':
+        net = HulNet()
     return init_net(net, init_type, init_gain, gpu_id)
 
 
@@ -258,6 +260,8 @@ def define_D(input_nc, ndf, netD,
         net = HunkyDisc(input_nc)
     elif netD == 'HuDisc':
         net = HunkyDisc(input_nc)
+    elif netD == 'Hul144Disc':
+        net = Hul144Disc(input_nc)
     else:
         raise NotImplementedError('Discriminator model name [%s] is not recognized' % net)
 
