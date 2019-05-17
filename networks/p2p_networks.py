@@ -1,9 +1,11 @@
+# networks for GAN training (p2p_train.py)
+
 import torch
 import torch.nn as nn
 from torch.nn import init
 import functools
 from torch.optim import lr_scheduler
-from nnModules import UNet, HunkyDisc, HunkyNet, HuNet, HuDisc, Hul144Disc, HullNet
+from networks.nnModules import UNet, Hul144Disc, HulNet
 
 # forked from
 
@@ -74,7 +76,8 @@ def init_weights(net, init_type='normal', gain=0.02):
 
 
 def init_net(net, init_type='normal', init_gain=0.02, gpu_id='cuda:0'):
-    net.to(gpu_id)
+    if torch.cuda.is_available():
+        net.to(gpu_id)
     init_weights(net, init_type, gain=init_gain)
     return net
 

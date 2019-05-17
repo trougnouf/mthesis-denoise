@@ -7,7 +7,7 @@ import datetime
 import time
 import numpy as np
 import torch
-import nnModules
+import networks.nnModules as nnModules
 from torch.utils.data import DataLoader
 import torch.optim as optim
 from torch.optim.lr_scheduler import MultiStepLR, LambdaLR, StepLR
@@ -18,8 +18,10 @@ from torchvision import models
 
 default_train_data = ['datasets/train/NIND_160_128']
 
+description = 'Train a denoising neural network. Recommended use with the NIND and UNet or HulNet model. Set batch_size to as high as your GPU memory allows.'
+
 # Params
-parser = argparse.ArgumentParser(description='PyTorch Denoising network trainer')
+parser = argparse.ArgumentParser(description=description)
 parser.add_argument('--model', default='UNet', type=str, help='Model type (UNet, DnCNN, RedCNN, HunkyNet)')
 parser.add_argument('--batch_size', default=32, type=int, help='batch size')
 #parser.add_argument('--train_data', default='datasets/train/NIND_128_96', type=str, help='Path to the pre-cropped training data (default: '+'datasets/train/dataset_128_96'+')')
