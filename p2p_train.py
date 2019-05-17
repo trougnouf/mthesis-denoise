@@ -144,7 +144,7 @@ optimizer_d = optim.Adam(net_d.parameters(), lr=args.lr, betas=(args.beta1, 0.99
 net_g_scheduler = get_scheduler(optimizer_g, args, generator=True)
 net_d_scheduler = get_scheduler(optimizer_d, args, generator=False)
 
-if args.netD == 'UNet':
+if args.model == 'UNet':
     loss_crop_lb = int((DDataset.cs-DDataset.ucs)/2)
     loss_crop_up = loss_crop_lb+DDataset.ucs
 else:
