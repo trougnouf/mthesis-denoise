@@ -1,0 +1,1 @@
+python denoise_dir.py --model_path models/2019-05-12T09\:58_run_nn.py_--model_HuNet_--train_data_datasets-train-NIND_160_128_--test_reserve_ursulines-red_stefantiek_ursulines-building_MuseeL-Bobo_CourtineDeVillersDebris_MuseeL-Bobo-C500D_--cuda_device_3_--batch_size_20/model_051.pth --cs 160 --ucs 128 --no_overwrite
