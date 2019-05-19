@@ -278,8 +278,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             # Second, G(A) = B
             #loss_g_l1 = criterionL1(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]) * args.lamb
             loss_g = loss_g_gan
-            if use_SSIM:
-                loss_g += loss_g_ssim
+            loss_g += loss_g_ssim
             if use_L1:
                 loss_g += loss_g_L1
             loss_g.backward()
