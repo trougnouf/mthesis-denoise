@@ -160,13 +160,13 @@ if __name__ == '__main__':
         exit('Error: requested loss function '+args.lossf+' has not been implemented.')
     if cuda:
         model = model.cuda()
-        # device_ids = [0]
-        # model = nn.DataParallel(model, device_ids=device_ids).cuda()
         criterion = criterion.cuda()
+    else:
+        print("Warning: running on CPU is not sane")
     # Dataset
     #TODO replace num_workers
     DDataset = DenoisingDataset(train_data, compressionmin=args.compressionmin, compressionmax=args.compressionmax, sigmamin=args.sigmamin, sigmamax=args.sigmamax, test_reserve=args.test_reserve, yval=args.yval, do_sizecheck=args.do_sizecheck)
-    DLoader = DataLoader(dataset=DDataset, num_workers=8, drop_last=True, batch_size=batch_size, shuffle=True)
+    DLoader = DataLoader(dataset=DDataset, num_workers=4, drop_last=True, batch_size=batch_size, shuffle=True)
     if args.model == 'UNet':
         loss_crop_lb = int((DDataset.cs-DDataset.ucs)/2)
         loss_crop_up = loss_crop_lb+DDataset.ucs
@@ -191,7 +191,6 @@ if __name__ == '__main__':
         scheduler = StepLR(optimizer, step_size = args.lr_step_size, gamma = args.lr_gamma)
     else:
         scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=args.lr_step_size, verbose=True, factor=args.lr_gamma, threshold=1e-8)
-
     start_time = time.time()
     loss_ten=0
     for epoch in range(initial_epoch, args.epoch):
@@ -204,12 +203,13 @@ if __name__ == '__main__':
             else:
                 batch_x, batch_y = batch_xy[0], batch_xy[1]
 
-            loss = criterion(model(batch_y)[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], batch_x[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up])
+            loss = criterion(model(batch_y)[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], batch_x[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]).cuda()
             if args.lossf == 'SSIM':
                 loss = 1 - loss
-            epoch_loss += loss.item()
-            loss_ten += loss.item()
             loss.backward()
+            loss_item = loss.item()
+            epoch_loss += loss_item
+            loss_ten += loss_item
             optimizer.step()
             if n_count % 10 == 0:
                 print('%4d %4d / %4d loss = %2.4f' % (epoch+1, n_count, len(DDataset)//batch_size, loss_ten/10))

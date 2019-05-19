@@ -205,7 +205,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             optimizer_d.zero_grad()
             d_in_chan = 3 if args.not_conditional else 6
             disc_dat = torch.zeros(args.batch_size*2, d_in_chan, disc_cs, disc_cs).to(device)
-            disc_labels = torch.zeros(args.batch_size*2,1,1,1).to(device)
+            disc_labels = (torch.zeros(args.batch_size*2,1,1,1)+0.01).to(device)
             disc_i_list = list(range(args.batch_size*2))
             random.shuffle(disc_i_list)
 
@@ -219,10 +219,10 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             for i in range(args.batch_size*2):
                 if disc_i_list[i] >= args.batch_size:   # fake
                     disc_dat[i] = fake_ab[disc_i_list[i]-args.batch_size]
-                    disc_labels[i] = 1
+                    disc_labels[i] = 0.99
                 else:                                   # real
                     disc_dat[i] = real_ab[disc_i_list[i]]
-                    disc_labels[i] = 0
+                    disc_labels[i] = 0.01
             pred_d = net_d(disc_dat)
             loss_d = criterionGAN(pred_d, disc_labels)
             if args.debug_D:
