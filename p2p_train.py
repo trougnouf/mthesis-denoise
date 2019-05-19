@@ -64,7 +64,6 @@ parser.add_argument('--lr_min', default=0.00000005, type=float, help='Minimum le
 parser.add_argument('--min_ssim_l', default=0.15, type=float, help='Minimum SSIM score before using GAN loss')
 parser.add_argument('--post_fail_ssim_num', default=25, type=int, help='How many times SSIM is used exclusively when min_ssim_l threshold is not met')
 parser.add_argument('--lr_update_min_D_ratio', default=0.2, type=float, help='Minimum use of the discriminator (vs SSIM) for LR reduction')
-parser.add_argument('--keep_D', action='store_true', help='Keep using the discriminator once its threshold has been reached')
 parser.add_argument('--not_conditional', action='store_true', help='Discriminator does not see noisy image')
 parser.add_argument('--debug_D', action='store_true', help='Discriminator does not see noisy image')
 parser.add_argument('--debug_D_in_G', action='store_true', help='Discriminator does not see noisy image')
@@ -146,7 +145,8 @@ else:
     net_d = define_D(D_n_layers, args.ndf, args.netD, gpu_id=device)
 
 #criterionGAN = GANLoss(use_lsgan=False).to(device)
-criterionGAN = nn.BCELoss().to(device)
+#criterionGAN = nn.BCELoss().to(device)
+criterionGAN = nn.MSELoss().to(device)
 if args.weight_L1_0 > 0 or weight_L1_1 > 0:
     use_L1 = True
     criterionL1 = nn.L1Loss().to(device)
@@ -183,9 +183,11 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
     total_loss_d = 0
     total_loss_g_D = 0
     total_loss_g_std = 0
+    total_loss_g_ssim = 0
     num_train_d = 0
     num_train_g_D = 0
     num_train_g_std = 0
+    num_train_g_ssim = 0
     for iteration, batch in enumerate(training_data_loader, 1):
         if use_D:
             discriminator_learns = random.random() < args.D_ratio_1
@@ -246,13 +248,15 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         # First, G(A) should fake the discriminator
 
         #loss_g_ssim = (1-criterionSSIM(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]))
-        if not(use_D and args.keep_D and weight_ssim_1 == 0) or use_SSIM:
+        if not(use_D and weight_ssim_1 == 0) or use_SSIM:
             loss_g_ssim = criterionSSIM(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up])
             loss_g_ssim = 1-loss_g_ssim
+            total_loss_g_ssim += loss_g_ssim
+            num_train_g_ssim += 1
         else:
             loss_g_ssim = -1
             use_SSIM = False
-        if (use_D and args.keep_D) or (loss_g_ssim.item() < args.min_ssim_l and iterations_before_d < 1):
+        if (use_D) or (loss_g_ssim.item() < args.min_ssim_l and iterations_before_d < 1):
             use_D = True
             if weight_L1_1 == 0:
                 use_L1 = False
@@ -347,6 +351,9 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
     if num_train_g_std > 0:
         print('Generator average std loss: '+str(total_loss_g_std/num_train_g_std))
     print('Discriminator average loss: '+str(total_loss_d/num_train_d))
+
+    if (total_loss_g_ssim/num_train_g_ssim) > args.min_ssim_l and epoch > args.epoch_count:
+        use_D = False
 
     # test
     #avg_psnr = 0
