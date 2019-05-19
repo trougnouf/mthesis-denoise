@@ -67,6 +67,7 @@ parser.add_argument('--lr_update_min_D_ratio', default=0.2, type=float, help='Mi
 parser.add_argument('--keep_D', action='store_true', help='Keep using the discriminator once its threshold has been reached')
 parser.add_argument('--not_conditional', action='store_true', help='Discriminator does not see noisy image')
 parser.add_argument('--debug_D', action='store_true', help='Discriminator does not see noisy image')
+parser.add_argument('--debug_D_in_G', action='store_true', help='Discriminator does not see noisy image')
 parser.add_argument('--netD', default='basic', type=str, help='Discriminator network type (basic, Hul144Net)')
 parser.add_argument('--load_g', type=str, help='Generator model to load')
 parser.add_argument('--load_d', type=str, help='Discriminator model to load')
@@ -295,6 +296,8 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             else:
                 fake_ab = torch.cat((noisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]), 1)
                 pred_fake = net_d.forward(fake_ab)
+            if args.debug_D_in_G:
+                print(pred_fake)
             loss_g_gan = criterionGAN(pred_fake, torch.zeros(args.batch_size,1,1,1).to(device))#, True)
             #loss_g_gan = pred_fake
             loss_g_item_str += ', D(G(y),y): {:.4f})'.format(loss_g_gan)
