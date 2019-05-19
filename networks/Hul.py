@@ -272,7 +272,7 @@ class Hul160Net(nn.Module):
         del(l154)
         return self.dec158to160std(l158)
 
-# single-net: BS = 17 w/ 8GB GPU
+# single-net: BS = 17 w/ 8GB GPU, 27 w/ 11GB GPU
 class Hul128Net(nn.Module):
     def __init__(self):
         funit = 32
@@ -678,6 +678,7 @@ class Hul144Disc(nn.Module):
         return self.decide(layer)
 
 #112
+# w/ Hul128Net BS 12 on 7GB GPU
 class Hul112Disc(nn.Module):
     def __init__(self, input_channels = 3, funit = 32, finalpool = False):
         super(Hul112Disc, self).__init__()
@@ -685,7 +686,7 @@ class Hul112Disc(nn.Module):
         self.enc112to108std = nn.Sequential(
             nn.Conv2d(input_channels, 2*funit, 3),
             nn.PReLU(init=0.01),
-            nn.Conv2d(2, 2*funit, 3),
+            nn.Conv2d(2*funit, 2*funit, 3),
             nn.PReLU(init=0.01),
         )
         self.enc108to104std = nn.Sequential(
@@ -701,128 +702,132 @@ class Hul112Disc(nn.Module):
             nn.PReLU(init=0.01),
         )
         self.enc108to104dil = nn.Sequential(
-            nn.Conv2d(4*funit, 2*funit, 3, dilation=2),
-            nn.PReLU(init=0.01),
-            nn.BatchNorm2d(2*funit),
-        )
-        self.enc142to138dil = nn.Sequential(
-            nn.Conv2d(2*funit, 2*funit, 3, dilation=2, bias=False),
-            #nn.BatchNorm2d(2*funit),
-            nn.PReLU(init=0.01),
-        )
-        self.enc138to134dil = nn.Sequential(
             nn.Conv2d(4*funit, 2*funit, 3, dilation=2, bias=False),
             nn.PReLU(init=0.01),
             nn.BatchNorm2d(2*funit),
         )
-        self.enc144to134dil = nn.Sequential(
+        self.enc104to102std = nn.Sequential(
+            nn.Conv2d(4*funit, 4*funit, 3, bias=False),
+            nn.PReLU(init=0.01),
+            nn.BatchNorm2d(4*funit),
+        )
+        self.enc112to102dil = nn.Sequential(
             nn.Conv2d(input_channels, 2*funit, 3, dilation=5, bias=False),
-            #nn.BatchNorm2d(2*funit),
             nn.PReLU(init=0.01),
+            nn.BatchNorm2d(2*funit),
         )
-        self.enc134to132std = nn.Sequential(
-            nn.Conv2d(6*funit, 6*funit, 3, bias=False),
-            nn.PReLU(init=0.01),
-            nn.BatchNorm2d(6*funit),
-        )
-        self.enc132to44str = nn.Sequential(
+        self.enc102to34str = nn.Sequential(
             nn.Conv2d(6*funit, 6*funit, 3, stride=3, bias=False),
             nn.PReLU(init=0.01),
             nn.BatchNorm2d(6*funit),
         )
-        self.enc44to40std = nn.Sequential(
-            nn.Conv2d(6*funit, 3*funit, 3, bias=False),
+        self.enc34to30std = nn.Sequential(
+            nn.Conv2d(6*funit, 4*funit, 3, bias=False),
             nn.PReLU(init=0.01),
-            nn.BatchNorm2d(3*funit),
-            nn.Conv2d(3*funit, 3*funit, 3, bias=False),
+            nn.BatchNorm2d(4*funit),
+            nn.Conv2d(4*funit, 4*funit, 3, bias=False),
             nn.PReLU(init=0.01),
-            nn.BatchNorm2d(3*funit),
+            nn.BatchNorm2d(4*funit),
         )
-        self.enc40to36std = nn.Sequential(
-            nn.Conv2d(6*funit, 3*funit, 3, bias=False),
+        self.enc30to26std = nn.Sequential(
+            nn.Conv2d(8*funit, 4*funit, 3, bias=False),
             nn.PReLU(init=0.01),
-            nn.BatchNorm2d(3*funit),
-            nn.Conv2d(3*funit, 3*funit, 3, bias=False),
+            nn.BatchNorm2d(4*funit),
+            nn.Conv2d(4*funit, 4*funit, 3, bias=False),
             nn.PReLU(init=0.01),
-            nn.BatchNorm2d(3*funit),
+            nn.BatchNorm2d(4*funit),
         )
-
-        self.enc44to40dil = nn.Sequential(
-            nn.Conv2d(6*funit, 3*funit, 3, dilation=2, bias=False),
+        self.enc26to22std = nn.Sequential(
+            nn.Conv2d(8*funit, 4*funit, 3, bias=False),
             nn.PReLU(init=0.01),
-            nn.BatchNorm2d(3*funit),
+            nn.BatchNorm2d(4*funit),
+            nn.Conv2d(4*funit, 4*funit, 3, bias=False),
+            nn.PReLU(init=0.01),
+            nn.BatchNorm2d(4*funit),
         )
-        self.enc40to36dil = nn.Sequential(
-            nn.Conv2d(6*funit, 3*funit, 3, dilation=2, bias=False),
+        self.enc22to18std = nn.Sequential(
+            nn.Conv2d(8*funit, 4*funit, 3, bias=False),
             nn.PReLU(init=0.01),
-            nn.BatchNorm2d(3*funit),
-        )
-        self.enc36to12str = nn.Sequential(
-            nn.Conv2d(6*funit, 6*funit, 3, stride=3, bias=False),
+            nn.BatchNorm2d(4*funit),
+            nn.Conv2d(4*funit, 4*funit, 3, bias=False),
             nn.PReLU(init=0.01),
-            nn.BatchNorm2d(6*funit),
-        )
-
-        self.enc12to8std = nn.Sequential(
-            nn.Conv2d(6*funit, 6*funit, 3, bias=False),
-            nn.PReLU(init=0.01),
-            nn.BatchNorm2d(6*funit),
-            nn.Conv2d(6*funit, 6*funit, 3, bias=False),
-            nn.PReLU(init=0.01),
-            nn.BatchNorm2d(6*funit),
-        )
-        self.enc8to4std = nn.Sequential(
-            nn.Conv2d(12*funit, 6*funit, 3, bias=False),
-            nn.PReLU(init=0.01),
-            nn.BatchNorm2d(6*funit),
-            nn.Conv2d(6*funit, 6*funit, 3, bias=False),
-            nn.PReLU(init=0.01),
-            nn.BatchNorm2d(6*funit),
+            nn.BatchNorm2d(4*funit),
         )
 
-        self.enc12to8dil = nn.Sequential(
-            nn.Conv2d(6*funit, 6*funit, 3, dilation=2, bias=False),
+        self.enc34to30dil = nn.Sequential(
+            nn.Conv2d(6*funit, 4*funit, 3, bias=False, dilation=2),
             nn.PReLU(init=0.01),
-            nn.BatchNorm2d(6*funit),
+            nn.BatchNorm2d(4*funit),
         )
-        self.enc8to4dil = nn.Sequential(
-            nn.Conv2d(12*funit, 6*funit, 3, dilation=2, bias=False),
+        self.enc30to26dil = nn.Sequential(
+            nn.Conv2d(8*funit, 4*funit, 3, bias=False, dilation=2),
             nn.PReLU(init=0.01),
-            nn.BatchNorm2d(6*funit),
+            nn.BatchNorm2d(4*funit),
         )
+        self.enc26to22dil = nn.Sequential(
+            nn.Conv2d(8*funit, 4*funit, 3, bias=False, dilation=2),
+            nn.PReLU(init=0.01),
+            nn.BatchNorm2d(4*funit),
+        )
+        self.enc22to18dil = nn.Sequential(
+            nn.Conv2d(8*funit, 4*funit, 3, bias=False, dilation=2),
+            nn.PReLU(init=0.01),
+            nn.BatchNorm2d(4*funit),
+        )
+
+        self.enc18to6str = nn.Sequential(
+            nn.Conv2d(8*funit, 8*funit, 3, stride=3, bias=False),
+            nn.PReLU(init=0.01),
+            nn.BatchNorm2d(8*funit),
+        )
+
+
         if not finalpool:
-            self.enc4to2std = nn.Sequential(
-                nn.Conv2d(12*funit, 4*funit, 3, bias=True),
-                #nn.BatchNorm2d(2*funit),
+            self.enc6to2std = nn.Sequential(
+                nn.Conv2d(8*funit, 6*funit, 3, bias=False),
+                nn.PReLU(init=0.01),
+                nn.BatchNorm2d(6*funit),
+                nn.Conv2d(6*funit, 3*funit, 3, bias=False),
+                nn.PReLU(init=0.01),
+            )
+            self.enc6to2dil = nn.Sequential(
+                nn.Conv2d(8*funit, 3*funit, 3, bias=False, dilation=2),
                 nn.PReLU(init=0.01),
             )
             self.decide = nn.Sequential(
-                nn.Conv2d(4*funit, 1, 2),
+                nn.Conv2d(6*funit, 1, 2),
                 nn.Sigmoid()
             )
         else:
-            self.enc4to2std = nn.Sequential(
-                nn.Conv2d(12*funit, 1, 3, bias=True),
-                #nn.BatchNorm2d(2*funit),
-                nn.Sigmoid(),
+            self.enc6to2std = nn.Sequential(
+                nn.Conv2d(8*funit, 6*funit, 3, bias=False),
+                nn.PReLU(init=0.01),
+                nn.BatchNorm2d(6*funit),
+                nn.Conv2d(6*funit, 3*funit, 3, bias=False),
+                nn.PReLU(init=0.01),
+            )
+            self.enc6to2dil = nn.Sequential(
+                nn.Conv2d(8*funit, 3*funit, 3, bias=False, dilation=2),
+                nn.PReLU(init=0.01),
             )
             self.decide = nn.Sequential(
+                nn.Conv2d(6*funit, 1, 1),
+                nn.Sigmoid(),
                 nn.AdaptiveMaxPool2d(1),
             )
     def forward(self, x):
-        lay_i = self.enc144to142std(x)
-        lay_i = torch.cat([self.enc142to138std(lay_i), self.enc142to138dil(lay_i)], 1)
-        layer = torch.cat([self.enc138to134std(lay_i), self.enc138to134dil(lay_i), self.enc144to134dil(x)], 1)
-        del(x, lay_i)
-        layer = self.enc134to132std(layer)
-        layer = self.enc132to44str(layer)
-        layer = torch.cat([self.enc44to40std(layer), self.enc44to40dil(layer)], 1)
-        layer = torch.cat([self.enc40to36std(layer), self.enc40to36dil(layer)], 1)
-        layer = self.enc36to12str(layer)
-        layer = torch.cat([self.enc12to8std(layer), self.enc12to8dil(layer)], 1)
-        layer = torch.cat([self.enc8to4std(layer), self.enc8to4dil(layer)], 1)
-        layer = self.enc4to2std(layer)
+        layer = torch.cat([self.enc112to108std(x), self.enc112to108dil(x)], 1)
+        layer = torch.cat([self.enc108to104std(layer), self.enc108to104dil(layer)], 1)
+        layer = torch.cat([self.enc104to102std(layer), self.enc112to102dil(x)], 1)
+        layer = self.enc102to34str(layer)
+        layer = torch.cat([self.enc34to30std(layer), self.enc34to30dil(layer)], 1)
+        layer = torch.cat([self.enc30to26std(layer), self.enc30to26dil(layer)], 1)
+        layer = torch.cat([self.enc26to22std(layer), self.enc26to22dil(layer)], 1)
+        layer = torch.cat([self.enc22to18std(layer), self.enc22to18dil(layer)], 1)
+        layer = self.enc18to6str(layer)
+        layer = torch.cat([self.enc6to2std(layer), self.enc6to2dil(layer)], 1)
         return self.decide(layer)
+
 
 HulNet = Hul160Net  # compatibility
 '''
