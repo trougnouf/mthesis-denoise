@@ -231,7 +231,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
                 fake_indices = []
                 for i in range(args.batch_size, args.batch_size*2):
                     fake_indices.append(disc_i_list.index(i))
-                pred_d_for_G = pred_d[fake_indices]#.detach()?
+                pred_d_for_G = pred_d[fake_indices].detach()
             loss_d.backward()
             optimizer_d.step()
 
