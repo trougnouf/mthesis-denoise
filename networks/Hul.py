@@ -323,12 +323,12 @@ class Hul128Net(nn.Module):
             nn.BatchNorm2d(2*funit),
         )
         self.enc114to38str = nn.Sequential(
-            nn.Conv2d(4*funit, 2*funit, 3, stride=3, bias=False),
+            nn.Conv2d(4*funit, 4*funit, 3, stride=3, bias=False),
             nn.PReLU(init=0.01),
-            nn.BatchNorm2d(2*funit),
+            nn.BatchNorm2d(4*funit),
         )
         self.enc38to34std = nn.Sequential(
-            nn.Conv2d(2*funit, 2*funit, 3, bias=False),
+            nn.Conv2d(4*funit, 2*funit, 3, bias=False),
             nn.PReLU(init=0.01),
             nn.BatchNorm2d(2*funit),
             nn.Conv2d(2*funit, 2*funit, 3, bias=False),
@@ -344,7 +344,7 @@ class Hul128Net(nn.Module):
             nn.BatchNorm2d(2*funit),
         )
         self.enc38to34dil = nn.Sequential(
-            nn.Conv2d(2*funit, 2*funit, 3, dilation=2, bias=False),
+            nn.Conv2d(4*funit, 2*funit, 3, dilation=2, bias=False),
             nn.PReLU(init=0.01),
             nn.BatchNorm2d(2*funit),
         )
@@ -368,12 +368,12 @@ class Hul128Net(nn.Module):
             nn.BatchNorm2d(3*funit),
         )
         self.enc6to2std = nn.Sequential(
-            nn.Conv2d(6*funit, 4*funit, 3, bias=False),
+            nn.Conv2d(6*funit, 6*funit, 3, bias=False),
             nn.PReLU(init=0.01),
-            nn.BatchNorm2d(4*funit),
-            nn.Conv2d(4*funit, 4*funit, 3, bias=False),
+            nn.BatchNorm2d(6*funit),
+            nn.Conv2d(6*funit, 6*funit, 3, bias=False),
             nn.PReLU(init=0.01),
-            nn.BatchNorm2d(4*funit),
+            nn.BatchNorm2d(6*funit),
         )
         self.enc10to6dil = nn.Sequential(
             nn.Conv2d(4*funit, 3*funit, 3, dilation=2, bias=False),
@@ -381,13 +381,13 @@ class Hul128Net(nn.Module):
             nn.BatchNorm2d(3*funit),
         )
         self.enc6to2dil = nn.Sequential(
-            nn.Conv2d(6*funit, 4*funit, 3, dilation=2, bias=False),
+            nn.Conv2d(6*funit, 6*funit, 3, dilation=2, bias=False),
             nn.PReLU(init=0.01),
-            nn.BatchNorm2d(4*funit),
+            nn.BatchNorm2d(6*funit),
         )
         self.dec2to6std = nn.Sequential(
-            # in 0+8 out 3
-            nn.ConvTranspose2d(8*funit, 3*funit, 3, bias=False),
+            # in 0+12 out 3
+            nn.ConvTranspose2d(12*funit, 3*funit, 3, bias=False),
             nn.PReLU(init=0.01),
             nn.BatchNorm2d(3*funit),
             nn.ConvTranspose2d(3*funit, 3*funit, 3, bias=False),
@@ -405,7 +405,7 @@ class Hul128Net(nn.Module):
         )
         self.dec2to6dil = nn.Sequential(
             # in: 0+8 out 3
-            nn.ConvTranspose2d(8*funit, 3*funit, 3, dilation=2, bias=False),
+            nn.ConvTranspose2d(12*funit, 3*funit, 3, dilation=2, bias=False),
             nn.PReLU(init=0.01),
             nn.BatchNorm2d(3*funit),
         )
@@ -452,8 +452,8 @@ class Hul128Net(nn.Module):
             nn.BatchNorm2d(3*funit),
         )
         self.dec38to114str = nn.Sequential(
-            # in: 2+6, out: 4
-            nn.ConvTranspose2d(8*funit, 4*funit, 3, stride=3, bias=False),
+            # in: 4+6, out: 4
+            nn.ConvTranspose2d(10*funit, 4*funit, 3, stride=3, bias=False),
             nn.PReLU(init=0.01),
             nn.BatchNorm2d(4*funit),
         )
