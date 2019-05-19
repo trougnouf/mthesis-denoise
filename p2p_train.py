@@ -66,7 +66,6 @@ parser.add_argument('--post_fail_ssim_num', default=25, type=int, help='How many
 parser.add_argument('--lr_update_min_D_ratio', default=0.2, type=float, help='Minimum use of the discriminator (vs SSIM) for LR reduction')
 parser.add_argument('--not_conditional', action='store_true', help='Discriminator does not see noisy image')
 parser.add_argument('--debug_D', action='store_true', help='Discriminator does not see noisy image')
-parser.add_argument('--debug_D_in_G', action='store_true', help='Discriminator does not see noisy image')
 parser.add_argument('--netD', default='basic', type=str, help='Discriminator network type (basic, Hul144Net)')
 parser.add_argument('--load_g', type=str, help='Generator model to load')
 parser.add_argument('--load_d', type=str, help='Discriminator model to load')
@@ -153,11 +152,8 @@ if args.weight_L1_0 > 0 or weight_L1_1 > 0:
 else:
     use_L1 = False
 #criterionMSE = nn.MSELoss().to(device)
-if args.weight_ssim_0 > 0 or weight_ssim_1 > 0:
-    use_SSIM = True
-    criterionSSIM = pytorch_ssim.SSIM().to(device)
-else:
-    use_SSIM = False
+criterionSSIM = pytorch_ssim.SSIM().to(device)
+assert args.weight_ssim_0 > 0 # not implemented
 
 # setup optimizer
 optimizer_g = optim.Adam(net_g.parameters(), lr=args.lr)#, betas=(args.beta1, 0.999))
@@ -174,12 +170,12 @@ else:
 disc_cs = loss_crop_up - loss_crop_lb
 
 use_D = False
-# use ssim if not use_D and ssim weight0 or use_D and ssim weight1
 
 start_time = time.time()
-iterations_before_d = 0
+iterations_before_d = args.post_fail_ssim_num
 for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
     # train
+    # reset counters at the beginning of batch
     total_loss_d = 0
     total_loss_g_D = 0
     total_loss_g_std = 0
@@ -187,21 +183,24 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
     num_train_d = 0
     num_train_g_D = 0
     num_train_g_std = 0
-    num_train_g_ssim = 0
     for iteration, batch in enumerate(training_data_loader, 1):
+        cleanimg, noisyimg = batch[0].to(device), batch[1].to(device)
+        # generate clean image ("fake")
+        gnoisyimg = net_g(noisyimg)
+        # compute SSIM
+        loss_g_ssim = criterionSSIM(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up])
+        loss_g_ssim = 1-loss_g_ssim
+        total_loss_g_ssim += loss_g_ssim.item()
+        # determine whether we use and/or update discriminator
+        use_D = use_D or (loss_g_ssim.item() < args.min_ssim_l and iterations_before_d < 1)
+        use_L1 = (use_D and weight_L1_1 > 0) or (not(use_D) and args.weight_L1_0 > 0)
         if use_D:
             discriminator_learns = random.random() < args.D_ratio_1
         else:
             discriminator_learns = random.random() < args.D_ratio_0
-        # forward
-        cleanimg, noisyimg = batch[0].to(device), batch[1].to(device)
-        gnoisyimg = net_g(noisyimg)
+
+        # train discriminator
         if discriminator_learns or iteration == 1:
-
-
-            ######################
-            # (1) Update D network
-            ######################
 
             optimizer_d.zero_grad()
             d_in_chan = 3 if args.not_conditional else 6
@@ -209,8 +208,6 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             disc_labels = torch.zeros(args.batch_size*2,1,1,1).to(device)
             disc_i_list = list(range(args.batch_size*2))
             random.shuffle(disc_i_list)
-
-            #detached_gnoisyimg = gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up].detach()
 
             if args.not_conditional:
                 fake_ab = gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up].detach()
@@ -230,12 +227,13 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             loss_d = criterionGAN(pred_d, disc_labels)
             if args.debug_D:
                 print(torch.cat([disc_labels, pred_d],1))
+            if use_D:
+                fake_indices = []
+                for i in range(args.batch_size, args.batch_size*2):
+                    fake_indices.append(disc_i_list.index(i))
+                pred_d_for_G = pred_d[fake_indices]#.detach()?
             loss_d.backward()
             optimizer_d.step()
-
-            ######################
-            # (2) Update G network
-            ######################
 
             loss_d_item = loss_d.item()
             total_loss_d += loss_d_item
@@ -243,67 +241,35 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         else:
             loss_d_item=float('nan')
 
+        # train generator
         optimizer_g.zero_grad()
 
-        # First, G(A) should fake the discriminator
-
-        #loss_g_ssim = (1-criterionSSIM(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]))
-        if not(use_D and weight_ssim_1 == 0) or use_SSIM:
-            loss_g_ssim = criterionSSIM(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up])
-            loss_g_ssim = 1-loss_g_ssim
-            total_loss_g_ssim += loss_g_ssim
-            num_train_g_ssim += 1
-        else:
-            loss_g_ssim = -1
-            use_SSIM = False
-        if (use_D) or (loss_g_ssim.item() < args.min_ssim_l and iterations_before_d < 1):
-            use_D = True
-            if weight_L1_1 == 0:
-                use_L1 = False
-            else:
-                use_L1 = True
-            if weight_ssim_1 == 0:
-                use_SSIM = False
-            else:
-                use_SSIM = True
-        else:
-            use_D = False
-            if args.weight_L1_0 == 0:
-                use_L1 = False
-            else:
-                use_L1 = True
-            if args.weight_ssim_0 == 0:
-                use_SSIM = False
-                print("Warning: Not using discriminator nor SSIM is probably not implemented.")
-            else:
-                use_SSIM = True
         if use_L1:
             loss_g_L1 = criterionL1(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up])
         else:
-            loss_g_L1 = -1
-        loss_g_item_str = 'L('
-        if use_SSIM:
-            loss_g_item_str += 'SSIM: {:.4f}'.format(loss_g_ssim)
-        if use_SSIM and use_L1:
-            loss_g_item_str += ', '
+            loss_g_L1 = float('nan')
+        loss_g_item_str = 'L(SSIM: {:.4f}'.format(loss_g_ssim)
         if use_L1:
-            loss_g_item_str += 'L1: {:.4f}'.format(loss_g_L1)
+            loss_g_item_str += ', L1: {:.4f}'.format(loss_g_L1)
         # use D
         if use_D:
-            if use_SSIM:
-                loss_g_ssim *=  weight_ssim_1
+            loss_g_ssim *=  weight_ssim_1
             if use_L1:
                 loss_g_L1 *= weight_L1_1
-            if args.not_conditional:
-                fake_ab = gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]
-                pred_fake = net_d.forward(fake_ab)
-            else:
-                fake_ab = torch.cat((noisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]), 1)
-                pred_fake = net_d.forward(fake_ab)
-            if args.debug_D_in_G:
-                print(pred_fake)
+            if not(discriminator_learns):
+                if args.not_conditional:
+                    fake_ab = gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]
+                    pred_fake = net_d.forward(fake_ab)
+                else:
+                    fake_ab = torch.cat((noisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]), 1)
+                    pred_fake = net_d.forward(fake_ab)
+                if args.debug_D:
+                    print(pred_fake)
+            else:   # use loss generated in D training
+                pred_fake = pred_d_for_G
+
+
             loss_g_gan = criterionGAN(pred_fake, torch.zeros(args.batch_size,1,1,1).to(device))#, True)
-            #loss_g_gan = pred_fake
             loss_g_item_str += ', D(G(y),y): {:.4f})'.format(loss_g_gan)
             #loss_g_item_str = str(loss_g_gan)
             loss_g_gan *= (1-weight_ssim_1-weight_L1_1)
@@ -318,7 +284,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
                 loss_g += loss_g_L1
             loss_g.backward()
             loss_g_item = loss_g.item()
-            loss_g_item_str += ') = '+'{:.4f}'.format(loss_g)
+            loss_g_item_str += ') = '+'{:.4f}'.format(loss_g_item)
             total_loss_g_D += loss_g_item
             num_train_g_D += 1
         else:
@@ -352,7 +318,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         print('Generator average std loss: '+str(total_loss_g_std/num_train_g_std))
     print('Discriminator average loss: '+str(total_loss_d/num_train_d))
 
-    if (total_loss_g_ssim/num_train_g_ssim) > args.min_ssim_l and epoch > args.epoch_count:
+    if total_loss_g_ssim/num_train_g_std > args.min_ssim_l and epoch > args.epoch_count:
         use_D = False
 
     # test
