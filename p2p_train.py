@@ -58,7 +58,8 @@ parser.add_argument('--models_dir', default='models', type=str, help='Directory 
 parser.add_argument('--lr_gamma', default=.75, type=float, help='Learning rate decrease rate for plateau, StepLR (default: 0.75)')
 parser.add_argument('--lr_step_size', default=5, type=int, help='Step size for StepLR, patience for plateau scheduler')
 parser.add_argument('--model', default='UNet', type=str, help='Model type (UNet, Resnet, HunkyNet)')
-parser.add_argument('--D_ratio', default=0.33, type=float, help='How often D learns compared to G ( (0,1], default 1)')
+parser.add_argument('--D_ratio_0', default=1, type=float, help='How often D learns compared to G initially ( (0,1])')
+parser.add_argument('--D_ratio_1', default=0.33, type=float, help='How often D learns compared to G when D is in use ( (0,1])')
 parser.add_argument('--lr_min', default=0.00000005, type=float, help='Minimum learning rate (training stops when both lr are below threshold, default: 0.00000005)')
 parser.add_argument('--min_ssim_l', default=0.15, type=float, help='Minimum SSIM score before using GAN loss')
 parser.add_argument('--post_fail_ssim_num', default=25, type=int, help='How many times SSIM is used exclusively when min_ssim_l threshold is not met')
@@ -67,6 +68,9 @@ parser.add_argument('--keep_D', action='store_true', help='Keep using the discri
 parser.add_argument('--not_conditional', action='store_true', help='Discriminator does not see noisy image')
 parser.add_argument('--debug_D', action='store_true', help='Discriminator does not see noisy image')
 parser.add_argument('--netD', default='basic', type=str, help='Discriminator network type (basic, Hul144Net)')
+parser.add_argument('--load_g', type=str, help='Generator model to load')
+parser.add_argument('--load_d', type=str, help='Discriminator model to load')
+
 # TODO simpler discriminator architecture
 args = parser.parse_args()
 if args.weight_ssim_1 == None:
@@ -131,8 +135,14 @@ else:
 D_n_layers = args.input_nc if args.not_conditional else args.input_nc + args.output_nc
 
 print('===> Building models')
-net_g = define_G(args.input_nc, args.output_nc, args.ngf, 'batch', False, 'normal', 0.02, gpu_id=device, net_type=args.model)
-net_d = define_D(D_n_layers, args.ndf, args.netD, gpu_id=device)
+if args.load_g:
+    net_g = torch.load(args.load_g).to(device)
+else:
+    net_g = define_G(args.input_nc, args.output_nc, args.ngf, 'batch', False, 'normal', 0.02, gpu_id=device, net_type=args.model)
+if args.load_d:
+    net_d = torch.load(args.load_d).to(device)
+else:
+    net_d = define_D(D_n_layers, args.ndf, args.netD, gpu_id=device)
 
 #criterionGAN = GANLoss(use_lsgan=False).to(device)
 criterionGAN = nn.BCELoss().to(device)
@@ -176,7 +186,10 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
     num_train_g_D = 0
     num_train_g_std = 0
     for iteration, batch in enumerate(training_data_loader, 1):
-        discriminator_learns = random.random() < args.D_ratio
+        if use_D:
+            discriminator_learns = random.random() < args.D_ratio_1
+        else:
+            discriminator_learns = random.random() < args.D_ratio_0
         # forward
         cleanimg, noisyimg = batch[0].to(device), batch[1].to(device)
         gnoisyimg = net_g(noisyimg)
