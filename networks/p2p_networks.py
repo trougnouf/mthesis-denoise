@@ -5,7 +5,7 @@ import torch.nn as nn
 from torch.nn import init
 import functools
 from torch.optim import lr_scheduler
-from networks.nnModules import UNet, Hul144Disc, HulNet
+from networks.nnModules import UNet, Hul144Disc, Hul160Net, Hul128Net
 
 # forked from
 
@@ -85,15 +85,12 @@ def init_net(net, init_type='normal', init_gain=0.02, gpu_id='cuda:0'):
 def define_G(input_nc, output_nc, ngf, norm='batch', use_dropout=False, init_type='normal', init_gain=0.02, gpu_id='cuda:0', net_type='Resnet'):
     net = None
     norm_layer = get_norm_layer(norm_type=norm)
-
     if net_type == 'Resnet':
         net = ResnetGenerator(input_nc, output_nc, ngf, norm_layer=norm_layer, use_dropout=use_dropout, n_blocks=9)
     elif net_type == 'UNet':
         net = UNet(input_nc, output_nc)
-    elif net_type == 'HunkyNet':
-        net = HunkyNet()
-    elif net_type == 'HuNet':
-        net = HuNet()
+    elif net_type == 'Hul160Net':
+        net = Hul160Net()
     elif net_type == 'HulNet':
         net = HulNet()
     return init_net(net, init_type, init_gain, gpu_id)

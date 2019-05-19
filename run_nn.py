@@ -144,8 +144,8 @@ if __name__ == '__main__':
         print('resuming by loading epoch %03d' % initial_epoch)
         # model.load_state_dict(torch.load(os.path.join(save_dir, 'model_%03d.pth' % initial_epoch)))
         model = torch.load(os.path.join(save_dir, 'model_%03d.pth' % initial_epoch))
-    elif args.model != 'DnCNN':
-        model.apply(nnModules.init_weights)
+    #elif args.model != 'DnCNN':
+    #    model.apply(nnModules.init_weights)
     model.train()
     # Loss function
     #if args.lossf == 'MSSSIM':

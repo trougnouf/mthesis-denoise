@@ -1,0 +1,18 @@
+#python3 -u p2p_train.py --min_ssim_l 0.13 --post_fail_ssim_num 45 --weight_ssim_0 0.95 --weight_L1_0 0.05 --weight_ssim_1 0.45 --weight_L1_1 0.05 --test_reserve ursulines-red stefantiek ursulines-building MuseeL-Bobo CourtineDeVillersDebris C500D Pen-pile --model HulNet --netD Hul144Disc --batch_size 9 --load_g models/2019-05-18T20\:49_p2p_train.py_--min_ssim_l_0.13_--post_fail_ssim_num_45_--weight_ssim_0_0.95_--weight_L1_0_0.05_--weight_ssim_1_0.45_--weight_L1_1_0.05_--keep_D_--test_reserve_ursulines-red_stefantiek_ursulines-building_MuseeL-Bobo_CourtineDeViller/netG_model_epoch_7.pth --load_d models/2019-05-18T20\:49_p2p_train.py_--min_ssim_l_0.13_--post_fail_ssim_num_45_--weight_ssim_0_0.95_--weight_L1_0_0.05_--weight_ssim_1_0.45_--weight_L1_1_0.05_--keep_D_--test_reserve_ursulines-red_stefantiek_ursulines-building_MuseeL-Bobo_CourtineDeViller/netD_model_epoch_7.pth --debug_D
+
+
+to test for GAN:
+GAN vs cGAN
+#BN vs not BN
+#BN before or after activation
+final convolution vs maxpool
+
+train a std 128
+
+python3 -u p2p_train.py --min_ssim_l 0.13 --post_fail_ssim_num 10 --weight_ssim_0 0.95 --weight_L1_0 0.05 --weight_ssim_1 0.45 --weight_L1_1 0.05 --test_reserve ursulines-red stefantiek ursulines-building MuseeL-Bobo CourtineDeVillersDebris C500D Pen-pile --model Hul160Net --netD Hul144Disc --batch_size 9 --load_g models/2019-05-18T20\:49_p2p_train.py_--min_ssim_l_0.13_--post_fail_ssim_num_45_--weight_ssim_0_0.95_--weight_L1_0_0.05_--weight_ssim_1_0.45_--weight_L1_1_0.05_--keep_D_--test_reserve_ursulines-red_stefantiek_ursulines-building_MuseeL-Bobo_CourtineDeViller/netG_model_epoch_7.pth --load_d models/2019-05-18T20\:49_p2p_train.py_--min_ssim_l_0.13_--post_fail_ssim_num_45_--weight_ssim_0_0.95_--weight_L1_0_0.05_--weight_ssim_1_0.45_--weight_L1_1_0.05_--keep_D_--test_reserve_ursulines-red_stefantiek_ursulines-building_MuseeL-Bobo_CourtineDeViller/netD_model_epoch_7.pth
+
+nn.PReLU(init=0.01),
+nn.ReLU(),
+
+128 12
+160 
