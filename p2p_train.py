@@ -317,7 +317,9 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         print('Generator average std loss: '+str(total_loss_g_std/num_train_g_std))
     print('Discriminator average loss: '+str(total_loss_d/num_train_d))
 
-    if total_loss_g_ssim/num_train_g_std > args.min_ssim_l and epoch > args.epoch_count:
+    epoch_avg_ssim_loss = total_loss_g_ssim/num_train_g_std
+    print("Epoch avg SSIM loss: %d"%(epoch_avg_ssim_loss))
+    if epoch_avg_ssim_loss > args.min_ssim_l and epoch > args.epoch_count:
         use_D = False
 
     # test

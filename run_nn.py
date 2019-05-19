@@ -52,7 +52,7 @@ parser.add_argument('--relu', default='relu', help='ReLU function (relu, rrelu)'
 parser.add_argument('--do_sizecheck', action='store_true', help='Skip crop size check for faster initial loading (rely on filename only)')
 
 args = parser.parse_args()
-
+print(args)
 
 # memory eg:
 # 1996: res48x48 bs27 = 1932/1996 5260s
@@ -130,14 +130,10 @@ if __name__ == '__main__':
         # ugliness while I figure out memory issue
         else:
             model = nnModules.RRUNet(3,3, find_noise=args.find_noise)
-    elif args.model == 'HunkyNet':
-        model = nnModules.HunkyNet()
-    elif args.model == 'HunNet':
-        model = nnModules.HunNet()
-    elif args.model == 'HuNet':
-        model = nnModules.HuNet()
-    elif args.model == 'HulNet':
-        model = nnModules.HulNet()
+    elif args.model == 'Hul128Net':
+        model = nnModules.Hul128Net()
+    elif args.model == 'Hul160Net':
+        model = nnModules.Hul160Net()
     elif args.model == 'exp':
         model = models.resnet50()
 
