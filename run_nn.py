@@ -15,6 +15,7 @@ from dataset_torch_3 import DenoisingDataset
 from lib import pytorch_ssim
 from random import randint
 from torchvision import models
+import torch.backends.cudnn as cudnn    # TODO error check
 
 default_train_data = ['datasets/train/NIND_160_128']
 
@@ -72,6 +73,7 @@ else:
 batch_size = args.batch_size
 cuda = torch.cuda.is_available()
 if cuda:
+    cudnn.benchmark = True
     torch.cuda.set_device(args.cuda_device)
 else:
     print("Warning: running on CPU is not sane.")
@@ -94,7 +96,7 @@ else:
             sys.exit('Error: cannot resume experiment (404)')
     else:
         expname = datetime.datetime.now().isoformat()[:-10]+'_'+'_'.join(sys.argv).replace('/','-')
-
+print(expname)
 # TODO: limit length to avoid mkdir error
 save_dir = os.path.join('models', expname)
 res_dir = os.path.join(args.result_dir, expname)

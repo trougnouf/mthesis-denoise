@@ -100,9 +100,10 @@ else:
         expname = find_experiment()
         if expname == None:
             sys.exit('Error: cannot resume experiment (404)')
+        print("Error: resume not implemented")
     else:
         expname = datetime.datetime.now().isoformat()[:-10]+'_'+'_'.join(sys.argv).replace('/','-')
-
+print(expname)
 
 cudnn.benchmark = True
 
