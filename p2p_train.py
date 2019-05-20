@@ -317,7 +317,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
     if num_train_g_std > 0:
         print('Generator average loss without D: '+str(total_loss_g_std/num_train_g_std))
     epoch_avg_ssim_loss = total_loss_g_ssim/iteration
-    print("Epoch avg SSIM loss: %d"%(epoch_avg_ssim_loss))
+    print("Epoch avg SSIM loss: %f"%(epoch_avg_ssim_loss))
     print('Discriminator average loss: '+str(total_loss_d/num_train_d))
 
 
