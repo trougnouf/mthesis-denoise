@@ -13,7 +13,7 @@ A loss function is applied to the output of the last layer, its gradient with re
 
 \subsection{Layers}
 
-\textbf{Convolution layers} have a receptive field that is determined by their \ac{k} (typical values for $\ac{k}$ are 3 and 5), a convolution layer applies $C$ convolutions (also called filters) to every $\ac{k}*\ac{k}$ area in the previous layer's width and height\footnote{assuming a stride of 1} (taking in every channel) and returns one value per convolution. The next layer's width and height is thus reduced unless padding is applied. Given an input layer's width or height dimension $d$ and the \ac{p}, a convolution layer's output size can be calculated as $d-\ac{k}+2\ac{p}+1$. Each filter is weighted and weights are learned parameters. The same stack of filters is applied on every $\ac{k}*\ac{k}$ area of a given layer, therefore convolutional neural networks have a largely reduced number of weight parameters.
+\textbf{Convolution layers} apply $C$ convolutions (also called filters) to every $\ac{k}*\ac{k}$ area in the previous layer's width and height\footnote{assuming a stride of 1}, taking in every channel and returning one value per convolution. Convolutions have a receptive field that is determined by \ac{k} (typical values for $\ac{k}$ are 3 and 5). The next layer's width and height is thus reduced unless padding is applied. Given an input layer's width or height dimension $d$ and \ac{p}, a convolution layer's output size can be calculated as $d-\ac{k}+2\ac{p}+1$. Each filter is weighted and weights are learned parameters. The same stack of filters is applied on every $\ac{k}*\ac{k}$ area of a given layer, therefore \acs{CNN} have largely reduced number of weight parameters.
 
 \textbf{Activation layers} introduce non-linearity, they apply an activation function to every value in the previous layer and the resulting layer has the same shape as its input layer. We use the Sigmoid ($\phi(z)={1\over{1+e^{-z}}}$) and \ac{ReLU} ($R(z)=\max(0,z)$) activation functions. 
 
@@ -43,12 +43,11 @@ We designed a multi-scale architecture somewhat similar to U-Net whose aim is to
 \begin{figure}
   \begin{center}
     \animategraphics[width=\textwidth/3*2]{1}{gfx/dilation/frame-}{0}{8}
-    \caption{Dilated convolution}
+    \caption{Dilated convolution (dilation=2)}
     \label{fig:dilated}
   \end{center}
 \end{figure}
 \begin{figure}
-
   \begin{center}
   \input{gfx/convstr3}    
     \caption{3x3 convolution with stride=3}
@@ -59,7 +58,7 @@ We designed a multi-scale architecture somewhat similar to U-Net whose aim is to
   \item \textbf{Transposed convolution}: The blocks present in the upsampling stage use transposed convolutions rather than standard convolution in order to restore the original layers' size. Transposed convolutions are used in RED-Net as well.
   \item \textbf{Dilated convolution} adds space between each element of the convolution filter as shown on Figure \ref{fig:dilated}. This allows the receptive field to grow and the output layer's dimensions to shrink without increasing the number of parameters and computation steps.
   \item \textbf{Stride} is the xy space the convolution filter moves between each step in a layer. The default convolution has a stride of one such that each element is seen three times in a 3x3 convolution. We apply convolution with a stride of three instead of using a 2x2 pooling operation to downsample the image between blocks. The resulting feature maps are downsampled by a factor of three with learnable parameters, as shown in Figure \ref{fig:str3}.
-  \item \textbf{Dense connections}: HulNet uses concatenated filters similar to the concept introduced in DenseNet \cite{densenet}. Residual connections such as those used in \cite{rednet}\cite{unet} are element-wise sum of the feature maps, as such the feature maps are combined and the network can no longer chose individual elements to learn from. Dense connections on the other hand are 
+  \item \textbf{Dense connections}: HulNet uses concatenated filters similar to the concept introduced in DenseNet \cite{densenet}. Residual connections such as those used in \cite{rednet}\cite{unet} are element-wise sum of the feature maps, as such the feature maps are combined and the network can no longer chose individual elements to learn from. Dense connections on the other hand form concatenated features, that is the receiving filter can learn from any of the features separately and features can bring new information that does not necessarily need to be strongly correlated or have matching depths; features may therefore come from filters with different receptive fields and in different parts of the network. 
   We concatenate the filters 
   independent
   we can output more features from 
