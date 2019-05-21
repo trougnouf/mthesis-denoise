@@ -77,6 +77,8 @@ parser.add_argument('--load_g', type=str, help='Generator model to load')
 parser.add_argument('--load_d', type=str, help='Discriminator model to load')
 parser.add_argument('--D_loss_f', default='BCEWithLogits', type=str, help='GAN loss (BCEWithLogits, MSE)')
 #parser.add_argument('--min_loss_D', default=0.1, type=float) # TODO
+parser.add_argument('--load_g_state_dict_path', help='Load state dictionary into model')
+parser.add_argument('--load_d_state_dict_path', help='Load state dictionary into model')
 
 args = parser.parse_args()
 print(args)
@@ -176,6 +178,12 @@ if args.weight_L1_0 > 0 or weight_L1_1 > 0:
     criterionL1 = nn.L1Loss().to(device)
 else:
     use_L1 = False
+
+# load state dic for compatibility
+if args.load_g_state_dict_path:
+    net_g.load_state_dict(torch.load(args.load_g_state_dict_path))
+if args.load_d_state_dict_path:
+    net_d.load_state_dict(torch.load(args.load_d_state_dict_path))
 
 criterionSSIM = pytorch_ssim.SSIM().to(device)
 assert args.weight_ssim_0 > 0 # not implemented

@@ -52,6 +52,7 @@ parser.add_argument('--test_reserve', nargs='*', help='Space separated list of i
 parser.add_argument('--relu', default='relu', help='ReLU function (relu, rrelu)')
 parser.add_argument('--do_sizecheck', action='store_true', help='Skip crop size check for faster initial loading (rely on filename only)')
 parser.add_argument('--load_g_path', help='Load a pretrained model (ignores resume/expname options)')
+parser.add_argument('--load_g_state_dict_path', help='Load state dictionary into model')
 
 args = parser.parse_args()
 print(args)
@@ -151,6 +152,8 @@ if __name__ == '__main__':
         print('resuming by loading epoch %03d' % initial_epoch)
         # model.load_state_dict(torch.load(os.path.join(save_dir, 'model_%03d.pth' % initial_epoch)))
         model = torch.load(os.path.join(save_dir, 'model_%03d.pth' % initial_epoch))
+    if args.load_g_state_dic_path:
+        model.load_state_dict(torch.load(args.load_g_state_dic_path))
     #elif args.model != 'DnCNN':
     #    model.apply(nnModules.init_weights)
     model.train()
