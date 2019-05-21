@@ -23,7 +23,7 @@ description = 'Train a denoising neural network. Recommended use with the NIND a
 
 # Params
 parser = argparse.ArgumentParser(description=description)
-parser.add_argument('--model', default='UNet', type=str, help='Model type (UNet, DnCNN, RedCNN, HunkyNet)')
+parser.add_argument('--model', default='UNet', type=str, help='Model type (UNet, DnCNN, RedCNN, Hul128Net, Hul160Net)')
 parser.add_argument('--batch_size', default=32, type=int, help='batch size')
 #parser.add_argument('--train_data', default='datasets/train/NIND_128_96', type=str, help='Path to the pre-cropped training data (default: '+'datasets/train/dataset_128_96'+')')
 parser.add_argument('--train_data', nargs='*', help='(space-separated) Path(s) to the pre-cropped training data (default: '+' '.join(default_train_data)+')')
@@ -51,6 +51,7 @@ parser.add_argument('--lossf', default='SSIM', help='Loss function (SSIM or MSE)
 parser.add_argument('--test_reserve', nargs='*', help='Space separated list of image sets to be reserved for testing')
 parser.add_argument('--relu', default='relu', help='ReLU function (relu, rrelu)')
 parser.add_argument('--do_sizecheck', action='store_true', help='Skip crop size check for faster initial loading (rely on filename only)')
+parser.add_argument('--load_g_path', help='Load a pretrained model (ignores resume/expname options)')
 
 args = parser.parse_args()
 print(args)
@@ -75,8 +76,10 @@ cuda = torch.cuda.is_available()
 if cuda:
     cudnn.benchmark = True
     torch.cuda.set_device(args.cuda_device)
+    device = torch.device("cuda:"+str(args.cuda_device))
 else:
     print("Warning: running on CPU is not sane.")
+    device = torch.device("cpu")
 
 def find_experiment():
     exp = None
@@ -120,7 +123,9 @@ def log(*args, **kwargs):
 if __name__ == '__main__':
     # Model
     print('===> Building model')
-    if args.model == 'DnCNN':
+    if args.load_g_path: # bypass search functions and pretend to be new
+        model = torch.load(args.load_g_path, map_location=device)
+    elif args.model == 'DnCNN':
         model = nnModules.DnCNN(depth=args.depth, n_channels=args.n_channels, find_noise=args.find_noise, kernel_size=args.kernel_size, relu=args.relu)
     elif args.model == 'RedCNN':
         model = nnModules.RedCNN(depth=args.depth, n_channels=args.n_channels, kernel_size=args.kernel_size, relu=args.relu, find_noise=args.find_noise)
