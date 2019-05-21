@@ -678,7 +678,7 @@ class Hul144Disc(nn.Module):
         return self.decide(layer)
 
 #112
-# w/ Hul128Net BS 12 on 7GB GPU, 19 on 11GB GPU
+# w/ Hul128Net BS 12 on 7GB GPU, 20 on 11GB GPU or 19 if conditional
 class Hul112Disc(nn.Module):
     def __init__(self, input_channels = 3, funit = 32, finalpool = False):
         super(Hul112Disc, self).__init__()

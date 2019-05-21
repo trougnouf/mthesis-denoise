@@ -297,7 +297,6 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             else:
                 iterations_before_d -= 1
                 total_loss_g_std += loss_g_item
-                loss_g_item_str += ') = {:.4f}'.format(loss_g_item)
                 num_train_g_std += 1
         optimizer_g.step()
 
