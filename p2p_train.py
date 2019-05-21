@@ -229,6 +229,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
     num_train_g_D = 0
     num_train_g_std = 0
     loss_d_item = 1
+    loss_d_item_str = 'nan'
     for iteration, batch in enumerate(training_data_loader, 1):
         cleanimg, noisyimg = batch[0].to(device), batch[1].to(device)
         # generate clean image ("fake")
@@ -280,9 +281,10 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             optimizer_d.step()
             loss_d_item = loss_d.item()
             total_loss_d += loss_d_item
+            loss_d_item_str = str(loss_d_item)
             num_train_d += 1
         else:
-            loss_d_item=float('nan')
+            loss_d_item_str = 'nan'
 
         ## train generator ##
         set_requires_grad(net_d, False)
@@ -326,8 +328,8 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
                 num_train_g_std += 1
         optimizer_g.step()
 
-        print("===> Epoch[{}]({}/{}): Loss_D: {:.4f} Loss_G: {}".format(
-            epoch, iteration, len(training_data_loader), loss_d_item, loss_g_item_str))
+        print("===> Epoch[{}]({}/{}): Loss_D: {} Loss_G: {}".format(
+            epoch, iteration, len(training_data_loader), loss_d_item_str, loss_g_item_str))
     if num_train_g_D > 5:
         update_learning_rate(net_d_scheduler, optimizer_d, loss_avg=total_loss_d/num_train_d)
     if num_train_g_D > num_train_g_std*args.lr_update_min_D_ratio:
