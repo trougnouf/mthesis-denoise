@@ -64,8 +64,9 @@ parser.add_argument('--models_dir', default='models', type=str, help='Directory 
 parser.add_argument('--lr_gamma', default=.75, type=float, help='Learning rate decrease rate for plateau, StepLR (default: 0.75)')
 parser.add_argument('--lr_step_size', default=5, type=int, help='Step size for StepLR, patience for plateau scheduler')
 parser.add_argument('--model', default='Hul128Net', type=str, help='Model type (UNet, Resnet, Hul160Net, Hul128Net)')
-parser.add_argument('--D_ratio_0', default=1, type=float, help='How often D learns compared to G initially ( (0,1])')
+parser.add_argument('--D_ratio_0', default=0.9, type=float, help='How often D learns compared to G initially ( (0,1])')
 parser.add_argument('--D_ratio_1', default=0.33, type=float, help='How often D learns compared to G when D is in use ( (0,1])')
+parser.add_argument('--D_ratio_2', default=0.1, type=float, help='How often D learns compared to G when D is too good ( (0,1])')
 parser.add_argument('--lr_min', default=0.00000005, type=float, help='Minimum learning rate (training stops when both lr are below threshold, default: 0.00000005)')
 parser.add_argument('--min_ssim_l', default=0.12, type=float, help='Minimum SSIM score before using GAN loss')
 parser.add_argument('--post_fail_ssim_num', default=25, type=int, help='How many times SSIM is used exclusively when min_ssim_l threshold is not met')
@@ -239,10 +240,17 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         # determine whether we use and/or update discriminator
         use_D = use_D or (loss_g_ssim.item() < args.min_ssim_l and iterations_before_d < 1)
         use_L1 = (use_D and weight_L1_1 > 0) or (not(use_D) and args.weight_L1_0 > 0)
-        if use_D:
-            discriminator_learns = random.random() < args.D_ratio_1
-        else:
-            discriminator_learns = random.random() < args.D_ratio_0
+        if loss_d_item < 0.001 and args.D_loss_f == 'MSE':  # critical
+            D_ratio = args.D_ratio_2
+        elif use_D:
+            if loss_d_item > 0.221 and args.D_loss_f == 'MSE':  # needs improvement
+                D_ratio = args.D_ratio_0
+            else:   # std
+                D_ratio = args.D_ratio_1
+        else:   # init
+            D_ratio = args.D_ratio_0
+
+        discriminator_learns = random.random() < D_ratio
 
         if args.not_conditional:
             fake_ab = gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]
