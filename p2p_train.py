@@ -158,11 +158,11 @@ training_data_loader = DataLoader(dataset=DDataset, num_workers=args.threads, dr
 
 print('===> Building models')
 if args.load_g:
-    net_g = torch.load(args.load_g).to(device)
+    net_g = torch.load(args.load_g, map_location=device)
 else:
     net_g = define_G(args.input_nc, args.output_nc, args.ngf, 'batch', False, 'normal', 0.02, gpu_id=device, net_type=args.model)
 if args.load_d:
-    net_d = torch.load(args.load_d).to(device)
+    net_d = torch.load(args.load_d, map_location=device)
 else:
     net_d = define_D(D_n_layers, args.ndf, args.netD, gpu_id=device)
 
