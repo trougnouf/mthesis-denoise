@@ -114,9 +114,10 @@ D_n_layers = args.input_nc if args.not_conditional else args.input_nc + args.out
 
 def gen_target_probabilities(target_real=True):
     if target_real:
-        return 19/20+torch.rand(args.batch_size,1,1,1)/20
+        res = 19/20+torch.rand(args.batch_size,1,1,1)/20
     else:
-        return torch.rand(args.batch_size,1,1,1)/20
+        res = torch.rand(args.batch_size,1,1,1)/20
+    return res.to(device)
 
 def set_requires_grad(net, requires_grad = False):
     for param in net.parameters():
