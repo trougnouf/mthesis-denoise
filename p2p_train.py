@@ -281,7 +281,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             optimizer_d.step()
             loss_d_item = loss_d.item()
             total_loss_d += loss_d_item
-            loss_d_item_str = str(loss_d_item)
+            loss_d_item_str = "{:.4f}".format(loss_d_item)
             num_train_d += 1
         else:
             loss_d_item_str = 'nan'
