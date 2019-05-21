@@ -14,7 +14,7 @@ import torch.backends.cudnn as cudnn
 import random
 from lib import pytorch_ssim
 
-from networks.p2p_networks import define_G, define_D, GANLoss, get_scheduler, update_learning_rate
+from networks.p2p_networks import define_G, define_D, get_scheduler, update_learning_rate
 
 # TODO default values should go here
 default_train_data = ['datasets/train/NIND_128_112']
