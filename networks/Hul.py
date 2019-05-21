@@ -680,7 +680,7 @@ class Hul144Disc(nn.Module):
 #112
 # w/ Hul128Net BS 12 on 7GB GPU, 20 on 11GB GPU or 19 if conditional
 class Hul112Disc(nn.Module):
-    def __init__(self, input_channels = 3, funit = 32, finalpool = False):
+    def __init__(self, input_channels = 3, funit = 32, finalpool = False, out_activation = None):
         super(Hul112Disc, self).__init__()
         self.funit = funit
         self.enc112to108std = nn.Sequential(
@@ -815,6 +815,12 @@ class Hul112Disc(nn.Module):
                 #nn.Sigmoid(),
                 nn.AdaptiveMaxPool2d(1),
             )
+        if out_activation is None:
+            self.out_activation = None
+        elif out_activation == 'ReLU':
+            self.out_activation = nn.ReLU()
+        elif out_activation == 'Sigmoid':
+            self.out_activation = nn.Sigmoid()
     def forward(self, x):
         layer = torch.cat([self.enc112to108std(x), self.enc112to108dil(x)], 1)
         layer = torch.cat([self.enc108to104std(layer), self.enc108to104dil(layer)], 1)
@@ -827,6 +833,8 @@ class Hul112Disc(nn.Module):
         layer = self.enc18to6str(layer)
         layer = torch.cat([self.enc6to2std(layer), self.enc6to2dil(layer)], 1)
         layer = self.decide(layer)
+        if self.out_activation is not None:
+            return self.out_activation(layer)
         return layer
 
 

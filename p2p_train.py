@@ -75,10 +75,11 @@ parser.add_argument('--debug_D', action='store_true', help='Discriminator does n
 parser.add_argument('--netD', default='Hul112Disc', type=str, help='Discriminator network type (basic, Hul144Disc, Hul112Disc)')
 parser.add_argument('--load_g', type=str, help='Generator model to load')
 parser.add_argument('--load_d', type=str, help='Discriminator model to load')
-parser.add_argument('--D_loss_f', default='BCEWithLogits', type=str, help='GAN loss (BCEWithLogits, MSE)')
+parser.add_argument('--D_loss_f', default='MSE', type=str, help='GAN loss (BCEWithLogits, MSE)')
 #parser.add_argument('--min_loss_D', default=0.1, type=float) # TODO
 parser.add_argument('--load_g_state_dict_path', help='Load state dictionary into model')
 parser.add_argument('--load_d_state_dict_path', help='Load state dictionary into model')
+parser.add_argument('--loss_d_max_threshold', type=float, default=0.)
 
 args = parser.parse_args()
 print(args)
@@ -157,6 +158,19 @@ training_data_loader = DataLoader(dataset=DDataset, num_workers=args.threads, dr
 #testing_data_loader = DataLoader(dataset=test_set, num_workers=args.threads, batch_size=args.test_batch_size, shuffle=False)
 
 
+if args.D_loss_f == 'MSE':
+    criterionGAN = nn.MSELoss().to(device)
+    dout_activation = 'ReLU'
+else:
+    criterionGAN = nn.BCEWithLogitsLoss().to(device)
+    dout_activation = None
+# BCEWithLogitsLoss output:
+# target >  0       0.5     1       -1
+# res v
+#   0       .6931   .6931   .6931   .6931
+#   0.5     .9741   .7241   .4741   1.4741
+#   1       1.3133  .8133   .3133   2.3133
+#   -1      0.3133  .8133   1.3133  -.6867
 
 print('===> Building models')
 if args.load_g:
@@ -166,12 +180,7 @@ else:
 if args.load_d:
     net_d = torch.load(args.load_d, map_location=device)
 else:
-    net_d = define_D(D_n_layers, args.ndf, args.netD, gpu_id=device)
-
-if args.D_loss_f == 'MSE':
-    criterionGAN = nn.MSELoss().to(device)
-else:
-    criterionGAN = nn.BCEWithLogitsLoss().to(device)
+    net_d = define_D(D_n_layers, args.ndf, args.netD, gpu_id=device, out_activation=dout_activation)
 
 if args.weight_L1_0 > 0 or weight_L1_1 > 0:
     use_L1 = True
@@ -218,6 +227,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
     num_train_d = 0
     num_train_g_D = 0
     num_train_g_std = 0
+    loss_d_item = 1
     for iteration, batch in enumerate(training_data_loader, 1):
         cleanimg, noisyimg = batch[0].to(device), batch[1].to(device)
         # generate clean image ("fake")
