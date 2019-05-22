@@ -239,7 +239,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         loss_g_ssim = 1-loss_g_ssim
         total_loss_g_ssim += loss_g_ssim.item()
         # determine whether we use and/or update discriminator
-        if loss_d_item < 0.2:
+        if loss_d_item < 0.2 or args.D_loss_f != 'MSE':   #MSE
             useful_discriminator = True
         use_D = use_D or (loss_g_ssim.item() < args.min_ssim_l and iterations_before_d < 1 and useful_discriminator)
         use_L1 = (use_D and weight_L1_1 > 0) or (not(use_D) and args.weight_L1_0 > 0)
