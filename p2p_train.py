@@ -83,6 +83,7 @@ parser.add_argument('--load_d_state_dict_path', help='Load state dictionary into
 parser.add_argument('--loss_d_max_threshold', type=float, default=0.)
 parser.add_argument('--finalpool', action='store_true', help='Final pooling on the discriminator (instead of convolution)')
 parser.add_argument('--out_activation', help='Specific discriminator output activation')
+parser.add_argument('--generator_waits', action='store_true', help="Generator won't learn until discriminator is useful")
 
 args = parser.parse_args()
 print(args)
@@ -219,6 +220,9 @@ else:
 use_D = False
 useful_discriminator = False
 
+def generator_learns():
+    return useful_discriminator or not args.generator_waits
+
 
 start_time = time.time()
 iterations_before_d = args.post_fail_ssim_num
@@ -291,6 +295,10 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             num_train_d += 1
         else:
             loss_d_item_str = 'nan'
+        if not generator_learns():
+            print("===> Epoch[{}]({}/{}): Loss_D: {}".format(
+            epoch, iteration, len(training_data_loader), loss_d_item_str))
+            continue
 
         ## train generator ##
         set_requires_grad(net_d, False)
@@ -336,15 +344,16 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
 
         print("===> Epoch[{}]({}/{}): Loss_D: {} Loss_G: {}".format(
             epoch, iteration, len(training_data_loader), loss_d_item_str, loss_g_item_str))
-    if num_train_g_D > 5:
+    if num_train_d > 5:
         update_learning_rate(net_d_scheduler, optimizer_d, loss_avg=total_loss_d/num_train_d)
-    if num_train_g_D > num_train_g_std*args.lr_update_min_D_ratio:
-        print('Generator average loss with D: '+str(total_loss_g_D/num_train_g_D))
-        update_learning_rate(net_g_scheduler['D'], optimizer_g, loss_avg=total_loss_g_D/num_train_g_D)
-    else:
-        update_learning_rate(net_g_scheduler['SSIM'], optimizer_g, loss_avg=total_loss_g_std/num_train_g_std)
-    if num_train_g_std > 0:
-        print('Generator average loss without D: '+str(total_loss_g_std/num_train_g_std))
+    if generator_learns():
+        if num_train_g_D > num_train_g_std*args.lr_update_min_D_ratio:
+            print('Generator average loss with D: '+str(total_loss_g_D/num_train_g_D))
+            update_learning_rate(net_g_scheduler['D'], optimizer_g, loss_avg=total_loss_g_D/num_train_g_D)
+        else:
+            update_learning_rate(net_g_scheduler['SSIM'], optimizer_g, loss_avg=total_loss_g_std/num_train_g_std)
+        if num_train_g_std > 0:
+            print('Generator average loss without D: '+str(total_loss_g_std/num_train_g_std))
     epoch_avg_ssim_loss = total_loss_g_ssim/iteration
     print("Epoch avg SSIM loss: %f"%(epoch_avg_ssim_loss))
     print('Discriminator average loss: '+str(total_loss_d/num_train_d))

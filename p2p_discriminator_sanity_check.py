@@ -268,7 +268,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             num_train_g_std += 1
         print("===> Epoch[{}]({}/{}): Loss_D: {}".format(
             epoch, iteration, len(training_data_loader), loss_d_item_str))
-    if num_train_g_D > 5:
+    if num_train_d > 5:
         update_learning_rate(net_d_scheduler, optimizer_d, loss_avg=total_loss_d/num_train_d)
     print('Discriminator average loss: '+str(total_loss_d/num_train_d))
 
