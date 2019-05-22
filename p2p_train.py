@@ -38,7 +38,7 @@ parser.add_argument('--lr', type=float, default=0.0003, help='initial learning r
 parser.add_argument('--lr_policy', type=str, default='plateau', help='learning rate policy: lambda|step|plateau|cosine')
 parser.add_argument('--lr_decay_iters', type=int, default=50, help='multiply by a gamma every lr_decay_iters iterations')
 parser.add_argument('--beta1', type=float, default=0.75, help='beta1 for adam. default=0.5')
-parser.add_argument('--threads', type=int, default=4, help='number of threads for data loader to use')
+parser.add_argument('--threads', type=int, default=8, help='number of threads for data loader to use')
 parser.add_argument('--seed', type=int, default=123, help='random seed to use. Default=123')
 
 parser.add_argument('--weight_ssim_0', type=float, default=0.4, help='weight on SSIM term in objective')
@@ -213,7 +213,7 @@ else:
     loss_crop_up = int(DDataset.cs)-loss_crop_lb
 
 use_D = False
-
+useful_discriminator = False
 
 
 start_time = time.time()
@@ -239,9 +239,11 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         loss_g_ssim = 1-loss_g_ssim
         total_loss_g_ssim += loss_g_ssim.item()
         # determine whether we use and/or update discriminator
-        use_D = use_D or (loss_g_ssim.item() < args.min_ssim_l and iterations_before_d < 1)
+        if loss_d_item < 0.2:
+            useful_discriminator = True
+        use_D = use_D or (loss_g_ssim.item() < args.min_ssim_l and iterations_before_d < 1 and useful_discriminator)
         use_L1 = (use_D and weight_L1_1 > 0) or (not(use_D) and args.weight_L1_0 > 0)
-        if loss_d_item < 0.001 and args.D_loss_f == 'MSE':  # critical
+        if (loss_d_item < 0.001 and args.D_loss_f == 'MSE'):# or (loss_d_item > 5.0 and args.D_loss_f == 'BCEWithLogits'):  # critical
             D_ratio = args.D_ratio_2
         elif use_D:
             if loss_d_item > 0.221 and args.D_loss_f == 'MSE':  # needs improvement
