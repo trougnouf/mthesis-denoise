@@ -248,7 +248,7 @@ class Outconv(nn.Module):
 
 
 def define_D(input_nc, ndf, netD,
-             n_layers_D=3, norm='batch', use_sigmoid=False, init_type='normal', init_gain=0.02, gpu_id='cuda:0', out_activation=None):
+             n_layers_D=3, norm='batch', use_sigmoid=False, init_type='normal', init_gain=0.02, gpu_id='cuda:0', out_activation=None, finalpool = False):
     net = None
     norm_layer = get_norm_layer(norm_type=norm)
 
@@ -261,7 +261,7 @@ def define_D(input_nc, ndf, netD,
     elif netD == 'Hul144Disc':
         net = Hul144Disc(input_nc)
     elif netD == 'Hul112Disc':
-        net = Hul112Disc(input_nc, out_activation=out_activation)
+        net = Hul112Disc(input_nc, out_activation=out_activation, finalpool=finalpool)
     else:
         raise NotImplementedError('Discriminator model name [%s] is not recognized' % net)
 

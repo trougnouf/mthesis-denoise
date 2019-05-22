@@ -1,0 +1,8 @@
+Namespace(D_loss_f='BCEWithLogits', D_ratio_0=1, D_ratio_1=0.33, batch_size=17, beta1=0.75, compressionmax=100, compressionmin=100, cuda_device=1, debug_D=False, do_sizecheck=False, epoch_count=1, exact_reserve=False, expname=None, find_noise=False, input_nc=3, load_d=None, load_d_state_dict_path=None, load_g=None, load_g_state_dict_path='models/2019-05-20T08:14_run_nn.py_--model_Hul128Net_--train_data_datasets-train-NIND_128_112_--batch_size_17/Hul128Net_state_dict_16.pth', lr=0.0003, lr_decay_iters=50, lr_gamma=0.75, lr_min=5e-08, lr_policy='plateau', lr_step_size=5, lr_update_min_D_ratio=0.2, min_ssim_l=0.12, model='Hul128Net', models_dir='models', ndf=64, netD='Hul112Disc', ngf=64, niter=100, niter_decay=100, not_conditional=False, output_nc=3, post_fail_ssim_num=45, result_dir='results/train', resume=False, seed=123, sigmamax=0, sigmamin=0, test_batch_size=1, test_reserve=['ursulines-red', 'stefantiek', 'ursulines-building', 'MuseeL-Bobo', 'CourtineDeVillersDebris', 'C500D', 'Pen-pile'], threads=4, time_limit=172800, train_data=['datasets/train/NIND_128_112'], weight_L1_0=0.05, weight_L1_1=0.05, weight_ssim_0=0.95, weight_ssim_1=0.45, yval=None)
+THCudaCheck FAIL file=/build/python-pytorch/src/pytorch-1.1.0-cuda/torch/csrc/cuda/Module.cpp line=33 error=101 : invalid device ordinal
+Traceback (most recent call last):
+  File "p2p_train.py", line 108, in <module>
+    torch.cuda.set_device(args.cuda_device)
+  File "/usr/lib/python3.7/site-packages/torch/cuda/__init__.py", line 265, in set_device
+    torch._C._cuda_setDevice(device)
+RuntimeError: cuda runtime error (101) : invalid device ordinal at /build/python-pytorch/src/pytorch-1.1.0-cuda/torch/csrc/cuda/Module.cpp:33

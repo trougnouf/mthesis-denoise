@@ -795,7 +795,9 @@ class Hul112Disc(nn.Module):
                 nn.PReLU(init=0.01),
             )
             self.decide = nn.Sequential(
-                nn.Conv2d(6*funit, 1, 2),
+                nn.Conv2d(6*funit, 1*funit, 2),
+                nn.PReLU(init=0.01),
+                nn.Conv2d(1*funit, 1, 1),
                 #nn.Sigmoid()
             )
         else:
@@ -811,14 +813,16 @@ class Hul112Disc(nn.Module):
                 nn.PReLU(init=0.01),
             )
             self.decide = nn.Sequential(
-                nn.Conv2d(6*funit, 1, 1),
+                nn.Conv2d(6*funit, 2*funit, 1),
+                nn.PReLU(init=0.01),
+                nn.Conv2d(2*funit, 1, 1),
                 #nn.Sigmoid(),
                 nn.AdaptiveMaxPool2d(1),
             )
-        if out_activation is None:
+        if out_activation is None or out_activation == 'None':
             self.out_activation = None
-        elif out_activation == 'ReLU':
-            self.out_activation = nn.ReLU()
+        elif out_activation == 'PReLU':
+            self.out_activation = nn.PReLU()
         elif out_activation == 'Sigmoid':
             self.out_activation = nn.Sigmoid()
     def forward(self, x):

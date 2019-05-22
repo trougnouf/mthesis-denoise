@@ -81,6 +81,8 @@ parser.add_argument('--D_loss_f', default='MSE', type=str, help='GAN loss (BCEWi
 parser.add_argument('--load_g_state_dict_path', help='Load state dictionary into model')
 parser.add_argument('--load_d_state_dict_path', help='Load state dictionary into model')
 parser.add_argument('--loss_d_max_threshold', type=float, default=0.)
+parser.add_argument('--finalpool', action='store_true', help='Final pooling on the discriminator (instead of convolution)')
+parser.add_argument('--out_activation', help='Specific discriminator output activation')
 
 args = parser.parse_args()
 print(args)
@@ -161,10 +163,12 @@ training_data_loader = DataLoader(dataset=DDataset, num_workers=args.threads, dr
 
 if args.D_loss_f == 'MSE':
     criterionGAN = nn.MSELoss().to(device)
-    dout_activation = 'ReLU'
+    dout_activation = 'PReLU'
 else:
     criterionGAN = nn.BCEWithLogitsLoss().to(device)
     dout_activation = None
+if args.out_activation is not None:
+    dout_activation = args.out_activation
 # BCEWithLogitsLoss output:
 # target >  0       0.5     1       -1
 # res v
@@ -181,7 +185,7 @@ else:
 if args.load_d:
     net_d = torch.load(args.load_d, map_location=device)
 else:
-    net_d = define_D(D_n_layers, args.ndf, args.netD, gpu_id=device, out_activation=dout_activation)
+    net_d = define_D(D_n_layers, args.ndf, args.netD, gpu_id=device, out_activation=dout_activation, finalpool=args.finalpool)
 
 if args.weight_L1_0 > 0 or weight_L1_1 > 0:
     use_L1 = True
