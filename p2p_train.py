@@ -76,7 +76,7 @@ parser.add_argument('--debug_D', action='store_true', help='Discriminator does n
 parser.add_argument('--netD', default='Hul112Disc', type=str, help='Discriminator network type (basic, Hul144Disc, Hul112Disc)')
 parser.add_argument('--load_g', type=str, help='Generator model to load')
 parser.add_argument('--load_d', type=str, help='Discriminator model to load')
-parser.add_argument('--D_loss_f', default='MSE', type=str, help='GAN loss (BCEWithLogits, MSE)')
+parser.add_argument('--D_loss_f', default='MSE', type=str, help='GAN loss (BCEWithLogits, MSE, confident_mse_loss)')
 #parser.add_argument('--min_loss_D', default=0.1, type=float) # TODO
 parser.add_argument('--load_g_state_dict_path', help='Load state dictionary into model')
 parser.add_argument('--load_d_state_dict_path', help='Load state dictionary into model')
@@ -88,6 +88,14 @@ parser.add_argument('--funit_D', default=32, type=int, help='Filters unit for D'
 
 args = parser.parse_args()
 print(args)
+
+# requires Sigmoid
+def confident_mse_loss(answer, target):
+    if torch.abs(answer-target) > torch.tensor(0.47):
+        return torch.abs(answer-target)
+    else:
+        return torch.abs(answer-target)**2
+
 
 cudnn.benchmark = True
 
@@ -166,6 +174,9 @@ training_data_loader = DataLoader(dataset=DDataset, num_workers=args.threads, dr
 if args.D_loss_f == 'MSE':
     criterionGAN = nn.MSELoss().to(device)
     dout_activation = 'PReLU'
+elif args.D_loss_f == 'confident_mse_loss':
+    criterionGAN = confident_mse_loss
+    dout_activation = 'Sigmoid'
 else:
     criterionGAN = nn.BCEWithLogitsLoss().to(device)
     dout_activation = None
