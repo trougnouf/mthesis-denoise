@@ -91,7 +91,7 @@ print(args)
 
 # requires Sigmoid
 def confident_mse_loss(answer, target):
-    if torch.abs(answer-target) > torch.tensor(0.47):
+    if torch.abs(answer-target) > torch.tensor(0.47).to(device):
         return torch.abs(answer-target)
     else:
         return torch.abs(answer-target)**2
@@ -175,7 +175,7 @@ if args.D_loss_f == 'MSE':
     criterionGAN = nn.MSELoss().to(device)
     dout_activation = 'PReLU'
 elif args.D_loss_f == 'confident_mse_loss':
-    criterionGAN = confident_mse_loss.to(device)
+    criterionGAN = confident_mse_loss
     dout_activation = 'Sigmoid'
 else:
     criterionGAN = nn.BCEWithLogitsLoss().to(device)
