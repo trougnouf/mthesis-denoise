@@ -119,11 +119,11 @@ D_n_layers = args.input_nc if args.not_conditional else args.input_nc + args.out
 
 # fun
 
-def gen_target_probabilities(target_real=True):
+def gen_target_probabilities(target_real, target_probabilities_shape):
     if target_real:
-        res = 19/20+torch.rand(args.batch_size,1,1,1)/20
+        res = 19/20+torch.rand(target_probabilities_shape)/20
     else:
-        res = torch.rand(args.batch_size,1,1,1)/20
+        res = torch.rand(target_probabilities_shape)/20
     return res.to(device)
 
 def set_requires_grad(net, requires_grad = False):
@@ -281,14 +281,12 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         if discriminator_learns or iteration == 1:
             d_in_chan = 3 if args.not_conditional else 6
 
-            target_false_probabilities = gen_target_probabilities(False)
-            target_true_probabilities = gen_target_probabilities(True)
             set_requires_grad(net_d, True)
             optimizer_d.zero_grad()
             pred_fake = net_d(fake_ab.detach())
-            loss_D_fake = criterionGAN(pred_fake, target_false_probabilities)
+            loss_D_fake = criterionGAN(pred_fake, gen_target_probabilities(False, pred_fake.shape))
             pred_real = net_d(real_ab)
-            loss_D_real = criterionGAN(pred_real, target_true_probabilities)
+            loss_D_real = criterionGAN(pred_real, gen_target_probabilities(True, pred_real.shape))
             loss_d = (loss_D_fake + loss_D_real)/2  # not cat?
             if args.debug_D:
                 print("pred_fake, pred_real")
@@ -309,7 +307,6 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             continue
         ## train generator ##
         set_requires_grad(net_d, False)
-        target_true_probabilities = gen_target_probabilities(True)
         optimizer_g.zero_grad()
         loss_g_item_str = 'L(SSIM: {:.4f}'.format(loss_g_ssim)
         if use_L1:
@@ -324,7 +321,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             if args.debug_D:
                 print("pred_fake")
                 print(pred_fake)
-            loss_g_gan = criterionGAN(pred_fake, target_true_probabilities)
+            loss_g_gan = criterionGAN(pred_fake, gen_target_probabilities(True, pred_fake.shape))
             loss_g_item_str += ', D(G(y),y): {:.4f})'.format(loss_g_gan.item())
         else:
             weight_ssim = args.weight_ssim_0
