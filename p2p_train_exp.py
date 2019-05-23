@@ -84,6 +84,7 @@ parser.add_argument('--loss_d_max_threshold', type=float, default=0.)
 parser.add_argument('--finalpool', action='store_true', help='Final pooling on the discriminator (instead of convolution)')
 parser.add_argument('--out_activation', help='Specific discriminator output activation')
 parser.add_argument('--generator_waits', action='store_true', help="Generator won't learn until discriminator is useful")
+parser.add_argument('--funit_D', default=32, type=int, help='Filters unit for D')
 
 args = parser.parse_args()
 print(args)
@@ -119,11 +120,11 @@ D_n_layers = args.input_nc if args.not_conditional else args.input_nc + args.out
 
 # fun
 
-def gen_target_probabilities(target_real=True):
+def gen_target_probabilities(target_real, target_probabilities_shape):
     if target_real:
-        res = 19/20+torch.rand(args.batch_size,1,1,1)/20
+        res = 19/20+torch.rand(target_probabilities_shape)/20
     else:
-        res = torch.rand(args.batch_size,1,1,1)/20
+        res = torch.rand(target_probabilities_shape)/20
     return res.to(device)
 
 def set_requires_grad(net, requires_grad = False):
@@ -186,7 +187,7 @@ else:
 if args.load_d:
     net_d = torch.load(args.load_d, map_location=device)
 else:
-    net_d = define_D(D_n_layers, args.ndf, args.netD, gpu_id=device, out_activation=dout_activation, finalpool=args.finalpool)
+    net_d = define_D(D_n_layers, args.ndf, args.netD, gpu_id=device, out_activation=dout_activation, finalpool=args.finalpool, funit=args.funit_D)
 
 if args.weight_L1_0 > 0 or weight_L1_1 > 0:
     use_L1 = True
@@ -258,7 +259,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             useful_discriminator = True
         use_D = use_D or (loss_g_ssim.item() < args.min_ssim_l and iterations_before_d < 1 and useful_discriminator)
         use_L1 = (use_D and weight_L1_1 > 0) or (not(use_D) and args.weight_L1_0 > 0)
-        if (loss_d_item < 0.1 and args.D_loss_f == 'MSE'):# or (loss_d_item > 5.0 and args.D_loss_f == 'BCEWithLogits'):  # critical
+        if (loss_d_item < 0.0025 and args.D_loss_f == 'MSE'):# or (loss_d_item > 5.0 and args.D_loss_f == 'BCEWithLogits'):  # critical
             D_ratio = args.D_ratio_2
         elif use_D:
             if loss_d_item > 0.221 and args.D_loss_f == 'MSE':  # needs improvement
@@ -281,14 +282,12 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         if discriminator_learns or iteration == 1:
             d_in_chan = 3 if args.not_conditional else 6
 
-            target_false_probabilities = gen_target_probabilities(False)
-            target_true_probabilities = gen_target_probabilities(True)
-            #set_requires_grad(net_d, True)
+            set_requires_grad(net_d, True)
             optimizer_d.zero_grad()
             pred_fake = net_d(fake_ab.detach())
-            loss_D_fake = criterionGAN(pred_fake, target_false_probabilities)
+            loss_D_fake = criterionGAN(pred_fake, gen_target_probabilities(False, pred_fake.shape))
             pred_real = net_d(real_ab)
-            loss_D_real = criterionGAN(pred_real, target_true_probabilities)
+            loss_D_real = criterionGAN(pred_real, gen_target_probabilities(True, pred_real.shape))
             loss_d = (loss_D_fake + loss_D_real)/2  # not cat?
             if args.debug_D:
                 print("pred_fake, pred_real")
@@ -308,8 +307,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             generator_learns = update_generator_learns()
             continue
         ## train generator ##
-        #set_requires_grad(net_d, False)
-        target_true_probabilities = gen_target_probabilities(True)
+        set_requires_grad(net_d, False)
         optimizer_g.zero_grad()
         loss_g_item_str = 'L(SSIM: {:.4f}'.format(loss_g_ssim)
         if use_L1:
@@ -324,7 +322,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             if args.debug_D:
                 print("pred_fake")
                 print(pred_fake)
-            loss_g_gan = criterionGAN(pred_fake, target_true_probabilities)
+            loss_g_gan = criterionGAN(pred_fake, gen_target_probabilities(True, pred_fake.shape))
             loss_g_item_str += ', D(G(y),y): {:.4f})'.format(loss_g_gan.item())
         else:
             weight_ssim = args.weight_ssim_0
