@@ -259,7 +259,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             useful_discriminator = True
         use_D = use_D or (loss_g_ssim.item() < args.min_ssim_l and iterations_before_d < 1 and useful_discriminator)
         use_L1 = (use_D and weight_L1_1 > 0) or (not(use_D) and args.weight_L1_0 > 0)
-        if (loss_d_item < 0.1 and args.D_loss_f == 'MSE'):# or (loss_d_item > 5.0 and args.D_loss_f == 'BCEWithLogits'):  # critical
+        if (loss_d_item < 0.01 and args.D_loss_f == 'MSE'):# or (loss_d_item > 5.0 and args.D_loss_f == 'BCEWithLogits'):  # critical
             D_ratio = args.D_ratio_2
         elif use_D:
             if loss_d_item > 0.221 and args.D_loss_f == 'MSE':  # needs improvement
