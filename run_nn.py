@@ -140,6 +140,8 @@ if __name__ == '__main__':
             model = nnModules.RRUNet(3,3, find_noise=args.find_noise)
     elif args.model == 'Hul128Net':
         model = nnModules.Hul128Net()
+    elif args.model == 'Hulb128Net':
+        model = nnModules.Hulb128Net()
     elif args.model == 'Hul160Net':
         model = nnModules.Hul160Net()
     elif args.model == 'exp':

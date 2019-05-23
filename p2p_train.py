@@ -307,7 +307,6 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             epoch, iteration, len(training_data_loader), loss_d_item_str))
             generator_learns = update_generator_learns()
             continue
-
         ## train generator ##
         set_requires_grad(net_d, False)
         target_true_probabilities = gen_target_probabilities(True)

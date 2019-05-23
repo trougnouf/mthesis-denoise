@@ -1,3 +1,5 @@
+# this could be merged into p2p_train.py
+
 from __future__ import print_function
 import argparse
 import os

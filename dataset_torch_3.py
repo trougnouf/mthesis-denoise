@@ -79,6 +79,7 @@ class DenoisingDataset(Dataset):
         self.cs, self.ucs = [int(i) for i in datadirs[0].split('_')[-2:]]
         self.compressionmin, self.compressionmax = compressionmin, compressionmax
         self.sigmamin, self.sigmamax = sigmamin, sigmamax
+        self.fixed_noise_per_batch = fixed_noise_per_batch
         for datadir in datadirs:
             for aset in os.listdir(datadir):
                 if is_reserved(aset):
