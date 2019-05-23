@@ -5,7 +5,7 @@ import torch.nn as nn
 from torch.nn import init
 import functools
 from torch.optim import lr_scheduler
-from networks.nnModules import UNet, Hul144Disc, Hul160Net, Hul128Net, Hul112Disc
+from networks.nnModules import UNet, Hul144Disc, Hul160Net, Hul128Net, Hul112Disc, Hulb128Net
 
 # forked from
 
@@ -93,6 +93,8 @@ def define_G(input_nc, output_nc, ngf, norm='batch', use_dropout=False, init_typ
         net = Hul160Net()
     elif net_type == 'Hul128Net':
         net = Hul128Net()
+    elif net_type == 'Hulb128Net':
+        net = Hulb128Net()
     elif net_type == 'HulNet':
         net = HulNet()
     return init_net(net, init_type, init_gain, gpu_id)

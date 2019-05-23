@@ -22,6 +22,7 @@ parser.add_argument('--yaxis', type=str, default='Average MSE')
 parser.add_argument('--experiment', type=str)
 parser.add_argument('--list_experiments', action='store_true')
 parser.add_argument('--smoothing_factor', type=int, default=default_smoothing_factor)
+parser.add_argument('--uneven_graphs', action='store_true', help='Allow some graphs to display more data points')
 args = parser.parse_args()
 
 experiments = dict()
@@ -48,7 +49,8 @@ for component, path in experiment_raw.items():
     if smallest_log is None or smallest_log > len(data[component]):
         smallest_log = len(data[component])
 for component in data:
-    data[component] = data[component][0:smallest_log]
+    if not args.uneven_graphs:
+        data[component] = data[component][0:smallest_log]
     plt.plot(data[component], label=component, marker = markers[component])#, marker=markers[component])
 plt.title(args.experiment)
 plt.ylabel(args.yaxis)
