@@ -221,7 +221,7 @@ use_D = False
 useful_discriminator = False
 generator_learns = None
 
-def generator_learns():
+def does_generator_learn():
     global generator_learns # blergh
     prev_status = generator_learns
     generator_learns = useful_discriminator or not args.generator_waits
@@ -305,7 +305,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             num_train_d += 1
         else:
             loss_d_item_str = 'nan'
-        if not generator_learns():
+        if not does_generator_learn():
             print("===> Epoch[{}]({}/{}): Loss_D: {}".format(
             epoch, iteration, len(training_data_loader), loss_d_item_str))
             continue
@@ -356,7 +356,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             epoch, iteration, len(training_data_loader), loss_d_item_str, loss_g_item_str))
     if num_train_d > 5:
         update_learning_rate(net_d_scheduler, optimizer_d, loss_avg=total_loss_d/num_train_d)
-    if generator_learns():
+    if does_generator_learn():
         if num_train_g_D > num_train_g_std*args.lr_update_min_D_ratio:
             print('Generator average loss with D: '+str(total_loss_g_D/num_train_g_D))
             update_learning_rate(net_g_scheduler['D'], optimizer_g, loss_avg=total_loss_g_D/num_train_g_D)
