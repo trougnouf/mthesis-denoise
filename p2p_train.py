@@ -175,7 +175,7 @@ if args.D_loss_f == 'MSE':
     criterionGAN = nn.MSELoss().to(device)
     dout_activation = 'PReLU'
 elif args.D_loss_f == 'confident_mse_loss':
-    criterionGAN = confident_mse_loss
+    criterionGAN = confident_mse_loss.to(device)
     dout_activation = 'Sigmoid'
 else:
     criterionGAN = nn.BCEWithLogitsLoss().to(device)
