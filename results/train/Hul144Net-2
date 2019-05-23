@@ -1,0 +1,698 @@
+Namespace(D_ratio=0.33, batch_size=18, beta1=0.75, compressionmax=100, compressionmin=100, cuda_device=2, do_sizecheck=False, epoch_count=1, exact_reserve=False, expname=None, find_noise=False, input_nc=3, keep_D=True, lr=0.0003, lr_decay_iters=50, lr_gamma=0.75, lr_min=5e-08, lr_policy='plateau', lr_step_size=5, lr_update_min_D_ratio=0.2, min_ssim_l=0.125, model='HulNet', models_dir='models', ndf=64, netD='Hul144Disc', ngf=64, niter=100, niter_decay=100, not_conditional=False, output_nc=3, post_fail_ssim_num=35, result_dir='results/train', resume=False, seed=123, sigmamax=0, sigmamin=0, test_batch_size=1, test_reserve=['ursulines-red', 'stefantiek', 'ursulines-building', 'MuseeL-Bobo', 'CourtineDeVillersDebris', 'C500D', 'Pen-pile'], threads=4, time_limit=172800, train_data=None, weight_L1_0=0.0, weight_L1_1=0.05, weight_ssim_0=1.0, weight_ssim_1=0.4, yval=None)
+===> Loading datasets
+Added MVB-LouveFire['ISO200', 'ISO200-2']['ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISO6400-2', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Skipped ursulines-red (test reserve)
+Added corkboard['ISO200']['ISO320', 'ISO1000', 'ISO2500', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added banana['ISO200']['ISO250', 'ISO500', 'ISO800', 'ISO1250', 'ISO2000', 'ISO4000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added MuseeL-inspiredlotus['ISO200']['ISO640', 'ISO2500', 'ISO6400'] to the dataset
+Added schooltop['ISO200']['ISO800', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added Saint-Remi-C['ISO200']['ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Skipped MuseeL-cross-C500D (test reserve)
+Added MVB-JardinBotanique['ISO200', 'ISO200-2']['ISO400', 'ISO1000', 'ISO2500', 'ISO3200', 'ISO6400'] to the dataset
+Skipped MuseeL-yombe-C500D (test reserve)
+Added MuseeL-text['ISO200']['ISO400', 'ISO5000', 'ISO6400'] to the dataset
+Added MuseeL-centrifuge['ISO200']['ISO800', 'ISO2000', 'ISO6400'] to the dataset
+Added Ottignies['ISO200']['ISO640', 'ISO3200', 'ISO6400'] to the dataset
+Added tree1['ISO200']['ISO400', 'ISO1600', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added MuseeL-snakeAndMask['ISO200']['ISO2000', 'ISO6400', 'ISOH1'] to the dataset
+Added MuseeL-painting['ISO200']['ISO800', 'ISO3200', 'ISO6400'] to the dataset
+Added MuseeL-yombe['ISO200']['ISO640', 'ISO3200', 'ISO6400'] to the dataset
+Added bloop['ISO200']['ISO3200', 'ISO6400', 'ISOH1'] to the dataset
+Added MuseeL-head['ISO200']['ISO640', 'ISO3200', 'ISO6400'] to the dataset
+Added pastries['ISO200']['ISO3200', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Skipped MuseeL-Sepik-C500D (test reserve)
+Added MuseeL-roue['ISO200']['ISO800', 'ISO1250', 'ISO6400'] to the dataset
+Skipped MuseeL-Saint-Pierre-C500D (test reserve)
+Added dustyrubberduck['ISO200']['ISO1000', 'ISO1250', 'ISO2500', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added Stevin['ISO200']['ISO4000', 'ISO6400'] to the dataset
+Added MuseeL-RGB['ISO200']['ISO250', 'ISO1000', 'ISO6400'] to the dataset
+Added MuseeL-Ghysels['ISO200']['ISO800', 'ISO6400'] to the dataset
+Added MuseeL-pig['ISO200']['ISO500', 'ISO2000', 'ISO6400'] to the dataset
+Added MuseeL-ram['ISO200']['ISO800', 'ISO1000', 'ISO6400'] to the dataset
+Added kibbles['ISO200', 'ISO200-2']['ISO800', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added parking-keyboard['ISO200']['ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added whistle['ISO200']['ISO250', 'ISO500', 'ISO1000', 'ISO2000', 'ISO4000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3', 'ISOH4'] to the dataset
+Added fruits['ISO200', 'ISO200-2']['ISO800', 'ISO3200', 'ISO5000', 'ISO6400'] to the dataset
+Skipped ursulines-building (test reserve)
+Skipped MuseeL-mammal-C500D (test reserve)
+Added MuseeL-AraPacis['ISO200']['ISO800', 'ISO4000', 'ISO6400'] to the dataset
+Added MuseeL-hanging['ISO200']['ISO500', 'ISO4000', 'ISO6400'] to the dataset
+Added MuseeL-coral2['ISO200']['ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added semicircle['ISO200']['ISO320', 'ISO640', 'ISO1250', 'ISO2500', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added gnome['ISO200']['ISO800', 'ISO1600', 'ISO6400'] to the dataset
+Added MuseeL-coral['ISO200']['ISO800', 'ISO5000', 'ISO6400'] to the dataset
+Added drowning['ISO200']['ISO800', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added LaptopInLibrary['ISO200']['ISO500', 'ISO800', 'ISO1600', 'ISO2500', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added MuseeL-pinklotus['ISO200']['ISO800', 'ISO4000', 'ISO6400'] to the dataset
+Skipped MuseeL-sol-C500D (test reserve)
+Added MVB-heraldicLion['ISO200', 'ISO200-2']['ISO320', 'ISO1000', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Skipped MuseeL-fuite-C500D (test reserve)
+Added MVB-Urania['ISO200']['ISO320', 'ISO500', 'ISO1000', 'ISO2500', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added MuseeL-stele['ISO200']['ISO640', 'ISO1000', 'ISO6400'] to the dataset
+Added stairs['ISO200']['ISO250', 'ISO320', 'ISO640', 'ISO1250', 'ISO2500', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added MuseeL-avelo['ISO200']['ISO500', 'ISO3200', 'ISO6400'] to the dataset
+Added MuseeL-Vincent['ISO200']['ISO400', 'ISO2500', 'ISO6400'] to the dataset
+Added MuseeL-byMarcGroessens['ISO200']['ISO400', 'ISO3200', 'ISO6400'] to the dataset
+Added MuseeL-shell['ISO200']['ISO400', 'ISO800', 'ISO6400'] to the dataset
+Added Leonidas['ISO200']['ISO400', 'ISO3200', 'ISO6400', 'ISOH1'] to the dataset
+Added tree2['ISO200']['ISO800', 'ISO1600', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added claytools['ISO200']['ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added MuseeL-SergeVandercam['ISO200']['ISO320', 'ISO1000', 'ISO6400'] to the dataset
+Added directions['ISO200']['ISO640-2', 'ISO640', 'ISO1250', 'ISO6400-2', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added beads['ISO200']['ISO500', 'ISO1000', 'ISO3200', 'ISO6400'] to the dataset
+Added MuseeL-Vanillekipferl['ISO200']['ISO6400', 'ISOH1'] to the dataset
+Added ursulines-can['ISO200', 'ISO200-2']['ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added droid['ISO200']['ISO800', 'ISO3200', 'ISO6400'] to the dataset
+Added claycreatures['ISO200']['ISO1600', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added soap['ISO200', 'ISO200-2']['ISO400', 'ISO800', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3', 'ISOH4'] to the dataset
+Added BruegelLibraryS2['ISO200']['ISO500', 'ISO1250', 'ISO2500', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3', 'ISOH4'] to the dataset
+Added wall['ISO200']['ISO640', 'ISO6400'] to the dataset
+Added MuseeL-pedestal['ISO200']['ISO1250', 'ISO5000', 'ISO6400'] to the dataset
+Added MuseeL-fuite['ISO200']['ISO320', 'ISO4000', 'ISO6400'] to the dataset
+Skipped stefantiek (test reserve)
+Added claycreature['ISO200']['ISO4000', 'ISO6400', 'ISOH1'] to the dataset
+Added Saint-Remi['ISO200']['ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added fireextinguisher['ISO200', 'ISO200-3', 'ISO200-2']['ISO800', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added MuseeL-ambon['ISO200']['ISO640', 'ISO2500', 'ISO6400'] to the dataset
+Added Homarus-americanus['ISO200', 'ISO200-2']['ISO250', 'ISO400', 'ISO800', 'ISO2000', 'ISO3200', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Skipped MuseeL-idole-C500D (test reserve)
+Skipped MuseeL-Bobo (test reserve)
+Added mugshot['ISO200']['ISO6400', 'ISOH1'] to the dataset
+Skipped MuseeL-Bobo-C500D (test reserve)
+Skipped CourtineDeVillersDebris (test reserve)
+Added MVB-Bombardement['ISO200', 'ISO200-2']['ISO320', 'ISO800', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added Sint-Joris['ISO200']['ISO1000', 'ISO2500', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added threebicycles['ISO200']['ISO6400'] to the dataset
+Added chapel['ISO200']['ISO1000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added partiallyeatenbanana['ISO200']['ISO640', 'ISO1250', 'ISO2500', 'ISO4000', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added sevenbicycles['ISO200']['ISO1600', 'ISO6400'] to the dataset
+Added MuseeL-theatre['ISO200']['ISO400', 'ISO2500', 'ISO6400'] to the dataset
+Added shells['ISO200', 'ISO200-2']['ISO250', 'ISO320', 'ISO1000', 'ISO1600', 'ISO2500', 'ISO3200', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added MuseeL-Armlessness['ISO200']['ISO800', 'ISO2000', 'ISO6400'] to the dataset
+Added MuseeL-cross['ISO200']['ISO500', 'ISO4000', 'ISO6400'] to the dataset
+Added MuseeL-clam['ISO200']['ISO6400', 'ISOH1'] to the dataset
+Added MuseeL-Moschophore['ISO200']['ISO500', 'ISO4000', 'ISO6400'] to the dataset
+Added holywater['ISO200']['ISO1600', 'ISO4000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added MuseeL-mask['ISO200']['ISO640', 'ISO4000', 'ISO6400'] to the dataset
+Added books['ISO200']['ISO1600', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added MVB-Sainte-Anne['ISO200', 'ISO200-2']['ISO250', 'ISO640', 'ISO4000', 'ISO6400', 'ISOH1'] to the dataset
+Skipped MuseeL-CopteArch-C500D (test reserve)
+Added MVB-1887GrandPlace['ISO200', 'ISO200-2']['ISO400', 'ISO640', 'ISO2000', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added bertrixtree['ISO200']['ISO400', 'ISO640', 'ISO2500', 'ISO4000', 'ISO6400', 'ISOH1'] to the dataset
+Skipped Pen-pile (test reserve)
+Added BruegelLibraryS1['ISO200']['ISO400', 'ISO1000', 'ISO2500', 'ISO3200', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added MuseeL-Ndengese['ISO200']['ISO6400', 'ISOH1'] to the dataset
+Added MuseeL-heads['ISO200']['ISO400', 'ISO3200', 'ISO6400'] to the dataset
+Added vlc['ISO200']['ISO250', 'ISO500', 'ISO1000', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added MuseeL-turtle['ISO200']['ISO800', 'ISO1250', 'ISO6400'] to the dataset
+===> Building models
+initialize network with normal
+initialize network with normal
+===> Epoch[1](1/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.9422, L1: 0.3864) = 0.9422
+===> Epoch[1](2/3667): Loss_D: 0.2498 Loss_G: L(SSIM: 0.8454, L1: 0.3554) = 0.8454
+===> Epoch[1](3/3667): Loss_D: 0.2473 Loss_G: L(SSIM: 0.7179, L1: 0.3364) = 0.7179
+===> Epoch[1](4/3667): Loss_D: nan Loss_G: L(SSIM: 0.5615, L1: 0.2825) = 0.5615
+===> Epoch[1](5/3667): Loss_D: nan Loss_G: L(SSIM: 0.3135, L1: 0.1954) = 0.3135
+===> Epoch[1](6/3667): Loss_D: nan Loss_G: L(SSIM: 0.1837, L1: 0.1045) = 0.1837
+===> Epoch[1](7/3667): Loss_D: nan Loss_G: L(SSIM: 0.4790, L1: 0.6123) = 0.4790
+===> Epoch[1](8/3667): Loss_D: 0.3002 Loss_G: L(SSIM: 0.6476, L1: 1.0930) = 0.6476
+===> Epoch[1](9/3667): Loss_D: nan Loss_G: L(SSIM: 0.7106, L1: 1.1775) = 0.7106
+===> Epoch[1](10/3667): Loss_D: 0.2569 Loss_G: L(SSIM: 0.6254, L1: 1.0148) = 0.6254
+===> Epoch[1](11/3667): Loss_D: nan Loss_G: L(SSIM: 0.4885, L1: 0.6617) = 0.4885
+===> Epoch[1](12/3667): Loss_D: nan Loss_G: L(SSIM: 0.2829, L1: 0.2942) = 0.2829
+===> Epoch[1](13/3667): Loss_D: nan Loss_G: L(SSIM: 0.2411, L1: 0.0802) = 0.2411
+===> Epoch[1](14/3667): Loss_D: 0.2499 Loss_G: L(SSIM: 0.3377, L1: 0.1597) = 0.3377
+===> Epoch[1](15/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.3844, L1: 0.2379) = 0.3844
+===> Epoch[1](16/3667): Loss_D: 0.2499 Loss_G: L(SSIM: 0.4116, L1: 0.2406) = 0.4116
+===> Epoch[1](17/3667): Loss_D: nan Loss_G: L(SSIM: 0.3680, L1: 0.2089) = 0.3680
+===> Epoch[1](18/3667): Loss_D: nan Loss_G: L(SSIM: 0.3250, L1: 0.1545) = 0.3250
+===> Epoch[1](19/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.2557, L1: 0.1248) = 0.2557
+===> Epoch[1](20/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1856, L1: 0.0655) = 0.1856
+===> Epoch[1](21/3667): Loss_D: nan Loss_G: L(SSIM: 0.1900, L1: 0.0920) = 0.1900
+===> Epoch[1](22/3667): Loss_D: nan Loss_G: L(SSIM: 0.2041, L1: 0.1210) = 0.2041
+===> Epoch[1](23/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.2052, L1: 0.1339) = 0.2052
+===> Epoch[1](24/3667): Loss_D: nan Loss_G: L(SSIM: 0.2211, L1: 0.0873) = 0.2211
+===> Epoch[1](25/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.2362, L1: 0.0676) = 0.2362
+===> Epoch[1](26/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.2236, L1: 0.0455) = 0.2236
+===> Epoch[1](27/3667): Loss_D: nan Loss_G: L(SSIM: 0.2210, L1: 0.0877) = 0.2210
+===> Epoch[1](28/3667): Loss_D: nan Loss_G: L(SSIM: 0.1487, L1: 0.0504) = 0.1487
+===> Epoch[1](29/3667): Loss_D: nan Loss_G: L(SSIM: 0.1878, L1: 0.0521) = 0.1878
+===> Epoch[1](30/3667): Loss_D: nan Loss_G: L(SSIM: 0.1994, L1: 0.0657) = 0.1994
+===> Epoch[1](31/3667): Loss_D: nan Loss_G: L(SSIM: 0.1803, L1: 0.1087) = 0.1803
+===> Epoch[1](32/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.2587, L1: 0.1009) = 0.2587
+===> Epoch[1](33/3667): Loss_D: nan Loss_G: L(SSIM: 0.2120, L1: 0.1448) = 0.2120
+===> Epoch[1](34/3667): Loss_D: nan Loss_G: L(SSIM: 0.1884, L1: 0.1014) = 0.1884
+===> Epoch[1](35/3667): Loss_D: nan Loss_G: L(SSIM: 0.1509, L1: 0.0979) = 0.1509
+===> Epoch[1](36/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.2382, L1: 0.0731) = 0.2382
+===> Epoch[1](37/3667): Loss_D: nan Loss_G: L(SSIM: 0.2151, L1: 0.0625) = 0.2151
+===> Epoch[1](38/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.2138, L1: 0.0950) = 0.2138
+===> Epoch[1](39/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.2131, L1: 0.0972) = 0.2131
+===> Epoch[1](40/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.2226, L1: 0.1065) = 0.2226
+===> Epoch[1](41/3667): Loss_D: nan Loss_G: L(SSIM: 0.2071, L1: 0.0753) = 0.2071
+===> Epoch[1](42/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.2044, L1: 0.0733) = 0.2044
+===> Epoch[1](43/3667): Loss_D: nan Loss_G: L(SSIM: 0.2187, L1: 0.0702) = 0.2187
+===> Epoch[1](44/3667): Loss_D: nan Loss_G: L(SSIM: 0.1466, L1: 0.0476) = 0.1466
+===> Epoch[1](45/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1610, L1: 0.0632) = 0.1610
+===> Epoch[1](46/3667): Loss_D: nan Loss_G: L(SSIM: 0.2127, L1: 0.0662) = 0.2127
+===> Epoch[1](47/3667): Loss_D: nan Loss_G: L(SSIM: 0.2273, L1: 0.0705) = 0.2273
+===> Epoch[1](48/3667): Loss_D: nan Loss_G: L(SSIM: 0.1768, L1: 0.0545) = 0.1768
+===> Epoch[1](49/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.2019, L1: 0.0642) = 0.2019
+===> Epoch[1](50/3667): Loss_D: nan Loss_G: L(SSIM: 0.2160, L1: 0.0711) = 0.2160
+===> Epoch[1](51/3667): Loss_D: nan Loss_G: L(SSIM: 0.1591, L1: 0.0600) = 0.1591
+===> Epoch[1](52/3667): Loss_D: nan Loss_G: L(SSIM: 0.1945, L1: 0.0593) = 0.1945
+===> Epoch[1](53/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1666, L1: 0.0341) = 0.1666
+===> Epoch[1](54/3667): Loss_D: nan Loss_G: L(SSIM: 0.1799, L1: 0.0474) = 0.1799
+===> Epoch[1](55/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1590, L1: 0.0575) = 0.1590
+===> Epoch[1](56/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1980, L1: 0.0552) = 0.1980
+===> Epoch[1](57/3667): Loss_D: nan Loss_G: L(SSIM: 0.1920, L1: 0.0729) = 0.1920
+===> Epoch[1](58/3667): Loss_D: nan Loss_G: L(SSIM: 0.1685, L1: 0.0514) = 0.1685
+===> Epoch[1](59/3667): Loss_D: nan Loss_G: L(SSIM: 0.1196, L1: 0.0275) = 0.1196
+===> Epoch[1](60/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1415, L1: 0.0420) = 0.1415
+===> Epoch[1](61/3667): Loss_D: nan Loss_G: L(SSIM: 0.1662, L1: 0.0688) = 0.1662
+===> Epoch[1](62/3667): Loss_D: nan Loss_G: L(SSIM: 0.1973, L1: 0.0631) = 0.1973
+===> Epoch[1](63/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1630, L1: 0.0578) = 0.1630
+===> Epoch[1](64/3667): Loss_D: nan Loss_G: L(SSIM: 0.1743, L1: 0.0378) = 0.1743
+===> Epoch[1](65/3667): Loss_D: nan Loss_G: L(SSIM: 0.1509, L1: 0.0439) = 0.1509
+===> Epoch[1](66/3667): Loss_D: nan Loss_G: L(SSIM: 0.1462, L1: 0.0496) = 0.1462
+===> Epoch[1](67/3667): Loss_D: nan Loss_G: L(SSIM: 0.1816, L1: 0.0587) = 0.1816
+===> Epoch[1](68/3667): Loss_D: nan Loss_G: L(SSIM: 0.1478, L1: 0.0806) = 0.1478
+===> Epoch[1](69/3667): Loss_D: nan Loss_G: L(SSIM: 0.1345, L1: 0.0414) = 0.1345
+===> Epoch[1](70/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1605, L1: 0.0650) = 0.1605
+===> Epoch[1](71/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1676, L1: 0.0636) = 0.1676
+===> Epoch[1](72/3667): Loss_D: nan Loss_G: L(SSIM: 0.1497, L1: 0.0740) = 0.1497
+===> Epoch[1](73/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1893, L1: 0.0543) = 0.1893
+===> Epoch[1](74/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1478, L1: 0.0436) = 0.1478
+===> Epoch[1](75/3667): Loss_D: nan Loss_G: L(SSIM: 0.1668, L1: 0.0428) = 0.1668
+===> Epoch[1](76/3667): Loss_D: nan Loss_G: L(SSIM: 0.2057, L1: 0.0430) = 0.2057
+===> Epoch[1](77/3667): Loss_D: nan Loss_G: L(SSIM: 0.1778, L1: 0.0381) = 0.1778
+===> Epoch[1](78/3667): Loss_D: nan Loss_G: L(SSIM: 0.1890, L1: 0.0421) = 0.1890
+===> Epoch[1](79/3667): Loss_D: nan Loss_G: L(SSIM: 0.1257, L1: 0.0707) = 0.1257
+===> Epoch[1](80/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.2077, L1: 0.0953) = 0.2077
+===> Epoch[1](81/3667): Loss_D: nan Loss_G: L(SSIM: 0.1695, L1: 0.0774) = 0.1695
+===> Epoch[1](82/3667): Loss_D: nan Loss_G: L(SSIM: 0.1602, L1: 0.0518) = 0.1602
+===> Epoch[1](83/3667): Loss_D: nan Loss_G: L(SSIM: 0.1929, L1: 0.0482) = 0.1929
+===> Epoch[1](84/3667): Loss_D: 0.2501 Loss_G: L(SSIM: 0.2005, L1: 0.0629) = 0.2005
+===> Epoch[1](85/3667): Loss_D: 0.2501 Loss_G: L(SSIM: 0.1634, L1: 0.0811) = 0.1634
+===> Epoch[1](86/3667): Loss_D: nan Loss_G: L(SSIM: 0.2079, L1: 0.1034) = 0.2079
+===> Epoch[1](87/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1579, L1: 0.0676) = 0.1579
+===> Epoch[1](88/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.2003, L1: 0.0693) = 0.2003
+===> Epoch[1](89/3667): Loss_D: nan Loss_G: L(SSIM: 0.1875, L1: 0.0698) = 0.1875
+===> Epoch[1](90/3667): Loss_D: nan Loss_G: L(SSIM: 0.1660, L1: 0.0483) = 0.1660
+===> Epoch[1](91/3667): Loss_D: nan Loss_G: L(SSIM: 0.1497, L1: 0.0513) = 0.1497
+===> Epoch[1](92/3667): Loss_D: nan Loss_G: L(SSIM: 0.1917, L1: 0.0672) = 0.1917
+===> Epoch[1](93/3667): Loss_D: nan Loss_G: L(SSIM: 0.1219, L1: 0.0477) = 0.1219
+===> Epoch[1](94/3667): Loss_D: nan Loss_G: L(SSIM: 0.1594, L1: 0.0633) = 0.1594
+===> Epoch[1](95/3667): Loss_D: nan Loss_G: L(SSIM: 0.2077, L1: 0.0726) = 0.2077
+===> Epoch[1](96/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1737, L1: 0.0972) = 0.1737
+===> Epoch[1](97/3667): Loss_D: nan Loss_G: L(SSIM: 0.1617, L1: 0.0772) = 0.1617
+===> Epoch[1](98/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.2033, L1: 0.0903) = 0.2033
+===> Epoch[1](99/3667): Loss_D: nan Loss_G: L(SSIM: 0.1769, L1: 0.0679) = 0.1769
+===> Epoch[1](100/3667): Loss_D: nan Loss_G: L(SSIM: 0.1591, L1: 0.0675) = 0.1591
+===> Epoch[1](101/3667): Loss_D: nan Loss_G: L(SSIM: 0.1361, L1: 0.0505) = 0.1361
+===> Epoch[1](102/3667): Loss_D: nan Loss_G: L(SSIM: 0.1699, L1: 0.0642) = 0.1699
+===> Epoch[1](103/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1581, L1: 0.0582) = 0.1581
+===> Epoch[1](104/3667): Loss_D: nan Loss_G: L(SSIM: 0.2003, L1: 0.0918) = 0.2003
+===> Epoch[1](105/3667): Loss_D: nan Loss_G: L(SSIM: 0.1765, L1: 0.0750) = 0.1765
+===> Epoch[1](106/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1499, L1: 0.0556) = 0.1499
+===> Epoch[1](107/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1757, L1: 0.0582) = 0.1757
+===> Epoch[1](108/3667): Loss_D: nan Loss_G: L(SSIM: 0.1890, L1: 0.0513) = 0.1890
+===> Epoch[1](109/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1621, L1: 0.0402) = 0.1621
+===> Epoch[1](110/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1935, L1: 0.0429) = 0.1935
+===> Epoch[1](111/3667): Loss_D: nan Loss_G: L(SSIM: 0.1360, L1: 0.0361) = 0.1360
+===> Epoch[1](112/3667): Loss_D: nan Loss_G: L(SSIM: 0.1313, L1: 0.0319) = 0.1313
+===> Epoch[1](113/3667): Loss_D: nan Loss_G: L(SSIM: 0.1207, L1: 0.0195) = 0.1207
+===> Epoch[1](114/3667): Loss_D: nan Loss_G: L(SSIM: 0.1493, L1: 0.0336) = 0.1493
+===> Epoch[1](115/3667): Loss_D: nan Loss_G: L(SSIM: 0.1778, L1: 0.0389) = 0.1778
+===> Epoch[1](116/3667): Loss_D: nan Loss_G: L(SSIM: 0.1733, L1: 0.0532) = 0.1733
+===> Epoch[1](117/3667): Loss_D: nan Loss_G: L(SSIM: 0.1313, L1: 0.0571) = 0.1313
+===> Epoch[1](118/3667): Loss_D: nan Loss_G: L(SSIM: 0.1514, L1: 0.0428) = 0.1514
+===> Epoch[1](119/3667): Loss_D: nan Loss_G: L(SSIM: 0.1758, L1: 0.0446) = 0.1758
+===> Epoch[1](120/3667): Loss_D: nan Loss_G: L(SSIM: 0.2076, L1: 0.0660) = 0.2076
+===> Epoch[1](121/3667): Loss_D: nan Loss_G: L(SSIM: 0.1594, L1: 0.0828) = 0.1594
+===> Epoch[1](122/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.2346, L1: 0.0814) = 0.2346
+===> Epoch[1](123/3667): Loss_D: nan Loss_G: L(SSIM: 0.1916, L1: 0.0696) = 0.1916
+===> Epoch[1](124/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1704, L1: 0.0503) = 0.1704
+===> Epoch[1](125/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1888, L1: 0.0443) = 0.1888
+===> Epoch[1](126/3667): Loss_D: nan Loss_G: L(SSIM: 0.1613, L1: 0.0362) = 0.1613
+===> Epoch[1](127/3667): Loss_D: nan Loss_G: L(SSIM: 0.1685, L1: 0.0498) = 0.1685
+===> Epoch[1](128/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1840, L1: 0.0553) = 0.1840
+===> Epoch[1](129/3667): Loss_D: nan Loss_G: L(SSIM: 0.1401, L1: 0.0765) = 0.1401
+===> Epoch[1](130/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1417, L1: 0.0398) = 0.1417
+===> Epoch[1](131/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1870, L1: 0.0497) = 0.1870
+===> Epoch[1](132/3667): Loss_D: nan Loss_G: L(SSIM: 0.1914, L1: 0.0416) = 0.1914
+===> Epoch[1](133/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1548, L1: 0.0336) = 0.1548
+===> Epoch[1](134/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1807, L1: 0.0315) = 0.1807
+===> Epoch[1](135/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1501, L1: 0.0367) = 0.1501
+===> Epoch[1](136/3667): Loss_D: nan Loss_G: L(SSIM: 0.1434, L1: 0.0321) = 0.1434
+===> Epoch[1](137/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1571, L1: 0.0314) = 0.1571
+===> Epoch[1](138/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1987, L1: 0.0402) = 0.1987
+===> Epoch[1](139/3667): Loss_D: nan Loss_G: L(SSIM: 0.1230, L1: 0.0254) = 0.1230
+===> Epoch[1](140/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1772, L1: 0.0256) = 0.1772
+===> Epoch[1](141/3667): Loss_D: nan Loss_G: L(SSIM: 0.2043, L1: 0.0354) = 0.2043
+===> Epoch[1](142/3667): Loss_D: nan Loss_G: L(SSIM: 0.1596, L1: 0.0274) = 0.1596
+===> Epoch[1](143/3667): Loss_D: nan Loss_G: L(SSIM: 0.1661, L1: 0.0252) = 0.1661
+===> Epoch[1](144/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1492, L1: 0.0363) = 0.1492
+===> Epoch[1](145/3667): Loss_D: nan Loss_G: L(SSIM: 0.1353, L1: 0.0251) = 0.1353
+===> Epoch[1](146/3667): Loss_D: nan Loss_G: L(SSIM: 0.1310, L1: 0.0272) = 0.1310
+===> Epoch[1](147/3667): Loss_D: nan Loss_G: L(SSIM: 0.1748, L1: 0.0278) = 0.1748
+===> Epoch[1](148/3667): Loss_D: nan Loss_G: L(SSIM: 0.2055, L1: 0.0379) = 0.2055
+===> Epoch[1](149/3667): Loss_D: nan Loss_G: L(SSIM: 0.1545, L1: 0.0343) = 0.1545
+===> Epoch[1](150/3667): Loss_D: nan Loss_G: L(SSIM: 0.1800, L1: 0.0501) = 0.1800
+===> Epoch[1](151/3667): Loss_D: nan Loss_G: L(SSIM: 0.1437, L1: 0.0444) = 0.1437
+===> Epoch[1](152/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1322, L1: 0.0335) = 0.1322
+===> Epoch[1](153/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.2098, L1: 0.0421) = 0.2098
+===> Epoch[1](154/3667): Loss_D: nan Loss_G: L(SSIM: 0.1485, L1: 0.0279) = 0.1485
+===> Epoch[1](155/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1549, L1: 0.0249) = 0.1549
+===> Epoch[1](156/3667): Loss_D: nan Loss_G: L(SSIM: 0.1390, L1: 0.0314) = 0.1390
+===> Epoch[1](157/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1729, L1: 0.0389) = 0.1729
+===> Epoch[1](158/3667): Loss_D: nan Loss_G: L(SSIM: 0.1634, L1: 0.0360) = 0.1634
+===> Epoch[1](159/3667): Loss_D: nan Loss_G: L(SSIM: 0.1891, L1: 0.0334) = 0.1891
+===> Epoch[1](160/3667): Loss_D: nan Loss_G: L(SSIM: 0.1350, L1: 0.0282) = 0.1350
+===> Epoch[1](161/3667): Loss_D: nan Loss_G: L(SSIM: 0.1428, L1: 0.0382) = 0.1428
+===> Epoch[1](162/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1309, L1: 0.0434) = 0.1309
+===> Epoch[1](163/3667): Loss_D: nan Loss_G: L(SSIM: 0.1396, L1: 0.0518) = 0.1396
+===> Epoch[1](164/3667): Loss_D: nan Loss_G: L(SSIM: 0.1631, L1: 0.0454) = 0.1631
+===> Epoch[1](165/3667): Loss_D: nan Loss_G: L(SSIM: 0.1616, L1: 0.0389) = 0.1616
+===> Epoch[1](166/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1575, L1: 0.0365) = 0.1575
+===> Epoch[1](167/3667): Loss_D: nan Loss_G: L(SSIM: 0.1950, L1: 0.0497) = 0.1950
+===> Epoch[1](168/3667): Loss_D: nan Loss_G: L(SSIM: 0.1376, L1: 0.0452) = 0.1376
+===> Epoch[1](169/3667): Loss_D: nan Loss_G: L(SSIM: 0.1471, L1: 0.0408) = 0.1471
+===> Epoch[1](170/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1519, L1: 0.0312) = 0.1519
+===> Epoch[1](171/3667): Loss_D: nan Loss_G: L(SSIM: 0.1588, L1: 0.0459) = 0.1588
+===> Epoch[1](172/3667): Loss_D: nan Loss_G: L(SSIM: 0.1465, L1: 0.0483) = 0.1465
+===> Epoch[1](173/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1479, L1: 0.0411) = 0.1479
+===> Epoch[1](174/3667): Loss_D: nan Loss_G: L(SSIM: 0.1563, L1: 0.0355) = 0.1563
+===> Epoch[1](175/3667): Loss_D: nan Loss_G: L(SSIM: 0.1446, L1: 0.0316) = 0.1446
+===> Epoch[1](176/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1317, L1: 0.0237) = 0.1317
+===> Epoch[1](177/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1536, L1: 0.0343) = 0.1536
+===> Epoch[1](178/3667): Loss_D: nan Loss_G: L(SSIM: 0.1508, L1: 0.0388) = 0.1508
+===> Epoch[1](179/3667): Loss_D: nan Loss_G: L(SSIM: 0.1209, L1: 0.0340) = 0.1209
+===> Epoch[1](180/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1879, L1: 0.0397) = 0.1879
+===> Epoch[1](181/3667): Loss_D: nan Loss_G: L(SSIM: 0.1693, L1: 0.0300) = 0.1693
+===> Epoch[1](182/3667): Loss_D: nan Loss_G: L(SSIM: 0.1329, L1: 0.0403) = 0.1329
+===> Epoch[1](183/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1459, L1: 0.0261) = 0.1459
+===> Epoch[1](184/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1919, L1: 0.0294) = 0.1919
+===> Epoch[1](185/3667): Loss_D: nan Loss_G: L(SSIM: 0.1559, L1: 0.0275) = 0.1559
+===> Epoch[1](186/3667): Loss_D: nan Loss_G: L(SSIM: 0.1584, L1: 0.0309) = 0.1584
+===> Epoch[1](187/3667): Loss_D: nan Loss_G: L(SSIM: 0.1990, L1: 0.0330) = 0.1990
+===> Epoch[1](188/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.2028, L1: 0.0362) = 0.2028
+===> Epoch[1](189/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1506, L1: 0.0281) = 0.1506
+===> Epoch[1](190/3667): Loss_D: nan Loss_G: L(SSIM: 0.1203, L1: 0.0222) = 0.1203
+===> Epoch[1](191/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1371, L1: 0.0201) = 0.1371
+===> Epoch[1](192/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1312, L1: 0.0233) = 0.1312
+===> Epoch[1](193/3667): Loss_D: nan Loss_G: L(SSIM: 0.1152, L1: 0.0181) = 0.1152
+===> Epoch[1](194/3667): Loss_D: nan Loss_G: L(SSIM: 0.1775, L1: 0.0289) = 0.1775
+===> Epoch[1](195/3667): Loss_D: nan Loss_G: L(SSIM: 0.1760, L1: 0.0369) = 0.1760
+===> Epoch[1](196/3667): Loss_D: nan Loss_G: L(SSIM: 0.1601, L1: 0.0373) = 0.1601
+===> Epoch[1](197/3667): Loss_D: nan Loss_G: L(SSIM: 0.1229, L1: 0.0243) = 0.1229
+===> Epoch[1](198/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1705, L1: 0.0240) = 0.1705
+===> Epoch[1](199/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.2022, L1: 0.0346) = 0.2022
+===> Epoch[1](200/3667): Loss_D: nan Loss_G: L(SSIM: 0.1474, L1: 0.0262) = 0.1474
+===> Epoch[1](201/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1539, L1: 0.0297) = 0.1539
+===> Epoch[1](202/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1878, L1: 0.0394) = 0.1878
+===> Epoch[1](203/3667): Loss_D: nan Loss_G: L(SSIM: 0.1563, L1: 0.0357) = 0.1563
+===> Epoch[1](204/3667): Loss_D: nan Loss_G: L(SSIM: 0.1482, L1: 0.0252) = 0.1482
+===> Epoch[1](205/3667): Loss_D: nan Loss_G: L(SSIM: 0.1440, L1: 0.0332) = 0.1440
+===> Epoch[1](206/3667): Loss_D: nan Loss_G: L(SSIM: 0.1087, L1: 0.0427) = 0.1087
+===> Epoch[1](207/3667): Loss_D: nan Loss_G: L(SSIM: 0.1670, L1: 0.0682) = 0.1670
+===> Epoch[1](208/3667): Loss_D: nan Loss_G: L(SSIM: 0.1464, L1: 0.0733) = 0.1464
+===> Epoch[1](209/3667): Loss_D: nan Loss_G: L(SSIM: 0.1527, L1: 0.0658) = 0.1527
+===> Epoch[1](210/3667): Loss_D: nan Loss_G: L(SSIM: 0.1549, L1: 0.0394) = 0.1549
+===> Epoch[1](211/3667): Loss_D: nan Loss_G: L(SSIM: 0.1783, L1: 0.0554) = 0.1783
+===> Epoch[1](212/3667): Loss_D: nan Loss_G: L(SSIM: 0.2162, L1: 0.0972) = 0.2162
+===> Epoch[1](213/3667): Loss_D: nan Loss_G: L(SSIM: 0.1893, L1: 0.1118) = 0.1893
+===> Epoch[1](214/3667): Loss_D: 0.2498 Loss_G: L(SSIM: 0.1944, L1: 0.1111) = 0.1944
+===> Epoch[1](215/3667): Loss_D: 0.2497 Loss_G: L(SSIM: 0.1964, L1: 0.0904) = 0.1964
+===> Epoch[1](216/3667): Loss_D: nan Loss_G: L(SSIM: 0.1694, L1: 0.0648) = 0.1694
+===> Epoch[1](217/3667): Loss_D: 0.2493 Loss_G: L(SSIM: 0.1777, L1: 0.0729) = 0.1777
+===> Epoch[1](218/3667): Loss_D: nan Loss_G: L(SSIM: 0.1608, L1: 0.0574) = 0.1608
+===> Epoch[1](219/3667): Loss_D: nan Loss_G: L(SSIM: 0.1901, L1: 0.0490) = 0.1901
+===> Epoch[1](220/3667): Loss_D: nan Loss_G: L(SSIM: 0.1768, L1: 0.0690) = 0.1768
+===> Epoch[1](221/3667): Loss_D: nan Loss_G: L(SSIM: 0.1460, L1: 0.0706) = 0.1460
+===> Epoch[1](222/3667): Loss_D: nan Loss_G: L(SSIM: 0.1893, L1: 0.1391) = 0.1893
+===> Epoch[1](223/3667): Loss_D: nan Loss_G: L(SSIM: 0.1768, L1: 0.1059) = 0.1768
+===> Epoch[1](224/3667): Loss_D: nan Loss_G: L(SSIM: 0.1715, L1: 0.0513) = 0.1715
+===> Epoch[1](225/3667): Loss_D: nan Loss_G: L(SSIM: 0.1303, L1: 0.0366) = 0.1303
+===> Epoch[1](226/3667): Loss_D: nan Loss_G: L(SSIM: 0.1685, L1: 0.0412) = 0.1685
+===> Epoch[1](227/3667): Loss_D: nan Loss_G: L(SSIM: 0.1708, L1: 0.0440) = 0.1708
+===> Epoch[1](228/3667): Loss_D: nan Loss_G: L(SSIM: 0.2248, L1: 0.0767) = 0.2248
+===> Epoch[1](229/3667): Loss_D: nan Loss_G: L(SSIM: 0.1646, L1: 0.0749) = 0.1646
+===> Epoch[1](230/3667): Loss_D: nan Loss_G: L(SSIM: 0.1678, L1: 0.0780) = 0.1678
+===> Epoch[1](231/3667): Loss_D: nan Loss_G: L(SSIM: 0.2318, L1: 0.0887) = 0.2318
+===> Epoch[1](232/3667): Loss_D: nan Loss_G: L(SSIM: 0.1591, L1: 0.0953) = 0.1591
+===> Epoch[1](233/3667): Loss_D: 0.2496 Loss_G: L(SSIM: 0.1924, L1: 0.0850) = 0.1924
+===> Epoch[1](234/3667): Loss_D: nan Loss_G: L(SSIM: 0.1937, L1: 0.0567) = 0.1937
+===> Epoch[1](235/3667): Loss_D: nan Loss_G: L(SSIM: 0.1906, L1: 0.1221) = 0.1906
+===> Epoch[1](236/3667): Loss_D: nan Loss_G: L(SSIM: 0.1944, L1: 0.0940) = 0.1944
+===> Epoch[1](237/3667): Loss_D: 0.2495 Loss_G: L(SSIM: 0.1601, L1: 0.0849) = 0.1601
+===> Epoch[1](238/3667): Loss_D: nan Loss_G: L(SSIM: 0.1733, L1: 0.0643) = 0.1733
+===> Epoch[1](239/3667): Loss_D: nan Loss_G: L(SSIM: 0.1740, L1: 0.0586) = 0.1740
+===> Epoch[1](240/3667): Loss_D: 0.2471 Loss_G: L(SSIM: 0.2015, L1: 0.0845) = 0.2015
+===> Epoch[1](241/3667): Loss_D: nan Loss_G: L(SSIM: 0.1888, L1: 0.0623) = 0.1888
+===> Epoch[1](242/3667): Loss_D: nan Loss_G: L(SSIM: 0.1524, L1: 0.0805) = 0.1524
+===> Epoch[1](243/3667): Loss_D: nan Loss_G: L(SSIM: 0.1550, L1: 0.0734) = 0.1550
+===> Epoch[1](244/3667): Loss_D: nan Loss_G: L(SSIM: 0.1602, L1: 0.0839) = 0.1602
+===> Epoch[1](245/3667): Loss_D: 0.3039 Loss_G: L(SSIM: 0.1748, L1: 0.0890) = 0.1748
+===> Epoch[1](246/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1565, L1: 0.0553) = 0.1565
+===> Epoch[1](247/3667): Loss_D: nan Loss_G: L(SSIM: 0.1236, L1: 0.0361) = 0.1236
+===> Epoch[1](248/3667): Loss_D: nan Loss_G: L(SSIM: 0.1573, L1: 0.0380) = 0.1573
+===> Epoch[1](249/3667): Loss_D: nan Loss_G: L(SSIM: 0.1191, L1: 0.0507) = 0.1191
+===> Epoch[1](250/3667): Loss_D: nan Loss_G: L(SSIM: 0.2075, L1: 0.0728) = 0.2075
+===> Epoch[1](251/3667): Loss_D: 0.2502 Loss_G: L(SSIM: 0.1949, L1: 0.0711) = 0.1949
+===> Epoch[1](252/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1511, L1: 0.0559) = 0.1511
+===> Epoch[1](253/3667): Loss_D: nan Loss_G: L(SSIM: 0.1917, L1: 0.0581) = 0.1917
+===> Epoch[1](254/3667): Loss_D: nan Loss_G: L(SSIM: 0.1243, L1: 0.0337) = 0.1243
+===> Epoch[1](255/3667): Loss_D: nan Loss_G: L(SSIM: 0.1829, L1: 0.0532) = 0.1829
+===> Epoch[1](256/3667): Loss_D: nan Loss_G: L(SSIM: 0.1882, L1: 0.0466) = 0.1882
+===> Epoch[1](257/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1789, L1: 0.0609) = 0.1789
+===> Epoch[1](258/3667): Loss_D: nan Loss_G: L(SSIM: 0.1922, L1: 0.0864) = 0.1922
+===> Epoch[1](259/3667): Loss_D: nan Loss_G: L(SSIM: 0.1598, L1: 0.0561) = 0.1598
+===> Epoch[1](260/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1610, L1: 0.0435) = 0.1610
+===> Epoch[1](261/3667): Loss_D: nan Loss_G: L(SSIM: 0.1366, L1: 0.0314) = 0.1366
+===> Epoch[1](262/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1544, L1: 0.0355) = 0.1544
+===> Epoch[1](263/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1523, L1: 0.0373) = 0.1523
+===> Epoch[1](264/3667): Loss_D: nan Loss_G: L(SSIM: 0.1363, L1: 0.0349) = 0.1363
+===> Epoch[1](265/3667): Loss_D: nan Loss_G: L(SSIM: 0.1735, L1: 0.0495) = 0.1735
+===> Epoch[1](266/3667): Loss_D: nan Loss_G: L(SSIM: 0.1568, L1: 0.0346) = 0.1568
+===> Epoch[1](267/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1543, L1: 0.0425) = 0.1543
+===> Epoch[1](268/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1803, L1: 0.0390) = 0.1803
+===> Epoch[1](269/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1115, L1: 0.0315) = 0.1115
+===> Epoch[1](270/3667): Loss_D: nan Loss_G: L(SSIM: 0.1152, L1: 0.0348) = 0.1152
+===> Epoch[1](271/3667): Loss_D: nan Loss_G: L(SSIM: 0.1106, L1: 0.0295) = 0.1106
+===> Epoch[1](272/3667): Loss_D: nan Loss_G: L(SSIM: 0.1661, L1: 0.0346) = 0.1661
+===> Epoch[1](273/3667): Loss_D: nan Loss_G: L(SSIM: 0.1604, L1: 0.0398) = 0.1604
+===> Epoch[1](274/3667): Loss_D: nan Loss_G: L(SSIM: 0.1537, L1: 0.0374) = 0.1537
+===> Epoch[1](275/3667): Loss_D: nan Loss_G: L(SSIM: 0.1909, L1: 0.0465) = 0.1909
+===> Epoch[1](276/3667): Loss_D: nan Loss_G: L(SSIM: 0.1973, L1: 0.0464) = 0.1973
+===> Epoch[1](277/3667): Loss_D: nan Loss_G: L(SSIM: 0.1599, L1: 0.0345) = 0.1599
+===> Epoch[1](278/3667): Loss_D: nan Loss_G: L(SSIM: 0.1782, L1: 0.0568) = 0.1782
+===> Epoch[1](279/3667): Loss_D: nan Loss_G: L(SSIM: 0.1775, L1: 0.0543) = 0.1775
+===> Epoch[1](280/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1199, L1: 0.0567) = 0.1199
+===> Epoch[1](281/3667): Loss_D: nan Loss_G: L(SSIM: 0.1661, L1: 0.0444) = 0.1661
+===> Epoch[1](282/3667): Loss_D: nan Loss_G: L(SSIM: 0.1856, L1: 0.0462) = 0.1856
+===> Epoch[1](283/3667): Loss_D: nan Loss_G: L(SSIM: 0.1790, L1: 0.0473) = 0.1790
+===> Epoch[1](284/3667): Loss_D: 0.2501 Loss_G: L(SSIM: 0.1990, L1: 0.1045) = 0.1990
+===> Epoch[1](285/3667): Loss_D: nan Loss_G: L(SSIM: 0.1590, L1: 0.0983) = 0.1590
+===> Epoch[1](286/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1746, L1: 0.0782) = 0.1746
+===> Epoch[1](287/3667): Loss_D: nan Loss_G: L(SSIM: 0.1349, L1: 0.0517) = 0.1349
+===> Epoch[1](288/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1572, L1: 0.0374) = 0.1572
+===> Epoch[1](289/3667): Loss_D: nan Loss_G: L(SSIM: 0.1375, L1: 0.0405) = 0.1375
+===> Epoch[1](290/3667): Loss_D: nan Loss_G: L(SSIM: 0.1682, L1: 0.0482) = 0.1682
+===> Epoch[1](291/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1696, L1: 0.0553) = 0.1696
+===> Epoch[1](292/3667): Loss_D: nan Loss_G: L(SSIM: 0.1602, L1: 0.0530) = 0.1602
+===> Epoch[1](293/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.1303, L1: 0.0419) = 0.1303
+===> Epoch[1](294/3667): Loss_D: nan Loss_G: L(SSIM: 0.1372, L1: 0.0371) = 0.1372
+===> Epoch[1](295/3667): Loss_D: nan Loss_G: L(SSIM: 0.1545, L1: 0.0334) = 0.1545
+===> Epoch[1](296/3667): Loss_D: nan Loss_G: L(SSIM: 0.1830, L1: 0.0370) = 0.1830
+===> Epoch[1](297/3667): Loss_D: nan Loss_G: L(SSIM: 0.1866, L1: 0.0649) = 0.1866
+===> Epoch[1](298/3667): Loss_D: nan Loss_G: L(SSIM: 0.1850, L1: 0.0576) = 0.1850
+===> Epoch[1](299/3667): Loss_D: nan Loss_G: L(SSIM: 0.1652, L1: 0.0826) = 0.1652
+===> Epoch[1](300/3667): Loss_D: nan Loss_G: L(SSIM: 0.2052, L1: 0.0662) = 0.2052
+===> Epoch[1](301/3667): Loss_D: nan Loss_G: L(SSIM: 0.1550, L1: 0.0467) = 0.1550
+===> Epoch[1](302/3667): Loss_D: nan Loss_G: L(SSIM: 0.1396, L1: 0.0385) = 0.1396
+===> Epoch[1](303/3667): Loss_D: nan Loss_G: L(SSIM: 0.1758, L1: 0.0440) = 0.1758
+===> Epoch[1](304/3667): Loss_D: nan Loss_G: L(SSIM: 0.1854, L1: 0.0640) = 0.1854
+===> Epoch[1](305/3667): Loss_D: nan Loss_G: L(SSIM: 0.1702, L1: 0.0851) = 0.1702
+===> Epoch[1](306/3667): Loss_D: 0.2502 Loss_G: L(SSIM: 0.2589, L1: 0.1308) = 0.2589
+===> Epoch[1](307/3667): Loss_D: nan Loss_G: L(SSIM: 0.1727, L1: 0.0513) = 0.1727
+===> Epoch[1](308/3667): Loss_D: nan Loss_G: L(SSIM: 0.2219, L1: 0.1141) = 0.2219
+===> Epoch[1](309/3667): Loss_D: nan Loss_G: L(SSIM: 0.2051, L1: 0.0695) = 0.2051
+===> Epoch[1](310/3667): Loss_D: nan Loss_G: L(SSIM: 0.1817, L1: 0.0524) = 0.1817
+===> Epoch[1](311/3667): Loss_D: nan Loss_G: L(SSIM: 0.2640, L1: 0.0958) = 0.2640
+===> Epoch[1](312/3667): Loss_D: nan Loss_G: L(SSIM: 0.7813, L1: 1.1819) = 0.7813
+===> Epoch[1](313/3667): Loss_D: 0.2500 Loss_G: L(SSIM: 0.3489, L1: 0.1699) = 0.3489
+===> Epoch[1](314/3667): Loss_D: nan Loss_G: L(SSIM: 0.9329, L1: 0.3300) = 0.9329
+===> Epoch[1](315/3667): Loss_D: nan Loss_G: L(SSIM: 0.9889, L1: 17.3297) = 0.9889
+===> Epoch[1](316/3667): Loss_D: nan Loss_G: L(SSIM: 0.9896, L1: 13.5838) = 0.9896
+===> Epoch[1](317/3667): Loss_D: nan Loss_G: L(SSIM: 0.9671, L1: 28.7774) = 0.9671
+===> Epoch[1](318/3667): Loss_D: nan Loss_G: L(SSIM: 0.9936, L1: 1365.2125) = 0.9936
+===> Epoch[1](319/3667): Loss_D: 0.1426 Loss_G: L(SSIM: 0.9943, L1: 5913.1558) = 0.9943
+===> Epoch[1](320/3667): Loss_D: 0.1570 Loss_G: L(SSIM: 0.9957, L1: 9100.9561) = 0.9957
+===> Epoch[1](321/3667): Loss_D: nan Loss_G: L(SSIM: 0.9939, L1: 10462.7783) = 0.9939
+===> Epoch[1](322/3667): Loss_D: nan Loss_G: L(SSIM: 0.9976, L1: 22134.8574) = 0.9976
+===> Epoch[1](323/3667): Loss_D: nan Loss_G: L(SSIM: 0.9942, L1: 40217.8047) = 0.9942
+===> Epoch[1](324/3667): Loss_D: nan Loss_G: L(SSIM: 0.9814, L1: 41461.6680) = 0.9814
+===> Epoch[1](325/3667): Loss_D: nan Loss_G: L(SSIM: 0.9826, L1: 83805.1562) = 0.9826
+===> Epoch[1](326/3667): Loss_D: nan Loss_G: L(SSIM: 0.9890, L1: 130568.7656) = 0.9890
+===> Epoch[1](327/3667): Loss_D: nan Loss_G: L(SSIM: 0.9838, L1: 61355.3633) = 0.9838
+===> Epoch[1](328/3667): Loss_D: 0.6168 Loss_G: L(SSIM: 0.9940, L1: 95984.7500) = 0.9940
+===> Epoch[1](329/3667): Loss_D: 0.5390 Loss_G: L(SSIM: 0.9749, L1: 139038.5156) = 0.9749
+===> Epoch[1](330/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9924, L1: 401942.5625) = 0.9924
+===> Epoch[1](331/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9824, L1: 678430.8750) = 0.9824
+===> Epoch[1](332/3667): Loss_D: nan Loss_G: L(SSIM: 0.9950, L1: 1757319.3750) = 0.9950
+===> Epoch[1](333/3667): Loss_D: nan Loss_G: L(SSIM: 0.9958, L1: 2506551.7500) = 0.9958
+===> Epoch[1](334/3667): Loss_D: nan Loss_G: L(SSIM: 0.9860, L1: 3379174.7500) = 0.9860
+===> Epoch[1](335/3667): Loss_D: nan Loss_G: L(SSIM: 0.9820, L1: 4378015.5000) = 0.9820
+===> Epoch[1](336/3667): Loss_D: nan Loss_G: L(SSIM: 0.9902, L1: 6601882.0000) = 0.9902
+===> Epoch[1](337/3667): Loss_D: nan Loss_G: L(SSIM: 0.9984, L1: 22594378.0000) = 0.9984
+===> Epoch[1](338/3667): Loss_D: nan Loss_G: L(SSIM: 0.9752, L1: 45614816.0000) = 0.9752
+===> Epoch[1](339/3667): Loss_D: nan Loss_G: L(SSIM: 0.9852, L1: 64243372.0000) = 0.9852
+===> Epoch[1](340/3667): Loss_D: nan Loss_G: L(SSIM: 0.9825, L1: 76084536.0000) = 0.9825
+===> Epoch[1](341/3667): Loss_D: nan Loss_G: L(SSIM: 0.9872, L1: 78135640.0000) = 0.9872
+===> Epoch[1](342/3667): Loss_D: nan Loss_G: L(SSIM: 0.9849, L1: 63671976.0000) = 0.9849
+===> Epoch[1](343/3667): Loss_D: nan Loss_G: L(SSIM: 0.9790, L1: 73838440.0000) = 0.9790
+===> Epoch[1](344/3667): Loss_D: nan Loss_G: L(SSIM: 0.9893, L1: 73263560.0000) = 0.9893
+===> Epoch[1](345/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9920, L1: 69050520.0000) = 0.9920
+===> Epoch[1](346/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9900, L1: 77852264.0000) = 0.9900
+===> Epoch[1](347/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9945, L1: 97813424.0000) = 0.9945
+===> Epoch[1](348/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9959, L1: 90049848.0000) = 0.9959
+===> Epoch[1](349/3667): Loss_D: nan Loss_G: L(SSIM: 0.9973, L1: 151243264.0000) = 0.9973
+===> Epoch[1](350/3667): Loss_D: nan Loss_G: L(SSIM: 0.9910, L1: 147098416.0000) = 0.9910
+===> Epoch[1](351/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9897, L1: 112596808.0000) = 0.9897
+===> Epoch[1](352/3667): Loss_D: nan Loss_G: L(SSIM: 0.9853, L1: 128671696.0000) = 0.9853
+===> Epoch[1](353/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9900, L1: 168175104.0000) = 0.9900
+===> Epoch[1](354/3667): Loss_D: nan Loss_G: L(SSIM: 0.9903, L1: 145960512.0000) = 0.9903
+===> Epoch[1](355/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9801, L1: 129450784.0000) = 0.9801
+===> Epoch[1](356/3667): Loss_D: nan Loss_G: L(SSIM: 0.9829, L1: 109806552.0000) = 0.9829
+===> Epoch[1](357/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9720, L1: 122579392.0000) = 0.9720
+===> Epoch[1](358/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9925, L1: 172429104.0000) = 0.9925
+===> Epoch[1](359/3667): Loss_D: nan Loss_G: L(SSIM: 0.9854, L1: 128502072.0000) = 0.9854
+===> Epoch[1](360/3667): Loss_D: nan Loss_G: L(SSIM: 0.9967, L1: 147613568.0000) = 0.9967
+===> Epoch[1](361/3667): Loss_D: nan Loss_G: L(SSIM: 0.9833, L1: 105338360.0000) = 0.9833
+===> Epoch[1](362/3667): Loss_D: nan Loss_G: L(SSIM: 0.9772, L1: 156351552.0000) = 0.9772
+===> Epoch[1](363/3667): Loss_D: nan Loss_G: L(SSIM: 0.9895, L1: 155170176.0000) = 0.9895
+===> Epoch[1](364/3667): Loss_D: nan Loss_G: L(SSIM: 0.9852, L1: 125656520.0000) = 0.9852
+===> Epoch[1](365/3667): Loss_D: nan Loss_G: L(SSIM: 0.9755, L1: 150745600.0000) = 0.9755
+===> Epoch[1](366/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9754, L1: 169595664.0000) = 0.9754
+===> Epoch[1](367/3667): Loss_D: nan Loss_G: L(SSIM: 0.9892, L1: 147219408.0000) = 0.9892
+===> Epoch[1](368/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9968, L1: 159107520.0000) = 0.9968
+===> Epoch[1](369/3667): Loss_D: nan Loss_G: L(SSIM: 0.9951, L1: 153586880.0000) = 0.9951
+===> Epoch[1](370/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9823, L1: 190505200.0000) = 0.9823
+===> Epoch[1](371/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9801, L1: 282246720.0000) = 0.9801
+===> Epoch[1](372/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9919, L1: 261392448.0000) = 0.9919
+===> Epoch[1](373/3667): Loss_D: nan Loss_G: L(SSIM: 0.9922, L1: 285393312.0000) = 0.9922
+===> Epoch[1](374/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9612, L1: 361299040.0000) = 0.9612
+===> Epoch[1](375/3667): Loss_D: nan Loss_G: L(SSIM: 0.9799, L1: 337667616.0000) = 0.9799
+===> Epoch[1](376/3667): Loss_D: nan Loss_G: L(SSIM: 0.9846, L1: 347983776.0000) = 0.9846
+===> Epoch[1](377/3667): Loss_D: nan Loss_G: L(SSIM: 0.9987, L1: 442640320.0000) = 0.9987
+===> Epoch[1](378/3667): Loss_D: nan Loss_G: L(SSIM: 0.9898, L1: 424949344.0000) = 0.9898
+===> Epoch[1](379/3667): Loss_D: nan Loss_G: L(SSIM: 0.9949, L1: 406160128.0000) = 0.9949
+===> Epoch[1](380/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9905, L1: 358215424.0000) = 0.9905
+===> Epoch[1](381/3667): Loss_D: nan Loss_G: L(SSIM: 0.9927, L1: 284793952.0000) = 0.9927
+===> Epoch[1](382/3667): Loss_D: nan Loss_G: L(SSIM: 0.9926, L1: 325018848.0000) = 0.9926
+===> Epoch[1](383/3667): Loss_D: nan Loss_G: L(SSIM: 0.9914, L1: 368581952.0000) = 0.9914
+===> Epoch[1](384/3667): Loss_D: nan Loss_G: L(SSIM: 0.9950, L1: 298996448.0000) = 0.9950
+===> Epoch[1](385/3667): Loss_D: nan Loss_G: L(SSIM: 0.9743, L1: 276249184.0000) = 0.9743
+===> Epoch[1](386/3667): Loss_D: nan Loss_G: L(SSIM: 0.9952, L1: 313303776.0000) = 0.9952
+===> Epoch[1](387/3667): Loss_D: nan Loss_G: L(SSIM: 0.9943, L1: 350914368.0000) = 0.9943
+===> Epoch[1](388/3667): Loss_D: nan Loss_G: L(SSIM: 0.9864, L1: 229048736.0000) = 0.9864
+===> Epoch[1](389/3667): Loss_D: nan Loss_G: L(SSIM: 0.9897, L1: 316185920.0000) = 0.9897
+===> Epoch[1](390/3667): Loss_D: nan Loss_G: L(SSIM: 0.9944, L1: 419185536.0000) = 0.9944
+===> Epoch[1](391/3667): Loss_D: nan Loss_G: L(SSIM: 0.9965, L1: 869845824.0000) = 0.9965
+===> Epoch[1](392/3667): Loss_D: nan Loss_G: L(SSIM: 0.9645, L1: 817512960.0000) = 0.9645
+===> Epoch[1](393/3667): Loss_D: nan Loss_G: L(SSIM: 0.9944, L1: 1612133760.0000) = 0.9944
+===> Epoch[1](394/3667): Loss_D: nan Loss_G: L(SSIM: 0.9762, L1: 2120841088.0000) = 0.9762
+===> Epoch[1](395/3667): Loss_D: nan Loss_G: L(SSIM: 0.9842, L1: 2738392320.0000) = 0.9842
+===> Epoch[1](396/3667): Loss_D: nan Loss_G: L(SSIM: 0.9873, L1: 3969782528.0000) = 0.9873
+===> Epoch[1](397/3667): Loss_D: nan Loss_G: L(SSIM: 0.9910, L1: 5361374208.0000) = 0.9910
+===> Epoch[1](398/3667): Loss_D: nan Loss_G: L(SSIM: 0.9795, L1: 5602720256.0000) = 0.9795
+===> Epoch[1](399/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9773, L1: 7261105664.0000) = 0.9773
+===> Epoch[1](400/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9863, L1: 9151662080.0000) = 0.9863
+===> Epoch[1](401/3667): Loss_D: nan Loss_G: L(SSIM: 0.9938, L1: 11148044288.0000) = 0.9938
+===> Epoch[1](402/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9833, L1: 11959930880.0000) = 0.9833
+===> Epoch[1](403/3667): Loss_D: nan Loss_G: L(SSIM: 0.9887, L1: 12822612992.0000) = 0.9887
+===> Epoch[1](404/3667): Loss_D: nan Loss_G: L(SSIM: 0.9833, L1: 10695612416.0000) = 0.9833
+===> Epoch[1](405/3667): Loss_D: nan Loss_G: L(SSIM: 0.9922, L1: 13023920128.0000) = 0.9922
+===> Epoch[1](406/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9965, L1: 13184817152.0000) = 0.9965
+===> Epoch[1](407/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9641, L1: 10683692032.0000) = 0.9641
+===> Epoch[1](408/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9783, L1: 12612188160.0000) = 0.9783
+===> Epoch[1](409/3667): Loss_D: nan Loss_G: L(SSIM: 0.9780, L1: 11697712128.0000) = 0.9780
+===> Epoch[1](410/3667): Loss_D: nan Loss_G: L(SSIM: 0.9881, L1: 10224177152.0000) = 0.9881
+===> Epoch[1](411/3667): Loss_D: nan Loss_G: L(SSIM: 0.9850, L1: 13382040576.0000) = 0.9850
+===> Epoch[1](412/3667): Loss_D: nan Loss_G: L(SSIM: 0.9856, L1: 11606214656.0000) = 0.9856
+===> Epoch[1](413/3667): Loss_D: nan Loss_G: L(SSIM: 0.9954, L1: 11181479936.0000) = 0.9954
+===> Epoch[1](414/3667): Loss_D: nan Loss_G: L(SSIM: 0.9771, L1: 9607006208.0000) = 0.9771
+===> Epoch[1](415/3667): Loss_D: nan Loss_G: L(SSIM: 0.9703, L1: 6746779648.0000) = 0.9703
+===> Epoch[1](416/3667): Loss_D: nan Loss_G: L(SSIM: 0.9769, L1: 7016087552.0000) = 0.9769
+===> Epoch[1](417/3667): Loss_D: nan Loss_G: L(SSIM: 0.9896, L1: 6183070720.0000) = 0.9896
+===> Epoch[1](418/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9901, L1: 5276454400.0000) = 0.9901
+===> Epoch[1](419/3667): Loss_D: nan Loss_G: L(SSIM: 0.9809, L1: 5095336448.0000) = 0.9809
+===> Epoch[1](420/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9762, L1: 3751713536.0000) = 0.9762
+===> Epoch[1](421/3667): Loss_D: nan Loss_G: L(SSIM: 0.9915, L1: 5439505408.0000) = 0.9915
+===> Epoch[1](422/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9550, L1: 4725139968.0000) = 0.9550
+===> Epoch[1](423/3667): Loss_D: nan Loss_G: L(SSIM: 0.9857, L1: 4702565376.0000) = 0.9857
+===> Epoch[1](424/3667): Loss_D: nan Loss_G: L(SSIM: 0.9866, L1: 4427878400.0000) = 0.9866
+===> Epoch[1](425/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9788, L1: 3935270656.0000) = 0.9788
+===> Epoch[1](426/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9959, L1: 4873497088.0000) = 0.9959
+===> Epoch[1](427/3667): Loss_D: nan Loss_G: L(SSIM: 0.9878, L1: 3601987072.0000) = 0.9878
+===> Epoch[1](428/3667): Loss_D: nan Loss_G: L(SSIM: 0.9889, L1: 4091185920.0000) = 0.9889
+===> Epoch[1](429/3667): Loss_D: nan Loss_G: L(SSIM: 0.9725, L1: 3044041984.0000) = 0.9725
+===> Epoch[1](430/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9934, L1: 3229445376.0000) = 0.9934
+===> Epoch[1](431/3667): Loss_D: nan Loss_G: L(SSIM: 0.9910, L1: 2573931520.0000) = 0.9910
+===> Epoch[1](432/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9896, L1: 2870264832.0000) = 0.9896
+===> Epoch[1](433/3667): Loss_D: nan Loss_G: L(SSIM: 0.9887, L1: 2281438208.0000) = 0.9887
+===> Epoch[1](434/3667): Loss_D: nan Loss_G: L(SSIM: 0.9901, L1: 2613711616.0000) = 0.9901
+===> Epoch[1](435/3667): Loss_D: nan Loss_G: L(SSIM: 0.9743, L1: 1959984128.0000) = 0.9743
+===> Epoch[1](436/3667): Loss_D: nan Loss_G: L(SSIM: 0.9930, L1: 2271136768.0000) = 0.9930
+===> Epoch[1](437/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9902, L1: 1929257088.0000) = 0.9902
+===> Epoch[1](438/3667): Loss_D: nan Loss_G: L(SSIM: 0.9881, L1: 1863633536.0000) = 0.9881
+===> Epoch[1](439/3667): Loss_D: nan Loss_G: L(SSIM: 0.9866, L1: 1973775360.0000) = 0.9866
+===> Epoch[1](440/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9759, L1: 1737469824.0000) = 0.9759
+===> Epoch[1](441/3667): Loss_D: nan Loss_G: L(SSIM: 0.9894, L1: 1715397248.0000) = 0.9894
+===> Epoch[1](442/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9838, L1: 1862095104.0000) = 0.9838
+===> Epoch[1](443/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9924, L1: 1427374720.0000) = 0.9924
+===> Epoch[1](444/3667): Loss_D: nan Loss_G: L(SSIM: 0.9847, L1: 1192931840.0000) = 0.9847
+===> Epoch[1](445/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9855, L1: 1310188672.0000) = 0.9855
+===> Epoch[1](446/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9780, L1: 1247567360.0000) = 0.9780
+===> Epoch[1](447/3667): Loss_D: nan Loss_G: L(SSIM: 0.9806, L1: 1218800640.0000) = 0.9806
+===> Epoch[1](448/3667): Loss_D: nan Loss_G: L(SSIM: 0.9904, L1: 966221760.0000) = 0.9904
+===> Epoch[1](449/3667): Loss_D: nan Loss_G: L(SSIM: 0.9733, L1: 959111616.0000) = 0.9733
+===> Epoch[1](450/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9809, L1: 974495360.0000) = 0.9809
+===> Epoch[1](451/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9746, L1: 1005296128.0000) = 0.9746
+===> Epoch[1](452/3667): Loss_D: nan Loss_G: L(SSIM: 0.9845, L1: 1057016960.0000) = 0.9845
+===> Epoch[1](453/3667): Loss_D: nan Loss_G: L(SSIM: 0.9469, L1: 951731264.0000) = 0.9469
+===> Epoch[1](454/3667): Loss_D: nan Loss_G: L(SSIM: 0.9622, L1: 960792576.0000) = 0.9622
+===> Epoch[1](455/3667): Loss_D: nan Loss_G: L(SSIM: 0.9903, L1: 938395264.0000) = 0.9903
+===> Epoch[1](456/3667): Loss_D: nan Loss_G: L(SSIM: 0.9771, L1: 773922176.0000) = 0.9771
+===> Epoch[1](457/3667): Loss_D: nan Loss_G: L(SSIM: 0.9877, L1: 553161920.0000) = 0.9877
+===> Epoch[1](458/3667): Loss_D: nan Loss_G: L(SSIM: 0.9794, L1: 286213888.0000) = 0.9794
+===> Epoch[1](459/3667): Loss_D: nan Loss_G: L(SSIM: 0.9849, L1: 158690160.0000) = 0.9849
+===> Epoch[1](460/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9699, L1: 61838444.0000) = 0.9699
+===> Epoch[1](461/3667): Loss_D: nan Loss_G: L(SSIM: 0.9871, L1: 41970412.0000) = 0.9871
+===> Epoch[1](462/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9938, L1: 19549012.0000) = 0.9938
+===> Epoch[1](463/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9967, L1: 11954442.0000) = 0.9967
+===> Epoch[1](464/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9930, L1: 6913124.0000) = 0.9930
+===> Epoch[1](465/3667): Loss_D: nan Loss_G: L(SSIM: 0.9744, L1: 6930416.0000) = 0.9744
+===> Epoch[1](466/3667): Loss_D: nan Loss_G: L(SSIM: 0.9856, L1: 97829.2266) = 0.9856
+===> Epoch[1](467/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9685, L1: 0.3353) = 0.9685
+===> Epoch[1](468/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9644, L1: 0.6036) = 0.9644
+===> Epoch[1](469/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9887, L1: 0.3795) = 0.9887
+===> Epoch[1](470/3667): Loss_D: nan Loss_G: L(SSIM: 0.9761, L1: 0.3783) = 0.9761
+===> Epoch[1](471/3667): Loss_D: nan Loss_G: L(SSIM: 0.9544, L1: 93.9205) = 0.9544
+===> Epoch[1](472/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9658, L1: 0.2742) = 0.9658
+===> Epoch[1](473/3667): Loss_D: nan Loss_G: L(SSIM: 0.9777, L1: 0.3824) = 0.9777
+===> Epoch[1](474/3667): Loss_D: nan Loss_G: L(SSIM: 0.9191, L1: 0.4215) = 0.9191
+===> Epoch[1](475/3667): Loss_D: nan Loss_G: L(SSIM: 0.9921, L1: 0.4736) = 0.9921
+===> Epoch[1](476/3667): Loss_D: nan Loss_G: L(SSIM: 0.9913, L1: 6445.3491) = 0.9913
+===> Epoch[1](477/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9917, L1: 0.6283) = 0.9917
+===> Epoch[1](478/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9752, L1: 47.2834) = 0.9752
+===> Epoch[1](479/3667): Loss_D: nan Loss_G: L(SSIM: 0.9863, L1: 1112.0159) = 0.9863
+===> Epoch[1](480/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9867, L1: 0.5497) = 0.9867
+===> Epoch[1](481/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9694, L1: 2235.3604) = 0.9694
+===> Epoch[1](482/3667): Loss_D: nan Loss_G: L(SSIM: 0.9845, L1: 8065.9946) = 0.9845
+===> Epoch[1](483/3667): Loss_D: nan Loss_G: L(SSIM: 0.9763, L1: 78.6953) = 0.9763
+===> Epoch[1](484/3667): Loss_D: nan Loss_G: L(SSIM: 0.9482, L1: 374.7844) = 0.9482
+===> Epoch[1](485/3667): Loss_D: nan Loss_G: L(SSIM: 0.9695, L1: 0.3595) = 0.9695
+===> Epoch[1](486/3667): Loss_D: nan Loss_G: L(SSIM: 0.9922, L1: 0.3871) = 0.9922
+===> Epoch[1](487/3667): Loss_D: nan Loss_G: L(SSIM: 0.9822, L1: 0.5037) = 0.9822
+===> Epoch[1](488/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9922, L1: 0.4617) = 0.9922
+===> Epoch[1](489/3667): Loss_D: nan Loss_G: L(SSIM: 0.9939, L1: 0.3933) = 0.9939
+===> Epoch[1](490/3667): Loss_D: nan Loss_G: L(SSIM: 0.9916, L1: 0.4334) = 0.9916
+===> Epoch[1](491/3667): Loss_D: nan Loss_G: L(SSIM: 0.9620, L1: 0.3212) = 0.9620
+===> Epoch[1](492/3667): Loss_D: nan Loss_G: L(SSIM: 0.9933, L1: 0.4021) = 0.9933
+===> Epoch[1](493/3667): Loss_D: nan Loss_G: L(SSIM: 0.9714, L1: 0.3409) = 0.9714
+===> Epoch[1](494/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9842, L1: 0.3614) = 0.9842
+===> Epoch[1](495/3667): Loss_D: nan Loss_G: L(SSIM: 0.9700, L1: 0.3789) = 0.9700
+===> Epoch[1](496/3667): Loss_D: nan Loss_G: L(SSIM: 0.9791, L1: 0.3937) = 0.9791
+===> Epoch[1](497/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9590, L1: 0.3538) = 0.9590
+===> Epoch[1](498/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9941, L1: 0.4481) = 0.9941
+===> Epoch[1](499/3667): Loss_D: nan Loss_G: L(SSIM: 0.9944, L1: 0.4214) = 0.9944
+===> Epoch[1](500/3667): Loss_D: nan Loss_G: L(SSIM: 0.9934, L1: 0.4509) = 0.9934
+===> Epoch[1](501/3667): Loss_D: nan Loss_G: L(SSIM: 0.9876, L1: 0.5161) = 0.9876
+===> Epoch[1](502/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9936, L1: 0.5234) = 0.9936
+===> Epoch[1](503/3667): Loss_D: nan Loss_G: L(SSIM: 0.9804, L1: 0.5013) = 0.9804
+===> Epoch[1](504/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9922, L1: 0.4628) = 0.9922
+===> Epoch[1](505/3667): Loss_D: nan Loss_G: L(SSIM: 0.9963, L1: 0.4468) = 0.9963
+===> Epoch[1](506/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9783, L1: 0.3606) = 0.9783
+===> Epoch[1](507/3667): Loss_D: nan Loss_G: L(SSIM: 0.9780, L1: 0.4000) = 0.9780
+===> Epoch[1](508/3667): Loss_D: nan Loss_G: L(SSIM: 0.9787, L1: 0.4783) = 0.9787
+===> Epoch[1](509/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9811, L1: 0.2986) = 0.9811
+===> Epoch[1](510/3667): Loss_D: nan Loss_G: L(SSIM: 0.9407, L1: 0.3310) = 0.9407
+===> Epoch[1](511/3667): Loss_D: nan Loss_G: L(SSIM: 0.9968, L1: 0.4738) = 0.9968
+===> Epoch[1](512/3667): Loss_D: nan Loss_G: L(SSIM: 0.9806, L1: 0.2957) = 0.9806
+===> Epoch[1](513/3667): Loss_D: nan Loss_G: L(SSIM: 0.9838, L1: 0.4443) = 0.9838
+===> Epoch[1](514/3667): Loss_D: nan Loss_G: L(SSIM: 0.9868, L1: 0.4331) = 0.9868
+===> Epoch[1](515/3667): Loss_D: nan Loss_G: L(SSIM: 0.9810, L1: 0.4140) = 0.9810
+===> Epoch[1](516/3667): Loss_D: nan Loss_G: L(SSIM: 0.9753, L1: 0.4410) = 0.9753
+===> Epoch[1](517/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9838, L1: 0.3899) = 0.9838
+===> Epoch[1](518/3667): Loss_D: nan Loss_G: L(SSIM: 0.9966, L1: 0.4309) = 0.9966
+===> Epoch[1](519/3667): Loss_D: nan Loss_G: L(SSIM: 0.9884, L1: 0.4800) = 0.9884
+===> Epoch[1](520/3667): Loss_D: nan Loss_G: L(SSIM: 0.9735, L1: 0.4110) = 0.9735
+===> Epoch[1](521/3667): Loss_D: nan Loss_G: L(SSIM: 0.9798, L1: 0.3594) = 0.9798
+===> Epoch[1](522/3667): Loss_D: nan Loss_G: L(SSIM: 0.9696, L1: 0.3771) = 0.9696
+===> Epoch[1](523/3667): Loss_D: nan Loss_G: L(SSIM: 0.9933, L1: 0.4579) = 0.9933
+===> Epoch[1](524/3667): Loss_D: nan Loss_G: L(SSIM: 0.9802, L1: 0.3541) = 0.9802
+===> Epoch[1](525/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9705, L1: 0.3832) = 0.9705
+===> Epoch[1](526/3667): Loss_D: nan Loss_G: L(SSIM: 0.9943, L1: 0.4534) = 0.9943
+===> Epoch[1](527/3667): Loss_D: nan Loss_G: L(SSIM: 0.9978, L1: 0.4504) = 0.9978
+===> Epoch[1](528/3667): Loss_D: nan Loss_G: L(SSIM: 0.9510, L1: 0.3817) = 0.9510
+===> Epoch[1](529/3667): Loss_D: nan Loss_G: L(SSIM: 0.9648, L1: 0.3660) = 0.9648
+===> Epoch[1](530/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9849, L1: 0.3702) = 0.9849
+===> Epoch[1](531/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9536, L1: 0.3722) = 0.9536
+===> Epoch[1](532/3667): Loss_D: nan Loss_G: L(SSIM: 0.9574, L1: 0.3831) = 0.9574
+===> Epoch[1](533/3667): Loss_D: nan Loss_G: L(SSIM: 0.9847, L1: 0.4342) = 0.9847
+===> Epoch[1](534/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9805, L1: 0.4350) = 0.9805
+===> Epoch[1](535/3667): Loss_D: nan Loss_G: L(SSIM: 0.9337, L1: 0.4081) = 0.9337
+===> Epoch[1](536/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9878, L1: 0.4449) = 0.9878
+===> Epoch[1](537/3667): Loss_D: nan Loss_G: L(SSIM: 0.9875, L1: 0.3555) = 0.9875
+===> Epoch[1](538/3667): Loss_D: nan Loss_G: L(SSIM: 0.9712, L1: 0.4036) = 0.9712
+===> Epoch[1](539/3667): Loss_D: nan Loss_G: L(SSIM: 0.9937, L1: 0.4358) = 0.9937
+===> Epoch[1](540/3667): Loss_D: nan Loss_G: L(SSIM: 0.9864, L1: 0.4144) = 0.9864
+===> Epoch[1](541/3667): Loss_D: nan Loss_G: L(SSIM: 0.9553, L1: 0.3306) = 0.9553
+===> Epoch[1](542/3667): Loss_D: nan Loss_G: L(SSIM: 0.9684, L1: 0.3856) = 0.9684
+===> Epoch[1](543/3667): Loss_D: nan Loss_G: L(SSIM: 0.9775, L1: 0.4243) = 0.9775
+===> Epoch[1](544/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9939, L1: 0.5166) = 0.9939
+===> Epoch[1](545/3667): Loss_D: nan Loss_G: L(SSIM: 0.9696, L1: 0.3876) = 0.9696
+===> Epoch[1](546/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9755, L1: 0.4886) = 0.9755
+===> Epoch[1](547/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9895, L1: 0.4694) = 0.9895
+===> Epoch[1](548/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9831, L1: 0.3613) = 0.9831
+===> Epoch[1](549/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9796, L1: 0.4295) = 0.9796
+===> Epoch[1](550/3667): Loss_D: nan Loss_G: L(SSIM: 0.9928, L1: 0.4221) = 0.9928
+===> Epoch[1](551/3667): Loss_D: nan Loss_G: L(SSIM: 0.9956, L1: 0.5011) = 0.9956
+===> Epoch[1](552/3667): Loss_D: nan Loss_G: L(SSIM: 0.9468, L1: 0.3928) = 0.9468
+===> Epoch[1](553/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9719, L1: 0.3859) = 0.9719
+===> Epoch[1](554/3667): Loss_D: nan Loss_G: L(SSIM: 0.9885, L1: 0.4205) = 0.9885
+===> Epoch[1](555/3667): Loss_D: nan Loss_G: L(SSIM: 0.9823, L1: 0.3446) = 0.9823
+===> Epoch[1](556/3667): Loss_D: nan Loss_G: L(SSIM: 0.9695, L1: 0.4270) = 0.9695
+===> Epoch[1](557/3667): Loss_D: nan Loss_G: L(SSIM: 0.9926, L1: 0.4241) = 0.9926
+===> Epoch[1](558/3667): Loss_D: nan Loss_G: L(SSIM: 0.9620, L1: 0.3931) = 0.9620
+===> Epoch[1](559/3667): Loss_D: nan Loss_G: L(SSIM: 0.9562, L1: 0.3817) = 0.9562
+===> Epoch[1](560/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9809, L1: 0.4030) = 0.9809
+===> Epoch[1](561/3667): Loss_D: nan Loss_G: L(SSIM: 0.9874, L1: 0.3931) = 0.9874
+===> Epoch[1](562/3667): Loss_D: nan Loss_G: L(SSIM: 0.9805, L1: 0.3926) = 0.9805
+===> Epoch[1](563/3667): Loss_D: nan Loss_G: L(SSIM: 0.9897, L1: 0.4924) = 0.9897
+===> Epoch[1](564/3667): Loss_D: nan Loss_G: L(SSIM: 0.9197, L1: 0.3039) = 0.9197
+===> Epoch[1](565/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9694, L1: 0.3304) = 0.9694
+===> Epoch[1](566/3667): Loss_D: nan Loss_G: L(SSIM: 0.9865, L1: 0.4492) = 0.9865
+===> Epoch[1](567/3667): Loss_D: nan Loss_G: L(SSIM: 0.9446, L1: 0.3968) = 0.9446
+===> Epoch[1](568/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9742, L1: 0.3786) = 0.9742
+===> Epoch[1](569/3667): Loss_D: nan Loss_G: L(SSIM: 0.9715, L1: 0.3483) = 0.9715
+===> Epoch[1](570/3667): Loss_D: nan Loss_G: L(SSIM: 0.9814, L1: 0.4610) = 0.9814
+===> Epoch[1](571/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9740, L1: 0.4451) = 0.9740
+===> Epoch[1](572/3667): Loss_D: nan Loss_G: L(SSIM: 0.9728, L1: 0.3546) = 0.9728
+===> Epoch[1](573/3667): Loss_D: nan Loss_G: L(SSIM: 0.9871, L1: 0.4578) = 0.9871
+===> Epoch[1](574/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9941, L1: 0.4638) = 0.9941
+===> Epoch[1](575/3667): Loss_D: nan Loss_G: L(SSIM: 0.9713, L1: 0.3770) = 0.9713
+===> Epoch[1](576/3667): Loss_D: nan Loss_G: L(SSIM: 0.9822, L1: 0.3764) = 0.9822
+===> Epoch[1](577/3667): Loss_D: nan Loss_G: L(SSIM: 0.9900, L1: 0.4618) = 0.9900
+===> Epoch[1](578/3667): Loss_D: nan Loss_G: L(SSIM: 0.9930, L1: 0.4720) = 0.9930
+===> Epoch[1](579/3667): Loss_D: nan Loss_G: L(SSIM: 0.9893, L1: 0.4834) = 0.9893
+===> Epoch[1](580/3667): Loss_D: 0.5000 Loss_G: L(SSIM: 0.9742, L1: 0.4135) = 0.9742
+Traceback (most recent call last):
+  File "p2p_train.py", line 257, in <module>
+    loss_g.backward()
+  File "/home/brummer/.local/lib/python3.5/site-packages/torch/tensor.py", line 107, in backward
+    torch.autograd.backward(self, gradient, retain_graph, create_graph)
+  File "/home/brummer/.local/lib/python3.5/site-packages/torch/autograd/__init__.py", line 93, in backward
+    allow_unreachable=True)  # allow_unreachable flag
+KeyboardInterrupt

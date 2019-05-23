@@ -89573,3 +89573,5 @@ python3 -u p2p_train.py --min_ssim_l 0.15 --post_fail_ssim_num 70 --weight_ssim 
 
 
 
+python3 -u run_nn.py --model HulNet --test_reserve ursulines-red stefantiek ursulines-building MuseeL-Bobo CourtineDeVillersDebris C500D --cuda_device 3 --batch_size 25 &> 'results/train/HulNet1-3'
+

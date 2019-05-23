@@ -1,0 +1,452 @@
+Namespace(batch_size=25, compressionmax=100, compressionmin=100, cuda_device=1, depth=22, do_sizecheck=False, epoch=32768, expname=None, find_noise=False, kernel_size=5, load_g_path=None, load_g_state_dict_path=None, lossf='SSIM', lr=0.0003, lr_gamma=0.75, lr_step_size=1, model='HulbNoBN128Net', models_dir='models', n_channels=128, relu='relu', result_dir='results/train', resume=False, scheduler='plateau', sigmamax=0, sigmamin=0, test_reserve=None, time_limit=172800, train_data=['datasets/train/NIND_128_112'], yval=None)
+2019-05-23T14:49_run_nn.py_--train_data_datasets-train-NIND_128_112_--model_HulbNoBN128Net_--cuda_device_1_--batch_size_25
+===> Building model
+Added MVB-LouveFire['ISO200', 'ISO200-2']['ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISO6400-2', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added ursulines-red['ISO200']['ISO250', 'ISO500', 'ISO4000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added corkboard['ISO200']['ISO320', 'ISO1000', 'ISO2500', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added banana['ISO200']['ISO250', 'ISO500', 'ISO800', 'ISO1250', 'ISO2000', 'ISO4000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added MuseeL-inspiredlotus['ISO200']['ISO640', 'ISO2500', 'ISO6400'] to the dataset
+Added schooltop['ISO200']['ISO800', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added Saint-Remi-C['ISO200']['ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added MuseeL-cross-C500D['ISO100']['ISO200', 'ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISOH1'] to the dataset
+Added MVB-JardinBotanique['ISO200', 'ISO200-2']['ISO400', 'ISO1000', 'ISO2500', 'ISO3200', 'ISO6400'] to the dataset
+Added MuseeL-yombe-C500D['ISO100']['ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISOH1'] to the dataset
+Added MuseeL-text['ISO200']['ISO400', 'ISO5000', 'ISO6400'] to the dataset
+Added MuseeL-centrifuge['ISO200']['ISO800', 'ISO2000', 'ISO6400'] to the dataset
+Added Ottignies['ISO200']['ISO640', 'ISO3200', 'ISO6400'] to the dataset
+Added tree1['ISO200']['ISO400', 'ISO1600', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added MuseeL-snakeAndMask['ISO200']['ISO2000', 'ISO6400', 'ISOH1'] to the dataset
+Added MuseeL-painting['ISO200']['ISO800', 'ISO3200', 'ISO6400'] to the dataset
+Added MuseeL-yombe['ISO200']['ISO640', 'ISO3200', 'ISO6400'] to the dataset
+Added bloop['ISO200']['ISO3200', 'ISO6400', 'ISOH1'] to the dataset
+Added MuseeL-head['ISO200']['ISO640', 'ISO3200', 'ISO6400'] to the dataset
+Added pastries['ISO200']['ISO3200', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added MuseeL-Sepik-C500D['ISO100']['ISO200', 'ISO800', 'ISO1600', 'ISO3200', 'ISOH1'] to the dataset
+Added MuseeL-roue['ISO200']['ISO800', 'ISO1250', 'ISO6400'] to the dataset
+Added MuseeL-Saint-Pierre-C500D['ISO100', 'ISO100-2']['ISO200', 'ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISOH1'] to the dataset
+Added dustyrubberduck['ISO200']['ISO1000', 'ISO1250', 'ISO2500', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added Stevin['ISO200']['ISO4000', 'ISO6400'] to the dataset
+Added MuseeL-RGB['ISO200']['ISO250', 'ISO1000', 'ISO6400'] to the dataset
+Added MuseeL-Ghysels['ISO200']['ISO800', 'ISO6400'] to the dataset
+Added MuseeL-pig['ISO200']['ISO500', 'ISO2000', 'ISO6400'] to the dataset
+Added MuseeL-ram['ISO200']['ISO800', 'ISO1000', 'ISO6400'] to the dataset
+Added kibbles['ISO200', 'ISO200-2']['ISO800', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added parking-keyboard['ISO200']['ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added whistle['ISO200']['ISO250', 'ISO500', 'ISO1000', 'ISO2000', 'ISO4000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3', 'ISOH4'] to the dataset
+Added fruits['ISO200', 'ISO200-2']['ISO800', 'ISO3200', 'ISO5000', 'ISO6400'] to the dataset
+Added ursulines-building['ISO200']['ISO250', 'ISO400', 'ISO1000', 'ISO4000', 'ISO6400', 'ISOH1'] to the dataset
+Added MuseeL-mammal-C500D['ISO100']['ISO200', 'ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISOH1'] to the dataset
+Added MuseeL-AraPacis['ISO200']['ISO800', 'ISO4000', 'ISO6400'] to the dataset
+Added MuseeL-hanging['ISO200']['ISO500', 'ISO4000', 'ISO6400'] to the dataset
+Added MuseeL-coral2['ISO200']['ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added semicircle['ISO200']['ISO320', 'ISO640', 'ISO1250', 'ISO2500', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added gnome['ISO200']['ISO800', 'ISO1600', 'ISO6400'] to the dataset
+Added MuseeL-coral['ISO200']['ISO800', 'ISO5000', 'ISO6400'] to the dataset
+Added drowning['ISO200']['ISO800', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added LaptopInLibrary['ISO200']['ISO500', 'ISO800', 'ISO1600', 'ISO2500', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added MuseeL-pinklotus['ISO200']['ISO800', 'ISO4000', 'ISO6400'] to the dataset
+Added MuseeL-sol-C500D['ISO100']['ISO200', 'ISO400', 'ISO800', 'ISO3200', 'ISOH1'] to the dataset
+Added MVB-heraldicLion['ISO200', 'ISO200-2']['ISO320', 'ISO1000', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added MuseeL-fuite-C500D['ISO100']['ISO200', 'ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISOH1'] to the dataset
+Added MVB-Urania['ISO200']['ISO320', 'ISO500', 'ISO1000', 'ISO2500', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added MuseeL-stele['ISO200']['ISO640', 'ISO1000', 'ISO6400'] to the dataset
+Added stairs['ISO200']['ISO250', 'ISO320', 'ISO640', 'ISO1250', 'ISO2500', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added MuseeL-skull-C500D['ISO100']['ISO200', 'ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISOH1'] to the dataset
+Added MuseeL-avelo['ISO200']['ISO500', 'ISO3200', 'ISO6400'] to the dataset
+Added MuseeL-Vincent['ISO200']['ISO400', 'ISO2500', 'ISO6400'] to the dataset
+Added MuseeL-byMarcGroessens['ISO200']['ISO400', 'ISO3200', 'ISO6400'] to the dataset
+Added MuseeL-shell['ISO200']['ISO400', 'ISO800', 'ISO6400'] to the dataset
+Added Leonidas['ISO200']['ISO400', 'ISO3200', 'ISO6400', 'ISOH1'] to the dataset
+Added tree2['ISO200']['ISO800', 'ISO1600', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added claytools['ISO200']['ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added MuseeL-SergeVandercam['ISO200']['ISO320', 'ISO1000', 'ISO6400'] to the dataset
+Added directions['ISO200']['ISO640-2', 'ISO640', 'ISO1250', 'ISO6400-2', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added beads['ISO200']['ISO500', 'ISO1000', 'ISO3200', 'ISO6400'] to the dataset
+Added MuseeL-Vanillekipferl['ISO200']['ISO6400', 'ISOH1'] to the dataset
+Added ursulines-can['ISO200', 'ISO200-2']['ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added droid['ISO200']['ISO800', 'ISO3200', 'ISO6400'] to the dataset
+Added claycreatures['ISO200']['ISO1600', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added soap['ISO200', 'ISO200-2']['ISO400', 'ISO800', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3', 'ISOH4'] to the dataset
+Added BruegelLibraryS2['ISO200']['ISO500', 'ISO1250', 'ISO2500', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3', 'ISOH4'] to the dataset
+Added wall['ISO200']['ISO640', 'ISO6400'] to the dataset
+Added MuseeL-pedestal['ISO200']['ISO1250', 'ISO5000', 'ISO6400'] to the dataset
+Added MuseeL-fuite['ISO200']['ISO320', 'ISO4000', 'ISO6400'] to the dataset
+Added stefantiek['ISO200']['ISO250', 'ISO500', 'ISO2000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added claycreature['ISO200']['ISO4000', 'ISO6400', 'ISOH1'] to the dataset
+Added Saint-Remi['ISO200']['ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added fireextinguisher['ISO200', 'ISO200-3', 'ISO200-2']['ISO800', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added MuseeL-ambon['ISO200']['ISO640', 'ISO2500', 'ISO6400'] to the dataset
+Added Homarus-americanus['ISO200', 'ISO200-2']['ISO250', 'ISO400', 'ISO800', 'ISO2000', 'ISO3200', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added MuseeL-idole-C500D['ISO100', 'ISO100-2']['ISO200', 'ISO400', 'ISO800', 'ISO3200', 'ISOH1'] to the dataset
+Added MuseeL-Bobo['ISO200']['ISO2500', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added mugshot['ISO200']['ISO6400', 'ISOH1'] to the dataset
+Added MuseeL-Bobo-C500D['ISO100']['ISO200', 'ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISOH1'] to the dataset
+Added CourtineDeVillersDebris['ISO200']['ISO2500', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added MVB-Bombardement['ISO200', 'ISO200-2']['ISO320', 'ISO800', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added Sint-Joris['ISO200']['ISO1000', 'ISO2500', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added threebicycles['ISO200']['ISO6400'] to the dataset
+Added chapel['ISO200']['ISO1000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added partiallyeatenbanana['ISO200']['ISO640', 'ISO1250', 'ISO2500', 'ISO4000', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added sevenbicycles['ISO200']['ISO1600', 'ISO6400'] to the dataset
+Added MuseeL-theatre['ISO200']['ISO400', 'ISO2500', 'ISO6400'] to the dataset
+Added shells['ISO200', 'ISO200-2']['ISO250', 'ISO320', 'ISO1000', 'ISO1600', 'ISO2500', 'ISO3200', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added MuseeL-Armlessness['ISO200']['ISO800', 'ISO2000', 'ISO6400'] to the dataset
+Added MuseeL-cross['ISO200']['ISO500', 'ISO4000', 'ISO6400'] to the dataset
+Added MuseeL-clam['ISO200']['ISO6400', 'ISOH1'] to the dataset
+Added MuseeL-Moschophore['ISO200']['ISO500', 'ISO4000', 'ISO6400'] to the dataset
+Added holywater['ISO200']['ISO1600', 'ISO4000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added MuseeL-mask['ISO200']['ISO640', 'ISO4000', 'ISO6400'] to the dataset
+Added books['ISO200']['ISO1600', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added MVB-Sainte-Anne['ISO200', 'ISO200-2']['ISO250', 'ISO640', 'ISO4000', 'ISO6400', 'ISOH1'] to the dataset
+Added MuseeL-CopteArch-C500D['ISO100', 'ISO100-2']['ISO200', 'ISO400', 'ISO1600', 'ISO3200'] to the dataset
+Added MVB-1887GrandPlace['ISO200', 'ISO200-2']['ISO400', 'ISO640', 'ISO2000', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added bertrixtree['ISO200']['ISO400', 'ISO640', 'ISO2500', 'ISO4000', 'ISO6400', 'ISOH1'] to the dataset
+Added Pen-pile['ISO100']['ISO200', 'ISO400', 'ISO800', 'ISO1600', 'ISO3200'] to the dataset
+Added BruegelLibraryS1['ISO200']['ISO400', 'ISO1000', 'ISO2500', 'ISO3200', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added MuseeL-Ndengese['ISO200']['ISO6400', 'ISOH1'] to the dataset
+Added MuseeL-heads['ISO200']['ISO400', 'ISO3200', 'ISO6400'] to the dataset
+Added vlc['ISO200']['ISO250', 'ISO500', 'ISO1000', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added MuseeL-turtle['ISO200']['ISO800', 'ISO1250', 'ISO6400'] to the dataset
+Using (4, 124) as bounds
+   1    0 / 3936 loss = 0.0891
+   1   10 / 3936 loss = 0.5491
+   1   20 / 3936 loss = 0.2903
+   1   30 / 3936 loss = 0.2202
+   1   40 / 3936 loss = 0.1717
+   1   50 / 3936 loss = 0.1830
+   1   60 / 3936 loss = 0.1704
+   1   70 / 3936 loss = 0.1718
+   1   80 / 3936 loss = 0.1745
+   1   90 / 3936 loss = 0.1623
+   1  100 / 3936 loss = 0.1691
+   1  110 / 3936 loss = 0.1545
+   1  120 / 3936 loss = 0.1690
+   1  130 / 3936 loss = 0.1544
+   1  140 / 3936 loss = 0.1515
+   1  150 / 3936 loss = 0.1540
+   1  160 / 3936 loss = 0.1552
+   1  170 / 3936 loss = 0.1535
+   1  180 / 3936 loss = 0.1545
+   1  190 / 3936 loss = 0.1376
+   1  200 / 3936 loss = 0.1442
+   1  210 / 3936 loss = 0.1505
+   1  220 / 3936 loss = 0.1493
+   1  230 / 3936 loss = 0.1560
+   1  240 / 3936 loss = 0.1484
+   1  250 / 3936 loss = 0.1509
+   1  260 / 3936 loss = 0.1521
+   1  270 / 3936 loss = 0.1516
+   1  280 / 3936 loss = 0.1491
+   1  290 / 3936 loss = 0.1477
+   1  300 / 3936 loss = 0.1510
+   1  310 / 3936 loss = 0.1411
+   1  320 / 3936 loss = 0.1444
+   1  330 / 3936 loss = 0.1496
+   1  340 / 3936 loss = 0.1374
+   1  350 / 3936 loss = 0.1521
+   1  360 / 3936 loss = 0.1342
+   1  370 / 3936 loss = 0.1348
+   1  380 / 3936 loss = 0.1387
+   1  390 / 3936 loss = 0.1349
+   1  400 / 3936 loss = 0.1415
+   1  410 / 3936 loss = 0.1382
+   1  420 / 3936 loss = 0.1262
+   1  430 / 3936 loss = 0.1318
+   1  440 / 3936 loss = 0.1346
+   1  450 / 3936 loss = 0.1340
+   1  460 / 3936 loss = 0.1290
+   1  470 / 3936 loss = 0.1315
+   1  480 / 3936 loss = 0.1346
+   1  490 / 3936 loss = 0.1315
+   1  500 / 3936 loss = 0.1282
+   1  510 / 3936 loss = 0.1271
+   1  520 / 3936 loss = 0.1298
+   1  530 / 3936 loss = 0.1300
+   1  540 / 3936 loss = 0.1223
+   1  550 / 3936 loss = 0.1274
+   1  560 / 3936 loss = 0.1408
+   1  570 / 3936 loss = 0.1381
+   1  580 / 3936 loss = 0.1363
+   1  590 / 3936 loss = 0.1288
+   1  600 / 3936 loss = 0.1285
+   1  610 / 3936 loss = 0.1353
+   1  620 / 3936 loss = 0.1225
+   1  630 / 3936 loss = 0.1329
+   1  640 / 3936 loss = 0.1287
+   1  650 / 3936 loss = 0.1235
+   1  660 / 3936 loss = 0.1248
+   1  670 / 3936 loss = 0.1212
+   1  680 / 3936 loss = 0.1459
+   1  690 / 3936 loss = 0.1336
+   1  700 / 3936 loss = 0.1270
+   1  710 / 3936 loss = 0.1300
+   1  720 / 3936 loss = 0.1261
+   1  730 / 3936 loss = 0.1280
+   1  740 / 3936 loss = 0.1253
+   1  750 / 3936 loss = 0.1221
+   1  760 / 3936 loss = 0.1246
+   1  770 / 3936 loss = 0.1207
+   1  780 / 3936 loss = 0.1232
+   1  790 / 3936 loss = 0.1203
+   1  800 / 3936 loss = 0.1215
+   1  810 / 3936 loss = 0.1289
+   1  820 / 3936 loss = 0.1298
+   1  830 / 3936 loss = 0.1238
+   1  840 / 3936 loss = 0.1250
+   1  850 / 3936 loss = 0.1081
+   1  860 / 3936 loss = 0.1253
+   1  870 / 3936 loss = 0.1186
+   1  880 / 3936 loss = 0.1284
+   1  890 / 3936 loss = 0.1244
+   1  900 / 3936 loss = 0.1308
+   1  910 / 3936 loss = 0.1180
+   1  920 / 3936 loss = 0.1167
+   1  930 / 3936 loss = 0.1217
+   1  940 / 3936 loss = 0.1141
+   1  950 / 3936 loss = 0.1176
+   1  960 / 3936 loss = 0.1138
+   1  970 / 3936 loss = 0.1159
+   1  980 / 3936 loss = 0.1230
+   1  990 / 3936 loss = 0.1134
+   1 1000 / 3936 loss = 0.1250
+   1 1010 / 3936 loss = 0.1124
+   1 1020 / 3936 loss = 0.1142
+   1 1030 / 3936 loss = 0.1175
+   1 1040 / 3936 loss = 0.1230
+   1 1050 / 3936 loss = 0.1152
+   1 1060 / 3936 loss = 0.1214
+   1 1070 / 3936 loss = 0.1222
+   1 1080 / 3936 loss = 0.1099
+   1 1090 / 3936 loss = 0.1190
+   1 1100 / 3936 loss = 0.1239
+   1 1110 / 3936 loss = 0.1164
+   1 1120 / 3936 loss = 0.1103
+   1 1130 / 3936 loss = 0.1273
+   1 1140 / 3936 loss = 0.1219
+   1 1150 / 3936 loss = 0.1100
+   1 1160 / 3936 loss = 0.1178
+   1 1170 / 3936 loss = 0.1186
+   1 1180 / 3936 loss = 0.1329
+   1 1190 / 3936 loss = 0.1207
+   1 1200 / 3936 loss = 0.1191
+   1 1210 / 3936 loss = 0.1198
+   1 1220 / 3936 loss = 0.1167
+   1 1230 / 3936 loss = 0.1160
+   1 1240 / 3936 loss = 0.1114
+   1 1250 / 3936 loss = 0.1102
+   1 1260 / 3936 loss = 0.1124
+   1 1270 / 3936 loss = 0.1136
+   1 1280 / 3936 loss = 0.1181
+   1 1290 / 3936 loss = 0.1144
+   1 1300 / 3936 loss = 0.1137
+   1 1310 / 3936 loss = 0.1127
+   1 1320 / 3936 loss = 0.1049
+   1 1330 / 3936 loss = 0.1232
+   1 1340 / 3936 loss = 0.1116
+   1 1350 / 3936 loss = 0.1202
+   1 1360 / 3936 loss = 0.1221
+   1 1370 / 3936 loss = 0.1101
+   1 1380 / 3936 loss = 0.1094
+   1 1390 / 3936 loss = 0.1156
+   1 1400 / 3936 loss = 0.1192
+   1 1410 / 3936 loss = 0.1179
+   1 1420 / 3936 loss = 0.1149
+   1 1430 / 3936 loss = 0.1107
+   1 1440 / 3936 loss = 0.1067
+   1 1450 / 3936 loss = 0.1027
+   1 1460 / 3936 loss = 0.1212
+   1 1470 / 3936 loss = 0.1171
+   1 1480 / 3936 loss = 0.1052
+   1 1490 / 3936 loss = 0.1095
+   1 1500 / 3936 loss = 0.1202
+   1 1510 / 3936 loss = 0.1235
+   1 1520 / 3936 loss = 0.1149
+   1 1530 / 3936 loss = 0.1100
+   1 1540 / 3936 loss = 0.1112
+   1 1550 / 3936 loss = 0.1183
+   1 1560 / 3936 loss = 0.1074
+   1 1570 / 3936 loss = 0.1137
+   1 1580 / 3936 loss = 0.1094
+   1 1590 / 3936 loss = 0.1078
+   1 1600 / 3936 loss = 0.1167
+   1 1610 / 3936 loss = 0.1014
+   1 1620 / 3936 loss = 0.1136
+   1 1630 / 3936 loss = 0.1104
+   1 1640 / 3936 loss = 0.1235
+   1 1650 / 3936 loss = 0.1163
+   1 1660 / 3936 loss = 0.1136
+   1 1670 / 3936 loss = 0.1117
+   1 1680 / 3936 loss = 0.1110
+   1 1690 / 3936 loss = 0.1108
+   1 1700 / 3936 loss = 0.1075
+   1 1710 / 3936 loss = 0.1175
+   1 1720 / 3936 loss = 0.1118
+   1 1730 / 3936 loss = 0.1164
+   1 1740 / 3936 loss = 0.1140
+   1 1750 / 3936 loss = 0.1222
+   1 1760 / 3936 loss = 0.1219
+   1 1770 / 3936 loss = 0.1222
+   1 1780 / 3936 loss = 0.1137
+   1 1790 / 3936 loss = 0.1087
+   1 1800 / 3936 loss = 0.1081
+   1 1810 / 3936 loss = 0.1075
+   1 1820 / 3936 loss = 0.1157
+   1 1830 / 3936 loss = 0.1248
+   1 1840 / 3936 loss = 0.1089
+   1 1850 / 3936 loss = 0.1035
+   1 1860 / 3936 loss = 0.1123
+   1 1870 / 3936 loss = 0.1171
+   1 1880 / 3936 loss = 0.1174
+   1 1890 / 3936 loss = 0.1084
+   1 1900 / 3936 loss = 0.1088
+   1 1910 / 3936 loss = 0.1054
+   1 1920 / 3936 loss = 0.1074
+   1 1930 / 3936 loss = 0.1057
+   1 1940 / 3936 loss = 0.1086
+   1 1950 / 3936 loss = 0.1111
+   1 1960 / 3936 loss = 0.1204
+   1 1970 / 3936 loss = 0.1134
+   1 1980 / 3936 loss = 0.1166
+   1 1990 / 3936 loss = 0.1201
+   1 2000 / 3936 loss = 0.1146
+   1 2010 / 3936 loss = 0.1079
+   1 2020 / 3936 loss = 0.1073
+   1 2030 / 3936 loss = 0.1091
+   1 2040 / 3936 loss = 0.1101
+   1 2050 / 3936 loss = 0.1028
+   1 2060 / 3936 loss = 0.1136
+   1 2070 / 3936 loss = 0.1156
+   1 2080 / 3936 loss = 0.1071
+   1 2090 / 3936 loss = 0.1086
+   1 2100 / 3936 loss = 0.1106
+   1 2110 / 3936 loss = 0.1128
+   1 2120 / 3936 loss = 0.1064
+   1 2130 / 3936 loss = 0.1094
+   1 2140 / 3936 loss = 0.1095
+   1 2150 / 3936 loss = 0.1163
+   1 2160 / 3936 loss = 0.1125
+   1 2170 / 3936 loss = 0.1078
+   1 2180 / 3936 loss = 0.1090
+   1 2190 / 3936 loss = 0.1070
+   1 2200 / 3936 loss = 0.1148
+   1 2210 / 3936 loss = 0.1118
+   1 2220 / 3936 loss = 0.1065
+   1 2230 / 3936 loss = 0.1153
+   1 2240 / 3936 loss = 0.1089
+   1 2250 / 3936 loss = 0.1126
+   1 2260 / 3936 loss = 0.1144
+   1 2270 / 3936 loss = 0.1093
+   1 2280 / 3936 loss = 0.1068
+   1 2290 / 3936 loss = 0.1105
+   1 2300 / 3936 loss = 0.1061
+   1 2310 / 3936 loss = 0.1146
+   1 2320 / 3936 loss = 0.1141
+   1 2330 / 3936 loss = 0.1124
+   1 2340 / 3936 loss = 0.1123
+   1 2350 / 3936 loss = 0.1015
+   1 2360 / 3936 loss = 0.1105
+   1 2370 / 3936 loss = 0.1079
+   1 2380 / 3936 loss = 0.1138
+   1 2390 / 3936 loss = 0.1097
+   1 2400 / 3936 loss = 0.1020
+   1 2410 / 3936 loss = 0.1083
+   1 2420 / 3936 loss = 0.1014
+   1 2430 / 3936 loss = 0.1112
+   1 2440 / 3936 loss = 0.1101
+   1 2450 / 3936 loss = 0.1149
+   1 2460 / 3936 loss = 0.1040
+   1 2470 / 3936 loss = 0.1113
+   1 2480 / 3936 loss = 0.1147
+   1 2490 / 3936 loss = 0.1045
+   1 2500 / 3936 loss = 0.1138
+   1 2510 / 3936 loss = 0.1175
+   1 2520 / 3936 loss = 0.1197
+   1 2530 / 3936 loss = 0.1244
+   1 2540 / 3936 loss = 0.1142
+   1 2550 / 3936 loss = 0.1077
+   1 2560 / 3936 loss = 0.1014
+   1 2570 / 3936 loss = 0.1055
+   1 2580 / 3936 loss = 0.1050
+   1 2590 / 3936 loss = 0.1087
+   1 2600 / 3936 loss = 0.1072
+   1 2610 / 3936 loss = 0.1070
+   1 2620 / 3936 loss = 0.1147
+   1 2630 / 3936 loss = 0.1103
+   1 2640 / 3936 loss = 0.1100
+   1 2650 / 3936 loss = 0.1075
+   1 2660 / 3936 loss = 0.1023
+   1 2670 / 3936 loss = 0.1091
+   1 2680 / 3936 loss = 0.1179
+   1 2690 / 3936 loss = 0.1108
+   1 2700 / 3936 loss = 0.1145
+   1 2710 / 3936 loss = 0.1084
+   1 2720 / 3936 loss = 0.1076
+   1 2730 / 3936 loss = 0.1127
+   1 2740 / 3936 loss = 0.1093
+   1 2750 / 3936 loss = 0.1078
+   1 2760 / 3936 loss = 0.1088
+   1 2770 / 3936 loss = 0.1090
+   1 2780 / 3936 loss = 0.1142
+   1 2790 / 3936 loss = 0.1109
+   1 2800 / 3936 loss = 0.1133
+   1 2810 / 3936 loss = 0.1191
+   1 2820 / 3936 loss = 0.1057
+   1 2830 / 3936 loss = 0.1031
+   1 2840 / 3936 loss = 0.1091
+   1 2850 / 3936 loss = 0.1103
+   1 2860 / 3936 loss = 0.1087
+   1 2870 / 3936 loss = 0.1151
+   1 2880 / 3936 loss = 0.1061
+   1 2890 / 3936 loss = 0.1106
+   1 2900 / 3936 loss = 0.1085
+   1 2910 / 3936 loss = 0.1131
+   1 2920 / 3936 loss = 0.1031
+   1 2930 / 3936 loss = 0.1052
+   1 2940 / 3936 loss = 0.1080
+   1 2950 / 3936 loss = 0.1166
+   1 2960 / 3936 loss = 0.1058
+   1 2970 / 3936 loss = 0.1210
+   1 2980 / 3936 loss = 0.1105
+   1 2990 / 3936 loss = 0.1192
+   1 3000 / 3936 loss = 0.1134
+   1 3010 / 3936 loss = 0.1103
+   1 3020 / 3936 loss = 0.1077
+   1 3030 / 3936 loss = 0.1081
+   1 3040 / 3936 loss = 0.1065
+   1 3050 / 3936 loss = 0.1122
+   1 3060 / 3936 loss = 0.1031
+   1 3070 / 3936 loss = 0.1033
+   1 3080 / 3936 loss = 0.1114
+   1 3090 / 3936 loss = 0.1051
+   1 3100 / 3936 loss = 0.1172
+   1 3110 / 3936 loss = 0.1080
+   1 3120 / 3936 loss = 0.1095
+   1 3130 / 3936 loss = 0.1093
+   1 3140 / 3936 loss = 0.1101
+   1 3150 / 3936 loss = 0.1124
+   1 3160 / 3936 loss = 0.1030
+   1 3170 / 3936 loss = 0.1116
+   1 3180 / 3936 loss = 0.1057
+   1 3190 / 3936 loss = 0.1043
+   1 3200 / 3936 loss = 0.1050
+   1 3210 / 3936 loss = 0.1004
+   1 3220 / 3936 loss = 0.1102
+   1 3230 / 3936 loss = 0.1115
+   1 3240 / 3936 loss = 0.1105
+   1 3250 / 3936 loss = 0.1091
+   1 3260 / 3936 loss = 0.1098
+   1 3270 / 3936 loss = 0.1023
+   1 3280 / 3936 loss = 0.1077
+   1 3290 / 3936 loss = 0.1131
+   1 3300 / 3936 loss = 0.1190
+   1 3310 / 3936 loss = 0.1191
+   1 3320 / 3936 loss = 0.1088
+   1 3330 / 3936 loss = 0.1107
+   1 3340 / 3936 loss = 0.1101
+   1 3350 / 3936 loss = 0.1097
+   1 3360 / 3936 loss = 0.1031
+   1 3370 / 3936 loss = 0.1077
+   1 3380 / 3936 loss = 0.1191
+   1 3390 / 3936 loss = 0.1098
+   1 3400 / 3936 loss = 0.1012
+   1 3410 / 3936 loss = 0.0996
