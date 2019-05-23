@@ -154,8 +154,8 @@ if __name__ == '__main__':
         print('resuming by loading epoch %03d' % initial_epoch)
         # model.load_state_dict(torch.load(os.path.join(save_dir, 'model_%03d.pth' % initial_epoch)))
         model = torch.load(os.path.join(save_dir, 'model_%03d.pth' % initial_epoch))
-    if args.load_g_state_dic_path:
-        model.load_state_dict(torch.load(args.load_g_state_dic_path))
+    if args.load_g_state_dict_path:
+        model.load_state_dict(torch.load(args.load_g_state_dict_path))
     #elif args.model != 'DnCNN':
     #    model.apply(nnModules.init_weights)
     model.train()
