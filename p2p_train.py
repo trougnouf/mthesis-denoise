@@ -91,10 +91,10 @@ print(args)
 
 # requires Sigmoid
 def confident_mse_loss(answer, target):
-    if torch.abs(answer-target) > torch.tensor(0.47).to(device):
-        return torch.abs(answer-target)
-    else:
-        return torch.abs(answer-target)**2
+    dif = torch.abs(answer-target)
+    not_confident_i = (dif > 0.47).to(torch.float32)
+    confident_i = 1-not_confident_i
+    return confident_i*dif+not_confident_i*dif**2
 
 
 cudnn.benchmark = True
