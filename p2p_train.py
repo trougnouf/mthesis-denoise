@@ -94,7 +94,8 @@ def confident_mse_loss(answer, target):
     dif = torch.abs(answer-target)
     not_confident_i = (dif > 0.47).to(torch.float32)
     confident_i = 1-not_confident_i
-    return confident_i*dif+not_confident_i*dif**2
+    res = confident_i*dif+not_confident_i*dif**2
+    return res.mean()
 
 
 cudnn.benchmark = True
