@@ -1,2 +1,15 @@
-Hulb128Net: BN vs noBN  results/train/2019-05-23-Hulb128Net-BN  results/train/2019-05-23-Hulb128Net-NoBN results/train/2019-05-23-Hulb128Net-NoBN-NoFAct
+Hulb128Net: BN vs noBN  results/train/2019-05-23-Hulb128Net-BN  results/train/2019-05-23-Hulb128Net-NoBN results/train/2019-05-23-Hulb128Net-NoBN-NoAct
 (might be improved if we batch same noise but too much variance atm)
+
+Hulb128Act = {"No BN, PReLU": "results/train/2019-05-23-Hulb128Net-BN",
+"BN, PReLU": "results/train/2019-05-23-Hulb128Net-NoBN",
+"No BN, no final activation": "results/train/2019-05-23-Hulb128Net-NoBN-NoAct"}
+
+Hul112Disc:
+{
+"None": "results/train/2019-05-22-D_sanity_check_not_conditional_No_activation",
+"Sigmoid": "results/train/2019-05-22-D_sanity_check_not_conditional_Sigmoid",
+"PReLU": "results/train/2019-05-22-D_sanity_check_not_conditional"
+}
+
+TODO finalpool
