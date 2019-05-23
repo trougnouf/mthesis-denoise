@@ -541,7 +541,7 @@ class Hul128Net(nn.Module):
 
 #
 class Hulb128Net(nn.Module):
-    def __init__(self, funit=32, activation='PReLU'):
+    def __init__(self, funit=32, activation='None'):
         super(Hulb128Net, self).__init__()
         self.enc128to126std = nn.Sequential(
             nn.Conv2d(3, 2*funit, 3),

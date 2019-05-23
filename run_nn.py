@@ -142,8 +142,6 @@ if __name__ == '__main__':
         model = nnModules.Hul128Net()
     elif args.model == 'Hulb128Net':
         model = nnModules.Hulb128Net()
-    elif args.model == 'HulbNoBN128Net':
-        model = nnModules.HulbNoBN128Net()
     elif args.model == 'Hul160Net':
         model = nnModules.Hul160Net()
     elif args.model == 'exp':
