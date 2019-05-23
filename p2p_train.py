@@ -91,7 +91,7 @@ print(args)
 
 # requires Sigmoid
 def confident_mse_loss(answer, target):
-    not_confident_i = (answer > 0.4) & (answer < 0.6)
+    not_confident_i = ((answer > 0.4) & (answer < 0.6)).to(torch.float32)
     confident_i = 1-not_confident_i
     dif = torch.abs(answer-target)
     res = confident_i*dif**2+not_confident_i*dif
