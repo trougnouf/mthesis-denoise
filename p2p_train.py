@@ -84,6 +84,7 @@ parser.add_argument('--loss_d_max_threshold', type=float, default=0.)
 parser.add_argument('--finalpool', action='store_true', help='Final pooling on the discriminator (instead of convolution)')
 parser.add_argument('--out_activation', help='Specific discriminator output activation')
 parser.add_argument('--generator_waits', action='store_true', help="Generator won't learn until discriminator is useful")
+parser.add_argument('--funit_D', default=32, type=int, help='Filters unit for D')
 
 args = parser.parse_args()
 print(args)
@@ -186,7 +187,7 @@ else:
 if args.load_d:
     net_d = torch.load(args.load_d, map_location=device)
 else:
-    net_d = define_D(D_n_layers, args.ndf, args.netD, gpu_id=device, out_activation=dout_activation, finalpool=args.finalpool)
+    net_d = define_D(D_n_layers, args.ndf, args.netD, gpu_id=device, out_activation=dout_activation, finalpool=args.finalpool, funit=args.funit_D)
 
 if args.weight_L1_0 > 0 or weight_L1_1 > 0:
     use_L1 = True
