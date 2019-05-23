@@ -774,14 +774,15 @@ class Hulb128Net(nn.Module):
             nn.PReLU(init=0.01),
             nn.ConvTranspose2d(2*funit, 3, 1),
         )
-        if activation == None or activation == 'None':
+        if activation is None or activation == 'None':
             self.activation = None
         elif activation == 'ReLU':
             self.activation = nn.ReLU()
         elif activation == 'PReLU':
-            self.activation == nn.PReLU(init=0.01)
+            self.activation = nn.PReLU(init=0.01)
         elif activation == 'Sigmoid':
-            self.activation == nn.Sigmoid()
+            self.activation = nn.Sigmoid()
+
     def forward(self, x):
         # down
         # 160 to 150
@@ -1323,9 +1324,9 @@ class HulbNoBN128Net(nn.Module):
         elif activation == 'ReLU':
             self.activation = nn.ReLU()
         elif activation == 'PReLU':
-            self.activation == nn.PReLU(init=0.01)
+            self.activation = nn.PReLU(init=0.01)
         elif activation == 'Sigmoid':
-            self.activation == nn.Sigmoid()
+            self.activation = nn.Sigmoid()
     def forward(self, x):
         # down
         # 160 to 150
