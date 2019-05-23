@@ -29,7 +29,8 @@ experiments = dict()
 experiments['Hul112_activation'] = {
     "None": "results/train/2019-05-22-D_sanity_check_not_conditional_No_activation",
     "Sigmoid": "results/train/2019-05-22-D_sanity_check_not_conditional_Sigmoid",
-    "PReLU": "results/train/2019-05-22-D_sanity_check_not_conditional"
+    "PReLU": "results/train/2019-05-22-D_sanity_check_not_conditional",
+    "Final pooling": "results/train/2019-05-22-D_sanity_check_finalpool"
 }
 experiments['Hulb128'] = {"BN, PReLU": "results/train/2019-05-23-Hulb128Net-BN",
 "No BN, PReLU": "results/train/2019-05-23-Hulb128Net-NoBN",
