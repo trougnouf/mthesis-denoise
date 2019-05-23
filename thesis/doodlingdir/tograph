@@ -1,0 +1,2 @@
+Hulb128Net: BN vs noBN  results/train/2019-05-23-Hulb128Net-BN  results/train/2019-05-23-Hulb128Net-NoBN
+(might be improved if we batch same noise but too much variance atm)
