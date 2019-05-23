@@ -219,9 +219,19 @@ else:
 
 use_D = False
 useful_discriminator = False
+generator_learns = None
 
 def generator_learns():
-    return useful_discriminator or not args.generator_waits
+    global generator_learns # blergh
+    prev_status = generator_learns
+    generator_learns = useful_discriminator or not args.generator_waits
+    if generator_learns != prev_status:
+        if generator_learns:
+            set_requires_grad(net_g, True)
+        else:
+            optimizer_g.zero_grad()
+            set_requires_grad(net_g, False)
+    return generator_learns
 
 
 start_time = time.time()
