@@ -541,7 +541,7 @@ class Hul128Net(nn.Module):
 
 # single-net: BS = 17 w/ 8GB GPU, 27 w/ 11GB GPU
 class Hulb128Net(nn.Module):
-    def __init__(self, funit=32, activation='ReLU'):
+    def __init__(self, funit=32, activation='PReLU'):
         super(Hulb128Net, self).__init__()
         self.enc128to126std = nn.Sequential(
             nn.Conv2d(3, 2*funit, 3),
@@ -771,7 +771,7 @@ class Hulb128Net(nn.Module):
         self.dec126to128std = nn.Sequential(
             # in: 2+6
             nn.ConvTranspose2d(8*funit, 2*funit, 3),
-            nn.PReLU(),
+            nn.PReLU(init=0.01),
             nn.ConvTranspose2d(2*funit, 3, 1),
         )
         if activation == None or activation == 'None':
@@ -779,7 +779,7 @@ class Hulb128Net(nn.Module):
         elif activation == 'ReLU':
             self.activation = nn.ReLU()
         elif activation == 'PReLU':
-            self.activation == nn.PReLU()
+            self.activation == nn.PReLU(init=0.01)
         elif activation == 'Sigmoid':
             self.activation == nn.Sigmoid()
     def forward(self, x):
@@ -962,7 +962,7 @@ class Hul144Disc(nn.Module):
 #112
 # w/ Hul128Net BS 12 on 7GB GPU, 20 on 11GB GPU or 19 if conditional
 class Hul112Disc(nn.Module):
-    def __init__(self, input_channels = 3, funit = 32, finalpool = False, out_activation = None):
+    def __init__(self, input_channels = 3, funit = 32, finalpool = False, out_activation = 'PReLU'):
         super(Hul112Disc, self).__init__()
         self.funit = funit
         self.enc112to108std = nn.Sequential(
@@ -1104,7 +1104,7 @@ class Hul112Disc(nn.Module):
         if out_activation is None or out_activation == 'None':
             self.out_activation = None
         elif out_activation == 'PReLU':
-            self.out_activation = nn.PReLU()
+            self.out_activation = nn.PReLU(init=0.01)
         elif out_activation == 'Sigmoid':
             self.out_activation = nn.Sigmoid()
     def forward(self, x):
