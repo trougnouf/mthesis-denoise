@@ -310,6 +310,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         loss_d_item = loss_d.item()
         total_loss_d += loss_d_item
         loss_d_item_str = "{:.4f}".format(loss_d_item)
+        del(loss_d, pred_real, loss_D_real, loss_D_fake, real_ab, fake_ab)
         num_train_d += 1
 
         if not generator_learns:
