@@ -317,8 +317,6 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
 
         if discriminator_learns or iteration == 1:
             optimizer_d.step()
-        else:
-            loss_d_item_str = 'nan'
         loss_d_range = ", ".join(["{:.2}".format(float(i)) for i in (min(pred_real), max(pred_real), min(pred_fake), max(pred_fake))])
 
         total_loss_d += loss_d_item
@@ -372,8 +370,8 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
                 num_train_g_std += 1
         optimizer_g.step()
 
-        print("===> Epoch[{}]({}/{}): Loss_D: {} (range (r-r+f-f+): {}) \tLoss_G: {}".format(
-            epoch, iteration, len(training_data_loader), loss_d_item_str, str(loss_d_range), loss_g_item_str))
+        print("===> Epoch[{}]({}/{}): Loss_D: {} (range (r-r+f-f+): {}, learn={} \tLoss_G: {}".format(
+            epoch, iteration, len(training_data_loader), loss_d_item_str, str(loss_d_range), discriminator_learns, loss_g_item_str))
     if num_train_d > 5:
         update_learning_rate(net_d_scheduler, optimizer_d, loss_avg=total_loss_d/num_train_d)
     if generator_learns:
