@@ -305,7 +305,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             print(pred_fake)
             print(pred_real)
         if discriminator_learns or iteration == 1:
-            loss_d.backward(retain_variables=True)
+            loss_d.backward(retain_graph=True)
             optimizer_d.step()
         loss_d_item = loss_d.item()
         total_loss_d += loss_d_item
