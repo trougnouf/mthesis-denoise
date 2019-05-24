@@ -85,7 +85,7 @@ parser.add_argument('--finalpool', action='store_true', help='Final pooling on t
 parser.add_argument('--out_activation', help='Specific discriminator output activation')
 parser.add_argument('--generator_waits', action='store_true', help="Generator won't learn until discriminator is useful")
 parser.add_argument('--funit_D', default=32, type=int, help='Filters unit for D')
-parser.add_argument('--retain_graph', action='store_true', help='Keep graph from D instead of calling updated D for G')
+parser.add_argument('--use_new_D', action='store_true', help='Use newly updated discriminator to train G instead of keeping graph used in D training')
 
 args = parser.parse_args()
 print(args)
@@ -128,7 +128,7 @@ else:
 
 D_n_layers = args.input_nc if args.not_conditional else args.input_nc + args.output_nc
 
-retain_graph = True if args.retain_graph else False
+retain_graph = False if args.use_new_D else True
 
 # fun
 
@@ -139,9 +139,9 @@ def gen_target_probabilities(target_real, target_probabilities_shape):
         res = torch.rand(target_probabilities_shape)/20
     return res.to(device)
 
-#def set_requires_grad(net, requires_grad = False):
-#    for param in net.parameters():
-#        param.requires_grad = requires_grad
+def set_requires_grad(net, requires_grad = False):
+    for param in net.parameters():
+        param.requires_grad = requires_grad
 
 def find_experiment():
     exp = None
@@ -249,6 +249,8 @@ def update_generator_learns():
     #    set_requires_grad(net_g, True)
     return response
 
+set_requires_grad(net_g, True)
+set_requires_grad(net_d, True)
 
 start_time = time.time()
 iterations_before_d = args.post_fail_ssim_num
@@ -273,14 +275,14 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         loss_g_ssim = 1-loss_g_ssim
         total_loss_g_ssim += loss_g_ssim.item()
         # determine whether we use and/or update discriminator
-        if loss_d_item < 0.2 or args.D_loss_f != 'MSE':   #MSE
+        if loss_d_item < 0.4 or args.D_loss_f != 'MSE':   #MSE
             useful_discriminator = True
         use_D = use_D or (loss_g_ssim.item() < args.min_ssim_l and iterations_before_d < 1 and useful_discriminator)
         use_L1 = (use_D and weight_L1_1 > 0) or (not(use_D) and args.weight_L1_0 > 0)
         if (loss_d_item < 0.01 and args.D_loss_f == 'MSE'):# or (loss_d_item > 5.0 and args.D_loss_f == 'BCEWithLogits'):  # critical
             D_ratio = args.D_ratio_2
         elif use_D:
-            if loss_d_item > 0.221 and args.D_loss_f == 'MSE':  # needs improvement
+            if loss_d_item > 0.4 and args.D_loss_f == 'MSE':  # needs improvement
                 D_ratio = args.D_ratio_0
             else:   # std
                 D_ratio = args.D_ratio_1
@@ -297,37 +299,34 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             real_ab = torch.cat([noisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]], 1)
 
         ## train discriminator ##
+        d_in_chan = 3 if args.not_conditional else 6
+
+        #set_requires_grad(net_d, True)
+        optimizer_d.zero_grad()
+
+        pred_fake = net_d(fake_ab.detach())
+        loss_D_fake = criterionGAN(pred_fake, gen_target_probabilities(False, pred_fake.shape))
+        loss_D_fake.backward(retain_graph=retain_graph)
+
+        pred_real = net_d(real_ab)
+        #breakpoint()
+        loss_D_real = criterionGAN(pred_real, gen_target_probabilities(True, pred_real.shape))
+        loss_D_real.backward()
+
+        loss_d_item = (loss_D_fake + loss_D_real).mean().item() # not cat?
+
         if discriminator_learns or iteration == 1:
-            d_in_chan = 3 if args.not_conditional else 6
-
-            #set_requires_grad(net_d, True)
-            optimizer_d.zero_grad()
-
-
-            pred_real = net_d(real_ab)
-            loss_D_real = criterionGAN(pred_real, gen_target_probabilities(True, pred_real.shape))
-            loss_D_real.backward()
-
-            pred_fake = net_d(fake_ab.detach())
-            loss_D_fake = criterionGAN(pred_fake, gen_target_probabilities(False, pred_fake.shape))
-            loss_D_fake.backward(retain_graph=retain_graph)
-
-            #loss_d = (loss_D_fake + loss_D_real) # not cat?
-            if args.debug_D:
-                print("pred_fake, pred_real")
-                print(pred_fake)
-                print(pred_real)
-            #loss_d.backward()
             optimizer_d.step()
-            loss_d_range = ", ".join(["{:.2}".format(float(i)) for i in (min(pred_real), max(pred_real), min(pred_fake), max(pred_fake))])
-            loss_d_item = (loss_D_fake+loss_D_real).mean().item()
-            total_loss_d += loss_d_item
-            loss_d_item_str = "{:.4f}".format(loss_d_item)
-            num_train_d += 1
         else:
             loss_d_item_str = 'nan'
+        loss_d_range = ", ".join(["{:.2}".format(float(i)) for i in (min(pred_real), max(pred_real), min(pred_fake), max(pred_fake))])
+
+        total_loss_d += loss_d_item
+        loss_d_item_str = "{:.4f}".format(loss_d_item)
+        num_train_d += 1
+
         if not generator_learns:
-            print("===> Epoch[{}]({}/{}): Loss_D: {} (range: {})".format(
+            print("===> Epoch[{}]({}/{}): Loss_D: {} (range r-r+f-f+: {})".format(
             epoch, iteration, len(training_data_loader), loss_d_item_str, str(loss_d_range)))
             generator_learns = update_generator_learns()
             continue
@@ -343,8 +342,8 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         if use_D:
             weight_ssim = weight_ssim_1
             weight_L1 = weight_L1_1
-            if not retain_graph:
-                pred_fake = net_d(fake_ab)
+            #if not retain_graph:
+            #    pred_fake = net_d(fake_ab)
             if args.debug_D:
                 print("pred_fake")
                 print(pred_fake)
@@ -373,7 +372,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
                 num_train_g_std += 1
         optimizer_g.step()
 
-        print("===> Epoch[{}]({}/{}): Loss_D: {} (range: {}) Loss_G: {}".format(
+        print("===> Epoch[{}]({}/{}): Loss_D: {} (range: {}) \tLoss_G: {}".format(
             epoch, iteration, len(training_data_loader), loss_d_item_str, str(loss_d_range), loss_g_item_str))
     if num_train_d > 5:
         update_learning_rate(net_d_scheduler, optimizer_d, loss_avg=total_loss_d/num_train_d)
