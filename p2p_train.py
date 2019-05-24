@@ -304,14 +304,14 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         #set_requires_grad(net_d, True)
         optimizer_d.zero_grad()
 
-        pred_fake = net_d(fake_ab.detach())
-        loss_D_fake = criterionGAN(pred_fake, gen_target_probabilities(False, pred_fake.shape))
-        loss_D_fake.backward(retain_graph=retain_graph)
-
         pred_real = net_d(real_ab)
         #breakpoint()
         loss_D_real = criterionGAN(pred_real, gen_target_probabilities(True, pred_real.shape))
         loss_D_real.backward()
+
+        pred_fake = net_d(fake_ab.detach())
+        loss_D_fake = criterionGAN(pred_fake, gen_target_probabilities(False, pred_fake.shape))
+        loss_D_fake.backward(retain_graph=retain_graph)
 
         loss_d_item = (loss_D_fake + loss_D_real).mean().item() # not cat?
 
