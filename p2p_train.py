@@ -241,12 +241,12 @@ useful_discriminator = False
 generator_learns = not args.generator_waits
 if not generator_learns:
     optimizer_g.zero_grad()
-    set_requires_grad(net_g, False)
+    #set_requires_grad(net_g, False)
 
 def update_generator_learns():
     response = generator_learns or useful_discriminator or not args.generator_waits
-    if response:
-        set_requires_grad(net_g, True)
+    #if response:
+    #    set_requires_grad(net_g, True)
     return response
 
 
