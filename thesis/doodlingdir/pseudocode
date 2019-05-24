@@ -20,3 +20,8 @@ loss_G_gan = MSE(pred_fake, gen_target_probabilities(True))
 loss_G = loss_G_gan * (1 - weight_SSIM - weight_L1) - loss_G_SSIM * weight_SSIM - loss_G_L1 * weight_L1
 loss_G.backward()
 optimizer_G.step()
+
+\begin{program}
+\mbox{(c)GAN training procedure}
+\FOR each batch
+\end{program}

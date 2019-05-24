@@ -375,13 +375,13 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         print("===> Epoch[{}]({}/{}): Loss_D: {} (range (r-r+f-f+): {}, learn={} \tLoss_G: {}".format(
             epoch, iteration, len(training_data_loader), loss_d_item_str, str(loss_d_range), discriminator_learns, loss_g_item_str))
     if num_train_d > 5:
-        update_learning_rate(net_d_scheduler, optimizer_d, loss_avg=total_loss_d/num_train_d)
+        update_learning_rate(net_d_scheduler, optimizer_d, loss_avg=total_loss_d/num_train_d, scheduler_name="net_d")
     if generator_learns:
         if num_train_g_D > num_train_g_std*args.lr_update_min_D_ratio:
             print('Generator average loss with D: '+str(total_loss_g_D/num_train_g_D))
-            update_learning_rate(net_g_scheduler['D'], optimizer_g, loss_avg=total_loss_g_D/num_train_g_D)
+            update_learning_rate(net_g_scheduler['D'], optimizer_g, loss_avg=total_loss_g_D/num_train_g_D, scheduler_name="net_g_D")
         else:
-            update_learning_rate(net_g_scheduler['SSIM'], optimizer_g, loss_avg=total_loss_g_std/num_train_g_std)
+            update_learning_rate(net_g_scheduler['SSIM'], optimizer_g, loss_avg=total_loss_g_std/num_train_g_std, scheduler_name="net_g_SSIM")
         if num_train_g_std > 0:
             print('Generator average loss without D: '+str(total_loss_g_std/num_train_g_std))
     epoch_avg_ssim_loss = total_loss_g_ssim/iteration

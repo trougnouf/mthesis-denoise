@@ -13,3 +13,8 @@ Hul112Disc:
 }
 
 TODO finalpool
+
+training speed:
+2019-02-18T20:10_run_nn.py_--time_limit_259200_--batch_size_94_--test_reserve_ursulines-red_stefantiek_ursulines-building_MuseeL-Bobo_CourtineDeVillersDebris_MuseeL-Bobo-C500D_--skip_sizecheck_--lr_3e-4
+results/train/2019-05-24-Hulb128Net-Hul128Disc-funit16-keptD-not_conditional
+results/train/2019-05-24-Hulb128Net-Hul128Disc-funit16-keptD
