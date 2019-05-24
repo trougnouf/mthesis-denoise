@@ -37,7 +37,7 @@ parser.add_argument('--niter_decay', type=int, default=100, help='# of iter to l
 parser.add_argument('--lr', type=float, default=0.0003, help='initial learning rate for adam')
 parser.add_argument('--lr_policy', type=str, default='plateau', help='learning rate policy: lambda|step|plateau|cosine')
 parser.add_argument('--lr_decay_iters', type=int, default=50, help='multiply by a gamma every lr_decay_iters iterations')
-parser.add_argument('--beta1', type=float, default=0.75, help='beta1 for adam. default=0.5')
+parser.add_argument('--beta1', type=float, default=0.5, help='beta1 for adam. default=0.5')
 parser.add_argument('--threads', type=int, default=8, help='number of threads for data loader to use')
 parser.add_argument('--seed', type=int, default=123, help='random seed to use. Default=123')
 
@@ -76,7 +76,7 @@ parser.add_argument('--debug_D', action='store_true', help='Discriminator does n
 parser.add_argument('--netD', default='Hul112Disc', type=str, help='Discriminator network type (basic, Hul144Disc, Hul112Disc)')
 parser.add_argument('--load_g', type=str, help='Generator model to load')
 parser.add_argument('--load_d', type=str, help='Discriminator model to load')
-parser.add_argument('--D_loss_f', default='MSE', type=str, help='GAN loss (BCEWithLogits, MSE, confident_mse_loss)')
+parser.add_argument('--D_loss_f', default='MSE', type=str, help='GAN loss (BCEWithLogits, MSE, BCE, confident_mse_loss)')
 #parser.add_argument('--min_loss_D', default=0.1, type=float) # TODO
 parser.add_argument('--load_g_state_dict_path', help='Load state dictionary into model')
 parser.add_argument('--load_d_state_dict_path', help='Load state dictionary into model')
@@ -85,6 +85,7 @@ parser.add_argument('--finalpool', action='store_true', help='Final pooling on t
 parser.add_argument('--out_activation', help='Specific discriminator output activation')
 parser.add_argument('--generator_waits', action='store_true', help="Generator won't learn until discriminator is useful")
 parser.add_argument('--funit_D', default=32, type=int, help='Filters unit for D')
+parser.add_argument('--retain_graph', action='store_true', help='Keep graph from D instead of calling updated D for G')
 
 args = parser.parse_args()
 print(args)
@@ -126,6 +127,8 @@ else:
     device = torch.device('cpu')
 
 D_n_layers = args.input_nc if args.not_conditional else args.input_nc + args.output_nc
+
+retain_graph = True if args.retain_graph else False
 
 # fun
 
@@ -178,6 +181,9 @@ if args.D_loss_f == 'MSE':
 elif args.D_loss_f == 'confident_mse_loss':
     criterionGAN = confident_mse_loss
     dout_activation = 'Sigmoid'
+elif args.D_loss_f == 'BCE':
+    criterionGAN = nn.BCELoss().to(device)
+    dout_activation = 'Sigmoid'
 else:
     criterionGAN = nn.BCEWithLogitsLoss().to(device)
     dout_activation = None
@@ -218,8 +224,8 @@ assert args.weight_ssim_0 > 0 # not implemented
 
 # setup optimizer
 
-optimizer_g = optim.Adam(net_g.parameters(), lr=args.lr)#, betas=(args.beta1, 0.999))
-optimizer_d = optim.Adam(net_d.parameters(), lr=args.lr)#, betas=(args.beta1, 0.999))
+optimizer_g = optim.Adam(net_g.parameters(), lr=args.lr, betas=(args.beta1, 0.999))
+optimizer_d = optim.Adam(net_d.parameters(), lr=args.lr, betas=(args.beta1, 0.999))
 net_g_scheduler = get_scheduler(optimizer_g, args, generator=True)
 net_d_scheduler = get_scheduler(optimizer_d, args, generator=False)
 
@@ -294,32 +300,39 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         if discriminator_learns or iteration == 1:
             d_in_chan = 3 if args.not_conditional else 6
 
-            set_requires_grad(net_d, True)
+            #set_requires_grad(net_d, True)
             optimizer_d.zero_grad()
-            pred_fake = net_d(fake_ab.detach())
-            loss_D_fake = criterionGAN(pred_fake, gen_target_probabilities(False, pred_fake.shape))
+
+
             pred_real = net_d(real_ab)
             loss_D_real = criterionGAN(pred_real, gen_target_probabilities(True, pred_real.shape))
-            loss_d = (loss_D_fake + loss_D_real)/2  # not cat?
+            loss_D_real.backward()
+
+            pred_fake = net_d(fake_ab.detach())
+            loss_D_fake = criterionGAN(pred_fake, gen_target_probabilities(False, pred_fake.shape))
+            loss_D_fake.backward(retain_graph=retain_graph)
+
+            #loss_d = (loss_D_fake + loss_D_real) # not cat?
             if args.debug_D:
                 print("pred_fake, pred_real")
                 print(pred_fake)
                 print(pred_real)
-            loss_d.backward()
+            #loss_d.backward()
             optimizer_d.step()
-            loss_d_item = loss_d.item()
+            loss_d_range = ", ".join(["{:.2}".format(float(i)) for i in (min(pred_real), max(pred_real), min(pred_fake), max(pred_fake))])
+            loss_d_item = (loss_D_fake+loss_D_real).mean().item()
             total_loss_d += loss_d_item
             loss_d_item_str = "{:.4f}".format(loss_d_item)
             num_train_d += 1
         else:
             loss_d_item_str = 'nan'
         if not generator_learns:
-            print("===> Epoch[{}]({}/{}): Loss_D: {}".format(
-            epoch, iteration, len(training_data_loader), loss_d_item_str))
+            print("===> Epoch[{}]({}/{}): Loss_D: {} (range: {})".format(
+            epoch, iteration, len(training_data_loader), loss_d_item_str, str(loss_d_range)))
             generator_learns = update_generator_learns()
             continue
         ## train generator ##
-        set_requires_grad(net_d, False)
+        #set_requires_grad(net_d, False)
         optimizer_g.zero_grad()
         loss_g_item_str = 'L(SSIM: {:.4f}'.format(loss_g_ssim)
         if use_L1:
@@ -330,7 +343,8 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         if use_D:
             weight_ssim = weight_ssim_1
             weight_L1 = weight_L1_1
-            pred_fake = net_d(fake_ab)
+            if not retain_graph:
+                pred_fake = net_d(fake_ab)
             if args.debug_D:
                 print("pred_fake")
                 print(pred_fake)
@@ -359,8 +373,8 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
                 num_train_g_std += 1
         optimizer_g.step()
 
-        print("===> Epoch[{}]({}/{}): Loss_D: {} Loss_G: {}".format(
-            epoch, iteration, len(training_data_loader), loss_d_item_str, loss_g_item_str))
+        print("===> Epoch[{}]({}/{}): Loss_D: {} (range: {}) Loss_G: {}".format(
+            epoch, iteration, len(training_data_loader), loss_d_item_str, str(loss_d_range), loss_g_item_str))
     if num_train_d > 5:
         update_learning_rate(net_d_scheduler, optimizer_d, loss_avg=total_loss_d/num_train_d)
     if generator_learns:

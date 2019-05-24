@@ -1,0 +1,15 @@
+training gen first -> d can't learn
+changed balance if D is too good or not good enough
+make generator wait until D is good
+mixing batch, and back
+add a penalty for indecisiveness
+
+D,G tested different loss functions and activations and BN
+
+
+don't know if learning from D at all
+
+promising: give G the old loss value, not updated discriminator
+todo DCGAN (BCE), completely different batch
+
+
