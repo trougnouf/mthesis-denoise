@@ -269,6 +269,8 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
     for iteration, batch in enumerate(training_data_loader, 1):
         cleanimg, noisyimg = batch[0].to(device), batch[1].to(device)
         # generate clean image ("fake")
+        optimizer_g.zero_grad()
+        optimizer_d.zero_grad()
         gnoisyimg = net_g(noisyimg)
         # compute SSIM
         loss_g_ssim = criterionSSIM(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up])
@@ -302,7 +304,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         d_in_chan = 3 if args.not_conditional else 6
 
         #set_requires_grad(net_d, True)
-        optimizer_d.zero_grad()
+
 
         pred_real = net_d(real_ab)
         #breakpoint()
@@ -330,7 +332,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             continue
         ## train generator ##
         #set_requires_grad(net_d, False)
-        optimizer_g.zero_grad()
+
         loss_g_item_str = 'L(SSIM: {:.4f}'.format(loss_g_ssim)
         if use_L1:
             loss_g_L1 = criterionL1(fake_ab, real_ab)

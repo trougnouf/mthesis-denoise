@@ -1,0 +1,22 @@
+optimizer_G.zero_grad()
+optimizer_D.zero_grad()
+# generate a clean image
+generated_image = net_G(noisyimg)
+loss_G_SSIM = SSIM(rm_borders(generated_image), rm_borders(cleanimg))
+# train the discriminator
+# fake_content and real_content are only (non-concatenated) generated_image and cleanimg in --not_conditional mode
+fake_content = cat(rm_borders(noisyimg), rm_borders(generated_image))
+real_content = cat(rm_borders(noisyimg), rm_borders(cleanimg))
+pred_real = net_D(real_content)
+loss_D_real = MSE(pred_real, gen_target_probabilities(True)) # noisy probabilities are 0 or 1 +/- 0 to 0.05
+loss_D_real.backward()
+pred_fake = net_D(fake_content.detach())
+loss_D_fake = MSE(pred_fake, gen_target_probabilities(False))
+loss_D_fake.backward(retain_graph)
+if discriminator_learns
+    optimizer_D.step()
+# train the generator
+loss_G_gan = MSE(pred_fake, gen_target_probabilities(True))
+loss_G = loss_G_gan * (1 - weight_SSIM - weight_L1) - loss_G_SSIM * weight_SSIM - loss_G_L1 * weight_L1
+loss_G.backward()
+optimizer_G.step()
