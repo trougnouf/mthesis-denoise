@@ -139,9 +139,9 @@ def gen_target_probabilities(target_real, target_probabilities_shape):
         res = torch.rand(target_probabilities_shape)/20
     return res.to(device)
 
-def set_requires_grad(net, requires_grad = False):
-    for param in net.parameters():
-        param.requires_grad = requires_grad
+#def set_requires_grad(net, requires_grad = False):
+#    for param in net.parameters():
+#        param.requires_grad = requires_grad
 
 def find_experiment():
     exp = None
