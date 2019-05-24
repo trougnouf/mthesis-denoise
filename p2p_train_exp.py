@@ -76,7 +76,7 @@ parser.add_argument('--debug_D', action='store_true', help='Discriminator does n
 parser.add_argument('--netD', default='Hul112Disc', type=str, help='Discriminator network type (basic, Hul144Disc, Hul112Disc)')
 parser.add_argument('--load_g', type=str, help='Generator model to load')
 parser.add_argument('--load_d', type=str, help='Discriminator model to load')
-parser.add_argument('--D_loss_f', default='MSE', type=str, help='GAN loss (BCEWithLogits, MSE)')
+parser.add_argument('--D_loss_f', default='MSE', type=str, help='GAN loss (BCEWithLogits, MSE, confident_mse_loss)')
 #parser.add_argument('--min_loss_D', default=0.1, type=float) # TODO
 parser.add_argument('--load_g_state_dict_path', help='Load state dictionary into model')
 parser.add_argument('--load_d_state_dict_path', help='Load state dictionary into model')
@@ -88,6 +88,15 @@ parser.add_argument('--funit_D', default=32, type=int, help='Filters unit for D'
 
 args = parser.parse_args()
 print(args)
+
+# requires Sigmoid
+def confident_mse_loss(answer, target):
+    not_confident_i = ((answer > 0.45) & (answer < 0.55)).to(torch.float32)
+    confident_i = 1-not_confident_i
+    dif = torch.abs(answer-target)
+    res = confident_i*dif**2+not_confident_i*dif
+    return res.mean()
+
 
 cudnn.benchmark = True
 
@@ -166,6 +175,9 @@ training_data_loader = DataLoader(dataset=DDataset, num_workers=args.threads, dr
 if args.D_loss_f == 'MSE':
     criterionGAN = nn.MSELoss().to(device)
     dout_activation = 'PReLU'
+elif args.D_loss_f == 'confident_mse_loss':
+    criterionGAN = confident_mse_loss
+    dout_activation = 'Sigmoid'
 else:
     criterionGAN = nn.BCEWithLogitsLoss().to(device)
     dout_activation = None
@@ -259,7 +271,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             useful_discriminator = True
         use_D = use_D or (loss_g_ssim.item() < args.min_ssim_l and iterations_before_d < 1 and useful_discriminator)
         use_L1 = (use_D and weight_L1_1 > 0) or (not(use_D) and args.weight_L1_0 > 0)
-        if (loss_d_item < 0.0025 and args.D_loss_f == 'MSE'):# or (loss_d_item > 5.0 and args.D_loss_f == 'BCEWithLogits'):  # critical
+        if (loss_d_item < 0.01 and args.D_loss_f == 'MSE'):# or (loss_d_item > 5.0 and args.D_loss_f == 'BCEWithLogits'):  # critical
             D_ratio = args.D_ratio_2
         elif use_D:
             if loss_d_item > 0.221 and args.D_loss_f == 'MSE':  # needs improvement
@@ -279,28 +291,27 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             real_ab = torch.cat([noisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]], 1)
 
         ## train discriminator ##
-        if discriminator_learns or iteration == 1:
-            d_in_chan = 3 if args.not_conditional else 6
+        d_in_chan = 3 if args.not_conditional else 6
 
-            set_requires_grad(net_d, True)
-            optimizer_d.zero_grad()
-            pred_fake = net_d(fake_ab.detach())
-            loss_D_fake = criterionGAN(pred_fake, gen_target_probabilities(False, pred_fake.shape))
-            pred_real = net_d(real_ab)
-            loss_D_real = criterionGAN(pred_real, gen_target_probabilities(True, pred_real.shape))
-            loss_d = (loss_D_fake + loss_D_real)/2  # not cat?
-            if args.debug_D:
-                print("pred_fake, pred_real")
-                print(pred_fake)
-                print(pred_real)
-            loss_d.backward()
+        set_requires_grad(net_d, True)
+        optimizer_d.zero_grad()
+        pred_fake = net_d(fake_ab.detach())
+        loss_D_fake = criterionGAN(pred_fake, gen_target_probabilities(False, pred_fake.shape))
+        pred_real = net_d(real_ab)
+        loss_D_real = criterionGAN(pred_real, gen_target_probabilities(True, pred_real.shape))
+        loss_d = (loss_D_fake + loss_D_real)/2  # not cat?
+        if args.debug_D:
+            print("pred_fake, pred_real")
+            print(pred_fake)
+            print(pred_real)
+        if discriminator_learns or iteration == 1:
+            loss_d.backward(retain_variables=True)
             optimizer_d.step()
-            loss_d_item = loss_d.item()
-            total_loss_d += loss_d_item
-            loss_d_item_str = "{:.4f}".format(loss_d_item)
-            num_train_d += 1
-        else:
-            loss_d_item_str = 'nan'
+        loss_d_item = loss_d.item()
+        total_loss_d += loss_d_item
+        loss_d_item_str = "{:.4f}".format(loss_d_item)
+        num_train_d += 1
+
         if not generator_learns:
             print("===> Epoch[{}]({}/{}): Loss_D: {}".format(
             epoch, iteration, len(training_data_loader), loss_d_item_str))
@@ -318,7 +329,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         if use_D:
             weight_ssim = weight_ssim_1
             weight_L1 = weight_L1_1
-            pred_fake = net_d(fake_ab)
+            #pred_fake = net_d(fake_ab)
             if args.debug_D:
                 print("pred_fake")
                 print(pred_fake)
