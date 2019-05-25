@@ -110,15 +110,6 @@ torch.cuda.manual_seed(args.seed)
 
 # process some args
 
-if args.weight_ssim_1 == None:
-    weight_ssim_1 = args.weight_ssim_0
-else:
-    weight_ssim_1 = args.weight_ssim_1
-if args.weight_L1_1 == None:
-    weight_L1_1 = args.weight_L1_0
-else:
-    weight_L1_1 = args.weight_L1_1
-
 if args.train_data == None or args.train_data == []:
     train_data = default_train_data
 else:
@@ -228,12 +219,11 @@ assert args.weight_ssim_0 > 0 # not implemented
 
 # setup optimizer
 
-optimizer_g = optim.Adam(net_g.parameters(), lr=args.lr, betas=(args.beta1, 0.999))
-net_g_scheduler = get_scheduler(optimizer_g, args, generator=True)
 optimizer_d = optim.Adam(net_d.parameters(), lr=args.lr, betas=(args.beta1, 0.999))
 net_d_scheduler = get_scheduler(optimizer_d, args, generator=False)
+net_g.eval()
 
-if args.model == 'UNet':    # UNet requires huge borders
+if args.model == 'UNet':    # UNet requires huge borders and
     loss_crop_lb = int((DDataset.cs-DDataset.ucs)/2)
     loss_crop_up = loss_crop_lb+DDataset.ucs
 else:
@@ -244,8 +234,7 @@ print('Using %s as bounds'%(str((loss_crop_lb, loss_crop_up))))
 use_D = False
 useful_discriminator = False
 generator_learns = not args.generator_waits
-if not generator_learns:
-    optimizer_g.zero_grad()
+
     #set_requires_grad(net_g, False)
 
 def update_generator_learns():
@@ -263,41 +252,16 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
     ### train ###
     # reset counters at the beginning of batch
     total_loss_d = 0
-    total_loss_g_D = 0
-    total_loss_g_std = 0
-    total_loss_g_ssim = 0
     num_train_d = 0
-    num_train_g_D = 0
-    num_train_g_std = 0
     loss_d_item = 1
     loss_d_item_str = 'nan'
     for iteration, batch in enumerate(training_data_loader, 1):
         cleanimg, noisyimg = batch[0].to(device), batch[1].to(device)
         # generate clean image ("fake")
-        optimizer_g.zero_grad()
         optimizer_d.zero_grad()
         gnoisyimg = net_g(noisyimg)
-        # compute SSIM # no longer any reason to have it here
-        loss_g_ssim = criterionSSIM(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up])
-        loss_g_ssim = 1-loss_g_ssim
-        total_loss_g_ssim += loss_g_ssim.item()
+
         # determine whether we use and/or update discriminator
-        if loss_d_item < 0.4 or args.D_loss_f != 'MSE':   #MSE
-            useful_discriminator = True
-        use_D = use_D or (loss_g_ssim.item() < args.min_ssim_l and iterations_before_d < 1 and useful_discriminator)
-        use_L1 = (use_D and weight_L1_1 > 0) or (not(use_D) and args.weight_L1_0 > 0)
-        if (loss_d_item < 0.01 and args.D_loss_f == 'MSE'):# or (loss_d_item > 5.0 and args.D_loss_f == 'BCEWithLogits'):  # critical
-            D_ratio = args.D_ratio_2
-        elif use_D:
-            if loss_d_item > 0.4 and args.D_loss_f == 'MSE':  # needs improvement
-                D_ratio = args.D_ratio_0
-            else:   # std
-                D_ratio = args.D_ratio_1
-        else:   # init
-            D_ratio = args.D_ratio_0
-
-        discriminator_learns = random.random() < D_ratio
-
         if args.not_conditional:
             fake_ab = gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]
             real_ab = cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]
@@ -320,76 +284,22 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         loss_D_fake = criterionGAN(pred_fake, gen_target_probabilities(False, pred_fake.shape))
         loss_D_fake.backward(retain_graph=retain_graph)
 
+        loss_d_real_item = loss_D_real.mean().item()
+        loss_d_fake_item = loss_D_fake.mean().item()
         loss_d_item = (loss_D_fake + loss_D_real).mean().item() # not cat?
 
-        if discriminator_learns or iteration == 1:
-            optimizer_d.step()
+        optimizer_d.step()
         loss_d_range = ", ".join(["{:.2}".format(float(i)) for i in (min(pred_real), max(pred_real), min(pred_fake), max(pred_fake))])
 
         total_loss_d += loss_d_item
         loss_d_item_str = "{:.4f}".format(loss_d_item)
         num_train_d += 1
 
-        if not generator_learns:
-            print("===> Epoch[{}]({}/{}): Loss_D: {} (range r-r+f-f+: {})".format(
-            epoch, iteration, len(training_data_loader), loss_d_item_str, str(loss_d_range)))
-            generator_learns = update_generator_learns()
-            continue
-        ## train generator ##
-        #set_requires_grad(net_d, False)
+        print("===> Epoch[{}]({}/{}): Loss_D: {} (range r-r+f-f+: {})".format(
+        epoch, iteration, len(training_data_loader), loss_d_item_str, str(loss_d_range)))
+        generator_learns = update_generator_learns()
 
-        loss_g_item_str = 'L(SSIM: {:.4f}'.format(loss_g_ssim)
-        if use_L1:
-            loss_g_L1 = criterionL1(fake_ab, real_ab)
-            loss_g_item_str += ', L1: {:.4f}'.format(loss_g_L1.item())
-        else:
-            loss_g_L1 = float('nan')
-        if use_D:
-            weight_ssim = weight_ssim_1
-            weight_L1 = weight_L1_1
-            #if not retain_graph:
-            #    pred_fake = net_d(fake_ab)
-            if args.debug_D:
-                print("pred_fake")
-                print(pred_fake)
-            loss_g_gan = criterionGAN(pred_fake, gen_target_probabilities(True, pred_fake.shape))
-            loss_g_item_str += ', D(G(y),y): {:.4f})'.format(loss_g_gan.item())
-        else:
-            weight_ssim = args.weight_ssim_0
-            weight_L1 = args.weight_L1_0
-        loss_g = loss_g_ssim * weight_ssim
-        if use_D:
-            loss_g += loss_g_gan * (1-weight_ssim - weight_L1)
-        if use_L1:
-            loss_g += loss_g_L1 * weight_L1
-        loss_g_item = loss_g.item()
-        loss_g.backward()
-        loss_g_item_str += ') = '+'{:.4f}'.format(loss_g_item)
-        if use_D:
-            total_loss_g_D += loss_g_item
-            num_train_g_D += 1
-        else:
-            if loss_g_ssim.item() > args.min_ssim_l:
-                iterations_before_d = args.post_fail_ssim_num
-            else:
-                iterations_before_d -= 1
-                total_loss_g_std += loss_g_item
-                num_train_g_std += 1
-        optimizer_g.step()
-
-        print("===> Epoch[{}]({}/{}): Loss_D: {} (range (r-r+f-f+): {}, learn={} \tLoss_G: {}".format(
-            epoch, iteration, len(training_data_loader), loss_d_item_str, str(loss_d_range), discriminator_learns, loss_g_item_str))
-    if num_train_d > 5:
-        update_learning_rate(net_d_scheduler, optimizer_d, loss_avg=total_loss_d/num_train_d, scheduler_name="net_d")
-    if generator_learns:
-        if num_train_g_D > num_train_g_std*args.lr_update_min_D_ratio:
-            print('Generator average loss with D: '+str(total_loss_g_D/num_train_g_D))
-            update_learning_rate(net_g_scheduler['D'], optimizer_g, loss_avg=total_loss_g_D/num_train_g_D, scheduler_name="net_g_D")
-        else:
-            update_learning_rate(net_g_scheduler['SSIM'], optimizer_g, loss_avg=total_loss_g_std/num_train_g_std, scheduler_name="net_g_SSIM")
-        if num_train_g_std > 0:
-            print('Generator average loss without D: '+str(total_loss_g_std/num_train_g_std))
-    epoch_avg_ssim_loss = total_loss_g_ssim/iteration
+    update_learning_rate(net_d_scheduler, optimizer_d, loss_avg=total_loss_d/num_train_d, scheduler_name="net_d")
     print("Epoch avg SSIM loss: %f"%(epoch_avg_ssim_loss))
     print('Discriminator average loss: '+str(total_loss_d/num_train_d))
 
