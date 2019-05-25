@@ -88,6 +88,7 @@ parser.add_argument('--out_activation', help='Specific discriminator output acti
 
 args = parser.parse_args()
 print(args)
+print("cmd: python3 "+" ".join(sys.argv))
 
 cudnn.benchmark = True
 

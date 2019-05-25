@@ -44,20 +44,57 @@ Balanced initialization is crucial as experimental work has shown that using the
 The network is still highly susceptible to failure after initialization. Common issues are overconfidence (with eventual mode collapse where the network outputs the same result), vanishing gradients, and indecision, therefore a good balance must be maintained all along the training process. We provide the discriminator's \ac{MSE} loss with noisy labels (+/- 0.03 probabilities) to prevent overconfidence. There is typically a 0.33 training ratio between the discriminator and the generator, the imbalance ensures that the two networks are not constantly trying to overcome each other's latest update. This ratio is lowered to 0.1 when the discriminator gets too accurate (95\%), and it is increased to 0.9 when the discriminator has approximately 50\% or below accuracy. (50\% is the ideal target but it often indicates an indecisive discriminator.)
 % should investigate: https://arxiv.org/abs/1803.07422 (Patch-Based Image Inpainting with Generative Adversarial Networks)
 
+\begin{algorithm}
+\caption{(c)GAN training procedure}
+\label{alg:gantrain}
 \begin{algorithmic}
-\STATE (c)GAN training procedure
 \FORALL{clean\_batch, noisy\_batch $\in$ Dataset}
-\STATE optimizer\_D.clear\_gradient()
-\STATE optimizer\_G.clear\_gradient()
-\STATE generated\_batch = net\_G(noisy\_batch) \COMMENT{Generate a clean images batch}
-\STATE loss\_G\_SSIM = SSIM(rm\_borders(generated\_batch), rm\_borders(clean\_batch)
-\COMMENT{Train the discriminator}
-\IF{net\_D is conditional}
-\STATE fake\_minibatch = concatenate(rm\_borders(noisy\_batch), rm\_borders(generated\_batch))
-\STATE real\_minibatch = concatenate(rm\_borders(noisy\_batch), rm\_borders(clean\_batch))
+\STATE ADAM\_optimizer\_D.clear\_gradient()
+\STATE ADAM\_optimizer\_G.clear\_gradient()
+\STATE \COMMENT{Generate a denoised ("fake") images batch}
+\STATE generated\_batch $\leftarrow$ network\_G(noisy\_batch)
+\STATE \COMMENT{Train the discriminator}
+\IF{network\_D.is\_conditional}
+\STATE fake\_minibatch $\leftarrow$ concatenate(
+\STATE \quad remove\_borders(noisy\_batch),
+\STATE \quad remove\_borders(generated\_batch).detach\_from\_graph())
+\STATE real\_minibatch $\leftarrow$ concatenate(
+\STATE \quad remove\_borders(noisy\_batch),
+\STATE \quad remove\_borders(clean\_batch))
 \ELSE
-\STATE fake\_minibatch = rm\_borders(generated\_batch)
-\STATE real\_minibatch = rm\_borders(clean\_batch)
+\STATE fake\_minibatch $\leftarrow$ remove\_borders(generated\_batch).detach\_from\_graph()
+\STATE real\_minibatch $\leftarrow$ remove\_borders(clean\_batch)
 \ENDIF
+\STATE predictions\_on\_real\_data $\leftarrow$ network\_D(real\_minibatch)
+\STATE loss\_real\_D $\leftarrow$ \ac{MSE}(
+\STATE \quad predictions\_on\_real\_data,
+\STATE \quad generate\_noisy\_probabilities(\TRUE))
+\STATE loss\_real\_D.backpropagate()
+\STATE predictions\_on\_fake\_data $\leftarrow$ network\_D(fake\_minibatch)
+\STATE loss\_fake\_D $\leftarrow$ \ac{MSE}(
+\STATE \quad predictions\_on\_fake\_data,
+\STATE \quad generate\_noisy\_probabilities(\FALSE))
+\STATE loss\_fake\_D.backpropagate()
+\IF{discriminator\_learns}
+\STATE \COMMENT{Whether the discriminator learns depends on randomness and a ratio determined by its previous performance}
+\STATE ADAM\_optimizer\_D.update\_weights()
+\ENDIF
+\STATE \COMMENT{Train the generator}
+\STATE loss\_G\_GAN $\leftarrow$ \ac{MSE}(
+\STATE \quad predictions\_on\_fake\_data,
+\STATE \quad generate\_noisy\_probabilities(\TRUE))
+\STATE loss\_G\_SSIM $\leftarrow$ \ac{SSIM}(
+\STATE \quad remove\_borders(generated\_batch),
+\STATE \quad remove\_borders(clean\_batch))
+\STATE loss\_G\_$\ell 1\leftarrow \ell 1$(
+\STATE \quad remove\_borders(generated\_batch),
+\STATE \quad remove\_borders(clean\_batch))
+\STATE loss\_G\_weighted $\leftarrow$ 
+\STATE \quad loss\_G\_GAN $\times (1- $ weight\_loss\_SSIM $-$ weight\_loss\_$\ell 1)$
+\STATE \quad $+$ loss\_G\_SSIM $\times$ weight\_loss\_SSIM
+\STATE \quad $+$ loss\_G\_$\ell 1 \times$ weight\_loss\_$\ell 1$
+\STATE loss\_G\_weighted.backpropagate()
+\STATE ADAM\_optimizer\_G.update\_weights()
 \ENDFOR
 \end{algorithmic}
+\end{algorithm}

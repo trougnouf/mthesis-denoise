@@ -89,6 +89,7 @@ parser.add_argument('--use_new_D', action='store_true', help='Use newly updated 
 
 args = parser.parse_args()
 print(args)
+print("cmd: python3 "+" ".join(sys.argv))
 
 # requires Sigmoid
 def confident_mse_loss(answer, target):
@@ -272,7 +273,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         optimizer_g.zero_grad()
         optimizer_d.zero_grad()
         gnoisyimg = net_g(noisyimg)
-        # compute SSIM
+        # compute SSIM # no longer any reason to have it here
         loss_g_ssim = criterionSSIM(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up])
         loss_g_ssim = 1-loss_g_ssim
         total_loss_g_ssim += loss_g_ssim.item()

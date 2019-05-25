@@ -5,7 +5,7 @@ import torch.nn as nn
 from torch.nn import init
 import functools
 from torch.optim import lr_scheduler
-from networks.nnModules import UNet, Hul144Disc, Hul160Net, Hul128Net, Hul112Disc, Hulb128Net
+from networks.nnModules import UNet, Hul112Disc, Hulb128Net, Hulbs112Disc, Hulbs128Net
 
 # forked from
 
@@ -95,6 +95,8 @@ def define_G(input_nc, output_nc, ngf, norm='batch', use_dropout=False, init_typ
         net = Hul128Net()
     elif net_type == 'Hulb128Net':
         net = Hulb128Net()
+    elif net_type == 'Hulbs128Net':
+        net = Hulbs128Net()
     elif net_type == 'HulNet':
         net = HulNet()
     return init_net(net, init_type, init_gain, gpu_id)
@@ -262,6 +264,8 @@ def define_D(input_nc, ndf, netD,
         net = PixelDiscriminator(input_nc, ndf, norm_layer=norm_layer, use_sigmoid=use_sigmoid)
     elif netD == 'Hul144Disc':
         net = Hul144Disc(input_nc)
+    elif netD == 'Hulbs112Disc':
+        net = Hulbs112Disc(input_nc, out_activation=out_activation, finalpool=finalpool, funit=funit)
     elif netD == 'Hul112Disc':
         net = Hul112Disc(input_nc, out_activation=out_activation, finalpool=finalpool, funit=funit)
     else:

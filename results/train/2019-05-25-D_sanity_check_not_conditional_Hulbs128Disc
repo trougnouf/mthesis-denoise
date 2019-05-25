@@ -1,0 +1,111 @@
+Namespace(D_loss_f='MSE', D_ratio_0=0.9, D_ratio_1=0.33, D_ratio_2=0.1, batch_size=30, beta1=0.75, compressionmax=100, compressionmin=100, cuda_device=0, debug_D=False, do_sizecheck=False, epoch_count=1, exact_reserve=False, expname=None, finalpool=False, find_noise=False, input_nc=3, load_d=None, load_d_state_dict_path=None, load_g=None, load_g_state_dict_path=None, loss_d_max_threshold=0.0, lr=0.0003, lr_decay_iters=50, lr_gamma=0.75, lr_min=5e-08, lr_policy='plateau', lr_step_size=5, lr_update_min_D_ratio=0.2, min_ssim_l=0.12, model='Hul128Net', models_dir='models', ndf=64, netD='Hulbs112Disc', ngf=64, niter=100, niter_decay=100, not_conditional=True, out_activation=None, output_nc=3, post_fail_ssim_num=25, result_dir='results/train', resume=False, seed=123, sigmamax=0, sigmamin=0, test_batch_size=1, test_reserve=None, threads=8, time_limit=600, train_data=None, weight_L1_0=0.1, weight_L1_1=None, weight_ssim_0=0.4, weight_ssim_1=None, yval=None)
+cmd: python3 p2p_discriminator_sanity_check.py --netD Hulbs112Disc --batch_size 30 --not_conditional --time_limit 600
+2019-05-25T15:50_p2p_discriminator_sanity_check.py_--netD_Hulbs112Disc_--batch_size_30_--not_conditional_--time_limit_600
+===> Loading datasets
+Added droid['ISO200']['ISO800', 'ISO3200', 'ISO6400'] to the dataset
+Added gnome['ISO200']['ISO800', 'ISO1600', 'ISO6400'] to the dataset
+Added Ottignies['ISO200']['ISO640', 'ISO3200', 'ISO6400'] to the dataset
+Added MuseeL-turtle['ISO200']['ISO800', 'ISO1250', 'ISO6400'] to the dataset
+Added MuseeL-centrifuge['ISO200']['ISO800', 'ISO2000', 'ISO6400'] to the dataset
+Added MuseeL-shell['ISO200']['ISO400', 'ISO800', 'ISO6400'] to the dataset
+Added MuseeL-coral['ISO200']['ISO800', 'ISO5000', 'ISO6400'] to the dataset
+Added MuseeL-head['ISO200']['ISO640', 'ISO3200', 'ISO6400'] to the dataset
+Added MuseeL-heads['ISO200']['ISO400', 'ISO3200', 'ISO6400'] to the dataset
+Added MuseeL-mask['ISO200']['ISO640', 'ISO4000', 'ISO6400'] to the dataset
+Added MuseeL-pig['ISO200']['ISO500', 'ISO2000', 'ISO6400'] to the dataset
+Added MuseeL-inspiredlotus['ISO200']['ISO640', 'ISO2500', 'ISO6400'] to the dataset
+Added MuseeL-pinklotus['ISO200']['ISO800', 'ISO4000', 'ISO6400'] to the dataset
+Added MuseeL-Armlessness['ISO200']['ISO800', 'ISO2000', 'ISO6400'] to the dataset
+Added MuseeL-byMarcGroessens['ISO200']['ISO400', 'ISO3200', 'ISO6400'] to the dataset
+Added MuseeL-SergeVandercam['ISO200']['ISO320', 'ISO1000', 'ISO6400'] to the dataset
+Added MuseeL-Moschophore['ISO200']['ISO500', 'ISO4000', 'ISO6400'] to the dataset
+Added MuseeL-AraPacis['ISO200']['ISO800', 'ISO4000', 'ISO6400'] to the dataset
+Added MuseeL-stele['ISO200']['ISO640', 'ISO1000', 'ISO6400'] to the dataset
+Added MuseeL-cross['ISO200']['ISO500', 'ISO4000', 'ISO6400'] to the dataset
+Added MuseeL-fuite['ISO200']['ISO320', 'ISO4000', 'ISO6400'] to the dataset
+Added MuseeL-RGB['ISO200']['ISO250', 'ISO1000', 'ISO6400'] to the dataset
+Added MuseeL-Vincent['ISO200']['ISO400', 'ISO2500', 'ISO6400'] to the dataset
+Added MuseeL-avelo['ISO200']['ISO500', 'ISO3200', 'ISO6400'] to the dataset
+Added MuseeL-ambon['ISO200']['ISO640', 'ISO2500', 'ISO6400'] to the dataset
+Added MuseeL-ram['ISO200']['ISO800', 'ISO1000', 'ISO6400'] to the dataset
+Added MuseeL-Ghysels['ISO200']['ISO800', 'ISO6400'] to the dataset
+Added MuseeL-pedestal['ISO200']['ISO1250', 'ISO5000', 'ISO6400'] to the dataset
+Added MuseeL-theatre['ISO200']['ISO400', 'ISO2500', 'ISO6400'] to the dataset
+Added MuseeL-text['ISO200']['ISO400', 'ISO5000', 'ISO6400'] to the dataset
+Added MuseeL-painting['ISO200']['ISO800', 'ISO3200', 'ISO6400'] to the dataset
+Added MuseeL-yombe['ISO200']['ISO640', 'ISO3200', 'ISO6400'] to the dataset
+Added MuseeL-roue['ISO200']['ISO800', 'ISO1250', 'ISO6400'] to the dataset
+Added MuseeL-hanging['ISO200']['ISO500', 'ISO4000', 'ISO6400'] to the dataset
+Added MuseeL-coral2['ISO200']['ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added MuseeL-Vanillekipferl['ISO200']['ISO6400', 'ISOH1'] to the dataset
+Added MuseeL-clam['ISO200']['ISO6400', 'ISOH1'] to the dataset
+Added MuseeL-Ndengese['ISO200']['ISO6400', 'ISOH1'] to the dataset
+Added MuseeL-Bobo['ISO200']['ISO2500', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added threebicycles['ISO200']['ISO6400'] to the dataset
+Added sevenbicycles['ISO200']['ISO1600', 'ISO6400'] to the dataset
+Added Stevin['ISO200']['ISO4000', 'ISO6400'] to the dataset
+Added wall['ISO200']['ISO640', 'ISO6400'] to the dataset
+Added Saint-Remi['ISO200']['ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added Saint-Remi-C['ISO200']['ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added books['ISO200']['ISO1600', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added MuseeL-snakeAndMask['ISO200']['ISO2000', 'ISO6400', 'ISOH1'] to the dataset
+Added bloop['ISO200']['ISO3200', 'ISO6400', 'ISOH1'] to the dataset
+Added schooltop['ISO200']['ISO800', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added Sint-Joris['ISO200']['ISO1000', 'ISO2500', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added claycreature['ISO200']['ISO4000', 'ISO6400', 'ISOH1'] to the dataset
+Added claycreatures['ISO200']['ISO1600', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added claytools['ISO200']['ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added CourtineDeVillersDebris['ISO200']['ISO2500', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added Leonidas['ISO200']['ISO400', 'ISO3200', 'ISO6400', 'ISOH1'] to the dataset
+Added pastries['ISO200']['ISO3200', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added mugshot['ISO200']['ISO6400', 'ISOH1'] to the dataset
+Added holywater['ISO200']['ISO1600', 'ISO4000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added chapel['ISO200']['ISO1000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added directions['ISO200']['ISO640-2', 'ISO640', 'ISO1250', 'ISO6400-2', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added drowning['ISO200']['ISO800', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added semicircle['ISO200']['ISO320', 'ISO640', 'ISO1250', 'ISO2500', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added stairs['ISO200']['ISO250', 'ISO320', 'ISO640', 'ISO1250', 'ISO2500', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added stefantiek['ISO200']['ISO250', 'ISO500', 'ISO2000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added tree1['ISO200']['ISO400', 'ISO1600', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added tree2['ISO200']['ISO800', 'ISO1600', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added ursulines-building['ISO200']['ISO250', 'ISO400', 'ISO1000', 'ISO4000', 'ISO6400', 'ISOH1'] to the dataset
+Added ursulines-can['ISO200', 'ISO200-2']['ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added ursulines-red['ISO200']['ISO250', 'ISO500', 'ISO4000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added vlc['ISO200']['ISO250', 'ISO500', 'ISO1000', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added whistle['ISO200']['ISO250', 'ISO500', 'ISO1000', 'ISO2000', 'ISO4000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3', 'ISOH4'] to the dataset
+Added parking-keyboard['ISO200']['ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added Homarus-americanus['ISO200', 'ISO200-2']['ISO250', 'ISO400', 'ISO800', 'ISO2000', 'ISO3200', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added fruits['ISO200', 'ISO200-2']['ISO800', 'ISO3200', 'ISO5000', 'ISO6400'] to the dataset
+Added soap['ISO200', 'ISO200-2']['ISO400', 'ISO800', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3', 'ISOH4'] to the dataset
+Added kibbles['ISO200', 'ISO200-2']['ISO800', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added bertrixtree['ISO200']['ISO400', 'ISO640', 'ISO2500', 'ISO4000', 'ISO6400', 'ISOH1'] to the dataset
+Added BruegelLibraryS1['ISO200']['ISO400', 'ISO1000', 'ISO2500', 'ISO3200', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added BruegelLibraryS2['ISO200']['ISO500', 'ISO1250', 'ISO2500', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3', 'ISOH4'] to the dataset
+Added LaptopInLibrary['ISO200']['ISO500', 'ISO800', 'ISO1600', 'ISO2500', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added banana['ISO200']['ISO250', 'ISO500', 'ISO800', 'ISO1250', 'ISO2000', 'ISO4000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added dustyrubberduck['ISO200']['ISO1000', 'ISO1250', 'ISO2500', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added partiallyeatenbanana['ISO200']['ISO640', 'ISO1250', 'ISO2500', 'ISO4000', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added corkboard['ISO200']['ISO320', 'ISO1000', 'ISO2500', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added fireextinguisher['ISO200', 'ISO200-3', 'ISO200-2']['ISO800', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added MVB-Sainte-Anne['ISO200', 'ISO200-2']['ISO250', 'ISO640', 'ISO4000', 'ISO6400', 'ISOH1'] to the dataset
+Added MVB-JardinBotanique['ISO200', 'ISO200-2']['ISO400', 'ISO1000', 'ISO2500', 'ISO3200', 'ISO6400'] to the dataset
+Added MVB-Urania['ISO200']['ISO320', 'ISO500', 'ISO1000', 'ISO2500', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added MVB-1887GrandPlace['ISO200', 'ISO200-2']['ISO400', 'ISO640', 'ISO2000', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added MVB-heraldicLion['ISO200', 'ISO200-2']['ISO320', 'ISO1000', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added MVB-Bombardement['ISO200', 'ISO200-2']['ISO320', 'ISO800', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added beads['ISO200']['ISO500', 'ISO1000', 'ISO3200', 'ISO6400'] to the dataset
+Added shells['ISO200', 'ISO200-2']['ISO250', 'ISO320', 'ISO1000', 'ISO1600', 'ISO2500', 'ISO3200', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added MVB-LouveFire['ISO200', 'ISO200-2']['ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISO6400-2', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added MuseeL-Bobo-C500D['ISO100']['ISO200', 'ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISOH1'] to the dataset
+Added MuseeL-yombe-C500D['ISO100']['ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISOH1'] to the dataset
+Added MuseeL-sol-C500D['ISO100']['ISO200', 'ISO400', 'ISO800', 'ISO3200', 'ISOH1'] to the dataset
+Added MuseeL-skull-C500D['ISO100']['ISO200', 'ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISOH1'] to the dataset
+Added MuseeL-Sepik-C500D['ISO100']['ISO200', 'ISO800', 'ISO1600', 'ISO3200', 'ISOH1'] to the dataset
+Added MuseeL-Saint-Pierre-C500D['ISO100', 'ISO100-2']['ISO200', 'ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISOH1'] to the dataset
+Added MuseeL-mammal-C500D['ISO100']['ISO200', 'ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISOH1'] to the dataset
+Added MuseeL-idole-C500D['ISO100', 'ISO100-2']['ISO200', 'ISO400', 'ISO800', 'ISO3200', 'ISOH1'] to the dataset
+Added MuseeL-CopteArch-C500D['ISO100', 'ISO100-2']['ISO200', 'ISO400', 'ISO1600', 'ISO3200'] to the dataset
+Added MuseeL-cross-C500D['ISO100']['ISO200', 'ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISOH1'] to the dataset
+Added MuseeL-fuite-C500D['ISO100']['ISO200', 'ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISOH1'] to the dataset
+Added Pen-pile['ISO100']['ISO200', 'ISO400', 'ISO800', 'ISO1600', 'ISO3200'] to the dataset
+===> Building models

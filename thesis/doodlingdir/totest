@@ -1,1 +1,12 @@
-to test: activate for fake 
+to test:
+- no BN (test at home?) SELU
+- 0 ssim (start from epoch 1?)
+- activate for fake (switch labels)
+- funit (D, G)
+
+res to report:
+color cast (wth BN?) (c-only?)
+
+
+make a cleaned dataset?
+or a real test w/ unet
