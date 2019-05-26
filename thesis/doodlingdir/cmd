@@ -1,1 +1,2 @@
-python3 -u p2p_train.py --min_ssim_l 0.125 --post_fail_ssim_num 35 --weight_ssim_0 0.9 --weight_L1_0 0.1 --weight_ssim_1 0.4 --weight_L1_1 0.1 --keep_D --test_reserve ursulines-red stefantiek ursulines-building MuseeL-Bobo CourtineDeVillersDebris C500D Pen-pile --model HulNet --netD Hul144Disc --cuda_device 2 --batch_size 18 &> 'results/train/Hul144Net'
+python3 -u p2p_train.py --min_ssim_l 0.12 --post_fail_ssim_num 45 --weight_ssim_0 0.95 --weight_L1_0 0.05 --weight_ssim_1 0.04 --weight_L1_1 0.01 --keep_D --test_reserve ursulines-red stefantiek ursulines-building MuseeL-Bobo CourtineDeVillersDebris C500D Pen-pile --cuda_device 1 --batch_size 18 &> 'results/train/2019-05-26-Hulb128Net-Hul112Disc-0.95_lossgan-fixed'
+

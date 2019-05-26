@@ -23,13 +23,12 @@ from networks.p2p_networks import define_G, define_D, get_scheduler, update_lear
 default_train_data = ['datasets/train/NIND_128_112']
 
 # TODO check parameters
-# Hul112Disc should go with Hul128Net and 128cs dataset
+# Hul112Disc should go with Hulb128Net and 128cs dataset
 # Hul144Disc should go with Hul160Net and 128cs dataset
 
 # Training settings
 parser = argparse.ArgumentParser(description='pix2pix-pytorch-implementation-in-mthesis-denoise')
 parser.add_argument('--batch_size', type=int, default=19, help='training batch size')
-parser.add_argument('--test_batch_size', type=int, default=1, help='testing batch size')
 parser.add_argument('--input_nc', type=int, default=3, help='input image channels')
 parser.add_argument('--output_nc', type=int, default=3, help='output image channels')
 parser.add_argument('--ngf', type=int, default=64, help='generator filters in first conv layer')
@@ -66,7 +65,7 @@ parser.add_argument('--result_dir', default='results/train', type=str, help='Dir
 parser.add_argument('--models_dir', default='models', type=str, help='Directory where models are saved/loaded (default: models)')
 parser.add_argument('--lr_gamma', default=.75, type=float, help='Learning rate decrease rate for plateau, StepLR (default: 0.75)')
 parser.add_argument('--lr_step_size', default=5, type=int, help='Step size for StepLR, patience for plateau scheduler')
-parser.add_argument('--model', default='Hul128Net', type=str, help='Model type (UNet, Resnet, Hul160Net, Hul128Net)')
+parser.add_argument('--model', default='Hulb128Net', type=str, help='Model type (UNet, Resnet, Hul160Net, Hul128Net)')
 parser.add_argument('--D_ratio_0', default=0.9, type=float, help='How often D learns compared to G initially ( (0,1])')
 parser.add_argument('--D_ratio_1', default=0.33, type=float, help='How often D learns compared to G when D is in use ( (0,1])')
 parser.add_argument('--D_ratio_2', default=0.1, type=float, help='How often D learns compared to G when D is too good ( (0,1])')
@@ -87,8 +86,9 @@ parser.add_argument('--loss_d_max_threshold', type=float, default=0.)
 parser.add_argument('--finalpool', action='store_true', help='Final pooling on the discriminator (instead of convolution)')
 parser.add_argument('--out_activation', help='Specific discriminator output activation')
 parser.add_argument('--generator_waits', action='store_true', help="Generator won't learn until discriminator is useful")
-parser.add_argument('--funit_D', default=32, type=int, help='Filters unit for D')
+parser.add_argument('--funit_D', default=24, type=int, help='Filters unit for D')
 parser.add_argument('--use_new_D', action='store_true', help='Use newly updated discriminator to train G instead of keeping graph used in D training')
+parser.add_argument('--invert_probabilities', action='store_true', help='Use 1 for fake and 0 for true')
 # parser.add_argument('--train_D_only', action='store_true') # TODO w/ refactor
 
 args = parser.parse_args()
@@ -301,11 +301,12 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
 
         pred_real = net_d(real_ab)
         #breakpoint()
-        loss_D_real = criterionGAN(pred_real, gen_target_probabilities(True, pred_real.shape, device))
+        loss_D_real = criterionGAN(pred_real,
+                                   gen_target_probabilities(True, pred_real.shape, device, args.invert_probabilities))
         loss_D_real.backward()
 
         pred_fake = net_d(fake_ab.detach())
-        loss_D_fake = criterionGAN(pred_fake, gen_target_probabilities(False, pred_fake.shape, device))
+        loss_D_fake = criterionGAN(pred_fake, gen_target_probabilities(False, pred_fake.shape, device, args.invert_probabilities))
         loss_D_fake.backward(retain_graph=retain_graph)
 
         loss_d_item = (loss_D_fake + loss_D_real).mean().item() # not cat?
@@ -340,7 +341,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             if args.debug_D:
                 print("pred_fake")
                 print(pred_fake)
-            loss_g_gan = criterionGAN(pred_fake, gen_target_probabilities(True, pred_fake.shape, device))
+            loss_g_gan = criterionGAN(pred_fake, gen_target_probabilities(True, pred_fake.shape, device, args.invert_probabilities))
             loss_g_item_str += ', D(G(y),y): {:.4f})'.format(loss_g_gan.item())
         else:
             weight_ssim = args.weight_ssim_0

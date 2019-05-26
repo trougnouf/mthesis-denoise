@@ -37,7 +37,7 @@ TODO Move this to later discussion
 
 LSGAN
 \section{Method}
-The discriminator is trained on the generated input as soon as the network is initialized, but the generator uses only conventional loss functions (namely \ac{SSIM} and L1) until a set SSIM threshold is met. From this point the loss function is a weighted combination of the discriminator's \ac{MSE} loss (0.5), the \ac{SSIM} index (0.45) ensures stability and image quality, and the L1 loss (0.05) provides some smoothness to overcome some of the excessive high-frequency details caused by the discriminator. 
+The discriminator is trained on the generated input as soon as the network is initialized, but the generator uses only conventional loss functions (namely \ac{SSIM} and $\ell 1$) until a set \ac{SSIM} threshold is met. From this point the loss function is a weighted combination of the discriminator's \ac{MSE} loss (0.75), the \ac{SSIM} index (0.20) ensures stability and image quality, and the $\ell 1$ loss (0.05) provides some smoothness to prevent the discriminator excessive high-frequency details caused by the discriminator. 
 
 Balanced initialization is crucial as experimental work has shown that using the discriminator too soon results in a generator whose only focus is to trick the discriminator and the image quality suffers to the point where the generator loses and its gradient vanishes. Starting off with a well-trained generator on the other hand gives no chance to the discriminator whose best bet is to be forever indecisive.
 
