@@ -9,9 +9,21 @@ Hulb128Act = {"No BN, PReLU": "results/train/2019-05-23-Hulb128Net-BN",
 # train on clean/noisy
 Hul112Disc:
 {
+# broken crop
 "None": "results/train/2019-05-22-D_sanity_check_not_conditional_No_activation",
 "Sigmoid": "results/train/2019-05-22-D_sanity_check_not_conditional_Sigmoid",
 "PReLU": "results/train/2019-05-22-D_sanity_check_not_conditional"
+"SELU": "results/train/2019-05-25-D_sanity_check_not_conditional_Hulbs128Disc"
+#normal crop
+python p2p_discriminator_sanity_check.py --netD Hul112Disc --batch_size 30 --not_conditional --time_limit 2400 --funit_D 16 --finalpool &> results/train/2019-05-26-D_sanity_check_Hul112Disc_fixed_funit16_finalpool
+python p2p_discriminator_sanity_check.py --netD Hul112Disc --batch_size 30 --not_conditional --time_limit 2400 --funit_D 16 --out_activation Sigmoid &> results/train/2019-05-26-D_sanity_check_Hulb112Disc_fixed_funit16_sigmoid
+python p2p_discriminator_sanity_check.py --netD Hul112Disc --batch_size 30 --not_conditional --time_limit 2400 --funit_D 16 --out_activation None &> results/train/2019-05-26-D_sanity_check_Hulb112Disc_fixed_funit16_no_activation
+python p2p_discriminator_sanity_check.py --netD Hul112Disc --batch_size 30 --not_conditional --time_limit 2400 --funit_D 16 --finalpool &> results/train/2019-05-26-D_sanity_check_Hul112Disc_fixed_funit16_finalpool
+python p2p_discriminator_sanity_check.py --netD Hulb112Disc --batch_size 30 --not_conditional --time_limit 2400 --funit_D 16 --finalpool &> results/train/2019-05-26-D_sanity_check_Hulb112Disc_fixed_funit16_finalpool
+python p2p_discriminator_sanity_check.py --netD Hul112Disc --batch_size 30 --not_conditional --time_limit 2400 --funit_D 16 &> results/train/2019-05-26-D_sanity_check_Hul112Disc_fixed_funit16
+python p2p_discriminator_sanity_check.py --netD Hul112Disc --batch_size 30 --not_conditional --time_limit 2400 --funit_D 32 &> results/train/2019-05-26-D_sanity_check_Hul112Disc_fixed_funit32
+python p2p_discriminator_sanity_check.py --netD Hulb112Disc --batch_size 30 --not_conditional --time_limit 2400 --funit_D 16 &> results/train/2019-05-26-D_sanity_check_Hulb112Disc_fixed_funit16
+python p2p_discriminator_sanity_check.py --netD Hulb112Disc --batch_size 30 --not_conditional --time_limit 2400 --funit_D 32 &> results/train/2019-05-26-D_sanity_check_Hulb112Disc_fixed_funit32
 }
 
 TODO finalpool

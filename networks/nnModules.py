@@ -3,7 +3,7 @@ import torch.nn.init as init
 from math import floor
 import torch.nn.functional as F
 import torch
-from networks.Hul import Hul112Disc, Hulb128Net, Hulbs112Disc, Hulbs128Net
+from networks.Hul import Hul112Disc, Hulb128Net, Hulb112Disc, Hulbs128Net, Hull112Disc
 
 def init_weights(m):
     if type(m) == nn.Linear:

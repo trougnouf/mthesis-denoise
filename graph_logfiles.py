@@ -10,7 +10,7 @@ import json
 import graph_utils
 
 # generate results from log file
-# python graph_logfiles.py --experiment Hul112_activation --yaxis "Average MSE"
+# python graph_logfiles.py --experiment Hul112_activation --yaxis "Average MSE" --uneven_graphs
 # python graph_logfiles.py --experiment Hulb128 --yaxis "Average SSIM"
 
 default_smoothing_factor = 50
@@ -27,10 +27,21 @@ args = parser.parse_args()
 
 experiments = dict()
 experiments['Hul112_activation'] = {
-    "None": "results/train/2019-05-22-D_sanity_check_not_conditional_No_activation",
-    "Sigmoid": "results/train/2019-05-22-D_sanity_check_not_conditional_Sigmoid",
-    "PReLU": "results/train/2019-05-22-D_sanity_check_not_conditional",
-    "Final pooling": "results/train/2019-05-22-D_sanity_check_finalpool"
+#    "None-bc": "results/train/2019-05-22-D_sanity_check_not_conditional_No_activation",
+#    "Sigmoid-bc": "results/train/2019-05-22-D_sanity_check_not_conditional_Sigmoid",
+#    "PReLU-bc": "results/train/2019-05-22-D_sanity_check_not_conditional",
+#    "Final pooling-bc": "results/train/2019-05-22-D_sanity_check_finalpool",
+    "Final pooling-16": "results/train/2019-05-26-D_sanity_check_Hul112Disc_fixed_funit16_finalpool",
+    "Sigmoid-16":"results/train/2019-05-26-D_sanity_check_Hul112Disc_fixed_funit16_sigmoid",
+    "None-16": "results/train/2019-05-26-D_sanity_check_Hul112Disc_fixed_funit16_no_activation",
+"Final pooling-noBN-16": "results/train/2019-05-26-D_sanity_check_Hulb112Disc_fixed_funit16_finalpool",
+"PReLU-16":"results/train/2019-05-26-D_sanity_check_Hul112Disc_fixed_funit16",
+"PReLU-32":"results/train/2019-05-26-D_sanity_check_Hul112Disc_fixed_funit32",
+"PReLU-noBN-16":"results/train/2019-05-26-D_sanity_check_Hulb112Disc_fixed_funit16",
+"PReLU-noBN-32":"results/train/2019-05-26-D_sanity_check_Hulb112Disc_fixed_funit32",
+"LeakyReLU everywhere-24":"results/train/2019-05-26-D_sanity_check_Hull112Disc_fixed_funit24_LeakyReLU",
+"LeakyReLU-24": "results/train/2019-05-26-D_sanity_check_Hul112Disc_fixed_funit24_LeakyReLU",
+"LeakyReLU-final pooling-24": "results/train/2019-05-26-D_sanity_check_Hul112Disc_fixed_funit24_LeakyReLU_finalpool"
 }
 experiments['Hulb128'] = {"BN, PReLU": "results/train/2019-05-23-Hulb128Net-BN",
 "No BN, PReLU": "results/train/2019-05-23-Hulb128Net-NoBN",

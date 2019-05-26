@@ -13,6 +13,7 @@ from torch.utils.data import DataLoader
 import torch.backends.cudnn as cudnn
 import random
 from lib import pytorch_ssim
+from train_utils import gen_target_probabilities, get_crop_boundaries
 
 from networks.p2p_networks import define_G, define_D, get_scheduler, update_learning_rate
 
@@ -127,13 +128,6 @@ retain_graph = False if args.use_new_D else True
 
 # fun
 
-def gen_target_probabilities(target_real, target_probabilities_shape):
-    if target_real:
-        res = 19/20+torch.rand(target_probabilities_shape)/20
-    else:
-        res = torch.rand(target_probabilities_shape)/20
-    return res.to(device)
-
 def set_requires_grad(net, requires_grad = False):
     for param in net.parameters():
         param.requires_grad = requires_grad
@@ -202,11 +196,6 @@ if args.load_d:
 else:
     net_d = define_D(D_n_layers, args.ndf, args.netD, gpu_id=device, out_activation=dout_activation, finalpool=args.finalpool, funit=args.funit_D)
 
-if args.weight_L1_0 > 0 or weight_L1_1 > 0:
-    use_L1 = True
-    criterionL1 = nn.L1Loss().to(device)
-else:
-    use_L1 = False
 
 # load state dic for compatibility
 if args.load_g_state_dict_path:
@@ -214,8 +203,6 @@ if args.load_g_state_dict_path:
 if args.load_d_state_dict_path:
     net_d.load_state_dict(torch.load(args.load_d_state_dict_path))
 
-criterionSSIM = pytorch_ssim.SSIM().to(device)
-assert args.weight_ssim_0 > 0 # not implemented
 
 # setup optimizer
 
@@ -223,27 +210,12 @@ optimizer_d = optim.Adam(net_d.parameters(), lr=args.lr, betas=(args.beta1, 0.99
 net_d_scheduler = get_scheduler(optimizer_d, args, generator=False)
 net_g.eval()
 
-if args.model == 'UNet':    # UNet requires huge borders and
-    loss_crop_lb = int((DDataset.cs-DDataset.ucs)/2)
-    loss_crop_up = loss_crop_lb+DDataset.ucs
-else:
-    loss_crop_lb = int((DDataset.cs-DDataset.ucs)/4)
-    loss_crop_up = int(DDataset.cs)-loss_crop_lb
-print('Using %s as bounds'%(str((loss_crop_lb, loss_crop_up))))
+loss_crop_lb, loss_crop_up = get_crop_boundaries(DDataset.cs, DDataset.ucs, args.model, args.netD)
 
 use_D = False
 useful_discriminator = False
-generator_learns = not args.generator_waits
 
-    #set_requires_grad(net_g, False)
 
-def update_generator_learns():
-    response = generator_learns or useful_discriminator or not args.generator_waits
-    #if response:
-    #    set_requires_grad(net_g, True)
-    return response
-
-set_requires_grad(net_g, True)
 set_requires_grad(net_d, True)
 
 start_time = time.time()
@@ -277,11 +249,11 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
 
         pred_real = net_d(real_ab)
         #breakpoint()
-        loss_D_real = criterionGAN(pred_real, gen_target_probabilities(True, pred_real.shape))
-        loss_D_real.backward()
+        loss_D_real = criterionGAN(pred_real, gen_target_probabilities(True, pred_real.shape, device))
+        loss_D_real.backward(retain_graph=retain_graph)
 
         pred_fake = net_d(fake_ab.detach())
-        loss_D_fake = criterionGAN(pred_fake, gen_target_probabilities(False, pred_fake.shape))
+        loss_D_fake = criterionGAN(pred_fake, gen_target_probabilities(False, pred_fake.shape, device))
         loss_D_fake.backward(retain_graph=retain_graph)
 
         loss_d_real_item = loss_D_real.mean().item()
@@ -297,15 +269,10 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
 
         print("===> Epoch[{}]({}/{}): Loss_D: {} (range r-r+f-f+: {})".format(
         epoch, iteration, len(training_data_loader), loss_d_item_str, str(loss_d_range)))
-        generator_learns = update_generator_learns()
 
     update_learning_rate(net_d_scheduler, optimizer_d, loss_avg=total_loss_d/num_train_d, scheduler_name="net_d")
-    print("Epoch avg SSIM loss: %f"%(epoch_avg_ssim_loss))
     print('Discriminator average loss: '+str(total_loss_d/num_train_d))
 
-
-    if epoch_avg_ssim_loss > args.min_ssim_l and epoch > args.epoch_count:
-        use_D = False
 
     #checkpoint
     try:
@@ -316,9 +283,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         os.makedirs(save_dir)
     #if not os.path.exists(res_dir):
     #    os.makedirs(res_dir)
-    net_g_model_out_path = os.path.join(save_dir, "netG_model_epoch_%d.pth" % epoch)
     net_d_model_out_path = os.path.join(save_dir, "netD_model_epoch_%d.pth" % epoch)
-    torch.save(net_g, net_g_model_out_path)
     torch.save(net_d, net_d_model_out_path)
     print("Checkpoint saved to {} at {}".format(save_dir, datetime.datetime.now().isoformat()))
     if args.time_limit is not None and args.time_limit < time.time() - start_time:

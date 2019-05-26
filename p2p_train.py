@@ -13,6 +13,7 @@ from torch.utils.data import DataLoader
 import torch.backends.cudnn as cudnn
 import random
 from lib import pytorch_ssim
+from train_utils import get_crop_boundaries, gen_target_probabilities
 
 from networks.p2p_networks import define_G, define_D, get_scheduler, update_learning_rate
 
@@ -136,13 +137,6 @@ retain_graph = False if args.use_new_D else True
 
 # fun
 
-def gen_target_probabilities(target_real, target_probabilities_shape):
-    if target_real:
-        res = 19/20+torch.rand(target_probabilities_shape)/20
-    else:
-        res = torch.rand(target_probabilities_shape)/20
-    return res.to(device)
-
 def set_requires_grad(net, requires_grad = False):
     for param in net.parameters():
         param.requires_grad = requires_grad
@@ -233,13 +227,7 @@ net_g_scheduler = get_scheduler(optimizer_g, args, generator=True)
 optimizer_d = optim.Adam(net_d.parameters(), lr=args.lr, betas=(args.beta1, 0.999))
 net_d_scheduler = get_scheduler(optimizer_d, args, generator=False)
 
-if args.model == 'UNet':    # UNet requires huge borders
-    loss_crop_lb = int((DDataset.cs-DDataset.ucs)/2)
-    loss_crop_up = loss_crop_lb+DDataset.ucs
-else:
-    loss_crop_lb = int((DDataset.cs-DDataset.ucs)/4)
-    loss_crop_up = int(DDataset.cs)-loss_crop_lb
-print('Using %s as bounds'%(str((loss_crop_lb, loss_crop_up))))
+loss_crop_lb, loss_crop_up = get_crop_boundaries(DDataset.cs, DDataset.ucs, args.model, args.netD)
 
 use_D = False
 useful_discriminator = False
@@ -313,11 +301,11 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
 
         pred_real = net_d(real_ab)
         #breakpoint()
-        loss_D_real = criterionGAN(pred_real, gen_target_probabilities(True, pred_real.shape))
+        loss_D_real = criterionGAN(pred_real, gen_target_probabilities(True, pred_real.shape, device))
         loss_D_real.backward()
 
         pred_fake = net_d(fake_ab.detach())
-        loss_D_fake = criterionGAN(pred_fake, gen_target_probabilities(False, pred_fake.shape))
+        loss_D_fake = criterionGAN(pred_fake, gen_target_probabilities(False, pred_fake.shape, device))
         loss_D_fake.backward(retain_graph=retain_graph)
 
         loss_d_item = (loss_D_fake + loss_D_real).mean().item() # not cat?
@@ -352,7 +340,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             if args.debug_D:
                 print("pred_fake")
                 print(pred_fake)
-            loss_g_gan = criterionGAN(pred_fake, gen_target_probabilities(True, pred_fake.shape))
+            loss_g_gan = criterionGAN(pred_fake, gen_target_probabilities(True, pred_fake.shape, device))
             loss_g_item_str += ', D(G(y),y): {:.4f})'.format(loss_g_gan.item())
         else:
             weight_ssim = args.weight_ssim_0
@@ -413,8 +401,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
     print("Checkpoint saved to {} at {}".format(save_dir, datetime.datetime.now().isoformat()))
     if args.time_limit is not None and args.time_limit < time.time() - start_time:
         print('Time is up.')
-        break
-    # TODO check this
+        exit(0)    # TODO check this
     elif optimizer_g.param_groups[0]['lr'] < args.lr_min and optimizer_d.param_groups[0]['lr'] < args.lr_min:
         print('Minimum learning rate reached.')
-        break
+        exit(0)

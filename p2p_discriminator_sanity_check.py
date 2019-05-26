@@ -15,6 +15,7 @@ from torch.utils.data import DataLoader
 import torch.backends.cudnn as cudnn
 import random
 from lib import pytorch_ssim
+import train_utils
 
 from networks.p2p_networks import define_G, define_D, get_scheduler, update_learning_rate
 
@@ -85,6 +86,7 @@ parser.add_argument('--load_d_state_dict_path', help='Load state dictionary into
 parser.add_argument('--loss_d_max_threshold', type=float, default=0.)
 parser.add_argument('--finalpool', action='store_true', help='Final pooling on the discriminator (instead of convolution)')
 parser.add_argument('--out_activation', help='Specific discriminator output activation')
+parser.add_argument('--funit_D', default=32, type=int, help='Filters unit for D')
 
 args = parser.parse_args()
 print(args)
@@ -155,8 +157,7 @@ DDataset = DenoisingDataset(train_data, compressionmin=args.compressionmin, comp
 training_data_loader = DataLoader(dataset=DDataset, num_workers=args.threads, drop_last=True, batch_size=args.batch_size, shuffle=True)
 #testing_data_loader = DataLoader(dataset=test_set, num_workers=args.threads, batch_size=args.test_batch_size, shuffle=False)
 
-loss_crop_lb = int((DDataset.cs-DDataset.ucs)/4)
-loss_crop_up = int(DDataset.cs)-loss_crop_lb
+loss_crop_lb, loss_crop_up = train_utils.get_crop_boundaries(DDataset.cs, DDataset.ucs, args.model, args.netD)
 
 if args.D_loss_f == 'MSE':
     criterionGAN = nn.MSELoss().to(device)
@@ -178,7 +179,7 @@ print('===> Building models')
 if args.load_d:
     net_d = torch.load(args.load_d, map_location=device)
 else:
-    net_d = define_D(D_n_layers, args.ndf, args.netD, gpu_id=device, out_activation=dout_activation, finalpool=args.finalpool)
+    net_d = define_D(D_n_layers, args.ndf, args.netD, gpu_id=device, out_activation=dout_activation, finalpool=args.finalpool, funit=args.funit_D)
 
 # load state dic for compatibility
 if args.load_d_state_dict_path:
@@ -224,7 +225,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         else:   # init
             D_ratio = args.D_ratio_0
 
-        discriminator_learns = random.random() < D_ratio
+        discriminator_learns = True
 
         if args.not_conditional:
             fake_ab = gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up]

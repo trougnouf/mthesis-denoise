@@ -5,7 +5,7 @@ import torch.nn as nn
 from torch.nn import init
 import functools
 from torch.optim import lr_scheduler
-from networks.nnModules import UNet, Hul112Disc, Hulb128Net, Hulbs112Disc, Hulbs128Net
+from networks.nnModules import UNet, Hul112Disc, Hulb128Net, Hulbs128Net, Hulb112Disc, Hull112Disc
 
 # forked from
 
@@ -264,9 +264,11 @@ def define_D(input_nc, ndf, netD,
         net = PixelDiscriminator(input_nc, ndf, norm_layer=norm_layer, use_sigmoid=use_sigmoid)
     elif netD == 'Hul144Disc':
         net = Hul144Disc(input_nc)
-    elif netD == 'Hulbs112Disc':
-        net = Hulbs112Disc(input_nc, out_activation=out_activation, finalpool=finalpool, funit=funit)
+    elif netD == 'Hulb112Disc':
+        net = Hulb112Disc(input_nc, out_activation=out_activation, finalpool=finalpool, funit=funit)
     elif netD == 'Hul112Disc':
+        net = Hul112Disc(input_nc, out_activation=out_activation, finalpool=finalpool, funit=funit)
+    elif netD == 'Hull112Disc':
         net = Hul112Disc(input_nc, out_activation=out_activation, finalpool=finalpool, funit=funit)
     else:
         raise NotImplementedError('Discriminator model name [%s] is not recognized' % net)
