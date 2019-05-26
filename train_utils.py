@@ -1,3 +1,5 @@
+import torch
+
 def get_crop_boundaries(cs, ucs, network=None, discriminator=None):
     if '112' in discriminator:
         loss_crop_lb = int((cs-112)/2)
