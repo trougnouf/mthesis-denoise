@@ -17,13 +17,26 @@ A \ac{GAN} does not necessarily need clean-noisy pairs of images because it only
 
 While it may seem counter-intuitive to train the discriminator with mini-batches of only one label at a time, this phenomenon may be explained with the use of Batch Normalization which keeps running statistics and normalizes the activations on the given batch, it could therefore perform better given low-variance input data. \cite{gantechniques}\cite{bn} % TODO Our data is fed as a mix of different ISO values and could explain why the generator does not perform as well with BN
   \item \ac{cGAN}
-  Conditional \acsp{GAN} are \assp{GAN} which take two inputs, the generated data and typically a label that describes it. An approach often used in image generation is to concatenate the corrupted image with the generated input and feed these image pairs as the input data rather than using a label. \cite{pix2pix}\cite{cyclegan}\cite{pix2pixhd}. The benefit of potentially semi-supervised learning is no longer present but the discriminator is built-in with a correlative loss and the network is less likely to require a conventional loss function.
+  Conditional \acsp{GAN} are \acsp{GAN} which take two inputs, the generated data and typically a label that describes it. An approach often used in image generation is to concatenate the corrupted image with the generated input and feed these image pairs as the input data rather than using a label. \cite{pix2pix}\cite{cyclegan}\cite{pix2pixhd}. The benefit of potentially semi-supervised learning is no longer present but the discriminator is built-in with a correlative loss and the network is less likely to require a conventional loss function.
 \end{itemize}
 CycleGAN\cite{cyclegan} is a popular approach which enforces cyclic consistency, that is, the network must be able to regenerate the corrupted observation back from the generated one. We believe this approach would not function well for the problem of image denoising because of the random nature of noise, whereas CycleGAN applications tend to have simple outlines as the corrupted observation.
 
 By loss:
+
+The original \ac{GAN} and commonly used \ac{DCGAN} use the \ac{BCE} loss which is defined as $\text{BCE}(\text{prediction}, \text{target})=-(\text{prediction}\cdot{\log{\text{target}}}+(1-\text{prediction})\cdot \log{(1-\text{target})})$. \ac{BCE} assumes a Sigmoid final output activation and a target probability between 0 and 1, it is used in current image-to-image translation tasks such as \cite{pix2pix}\cite{cyclegan}.
+
+The \ac{GAN}'s log-based \ac{BCE} loss suffers from vanishing gradient where the discriminator's gradient reaches zero thus the generator no longer receives any information to learn. \ac{LSGAN} 
+\ac{LSGAN} uses 
+ TODO used in ..., \ac{LSGAN} 
+
+
+GAN: to maximizelogD(G(z))
+\acp{GAN} have their own loss function that 
+.
+Two types of \ac{GAN} commonly used in the literature are \ac{DCGAN} and \ac{LSGAN}
 \begin{itemize}
 \item \ac{LSGAN}
+
 \item \ac{DCGAN}
 \end{itemize}
 \section{Chosen GAN}

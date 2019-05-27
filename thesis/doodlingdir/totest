@@ -3,8 +3,8 @@ done - no BN (test at home?) SELU
 
 - 0 ssim (start from epoch 1?)
 -0.95 ganlass
-python3 -u p2p_train.py --weight_ssim_1 0.04 --weight_L1_1 0.01 --min_ssim_l 0.12 --post_fail_ssim_num 45 --weight_ssim_0 0.95 --weight_L1_0 0.05 --test_reserve ursulines-red stefantiek ursulines-building MuseeL-Bobo CourtineDeVillersDebris C500D Pen-pile --cuda_device 1 --batch_size 18 &> 'results/train/2019-05-26-Hulb128Net-Hul112Disc-0.95_lossgan-fixed'
-python3 -u p2p_train.py invert_probabilities --weight_ssim_1 0.04 --weight_L1_1 0.01 --min_ssim_l 0.12 --post_fail_ssim_num 45 --weight_ssim_0 0.95 --weight_L1_0 0.05 --test_reserve ursulines-red stefantiek ursulines-building MuseeL-Bobo CourtineDeVillersDebris C500D Pen-pile --cuda_device 3 --batch_size 18 &> 'results/train/2019-05-26-Hulb128Net-Hul112Disc-invert_probabilities_0.95_lossgan-fixed'
+python3 -u p2p_train.py --weight_ssim_1 0.04 --weight_L1_1 0.01 --min_ssim_l 0.12 --post_fail_ssim_num 45 --weight_ssim_0 0.95 --weight_L1_0 0.05 --test_reserve ursulines-red stefantiek ursulines-building MuseeL-Bobo CourtineDeVillersDebris C500D Pen-pile --cuda_device 1 --batch_size 23 &> 'results/train/2019-05-26-Hulb128Net-Hul112Disc-0.95_lossgan-fixed'
+python3 -u p2p_train.py --invert_probabilities --weight_ssim_1 0.04 --weight_L1_1 0.01 --min_ssim_l 0.12 --post_fail_ssim_num 45 --weight_ssim_0 0.95 --weight_L1_0 0.05 --test_reserve ursulines-red stefantiek ursulines-building MuseeL-Bobo CourtineDeVillersDebris C500D Pen-pile --cuda_device 3 --batch_size 23 &> 'results/train/2019-05-26-Hulb128Net-Hul112Disc-invert_probabilities_0.95_lossgan-fixed'
 - activate for fake (switch labels)
 - funit (D, G)
 
