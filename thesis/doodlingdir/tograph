@@ -36,3 +36,7 @@ results/train/2019-05-24-Hulb128Net-Hul128Disc-funit16-keptD
 invert_probabilities:
 'results/train/2019-05-26-Hulb128Net-Hul112Disc-0.95_lossgan-fixed'
 'results/train/2019-05-26-Hulb128Net-Hul112Disc-invert_probabilities_0.95_lossgan-fixed'
+
+noisy_probabilities
+results/train/2019-05-28-Hulb128Disc-very_noisy_probabilities
+results/train/2019-05-28-Hulb128Disc-std_noisy_probabilities

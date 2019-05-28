@@ -89,6 +89,7 @@ parser.add_argument('--generator_waits', action='store_true', help="Generator wo
 parser.add_argument('--funit_D', default=24, type=int, help='Filters unit for D')
 parser.add_argument('--use_new_D', action='store_true', help='Use newly updated discriminator to train G instead of keeping graph used in D training')
 parser.add_argument('--invert_probabilities', action='store_true', help='Use 1 for fake and 0 for true')
+parser.add_argument('--very_noisy_probabilities', action='store_true', help='Make fake probabilities noisy too')
 # parser.add_argument('--train_D_only', action='store_true') # TODO w/ refactor
 
 args = parser.parse_args()
@@ -302,11 +303,11 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         pred_real = net_d(real_ab)
         #breakpoint()
         loss_D_real = criterionGAN(pred_real,
-                                   gen_target_probabilities(True, pred_real.shape, device, args.invert_probabilities))
+                                   gen_target_probabilities(True, pred_real.shape, device, args.invert_probabilities, True))
         loss_D_real.backward()
 
         pred_fake = net_d(fake_ab.detach())
-        loss_D_fake = criterionGAN(pred_fake, gen_target_probabilities(False, pred_fake.shape, device, args.invert_probabilities))
+        loss_D_fake = criterionGAN(pred_fake, gen_target_probabilities(False, pred_fake.shape, device, args.invert_probabilities, False or args.very_noisy_probabilities))
         loss_D_fake.backward(retain_graph=retain_graph)
 
         loss_d_item = (loss_D_fake + loss_D_real).mean().item() # not cat?
@@ -341,7 +342,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             if args.debug_D:
                 print("pred_fake")
                 print(pred_fake)
-            loss_g_gan = criterionGAN(pred_fake, gen_target_probabilities(True, pred_fake.shape, device, args.invert_probabilities))
+            loss_g_gan = criterionGAN(pred_fake, gen_target_probabilities(True, pred_fake.shape, device, args.invert_probabilities, False or args.very_noisy_probabilities))
             loss_g_item_str += ', D(G(y),y): {:.4f})'.format(loss_g_gan.item())
         else:
             weight_ssim = args.weight_ssim_0

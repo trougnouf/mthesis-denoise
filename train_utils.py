@@ -15,11 +15,17 @@ def get_crop_boundaries(cs, ucs, network=None, discriminator=None):
     print('Using %s as bounds'%(str((loss_crop_lb, loss_crop_up))))
     return loss_crop_lb, loss_crop_up
 
-def gen_target_probabilities(target_real, target_probabilities_shape, device=None, invert_probabilities=False):
+def gen_target_probabilities(target_real, target_probabilities_shape, device=None, invert_probabilities=False, noisy = True):
     if (target_real and not invert_probabilities) or (not target_real and invert_probabilities):
-        res = 19/20+torch.rand(target_probabilities_shape)/20
+        if noisy:
+            res = 19/20+torch.rand(target_probabilities_shape)/20
+        else:
+            res = torch.ones(target_probabilities_shape)
     else:
-        res = torch.rand(target_probabilities_shape)/20
+        if noisy:
+            res = torch.rand(target_probabilities_shape)/20
+        else:
+            res = torch.zeros(target_probabilities_shape)
     if device is None:
         return res
     else:
