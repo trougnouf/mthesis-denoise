@@ -1,6 +1,6 @@
-\chapter{Neural network architectures}\label{chap:Arch1}
+\chapter{Generative Neural Networks}\label{chap:Arch1}
 
-This chapter introduces the notion of convolutional neural networks and their components, then goes over the specific network architectures we have worked with.
+This chapter introduces the notion of a convolutional neural network and its components, then goes over the specific network architectures we have worked with to solve the denoising problem. All networks presented is this chapter are generative, that is they take an image of $W\times H$ pixels with three channels and generate a new image of the same dimensions. Generative networks differ from other network types of convolutional neural networks which have different output shapes, such as classification networks which output one to a few nodes each indicating the probability that an object is present, and segmentation networks which usually have the same shape as the input but one output channel per segmented feature.
 
 \section{Convolutional neural networks}
 %- Introduce convolutional neural networks
@@ -13,7 +13,15 @@ A loss function is applied to the output of the last layer, its gradient with re
 
 \subsection{Layers}
 
-\textbf{Convolution layers} apply $C$ convolutions (also called filters) to every $\ac{k}*\ac{k}$ area in the previous layer's width and height\footnote{assuming a stride of 1}, taking in every channel and returning one value per convolution. Convolutions have a receptive field that is determined by \ac{k} (typical values for $\ac{k}$ are 3 and 5). The next layer's width and height is thus reduced unless padding is applied. Given an input layer's width or height dimension $d$ and \ac{p}, a convolution layer's output size can be calculated as $d-\ac{k}+2\ac{p}+1$. Each filter is weighted and weights are learned parameters. The same stack of filters is applied on every $\ac{k}*\ac{k}$ area of a given layer, therefore \acs{CNN} have largely reduced number of weight parameters.
+\begin{figure}
+  \begin{center}
+    \includegraphics{gfx/Convolutional_Neural_Network_with_Color_Image_Filter.png}
+    \caption{A filter is applied to the first 3-channels (RGB) input of an image in a convolutional neural network. The same filter is applied across all channels of the whole image as shown, and many of these filters are applied to form the following layer's feature map (I.e. its channels). Illustration by Wikimedia Commons user Cecbur (CC-BY-SA-4.0 license)}
+    \label{fig:convolutionfilter}
+  \end{center}
+\end{figure}
+
+\textbf{Convolution layers} apply convolutions with $C$ filters (also called features) to every $\acs{k}*\acs{k}$ area in the previous layer's width and height\footnote{assuming a stride of 1}, taking in every channel and returning one value per filter. Convolutions have a receptive field that is determined by kernel size \acs{k} (typical values for $\acs{k}$ are 3 and 5). The next layer's width and height is thus reduced unless padding is applied. Given an input layer's width or height dimension $d$ and \ac{p}, a convolution layer's output size can be calculated as $d-\ac{k}+2\ac{p}+1$. Each filter is weighted and weights are learned parameters. The same stack of filters is applied on every $\ac{k}*\ac{k}$ area of a given layer, therefore \acs{CNN} have largely reduced number of weight parameters.
 
 \textbf{Activation layers} introduce non-linearity, they apply an activation function to every value in the previous layer and the resulting layer has the same shape as its input layer. We use the Sigmoid ($\phi(z)={1\over{1+e^{-z}}}$) and \ac{ReLU} ($R(z)=\max(0,z)$) activation functions. 
 
@@ -44,7 +52,7 @@ We designed a multi-scale architecture somewhat similar to U-Net whose aim is to
 \begin{figure}
   \begin{center}
     \animategraphics[width=\textwidth/3*2]{1}{gfx/dilation/frame-}{0}{8}
-    \caption{Dilated convolution (dilation=2)}
+    \caption{Dilated convolution (dilation=2). Illustration by GitHub user vdumoulin (MIT license)}
     \label{fig:dilated}
   \end{center}
 \end{figure}

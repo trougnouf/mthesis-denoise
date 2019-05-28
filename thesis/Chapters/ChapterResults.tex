@@ -1,1 +1,191 @@
 \chapter{Results}
+
+This chapter describes our use of \ac{CNN} to denoise images from the \ac{NIND}. The first section describes our suggested methods to handle the \ac{NIND} dataset. The \ac{CNN} Denoiser section first describes the various conventional network configurations we have worked with along with the Experimental results. The \ac{GAN} Denoiser section then describes our work and the results associated with (c)\ac{GAN} networks which require more experimental work and fine-tuning. 
+
+\section{Dataset usage}\label{sec:Dataset Usage}
+The \ac{NIND} is cropped in advance to speed up loading times. A crop size of 128x128 pixels was found to work well for training and larger crops did not significantly affect performance. We found that the border is most often corrupted in a U-Net model. Some network architectures perform better when required to learn to model entire crops down to their border, but it typically takes a lot of resources to get to that point and the result often still shows a grid pattern when the crops are stitched back together. We use a ``useful crop size" that is 0.75 the size of the actual crop size for U-Net models and approximately 0.875 with other architectures so that only the central part of a crop is used for stitching as well as for computing the loss. A script that crops the dataset in such overlapping blocks is provided for this purpose.
+
+An epoch consists of training the model on every crop of any ISO value for every scene, that is, a random ISO value is fed every time a crop is loaded, therefore it takes several epochs for the model to train on all of the available data. The ground-truth is also selected randomly when multiple ones are available and basic data augmentation (rotation and/or translation) is performed.
+
+\section{CNN Denoiser}\label{sec:CNN Denoiser}
+\subsubsection{Models}
+We initially trained a DnCNN \cite{dncnn} model on our data. This model attained satisfying performance when trained to model the latent clean image instead of modeling the noise. It was further improved by using a convolution filter size of 5x5 instead of 3x3. The second architecture tested was a \ac{RED-Net} \cite{rednet} with 22-layers and a filter size of 5x5. This model obtained very good performance, albeit with an impractical runtime and memory use. We settled on a U-Net \cite{unet} architecture which provides slightly better performance with significantly lower runtime and memory use.
+
+\subsection{Experimental results}
+
+We compared the performance obtained with the following methods:
+
+\begin{enumerate}
+\itemsep0em 
+  \item\label{exp:nindxt1} U-Net trained on \ac{NIND} (X-T1 subset):\newline
+  This model encompasses the main part of our dataset.
+  \item\label{exp:sidd} U-Net trained on \ac{SIDD} (320 provided image pairs):\newline
+  Compare the performance obtained using our dataset with 320 images from the \ac{SIDD} (Smartphone Image Denoising Dataset) \cite{sidd} which were made available for the 2019 NTIRE denoising challenge.
+  \item\label{exp:bm3d} \ac{BM3D} \cite{bm3d} ( \cite{bm3d-gpu} implementation) with $\sigma$ = \{5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 93, 95, 97, 99\}\footnote{\label{sigmanote}We test every $\sigma$ value mentioned in Methods \ref{exp:bm3d} and \ref{exp:nindart} and report the value which yields the highest \ac{SSIM} for each test image.}:\newline
+  BM3D has been ubiquitously used as a reference in non-learning based image denoising.
+\end{enumerate}
+In addition to the aforementioned reference methods, we consider the following experiments:
+\begin{enumerate}
+\itemsep0em 
+\setcounter{enumi}{3}
+  \item\label{exp:nindall}   U-Net trained on \ac{NIND} (dataset composed of the union of \ac{X-T1} and \ac{C500D} training scenes; 89.5 \% and 10.5 \%, respectively):\newline
+  When tested on a \ac{C500D} image, this method can be compared with the first reference method to determine whether training on images acquired with the test image sensor helps or not, thereby assessing the generalization capabilities of our reference model to different sensors.  In addition, it shows whether adding data from a different sensor negatively affects performance.
+  \item\label{exp:nindsidd} U-Net trained on the union of \ac{NIND}:\ac{X-T1}, \ac{NIND}:\ac{C500D} scenes) and \ac{SIDD} (320 pairs); 20.5 \%, 2.4 \%, and 77.1 \% respectively:\newline
+  This model shows the performance impact of adding a wildly different type of noise to the training data.
+  \item\label{exp:nind6400} U-Net trained on \ac{NIND} (\ac{X-T1} subset, ISO6400 noise only instead of random ISO sample):\newline
+  This experiment tests whether a model trained for blind denoising performs significantly worse than one trained for a specific ISO value.
+  \item\label{exp:nindart} U-Net trained on \ac{NIND} (\ac{X-T1} subset) with artificial gaussian noise added to the ground-truth. $\sigma$ = \{[1,55], [1,60], [1,80], [1,95]\}\footnoteref{sigmanote}:\newline
+  This experiment compares the performance obtained by a model trained on our real data to the widely applied approach of applying synthetic gaussian noise to clean images.
+  \item\label{exp:nindmakenoise} U-Net trained to reconstruct the noise on \ac{NIND} (\ac{X-T1} subset):\newline
+  We applied the residual learning strategy proposed in \cite{dncnn} by training a model that reconstructs the noise and subtracts it from the image.
+  \item\label{exp:nindred} \ac{RED-Net} \cite{rednet} trained on \ac{NIND} (\ac{X-T1} subset):\newline
+  This uses the same data as Method \ref{exp:nindxt1} with a different network architecture
+
+\end{enumerate}
+
+\begin{table*}[!htbp]
+\centering
+\resizebox{1\linewidth}{!}{
+\begin{tabular}{l|llllllllll}
+\ul{ISO value}                      & \ul{ISO200}   & \ul{ISO250}   & \ul{ISO500}   & \ul{ISO2500}  & \ul{ISO4000}  & \ul{ISO6400}  & \ul{High ISO} \\ \hline
+Number of images                     & 5              & 3              & 2              & 2              & 2              & 5              & 9              \\ \hline
+Noisy                                & \textbf{1.000} & 0.907          & 0.853          & 0.784          & 0.687          & 0.578          & 0.311          \\ \hline
+NIND:X-T1 (U-Net)                     & 0.949          & \textbf{0.929} & \textbf{0.920} & \textbf{0.912} & \textbf{0.900} & \textbf{0.893} & \textbf{0.851} \\ \hline
+SIDD (U-Net)                          & 0.906          & 0.907          & 0.904          & 0.864          & 0.882          & 0.860          & 0.814          \\ \hline
+BM3D                                 & 0.941          & \textbf{0.925} & 0.913          & 0.875          & 0.870          & 0.852          & 0.785          \\ \hline
+\ac{NIND}:X-T1+C500D (U-Net)               & 0.949          & \textbf{0.929} & \textbf{0.920} & \textbf{0.912} & \textbf{0.899} & \textbf{0.893} & \textbf{0.851} \\ \hline
+\ac{NIND}:X-T1+C500D + \ac{SIDD} (U-Net)        & 0.947          & \textbf{0.928} & \textbf{0.919} & \textbf{0.910} & \textbf{0.898} & \textbf{0.892} & \textbf{0.850} \\ \hline
+NIND:X-T1 ISO6400 only (U-Net)        & 0.919          & 0.915          & 0.911          & \textbf{0.907} & \textbf{0.901} & \textbf{0.894} & 0.821          \\ \hline
+Reconstruct noise on NIND:X-T1 (U-Net)      & 0.950          & \textbf{0.926} & 0.914          & 0.901          & 0.876          & 0.840          & 0.664          \\ \hline
+Artificial noise on NIND:X-T1 (U-Net) & 0.963          & 0.920          & 0.899          & 0.880          & 0.810          & 0.769          & 0.531          \\ \hline
+NIND:X-T1 (\ac{RED-Net})                   & 0.940          & 0.923          & 0.915          & \textbf{0.907} & 0.892          & \textbf{0.886} & 0.842          \\ \hline
+\end{tabular}%
+}\caption{Average \ac{SSIM} index on 5 \ac{NIND}:\ac{X-T1} denoised scenes (ursulines-building, stefantiek, CourtineDeVillersDebris, MuseeL-Bobo, ursulines-red). The best performing models (to within two significant digits) are marked in bold.}
+\label{tableNINDXT1}
+\end{table*}
+
+\begin{table*}[!htbp]
+\centering
+\resizebox{1\linewidth}{!}{%
+\begin{tabular}{l|lllllll}
+\ul{ISO value}                            & \ul{ISO100}   & \ul{ISO200}   & \ul{ISO400}   & \ul{ISO800}   & \ul{ISO1600}  & \ul{ISO3200}  & \ul{High ISO} \\ \hline
+{Noisy}                                & \textbf{1.000} & 0.814          & 0.754          & 0.660          & 0.550          & 0.401          & 0.172          \\ \hline
+{NIND:X-T1 (U-Net)}                     & 0.911          & \textbf{0.901} & \textbf{0.898} & \textbf{0.896} & \textbf{0.893} & \textbf{0.887} & \textbf{0.868} \\ \hline
+{SIDD (U-Net)}                          & 0.894         & 0.892           & 0.890          & 0.889          & 0.885  & 0.876          & 0.850          \\ \hline
+{BM3D}                                 & 0.921          & 0.890          & 0.884          & 0.877          & 0.871          & 0.860          & 0.813          \\ \hline
+{\ac{NIND}:\ac{X-T1}+\ac{C500D} (U-Net)}               & 0.911          & \textbf{0.901} & \textbf{0.899} & \textbf{0.896} & \textbf{0.894} & \textbf{0.888} & \textbf{0.872} \\ \hline
+{\ac{NIND}:\ac{X-T1}+\ac{C500D} + \ac{SIDD} (U-Net)}        & 0.912          & \textbf{0.901} & \textbf{0.899} & \textbf{0.896} & \textbf{0.893} & \textbf{0.888} & \textbf{0.871} \\ \hline
+{\ac{NIND}:\ac{X-T1} ISO6400 only (U-Net)}        & 0.899          & \textbf{0.897} & \textbf{0.896} & 0.894          & \textbf{0.892} & \textbf{0.886} & \textbf{0.865} \\ \hline
+{Reconstruct noise on \ac{NIND}:\ac{X-T1} (U-Net)}      & 0.908          & 0.895          & 0.887          & 0.875          & 0.855          & 0.807          & 0.617          \\ \hline
+{Artificial noise on \ac{NIND}:\ac{X-T1} (U-Net)} & 0.946          & 0.879          & 0.864          & 0.836          & 0.802          & 0.716          & 0.430          \\ \hline
+\end{tabular}%
+}\caption{\ac{SSIM} index on \ac{NIND}:\ac{C500}D denoised set MuseeL-Bobo-C500D}
+\label{tableNINDXT1onBoboC500D}
+\end{table*}
+
+\begin{table*}[!htbp]
+\centering
+\resizebox{1\linewidth}{!}{%
+\begin{tabular}{l|lllllll}
+\ul{ISO value}                       & \ul{ISO100}   & \ul{ISO200}   & \ul{ISO400}   & \ul{ISO800}   & \ul{ISO1600}  & \ul{ISO3200}  & \ul{High ISO} \\ \hline
+\ul{\# images}                       & 13             & 9              & 9              & 9              & 8              & 10             & 9              \\ \hline
+\ul{Noisy}                           & \textbf{0.954} & 0.766          & 0.707          & 0.619          & 0.501          & 0.380          & 0.220          \\ \hline
+\ul{NIND:X-T1 (U-Net)}                & 0.878          & \textbf{0.856} & \textbf{0.854} & \textbf{0.848} & \textbf{0.845} & \textbf{0.834} & \textbf{0.805} \\ \hline
+\ul{SIDD (U-Net)}                     & 0.851         & 0.838          & 0.837          & 0.834          & 0.830          & 0.813          & 0.774          \\ \hline
+\ul{BM3D}                            & 0.899          & 0.836          & 0.825          & 0.816          & 0.811          & 0.789          & 0.749          \\ \hline
+\ul{NIND:X-T1 ISO6400 only (U-Net)}   & 0.857          & 0.847          & \textbf{0.847} & 0.845          & \textbf{0.843} & \textbf{0.834} & 0.802          \\ \hline
+\ul{Reconstruct noise on NIND:X-T1 (U-Net)} & 0.878          & 0.845          & 0.835          & 0.814          & 0.785          & 0.725          & 0.604          \\ \hline
+\end{tabular}%
+}\caption{Average \ac{SSIM} index on 10 \ac{NIND}:\ac{C500D} scenes denoised with models trained on \ac{NIND}:\ac{X-T1} or with \ac{BM3D}}
+\label{tableXT1onC500D}
+\end{table*}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=1\linewidth]{gfx/graphs/boboc500d.pdf}
+%\input{bobo-c500d.pgf}
+\caption{Denoising performance of the MuseeL-Bobo-C500D set over increased ISO value (\ac{SSIM} values shown in Table \ref{tableNINDXT1onBoboC500D})}
+\label{fig:boboc500d}
+\end{figure}
+
+\begin{figure*}[!htbp]
+\centering
+\includegraphics[width=1\linewidth]{gfx/comp/stefantiek.jpg}
+\caption[caption for stefantiek]{Denoising stefantiek. 1: ISO200 ground-truth (1/20s), 2: high ISO (1/1900s), 3: 2 denoised using U-Net model trained with NIND, 4: 2 denoised using U-Net model trained with \ac{SIDD} (320-sets), 5: 2 denoised using \ac{BM3D} ($\sigma=90$\footnoteref{sigmanote})}
+\label{fig:stefantiek}
+\end{figure*}
+
+% \begin{figure}[!htbp]
+% \centering
+% \includegraphics[width=1\linewidth]{../comp/NIND_MuseeL-Bobo-C500D.jpg}
+% \caption{Denoising MuseeL-Bobo-C500D. 1: ISO100 ground-truth (4s), 2: ISO3200 (1/10s), 3: 2 denoised using U-Net model trained with \ac{NIND} (X-T1 subset), 4: 2 denoised using U-Net model trained with \ac{SIDD} (320-sets), 5: 2 denoised using BM3D ($\sigma=60$)}
+% \label{fig:boboc500dvis}
+% \end{figure}
+
+\begin{figure*}[!htbp]
+\centering
+\includegraphics[width=1\linewidth]{gfx/comp/txt.jpg}
+\caption[caption for sepiktext]{Denoising text present on MuseeL-Sepik-C500D. 1: ISO200 ground-truth (2s), 2: high ISO (1/30s), 3: 2 denoised using U-Net model trained with NIND:X-T1, 4: 2 denoised using U-Net model trained with \ac{SIDD} (320-sets), 5: 2 denoised using BM3D ($\sigma=99$\footnoteref{sigmanote})}
+\label{fig:text}
+\end{figure*}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=1\linewidth]{gfx/comp/comp-noisy-nind-bm3d30.jpg}
+\caption[pigeoncaption]{Comparison between a noisy ISO6400 crop (top), one denoised with a model trained on \ac{NIND} (middle), and one on which \ac{BM3D} ($\sigma=30$) has been applied (bottom). Our model appears to perform well on dynamic scenes despite having been trained on static scenes.}
+\label{fig:visualpigeons}
+\end{figure}
+
+
+Each network is trained for 48-hours on a GeForce GTX 1080 (11GB). % 77.1% of the time SIDD
+Table \ref{tableNINDXT1} shows denoising performance on the Fujifilm X-T1 test pictures. We observe that the model trained on the \ac{NIND} significantly outperforms \ac{BM3D} and that adding training data from the Canon EOS 500D sensor, as well as part of the \ac{SIDD} dataset, does not appear to negatively impact performance. Table \ref{tableNINDXT1onBoboC500D} and Figure \ref{fig:boboc500d} show denoising performance on the scene ``MuseeL-Bobo-C500D", where a model trained only with \ac{NIND}:\ac{X-T1} data performs nearly as well as a model that was also trained with \ac{NIND}:\ac{C500D} data (and so does a model trained with both \ac{NIND} and \ac{SIDD}). Table \ref{tableXT1onC500D} summarizes the average performance of \ac{X-T1}-trained models on ten \ac{C500D} scenes and shows performance which considerably exceeds that of \ac{BM3D} even though the model was generalizing for a different sensor type.
+
+A model trained with only \ac{NIND}:\ac{X-T1} ISO6400 noisy images yields slightly better performance at and around ISO6400, but this comes with a considerable loss of detail at low ISO and the denoising performance becomes poor as the noise level increases. Moreover the model trained on Fujifilm X-T1 ISO6400 images appears not to generalize as well to different sensors as we found it consistently performs worse on the Canon 500D images. These findings suggest that the cost of generalization is acceptably low and therefore a model mostly benefits from learning with different noise levels and sensors.
+
+Reconstructing the noise (Method \ref{exp:nindmakenoise}) as was suggested in \cite{dncnn} typically yields performance below that of BM3D when applied to ISO noise. The difficulty in reconstructing ISO noise was further noticed in an experiment where we mistakenly fed our learning model noisy images as ground-truth 31\% of the time and it still exceeded BM3D performance. This went as far as inverting the clean and noisy crops and still learning an appreciable level of denoising. These findings suggest that a model can easily tolerate some noise in the ground-truth data. Research into this topic \cite{noise2noise}  has been performed to explicitly train models on noisy data and rely on the zero-mean nature of the noise to effectively remove various artificial noise distributions.
+
+Training a model using artificial noise added to ground-truth images (Method \ref{exp:nindart}), as is commonplace in the literature \cite{rednet}\cite{dncnn}, yields the worst performance in our tests.
+
+In addition to the aforementioned results based on \ac{SSIM}, we have subjectively tested our \ac{NIND}-trained model on single images which are not part of the dataset. The first such image is that of a dynamic outdoor scene in which a human walks towards a group of pigeons, causing them to disperse in multiple directions. This type of fast, moving scene cannot be included in the dataset due to its dynamic nature and it must be captured with settings that result in a poor quality image; a small aperture (f/11) to focus everywhere, a fast shutter speed (1/1500s) to capture the flying birds, and a maximum sensor sensitivity (ISO6400) to match the aforementioned settings. Nonetheless, we found the denoised image to be of high quality; we submitted it to the Wikimedia Commons ``Quality Images Candidates" page \cite{qic} and it was subsequently promoted to a ``Quality Image" by Wikimedia Commons reviewers. A crop of the image is provided on Figure \ref{fig:visualpigeons} with a comparison between the noisy version, one denoised with a U-Net model trained on \ac{NIND}, and a version that has been denoised using \ac{BM3D} (with $\sigma=30$ which, on average, yields the highest \ac{SSIM} in our ISO6400 test images). The BM3D version shows significant displeasing artifacts, for example on the skirt and the blue uniform panel on the right, while the model trained on \ac{NIND} smoothed these regions appropriately while retaining a greater level of useful details such as those present on the pigeons' wings.
+
+\section{GAN Denoising}\label{sec:GAN Denoising}
+
+First followed the pix2pix approach which uses PatchGAN discriminator and U-Net generator to turn rough sketches into realistic images. The result show high-frequency details using PatchGAN. We were unable to balance PatchGAN with other loss functions to get good results, the high-frequencies were always too prominent and the \ac{SSIM} index not as high that obtained with \ac{BM3D}  (show graph w/ GAN/cGAN vs the rest)
+
+Some improvement were made with careful fine-tuning of the learning environment. TODO list these and graph
+
+At the same time U-Net loses too much border which is either easily discriminated against or does not leave a large enough crop for the discriminator to make up meaningful results. We thus designed both a generator and a discriminator which follow the same design ideas (alas the discriminator is cut in half and loses many of the dense connections (TODO name?)), and tested specific components for their respective use-cases.
+
+we created the HulbDisc architecture to work on multi-scale and 
+
+The two architectures were trained separately to assess and optimize their individual performance before working together. The generator is typically trained using the same framework as that of section \ref{sec:CNN Denoising}, while the discriminator main tests involve discriminating between clean and noisy crops from the dataset without receiving the conditional input. This test is not as robust as training with the result of a static generator but it allows us to quickly get a preview of the discriminator's performance whereas it would not always be able to learn from scratch given a well trained generator.
+
+Generator: BN vs noBN vs noBN no activation
+
+Discriminator: 
+
+(broken crop)
+"None":
+"Sigmoid": 
+"PReLU": 
+"SELU"
+(normal crop)
+Hul112Disc\_fixed\_funit16\_finalpool
+Hulb112Disc\_fixed\_funit16\_sigmoid
+Hulb112Disc\_fixed\_funit16\_no\_activation
+Hul112Disc\_fixed\_funit16\_finalpool
+Hulb112Disc\_fixed\_funit16\_finalpool
+Hul112Disc\_fixed\_funit16
+Hul112Disc\_fixed\_funit32
+Hulb112Disc\_fixed\_funit16
+Hulb112Disc\_fixed\_funit32
+
+Combined:
+
+conditional vs not conditional
+
+invert probabilities
+
+(minitest) noisy probabilities: positive only vs both
+
+ssim0
