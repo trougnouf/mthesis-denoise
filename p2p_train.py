@@ -307,9 +307,10 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         loss_D_real.backward()
 
         pred_fake = net_d(fake_ab.detach())
-        loss_D_fake = criterionGAN(pred_fake, gen_target_probabilities(False, pred_fake.shape, device, args.invert_probabilities, False or args.very_noisy_probabilities))
-        loss_D_fake.backward(retain_graph=retain_graph)
-
+        pred_fake_for_G = net_d(fake_ab)
+        loss_D_fake = criterionGAN(pred_fake,
+                                   gen_target_probabilities(False, pred_fake.shape, device, args.invert_probabilities, False or args.very_noisy_probabilities))
+        loss_D_fake.backward()
         loss_d_item = (loss_D_fake + loss_D_real).mean().item() # not cat?
 
         if discriminator_learns or iteration == 1:
@@ -342,7 +343,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             if args.debug_D:
                 print("pred_fake")
                 print(pred_fake)
-            loss_g_gan = criterionGAN(pred_fake, gen_target_probabilities(True, pred_fake.shape, device, args.invert_probabilities, False or args.very_noisy_probabilities))
+            loss_g_gan = criterionGAN(pred_fake_for_G, gen_target_probabilities(True, pred_fake.shape, device, args.invert_probabilities, False or args.very_noisy_probabilities))
             loss_g_item_str += ', D(G(y),y): {:.4f})'.format(loss_g_gan.item())
         else:
             weight_ssim = args.weight_ssim_0
