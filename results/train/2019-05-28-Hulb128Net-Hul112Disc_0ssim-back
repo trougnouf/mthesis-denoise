@@ -1,0 +1,306 @@
+Namespace(D_loss_f='MSE', D_ratio_0=0.98, D_ratio_1=0.5, D_ratio_2=0.02, batch_size=18, beta1=0.5, compressionmax=100, compressionmin=100, cuda_device=0, debug_D=False, do_sizecheck=False, epoch_count=1, exact_reserve=False, expname=None, finalpool=False, find_noise=False, funit_D=24, generator_waits=False, input_nc=3, invert_probabilities=False, load_d='models/2019-05-26T21:04_p2p_train.py_--weight_ssim_1_0.04_--weight_L1_1_0.01_--min_ssim_l_0.12_--post_fail_ssim_num_45_--weight_ssim_0_0.95_--weight_L1_0_0.05_--test_reserve_ursulines-red_stefantiek_ursulines-building_MuseeL-Bobo_CourtineDeVillersDebris_C/netD_model_epoch_3.pth', load_d_state_dict_path=None, load_g='models/2019-05-26T21:04_p2p_train.py_--weight_ssim_1_0.04_--weight_L1_1_0.01_--min_ssim_l_0.12_--post_fail_ssim_num_45_--weight_ssim_0_0.95_--weight_L1_0_0.05_--test_reserve_ursulines-red_stefantiek_ursulines-building_MuseeL-Bobo_CourtineDeVillersDebris_C/netG_model_epoch_3.pth', load_g_state_dict_path=None, loss_d_max_threshold=0.0, lr=0.0003, lr_decay_iters=50, lr_gamma=0.75, lr_min=5e-08, lr_policy='plateau', lr_step_size=5, lr_update_min_D_ratio=0.2, min_ssim_l=0.12, model='Hulb128Net', models_dir='models', ndf=64, netD='Hul112Disc', ngf=64, niter=100, niter_decay=100, not_conditional=False, out_activation=None, output_nc=3, post_fail_ssim_num=10, result_dir='results/train', resume=False, seed=123, sigmamax=0, sigmamin=0, test_reserve=['ursulines-red', 'stefantiek', 'ursulines-building', 'MuseeL-Bobo', 'CourtineDeVillersDebris', 'C500D', 'Pen-pile'], threads=8, time_limit=172800, train_data=None, use_new_D=False, very_noisy_probabilities=False, weight_L1_0=0.05, weight_L1_1=0.05, weight_ssim_0=0.95, weight_ssim_1=0.45, yval=None)
+cmd: python3 p2p_train.py --weight_ssim_1 0.45 --weight_L1_1 0.05 --min_ssim_l 0.12 --post_fail_ssim_num 10 --weight_ssim_0 0.95 --weight_L1_0 0.05 --test_reserve ursulines-red stefantiek ursulines-building MuseeL-Bobo CourtineDeVillersDebris C500D Pen-pile --cuda_device 0 --batch_size 18 --load_g models/2019-05-26T21:04_p2p_train.py_--weight_ssim_1_0.04_--weight_L1_1_0.01_--min_ssim_l_0.12_--post_fail_ssim_num_45_--weight_ssim_0_0.95_--weight_L1_0_0.05_--test_reserve_ursulines-red_stefantiek_ursulines-building_MuseeL-Bobo_CourtineDeVillersDebris_C/netG_model_epoch_3.pth --load_d models/2019-05-26T21:04_p2p_train.py_--weight_ssim_1_0.04_--weight_L1_1_0.01_--min_ssim_l_0.12_--post_fail_ssim_num_45_--weight_ssim_0_0.95_--weight_L1_0_0.05_--test_reserve_ursulines-red_stefantiek_ursulines-building_MuseeL-Bobo_CourtineDeVillersDebris_C/netD_model_epoch_3.pth
+2019-05-30T00:44_p2p_train.py_--weight_ssim_1_0.45_--weight_L1_1_0.05_--min_ssim_l_0.12_--post_fail_ssim_num_10_--weight_ssim_0_0.95_--weight_L1_0_0.05_--test_reserve_ursulines-red_stefantiek_ursulines-building_MuseeL-Bobo_CourtineDeVillersDebris_C500D_Pen-pile_--cuda_device_0_--batch_size_18_--load_g_models-2019-05-26T21:04_p2p_train.py_--weight_ssim_1_0.04_--weight_L1_1_0.01_--min_ssim_l_0.12_--post_fail_ssim_num_45_--weight_ssim_0_0.95_--weight_L1_0_0.05_--test_reserve_ursulines-red_stefantiek_ursulines-building_MuseeL-Bobo_CourtineDeVillersDebris_C-netG_model_epoch_3.pth_--load_d_models-2019-05-26T21:04_p2p_train.py_--weight_ssim_1_0.04_--weight_L1_1_0.01_--min_ssim_l_0.12_--post_fail_ssim_num_45_--weight_ssim_0_0.95_--weight_L1_0_0.05_--test_reserve_ursulines-red_stefantiek_ursulines-building_MuseeL-Bobo_CourtineDeVillersDebris_C-netD_model_epoch_3.pth
+===> Loading datasets
+Added droid['ISO200']['ISO800', 'ISO3200', 'ISO6400'] to the dataset
+Added gnome['ISO200']['ISO800', 'ISO1600', 'ISO6400'] to the dataset
+Added Ottignies['ISO200']['ISO640', 'ISO3200', 'ISO6400'] to the dataset
+Added MuseeL-turtle['ISO200']['ISO800', 'ISO1250', 'ISO6400'] to the dataset
+Added MuseeL-centrifuge['ISO200']['ISO800', 'ISO2000', 'ISO6400'] to the dataset
+Added MuseeL-shell['ISO200']['ISO400', 'ISO800', 'ISO6400'] to the dataset
+Added MuseeL-coral['ISO200']['ISO800', 'ISO5000', 'ISO6400'] to the dataset
+Added MuseeL-head['ISO200']['ISO640', 'ISO3200', 'ISO6400'] to the dataset
+Added MuseeL-heads['ISO200']['ISO400', 'ISO3200', 'ISO6400'] to the dataset
+Added MuseeL-mask['ISO200']['ISO640', 'ISO4000', 'ISO6400'] to the dataset
+Added MuseeL-pig['ISO200']['ISO500', 'ISO2000', 'ISO6400'] to the dataset
+Added MuseeL-inspiredlotus['ISO200']['ISO640', 'ISO2500', 'ISO6400'] to the dataset
+Added MuseeL-pinklotus['ISO200']['ISO800', 'ISO4000', 'ISO6400'] to the dataset
+Added MuseeL-Armlessness['ISO200']['ISO800', 'ISO2000', 'ISO6400'] to the dataset
+Added MuseeL-byMarcGroessens['ISO200']['ISO400', 'ISO3200', 'ISO6400'] to the dataset
+Added MuseeL-SergeVandercam['ISO200']['ISO320', 'ISO1000', 'ISO6400'] to the dataset
+Added MuseeL-Moschophore['ISO200']['ISO500', 'ISO4000', 'ISO6400'] to the dataset
+Added MuseeL-AraPacis['ISO200']['ISO800', 'ISO4000', 'ISO6400'] to the dataset
+Added MuseeL-stele['ISO200']['ISO640', 'ISO1000', 'ISO6400'] to the dataset
+Added MuseeL-cross['ISO200']['ISO500', 'ISO4000', 'ISO6400'] to the dataset
+Added MuseeL-fuite['ISO200']['ISO320', 'ISO4000', 'ISO6400'] to the dataset
+Added MuseeL-RGB['ISO200']['ISO250', 'ISO1000', 'ISO6400'] to the dataset
+Added MuseeL-Vincent['ISO200']['ISO400', 'ISO2500', 'ISO6400'] to the dataset
+Added MuseeL-avelo['ISO200']['ISO500', 'ISO3200', 'ISO6400'] to the dataset
+Added MuseeL-ambon['ISO200']['ISO640', 'ISO2500', 'ISO6400'] to the dataset
+Added MuseeL-ram['ISO200']['ISO800', 'ISO1000', 'ISO6400'] to the dataset
+Added MuseeL-Ghysels['ISO200']['ISO800', 'ISO6400'] to the dataset
+Added MuseeL-pedestal['ISO200']['ISO1250', 'ISO5000', 'ISO6400'] to the dataset
+Added MuseeL-theatre['ISO200']['ISO400', 'ISO2500', 'ISO6400'] to the dataset
+Added MuseeL-text['ISO200']['ISO400', 'ISO5000', 'ISO6400'] to the dataset
+Added MuseeL-painting['ISO200']['ISO800', 'ISO3200', 'ISO6400'] to the dataset
+Added MuseeL-yombe['ISO200']['ISO640', 'ISO3200', 'ISO6400'] to the dataset
+Added MuseeL-roue['ISO200']['ISO800', 'ISO1250', 'ISO6400'] to the dataset
+Added MuseeL-hanging['ISO200']['ISO500', 'ISO4000', 'ISO6400'] to the dataset
+Added MuseeL-coral2['ISO200']['ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added MuseeL-Vanillekipferl['ISO200']['ISO6400', 'ISOH1'] to the dataset
+Added MuseeL-clam['ISO200']['ISO6400', 'ISOH1'] to the dataset
+Added MuseeL-Ndengese['ISO200']['ISO6400', 'ISOH1'] to the dataset
+Skipped MuseeL-Bobo (test reserve)
+Added threebicycles['ISO200']['ISO6400'] to the dataset
+Added sevenbicycles['ISO200']['ISO1600', 'ISO6400'] to the dataset
+Added Stevin['ISO200']['ISO4000', 'ISO6400'] to the dataset
+Added wall['ISO200']['ISO640', 'ISO6400'] to the dataset
+Added Saint-Remi['ISO200']['ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added Saint-Remi-C['ISO200']['ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added books['ISO200']['ISO1600', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added MuseeL-snakeAndMask['ISO200']['ISO2000', 'ISO6400', 'ISOH1'] to the dataset
+Added bloop['ISO200']['ISO3200', 'ISO6400', 'ISOH1'] to the dataset
+Added schooltop['ISO200']['ISO800', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added Sint-Joris['ISO200']['ISO1000', 'ISO2500', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added claycreature['ISO200']['ISO4000', 'ISO6400', 'ISOH1'] to the dataset
+Added claycreatures['ISO200']['ISO1600', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added claytools['ISO200']['ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Skipped CourtineDeVillersDebris (test reserve)
+Added Leonidas['ISO200']['ISO400', 'ISO3200', 'ISO6400', 'ISOH1'] to the dataset
+Added pastries['ISO200']['ISO3200', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added mugshot['ISO200']['ISO6400', 'ISOH1'] to the dataset
+Added holywater['ISO200']['ISO1600', 'ISO4000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added chapel['ISO200']['ISO1000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added directions['ISO200']['ISO640-2', 'ISO640', 'ISO1250', 'ISO6400-2', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added drowning['ISO200']['ISO800', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added semicircle['ISO200']['ISO320', 'ISO640', 'ISO1250', 'ISO2500', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added stairs['ISO200']['ISO250', 'ISO320', 'ISO640', 'ISO1250', 'ISO2500', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Skipped stefantiek (test reserve)
+Added tree1['ISO200']['ISO400', 'ISO1600', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added tree2['ISO200']['ISO800', 'ISO1600', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Skipped ursulines-building (test reserve)
+Added ursulines-can['ISO200', 'ISO200-2']['ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Skipped ursulines-red (test reserve)
+Added vlc['ISO200']['ISO250', 'ISO500', 'ISO1000', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added whistle['ISO200']['ISO250', 'ISO500', 'ISO1000', 'ISO2000', 'ISO4000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3', 'ISOH4'] to the dataset
+Added parking-keyboard['ISO200']['ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added Homarus-americanus['ISO200', 'ISO200-2']['ISO250', 'ISO400', 'ISO800', 'ISO2000', 'ISO3200', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added fruits['ISO200', 'ISO200-2']['ISO800', 'ISO3200', 'ISO5000', 'ISO6400'] to the dataset
+Added soap['ISO200', 'ISO200-2']['ISO400', 'ISO800', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3', 'ISOH4'] to the dataset
+Added kibbles['ISO200', 'ISO200-2']['ISO800', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added bertrixtree['ISO200']['ISO400', 'ISO640', 'ISO2500', 'ISO4000', 'ISO6400', 'ISOH1'] to the dataset
+Added BruegelLibraryS1['ISO200']['ISO400', 'ISO1000', 'ISO2500', 'ISO3200', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added BruegelLibraryS2['ISO200']['ISO500', 'ISO1250', 'ISO2500', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3', 'ISOH4'] to the dataset
+Added LaptopInLibrary['ISO200']['ISO500', 'ISO800', 'ISO1600', 'ISO2500', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added banana['ISO200']['ISO250', 'ISO500', 'ISO800', 'ISO1250', 'ISO2000', 'ISO4000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added dustyrubberduck['ISO200']['ISO1000', 'ISO1250', 'ISO2500', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added partiallyeatenbanana['ISO200']['ISO640', 'ISO1250', 'ISO2500', 'ISO4000', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added corkboard['ISO200']['ISO320', 'ISO1000', 'ISO2500', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added fireextinguisher['ISO200', 'ISO200-3', 'ISO200-2']['ISO800', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added MVB-Sainte-Anne['ISO200', 'ISO200-2']['ISO250', 'ISO640', 'ISO4000', 'ISO6400', 'ISOH1'] to the dataset
+Added MVB-JardinBotanique['ISO200', 'ISO200-2']['ISO400', 'ISO1000', 'ISO2500', 'ISO3200', 'ISO6400'] to the dataset
+Added MVB-Urania['ISO200']['ISO320', 'ISO500', 'ISO1000', 'ISO2500', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added MVB-1887GrandPlace['ISO200', 'ISO200-2']['ISO400', 'ISO640', 'ISO2000', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added MVB-heraldicLion['ISO200', 'ISO200-2']['ISO320', 'ISO1000', 'ISO3200', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Added MVB-Bombardement['ISO200', 'ISO200-2']['ISO320', 'ISO800', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added beads['ISO200']['ISO500', 'ISO1000', 'ISO3200', 'ISO6400'] to the dataset
+Added shells['ISO200', 'ISO200-2']['ISO250', 'ISO320', 'ISO1000', 'ISO1600', 'ISO2500', 'ISO3200', 'ISO5000', 'ISO6400', 'ISOH1', 'ISOH2', 'ISOH3'] to the dataset
+Added MVB-LouveFire['ISO200', 'ISO200-2']['ISO400', 'ISO800', 'ISO1600', 'ISO3200', 'ISO6400-2', 'ISO6400', 'ISOH1', 'ISOH2'] to the dataset
+Skipped MuseeL-Bobo-C500D (test reserve)
+Skipped MuseeL-yombe-C500D (test reserve)
+Skipped MuseeL-sol-C500D (test reserve)
+Skipped MuseeL-skull-C500D (test reserve)
+Skipped MuseeL-Sepik-C500D (test reserve)
+Skipped MuseeL-Saint-Pierre-C500D (test reserve)
+Skipped MuseeL-mammal-C500D (test reserve)
+Skipped MuseeL-idole-C500D (test reserve)
+Skipped MuseeL-CopteArch-C500D (test reserve)
+Skipped MuseeL-cross-C500D (test reserve)
+Skipped MuseeL-fuite-C500D (test reserve)
+Skipped Pen-pile (test reserve)
+===> Building models
+/usr/lib/python3.7/site-packages/torch/serialization.py:454: SourceChangeWarning: source code of class 'torch.nn.modules.conv.Conv2d' has changed. you can retrieve the original source code by accessing the object's source attribute or set `torch.nn.Module.dump_patches = True` and use the patch tool to revert the changes.
+  warnings.warn(msg, SourceChangeWarning)
+/usr/lib/python3.7/site-packages/torch/serialization.py:454: SourceChangeWarning: source code of class 'torch.nn.modules.conv.ConvTranspose2d' has changed. you can retrieve the original source code by accessing the object's source attribute or set `torch.nn.Module.dump_patches = True` and use the patch tool to revert the changes.
+  warnings.warn(msg, SourceChangeWarning)
+Using (8, 120) as bounds
+===> Epoch[1](1/4851): Loss_D: 0.3765 (range (r-r+f-f+): 0.92, 1.1, 0.18, 0.71, learn=True 	Loss_G: L(SSIM: 0.0848, L1: 0.0071) = 0.0809
+===> Epoch[1](2/4851): Loss_D: 0.0526 (range (r-r+f-f+): 0.64, 0.89, 0.026, 0.14, learn=True 	Loss_G: L(SSIM: 0.1449, L1: 0.0172) = 0.1385
+===> Epoch[1](3/4851): Loss_D: 0.0182 (range (r-r+f-f+): 0.89, 1.2, 0.001, 0.17, learn=True 	Loss_G: L(SSIM: 0.1517, L1: 0.0150) = 0.1449
+===> Epoch[1](4/4851): Loss_D: 0.4196 (range (r-r+f-f+): 0.78, 0.99, 0.41, 0.82, learn=True 	Loss_G: L(SSIM: 0.0948, L1: 0.0125) = 0.0907
+===> Epoch[1](5/4851): Loss_D: 0.0457 (range (r-r+f-f+): 0.69, 1.1, 0.0048, 0.073, learn=True 	Loss_G: L(SSIM: 0.0980, L1: 0.0099) = 0.0936
+===> Epoch[1](6/4851): Loss_D: 0.0045 (range (r-r+f-f+): 0.86, 1.1, 0.0023, 0.039, learn=True 	Loss_G: L(SSIM: 0.0643, L1: 0.0103) = 0.0616
+===> Epoch[1](7/4851): Loss_D: 0.0232 (range (r-r+f-f+): 0.77, 0.92, 0.0026, 0.039, learn=False 	Loss_G: L(SSIM: 0.1053, L1: 0.0076) = 0.1004
+===> Epoch[1](8/4851): Loss_D: 0.0333 (range (r-r+f-f+): 0.69, 1.1, 0.0022, 0.037, learn=True 	Loss_G: L(SSIM: 0.0831, L1: 0.0086) = 0.0793
+===> Epoch[1](9/4851): Loss_D: 0.8377 (range (r-r+f-f+): 0.027, 0.21, 0.0029, 0.03, learn=True 	Loss_G: L(SSIM: 0.0963, L1: 0.0072) = 0.0918
+===> Epoch[1](10/4851): Loss_D: 0.0025 (range (r-r+f-f+): 0.89, 1.1, 7e-05, 0.03, learn=True 	Loss_G: L(SSIM: 0.1009, L1: 0.0087) = 0.0962
+===> Epoch[1](11/4851): Loss_D: 0.0116 (range (r-r+f-f+): 0.82, 1.1, 0.00066, 0.11, learn=False 	Loss_G: L(SSIM: 0.0981, L1: 0.0090) = 0.0937
+===> Epoch[1](12/4851): Loss_D: 0.0306 (range (r-r+f-f+): 0.77, 0.92, 0.031, 0.19, learn=True 	Loss_G: L(SSIM: 0.0756, L1: 0.0145) = 0.0725
+===> Epoch[1](13/4851): Loss_D: 0.0077 (range (r-r+f-f+): 0.81, 1.0, 0.0068, 0.042, learn=True 	Loss_G: L(SSIM: 0.1089, L1: 0.0102) = 0.1040
+===> Epoch[1](14/4851): Loss_D: 0.0091 (range (r-r+f-f+): 0.95, 1.1, 0.00079, 0.1, learn=False 	Loss_G: L(SSIM: 0.1083, L1: 0.0167, D(G(y),y): 0.9034)) = 0.5013
+===> Epoch[1](15/4851): Loss_D: 1.1358 (range (r-r+f-f+): 0.74, 1.1, 1.0, 1.2, learn=False 	Loss_G: L(SSIM: 0.1158, L1: 0.0227, D(G(y),y): 0.0061)) = 0.0563
+===> Epoch[1](16/4851): Loss_D: 1.0064 (range (r-r+f-f+): 0.82, 1.1, 0.93, 1.1, learn=True 	Loss_G: L(SSIM: 0.1147, L1: 0.0175, D(G(y),y): 0.0182)) = 0.0616
+===> Epoch[1](17/4851): Loss_D: 0.8228 (range (r-r+f-f+): 0.83, 1.0, 0.74, 0.99, learn=True 	Loss_G: L(SSIM: 0.1548, L1: 0.0185, D(G(y),y): 0.0581)) = 0.0997
+===> Epoch[1](18/4851): Loss_D: 0.5697 (range (r-r+f-f+): 0.59, 0.86, 0.53, 0.89, learn=True 	Loss_G: L(SSIM: 0.1173, L1: 0.0140, D(G(y),y): 0.2388)) = 0.1729
+===> Epoch[1](19/4851): Loss_D: 0.5514 (range (r-r+f-f+): 0.61, 0.81, 0.59, 0.76, learn=True 	Loss_G: L(SSIM: 0.1468, L1: 0.0410, D(G(y),y): 0.1442)) = 0.1402
+===> Epoch[1](20/4851): Loss_D: 0.6060 (range (r-r+f-f+): 0.56, 0.77, 0.62, 0.87, learn=True 	Loss_G: L(SSIM: 0.1488, L1: 0.0439, D(G(y),y): 0.1235)) = 0.1309
+===> Epoch[1](21/4851): Loss_D: 0.6772 (range (r-r+f-f+): 0.3, 0.58, 0.52, 0.78, learn=True 	Loss_G: L(SSIM: 0.1638, L1: 0.0320, D(G(y),y): 0.1678)) = 0.1592
+===> Epoch[1](22/4851): Loss_D: 0.5527 (range (r-r+f-f+): 0.52, 0.8, 0.5, 0.78, learn=True 	Loss_G: L(SSIM: 0.1398, L1: 0.0407, D(G(y),y): 0.1652)) = 0.1475
+===> Epoch[1](23/4851): Loss_D: 0.5216 (range (r-r+f-f+): 0.5, 0.73, 0.56, 0.73, learn=True 	Loss_G: L(SSIM: 0.1436, L1: 0.0525, D(G(y),y): 0.1761)) = 0.1553
+===> Epoch[1](24/4851): Loss_D: 0.5564 (range (r-r+f-f+): 0.37, 0.67, 0.49, 0.69, learn=True 	Loss_G: L(SSIM: 0.1453, L1: 0.0467, D(G(y),y): 0.1874)) = 0.1614
+===> Epoch[1](25/4851): Loss_D: 0.5288 (range (r-r+f-f+): 0.41, 0.76, 0.49, 0.71, learn=True 	Loss_G: L(SSIM: 0.1530, L1: 0.0355, D(G(y),y): 0.1740)) = 0.1576
+===> Epoch[1](26/4851): Loss_D: 0.5120 (range (r-r+f-f+): 0.42, 0.65, 0.45, 0.79, learn=False 	Loss_G: L(SSIM: 0.1514, L1: 0.0257, D(G(y),y): 0.1928)) = 0.1658
+===> Epoch[1](27/4851): Loss_D: 0.5146 (range (r-r+f-f+): 0.49, 0.63, 0.5, 0.67, learn=True 	Loss_G: L(SSIM: 0.1422, L1: 0.0210, D(G(y),y): 0.1795)) = 0.1548
+===> Epoch[1](28/4851): Loss_D: 0.4608 (range (r-r+f-f+): 0.48, 0.74, 0.43, 0.71, learn=True 	Loss_G: L(SSIM: 0.1452, L1: 0.0186, D(G(y),y): 0.2116)) = 0.1721
+===> Epoch[1](29/4851): Loss_D: 0.5327 (range (r-r+f-f+): 0.5, 0.73, 0.54, 0.72, learn=True 	Loss_G: L(SSIM: 0.1673, L1: 0.0177, D(G(y),y): 0.1661)) = 0.1592
+===> Epoch[1](30/4851): Loss_D: 0.5072 (range (r-r+f-f+): 0.45, 0.63, 0.48, 0.78, learn=True 	Loss_G: L(SSIM: 0.2077, L1: 0.0468, D(G(y),y): 0.2119)) = 0.2017
+===> Epoch[1](31/4851): Loss_D: 0.5192 (range (r-r+f-f+): 0.55, 0.61, 0.47, 0.76, learn=True 	Loss_G: L(SSIM: 0.1968, L1: 0.0309, D(G(y),y): 0.1817)) = 0.1810
+===> Epoch[1](32/4851): Loss_D: 0.4713 (range (r-r+f-f+): 0.54, 0.68, 0.54, 0.66, learn=True 	Loss_G: L(SSIM: 0.1773, L1: 0.0360, D(G(y),y): 0.1885)) = 0.1758
+===> Epoch[1](33/4851): Loss_D: 0.5273 (range (r-r+f-f+): 0.52, 0.7, 0.52, 0.74, learn=True 	Loss_G: L(SSIM: 0.2921, L1: 0.0639, D(G(y),y): 0.1713)) = 0.2203
+===> Epoch[1](34/4851): Loss_D: 0.4424 (range (r-r+f-f+): 0.5, 0.73, 0.47, 0.6, learn=True 	Loss_G: L(SSIM: 0.2038, L1: 0.0503, D(G(y),y): 0.2441)) = 0.2162
+===> Epoch[1](35/4851): Loss_D: 0.5077 (range (r-r+f-f+): 0.53, 0.69, 0.47, 0.69, learn=True 	Loss_G: L(SSIM: 0.1825, L1: 0.0309, D(G(y),y): 0.1665)) = 0.1670
+===> Epoch[1](36/4851): Loss_D: 0.4750 (range (r-r+f-f+): 0.44, 0.67, 0.5, 0.68, learn=True 	Loss_G: L(SSIM: 0.1730, L1: 0.0223, D(G(y),y): 0.2110)) = 0.1844
+===> Epoch[1](37/4851): Loss_D: 0.4728 (range (r-r+f-f+): 0.47, 0.74, 0.46, 0.67, learn=True 	Loss_G: L(SSIM: 0.1657, L1: 0.0212, D(G(y),y): 0.2356)) = 0.1934
+===> Epoch[1](38/4851): Loss_D: 0.5327 (range (r-r+f-f+): 0.53, 0.67, 0.55, 0.76, learn=True 	Loss_G: L(SSIM: 0.1351, L1: 0.0194, D(G(y),y): 0.1857)) = 0.1546
+===> Epoch[1](39/4851): Loss_D: 0.4485 (range (r-r+f-f+): 0.49, 0.66, 0.45, 0.61, learn=True 	Loss_G: L(SSIM: 0.1723, L1: 0.0181, D(G(y),y): 0.2271)) = 0.1920
+===> Epoch[1](40/4851): Loss_D: 0.5485 (range (r-r+f-f+): 0.48, 0.73, 0.59, 0.68, learn=True 	Loss_G: L(SSIM: 0.2088, L1: 0.0440, D(G(y),y): 0.1775)) = 0.1849
+===> Epoch[1](41/4851): Loss_D: 0.4779 (range (r-r+f-f+): 0.53, 0.67, 0.51, 0.65, learn=True 	Loss_G: L(SSIM: 0.1935, L1: 0.0259, D(G(y),y): 0.1934)) = 0.1851
+===> Epoch[1](42/4851): Loss_D: 0.4747 (range (r-r+f-f+): 0.53, 0.67, 0.51, 0.62, learn=True 	Loss_G: L(SSIM: 0.2002, L1: 0.0254, D(G(y),y): 0.2003)) = 0.1915
+===> Epoch[1](43/4851): Loss_D: 0.4880 (range (r-r+f-f+): 0.57, 0.72, 0.53, 0.71, learn=True 	Loss_G: L(SSIM: 0.1792, L1: 0.0287, D(G(y),y): 0.1817)) = 0.1729
+===> Epoch[1](44/4851): Loss_D: 0.4329 (range (r-r+f-f+): 0.55, 0.67, 0.44, 0.62, learn=False 	Loss_G: L(SSIM: 0.1375, L1: 0.0220, D(G(y),y): 0.2096)) = 0.1678
+===> Epoch[1](45/4851): Loss_D: 0.3093 (range (r-r+f-f+): 0.53, 0.64, 0.17, 0.67, learn=True 	Loss_G: L(SSIM: 0.1790, L1: 0.0300, D(G(y),y): 0.9465)) = 0.5553
+===> Epoch[1](46/4851): Loss_D: 0.5376 (range (r-r+f-f+): 0.55, 0.69, 0.47, 0.7, learn=False 	Loss_G: L(SSIM: 0.2129, L1: 0.0329, D(G(y),y): 0.1393)) = 0.1671
+===> Epoch[1](47/4851): Loss_D: 0.4510 (range (r-r+f-f+): 0.57, 0.7, 0.51, 0.69, learn=True 	Loss_G: L(SSIM: 0.2887, L1: 0.0492, D(G(y),y): 0.2193)) = 0.2420
+===> Epoch[1](48/4851): Loss_D: 0.5802 (range (r-r+f-f+): 0.45, 0.58, 0.53, 0.69, learn=True 	Loss_G: L(SSIM: 0.2873, L1: 0.0478, D(G(y),y): 0.1752)) = 0.2193
+===> Epoch[1](49/4851): Loss_D: 0.5508 (range (r-r+f-f+): 0.57, 0.73, 0.59, 0.75, learn=True 	Loss_G: L(SSIM: 0.3057, L1: 0.0758, D(G(y),y): 0.1664)) = 0.2245
+===> Epoch[1](50/4851): Loss_D: 0.4755 (range (r-r+f-f+): 0.58, 0.76, 0.49, 0.74, learn=True 	Loss_G: L(SSIM: 0.2208, L1: 0.0319, D(G(y),y): 0.2194)) = 0.2107
+===> Epoch[1](51/4851): Loss_D: 0.4977 (range (r-r+f-f+): 0.42, 0.85, 0.49, 0.74, learn=True 	Loss_G: L(SSIM: 0.2593, L1: 0.0754, D(G(y),y): 0.2078)) = 0.2244
+===> Epoch[1](52/4851): Loss_D: 0.4445 (range (r-r+f-f+): 0.52, 0.81, 0.49, 0.71, learn=True 	Loss_G: L(SSIM: 0.2816, L1: 0.1080, D(G(y),y): 0.2228)) = 0.2435
+===> Epoch[1](53/4851): Loss_D: 0.4594 (range (r-r+f-f+): 0.51, 0.81, 0.49, 0.66, learn=True 	Loss_G: L(SSIM: 0.2715, L1: 0.0827, D(G(y),y): 0.2208)) = 0.2367
+===> Epoch[1](54/4851): Loss_D: 0.5070 (range (r-r+f-f+): 0.47, 0.69, 0.45, 0.69, learn=True 	Loss_G: L(SSIM: 0.2263, L1: 0.0645, D(G(y),y): 0.1953)) = 0.2027
+===> Epoch[1](55/4851): Loss_D: 0.4373 (range (r-r+f-f+): 0.44, 0.71, 0.44, 0.6, learn=True 	Loss_G: L(SSIM: 0.1877, L1: 0.0466, D(G(y),y): 0.2153)) = 0.1944
+===> Epoch[1](56/4851): Loss_D: 0.4557 (range (r-r+f-f+): 0.53, 0.7, 0.4, 0.68, learn=True 	Loss_G: L(SSIM: 0.1819, L1: 0.0378, D(G(y),y): 0.2148)) = 0.1912
+===> Epoch[1](57/4851): Loss_D: 0.4461 (range (r-r+f-f+): 0.56, 0.94, 0.52, 0.7, learn=True 	Loss_G: L(SSIM: 0.1689, L1: 0.0284, D(G(y),y): 0.2175)) = 0.1862
+===> Epoch[1](58/4851): Loss_D: 0.5029 (range (r-r+f-f+): 0.49, 0.65, 0.47, 0.71, learn=True 	Loss_G: L(SSIM: 0.1725, L1: 0.0272, D(G(y),y): 0.1978)) = 0.1779
+===> Epoch[1](59/4851): Loss_D: 0.4967 (range (r-r+f-f+): 0.49, 0.75, 0.51, 0.68, learn=True 	Loss_G: L(SSIM: 0.1385, L1: 0.0190, D(G(y),y): 0.1803)) = 0.1534
+===> Epoch[1](60/4851): Loss_D: 0.4428 (range (r-r+f-f+): 0.47, 0.71, 0.41, 0.63, learn=True 	Loss_G: L(SSIM: 0.1755, L1: 0.0183, D(G(y),y): 0.2318)) = 0.1958
+===> Epoch[1](61/4851): Loss_D: 0.4707 (range (r-r+f-f+): 0.47, 0.71, 0.49, 0.65, learn=True 	Loss_G: L(SSIM: 0.1926, L1: 0.0620, D(G(y),y): 0.2060)) = 0.1928
+===> Epoch[1](62/4851): Loss_D: 0.4557 (range (r-r+f-f+): 0.56, 0.69, 0.45, 0.68, learn=True 	Loss_G: L(SSIM: 0.1621, L1: 0.0375, D(G(y),y): 0.2129)) = 0.1813
+===> Epoch[1](63/4851): Loss_D: 0.5035 (range (r-r+f-f+): 0.53, 0.7, 0.51, 0.68, learn=True 	Loss_G: L(SSIM: 0.1637, L1: 0.0266, D(G(y),y): 0.1824)) = 0.1662
+===> Epoch[1](64/4851): Loss_D: 0.4471 (range (r-r+f-f+): 0.54, 0.76, 0.5, 0.67, learn=True 	Loss_G: L(SSIM: 0.1774, L1: 0.0406, D(G(y),y): 0.2260)) = 0.1949
+===> Epoch[1](65/4851): Loss_D: 0.4520 (range (r-r+f-f+): 0.53, 0.72, 0.4, 0.64, learn=True 	Loss_G: L(SSIM: 0.1434, L1: 0.0308, D(G(y),y): 0.2432)) = 0.1877
+===> Epoch[1](66/4851): Loss_D: 0.4676 (range (r-r+f-f+): 0.56, 0.81, 0.51, 0.73, learn=True 	Loss_G: L(SSIM: 0.1715, L1: 0.0220, D(G(y),y): 0.2161)) = 0.1863
+===> Epoch[1](67/4851): Loss_D: 0.2094 (range (r-r+f-f+): 0.45, 0.75, 0.079, 0.29, learn=True 	Loss_G: L(SSIM: 0.1679, L1: 0.0302, D(G(y),y): 0.8832)) = 0.5187
+===> Epoch[1](68/4851): Loss_D: 0.5270 (range (r-r+f-f+): 0.53, 0.73, 0.39, 0.75, learn=False 	Loss_G: L(SSIM: 0.1849, L1: 0.0433, D(G(y),y): 0.1469)) = 0.1588
+===> Epoch[1](69/4851): Loss_D: 0.4578 (range (r-r+f-f+): 0.57, 0.82, 0.46, 0.68, learn=True 	Loss_G: L(SSIM: 0.2112, L1: 0.0291, D(G(y),y): 0.1884)) = 0.1907
+===> Epoch[1](70/4851): Loss_D: 0.4505 (range (r-r+f-f+): 0.59, 0.78, 0.41, 0.74, learn=True 	Loss_G: L(SSIM: 0.2679, L1: 0.0896, D(G(y),y): 0.2462)) = 0.2482
+===> Epoch[1](71/4851): Loss_D: 0.5359 (range (r-r+f-f+): 0.47, 0.75, 0.53, 0.78, learn=True 	Loss_G: L(SSIM: 0.3453, L1: 0.1167, D(G(y),y): 0.1926)) = 0.2575
+===> Epoch[1](72/4851): Loss_D: 0.6634 (range (r-r+f-f+): 0.43, 0.74, 0.6, 0.91, learn=True 	Loss_G: L(SSIM: 0.3036, L1: 0.0915, D(G(y),y): 0.1644)) = 0.2234
+===> Epoch[1](73/4851): Loss_D: 0.4893 (range (r-r+f-f+): 0.54, 0.78, 0.46, 0.78, learn=True 	Loss_G: L(SSIM: 0.2244, L1: 0.0766, D(G(y),y): 0.2319)) = 0.2207
+===> Epoch[1](74/4851): Loss_D: 0.4862 (range (r-r+f-f+): 0.56, 0.82, 0.46, 0.7, learn=True 	Loss_G: L(SSIM: 0.1754, L1: 0.0420, D(G(y),y): 0.2198)) = 0.1909
+===> Epoch[1](75/4851): Loss_D: 0.4797 (range (r-r+f-f+): 0.56, 0.73, 0.44, 0.74, learn=True 	Loss_G: L(SSIM: 0.2040, L1: 0.0533, D(G(y),y): 0.2413)) = 0.2151
+===> Epoch[1](76/4851): Loss_D: 0.4362 (range (r-r+f-f+): 0.53, 0.72, 0.48, 0.63, learn=True 	Loss_G: L(SSIM: 0.6755, L1: 0.1756, D(G(y),y): 0.2470)) = 0.4362
+===> Epoch[1](77/4851): Loss_D: 0.6183 (range (r-r+f-f+): 0.31, 0.52, 0.45, 0.66, learn=True 	Loss_G: L(SSIM: 0.4468, L1: 0.1009, D(G(y),y): 0.2370)) = 0.3246
+===> Epoch[1](78/4851): Loss_D: 0.3979 (range (r-r+f-f+): 0.46, 0.71, 0.42, 0.62, learn=True 	Loss_G: L(SSIM: 0.4779, L1: 0.1713, D(G(y),y): 0.2558)) = 0.3515
+===> Epoch[1](79/4851): Loss_D: 0.4285 (range (r-r+f-f+): 0.48, 0.72, 0.43, 0.66, learn=True 	Loss_G: L(SSIM: 0.1623, L1: 0.0335, D(G(y),y): 0.2278)) = 0.1886
+===> Epoch[1](80/4851): Loss_D: 0.5221 (range (r-r+f-f+): 0.57, 0.71, 0.52, 0.76, learn=True 	Loss_G: L(SSIM: 0.1890, L1: 0.0289, D(G(y),y): 0.1478)) = 0.1604
+===> Epoch[1](81/4851): Loss_D: 0.4150 (range (r-r+f-f+): 0.62, 0.75, 0.38, 0.66, learn=True 	Loss_G: L(SSIM: 0.1991, L1: 0.0220, D(G(y),y): 0.2393)) = 0.2103
+===> Epoch[1](82/4851): Loss_D: 0.4626 (range (r-r+f-f+): 0.62, 0.83, 0.5, 0.78, learn=True 	Loss_G: L(SSIM: 0.1561, L1: 0.0247, D(G(y),y): 0.2154)) = 0.1792
+===> Epoch[1](83/4851): Loss_D: 0.4459 (range (r-r+f-f+): 0.54, 0.73, 0.45, 0.65, learn=True 	Loss_G: L(SSIM: 0.1781, L1: 0.0428, D(G(y),y): 0.2617)) = 0.2132
+===> Epoch[1](84/4851): Loss_D: 0.4484 (range (r-r+f-f+): 0.49, 0.69, 0.41, 0.65, learn=True 	Loss_G: L(SSIM: 0.1776, L1: 0.0444, D(G(y),y): 0.2512)) = 0.2078
+===> Epoch[1](85/4851): Loss_D: 0.4603 (range (r-r+f-f+): 0.59, 0.74, 0.5, 0.7, learn=True 	Loss_G: L(SSIM: 0.1555, L1: 0.0347, D(G(y),y): 0.2201)) = 0.1818
+===> Epoch[1](86/4851): Loss_D: 0.4897 (range (r-r+f-f+): 0.54, 0.65, 0.43, 0.68, learn=True 	Loss_G: L(SSIM: 0.1468, L1: 0.0233, D(G(y),y): 0.1962)) = 0.1653
+===> Epoch[1](87/4851): Loss_D: 0.4541 (range (r-r+f-f+): 0.56, 0.78, 0.54, 0.65, learn=True 	Loss_G: L(SSIM: 0.1860, L1: 0.0227, D(G(y),y): 0.2117)) = 0.1907
+===> Epoch[1](88/4851): Loss_D: 0.4538 (range (r-r+f-f+): 0.58, 0.69, 0.53, 0.65, learn=True 	Loss_G: L(SSIM: 0.1832, L1: 0.0273, D(G(y),y): 0.2142)) = 0.1909
+===> Epoch[1](89/4851): Loss_D: 0.4474 (range (r-r+f-f+): 0.4, 0.67, 0.47, 0.65, learn=True 	Loss_G: L(SSIM: 0.2120, L1: 0.0285, D(G(y),y): 0.2357)) = 0.2147
+===> Epoch[1](90/4851): Loss_D: 0.4418 (range (r-r+f-f+): 0.53, 0.66, 0.42, 0.64, learn=True 	Loss_G: L(SSIM: 0.1591, L1: 0.0221, D(G(y),y): 0.2385)) = 0.1920
+===> Epoch[1](91/4851): Loss_D: 0.4184 (range (r-r+f-f+): 0.52, 0.8, 0.4, 0.73, learn=True 	Loss_G: L(SSIM: 0.1167, L1: 0.0134, D(G(y),y): 0.2301)) = 0.1683
+===> Epoch[1](92/4851): Loss_D: 0.4321 (range (r-r+f-f+): 0.6, 0.71, 0.48, 0.71, learn=True 	Loss_G: L(SSIM: 0.1683, L1: 0.0434, D(G(y),y): 0.2216)) = 0.1887
+===> Epoch[1](93/4851): Loss_D: 0.4682 (range (r-r+f-f+): 0.53, 0.73, 0.54, 0.7, learn=True 	Loss_G: L(SSIM: 0.3334, L1: 0.1341, D(G(y),y): 0.2026)) = 0.2581
+===> Epoch[1](94/4851): Loss_D: 0.4125 (range (r-r+f-f+): 0.49, 0.76, 0.47, 0.61, learn=True 	Loss_G: L(SSIM: 0.3219, L1: 0.1229, D(G(y),y): 0.2374)) = 0.2697
+===> Epoch[1](95/4851): Loss_D: 0.3837 (range (r-r+f-f+): 0.55, 0.74, 0.45, 0.63, learn=True 	Loss_G: L(SSIM: 0.2295, L1: 0.0716, D(G(y),y): 0.2955)) = 0.2546
+===> Epoch[1](96/4851): Loss_D: 0.3449 (range (r-r+f-f+): 0.54, 0.79, 0.45, 0.6, learn=False 	Loss_G: L(SSIM: 0.1541, L1: 0.0278, D(G(y),y): 0.2347)) = 0.1881
+===> Epoch[1](97/4851): Loss_D: 0.4950 (range (r-r+f-f+): 0.54, 0.79, 0.53, 0.68, learn=False 	Loss_G: L(SSIM: 0.1465, L1: 0.0168, D(G(y),y): 0.1336)) = 0.1336
+===> Epoch[1](98/4851): Loss_D: 0.3662 (range (r-r+f-f+): 0.55, 0.89, 0.4, 0.62, learn=True 	Loss_G: L(SSIM: 0.1795, L1: 0.0220, D(G(y),y): 0.2809)) = 0.2223
+===> Epoch[1](99/4851): Loss_D: 0.4155 (range (r-r+f-f+): 0.5, 0.79, 0.48, 0.74, learn=False 	Loss_G: L(SSIM: 0.1075, L1: 0.0137, D(G(y),y): 0.1865)) = 0.1423
+===> Epoch[1](100/4851): Loss_D: 0.5849 (range (r-r+f-f+): 0.44, 0.65, 0.43, 0.77, learn=True 	Loss_G: L(SSIM: 0.1913, L1: 0.0214, D(G(y),y): 0.1958)) = 0.1851
+===> Epoch[1](101/4851): Loss_D: 0.4923 (range (r-r+f-f+): 0.37, 0.79, 0.4, 0.75, learn=True 	Loss_G: L(SSIM: 0.1220, L1: 0.0196, D(G(y),y): 0.2979)) = 0.2048
+===> Epoch[1](102/4851): Loss_D: 0.4202 (range (r-r+f-f+): 0.54, 0.78, 0.38, 0.67, learn=True 	Loss_G: L(SSIM: 0.1502, L1: 0.0193, D(G(y),y): 0.2097)) = 0.1734
+===> Epoch[1](103/4851): Loss_D: 0.5425 (range (r-r+f-f+): 0.35, 0.81, 0.51, 0.72, learn=True 	Loss_G: L(SSIM: 0.1931, L1: 0.0403, D(G(y),y): 0.2360)) = 0.2069
+===> Epoch[1](104/4851): Loss_D: 0.3624 (range (r-r+f-f+): 0.6, 0.83, 0.42, 0.66, learn=True 	Loss_G: L(SSIM: 0.1905, L1: 0.0396, D(G(y),y): 0.2769)) = 0.2261
+===> Epoch[1](105/4851): Loss_D: 0.3552 (range (r-r+f-f+): 0.54, 0.72, 0.34, 0.61, learn=True 	Loss_G: L(SSIM: 0.1755, L1: 0.0445, D(G(y),y): 0.2970)) = 0.2297
+===> Epoch[1](106/4851): Loss_D: 0.4028 (range (r-r+f-f+): 0.46, 0.73, 0.45, 0.58, learn=False 	Loss_G: L(SSIM: 0.1565, L1: 0.0349, D(G(y),y): 0.2303)) = 0.1873
+===> Epoch[1](107/4851): Loss_D: 0.4849 (range (r-r+f-f+): 0.42, 0.66, 0.45, 0.68, learn=True 	Loss_G: L(SSIM: 0.2232, L1: 0.0267, D(G(y),y): 0.2390)) = 0.2212
+===> Epoch[1](108/4851): Loss_D: 0.4619 (range (r-r+f-f+): 0.54, 0.88, 0.46, 0.67, learn=True 	Loss_G: L(SSIM: 0.1936, L1: 0.0333, D(G(y),y): 0.2365)) = 0.2070
+===> Epoch[1](109/4851): Loss_D: 0.5016 (range (r-r+f-f+): 0.43, 0.69, 0.49, 0.72, learn=True 	Loss_G: L(SSIM: 0.1642, L1: 0.0418, D(G(y),y): 0.2139)) = 0.1829
+===> Epoch[1](110/4851): Loss_D: 0.3956 (range (r-r+f-f+): 0.51, 0.73, 0.41, 0.64, learn=True 	Loss_G: L(SSIM: 0.2452, L1: 0.0450, D(G(y),y): 0.2361)) = 0.2306
+===> Epoch[1](111/4851): Loss_D: 0.5432 (range (r-r+f-f+): 0.45, 0.76, 0.43, 0.77, learn=True 	Loss_G: L(SSIM: 0.1820, L1: 0.0292, D(G(y),y): 0.1836)) = 0.1751
+===> Epoch[1](112/4851): Loss_D: 0.3725 (range (r-r+f-f+): 0.5, 0.76, 0.38, 0.67, learn=True 	Loss_G: L(SSIM: 0.1647, L1: 0.0231, D(G(y),y): 0.2965)) = 0.2236
+===> Epoch[1](113/4851): Loss_D: 0.3847 (range (r-r+f-f+): 0.49, 0.72, 0.39, 0.58, learn=False 	Loss_G: L(SSIM: 0.1848, L1: 0.0185, D(G(y),y): 0.2631)) = 0.2156
+===> Epoch[1](114/4851): Loss_D: 0.4581 (range (r-r+f-f+): 0.52, 0.7, 0.41, 0.63, learn=False 	Loss_G: L(SSIM: 0.1842, L1: 0.0324, D(G(y),y): 0.1909)) = 0.1800
+===> Epoch[1](115/4851): Loss_D: 0.3933 (range (r-r+f-f+): 0.62, 0.84, 0.48, 0.66, learn=True 	Loss_G: L(SSIM: 0.1632, L1: 0.0202, D(G(y),y): 0.2972)) = 0.2231
+===> Epoch[1](116/4851): Loss_D: 0.3389 (range (r-r+f-f+): 0.62, 0.84, 0.4, 0.64, learn=False 	Loss_G: L(SSIM: 0.1800, L1: 0.0371, D(G(y),y): 0.2590)) = 0.2124
+===> Epoch[1](117/4851): Loss_D: 0.5321 (range (r-r+f-f+): 0.45, 0.74, 0.53, 0.7, learn=True 	Loss_G: L(SSIM: 0.1865, L1: 0.0373, D(G(y),y): 0.1714)) = 0.1715
+===> Epoch[1](118/4851): Loss_D: 0.4040 (range (r-r+f-f+): 0.49, 0.73, 0.39, 0.61, learn=True 	Loss_G: L(SSIM: 0.1972, L1: 0.0386, D(G(y),y): 0.2333)) = 0.2073
+===> Epoch[1](119/4851): Loss_D: 0.4077 (range (r-r+f-f+): 0.48, 0.67, 0.42, 0.6, learn=True 	Loss_G: L(SSIM: 0.1994, L1: 0.0452, D(G(y),y): 0.2680)) = 0.2260
+===> Epoch[1](120/4851): Loss_D: 0.4754 (range (r-r+f-f+): 0.57, 0.79, 0.52, 0.7, learn=True 	Loss_G: L(SSIM: 0.1512, L1: 0.0297, D(G(y),y): 0.2072)) = 0.1731
+===> Epoch[1](121/4851): Loss_D: 0.3444 (range (r-r+f-f+): 0.56, 0.81, 0.34, 0.65, learn=True 	Loss_G: L(SSIM: 0.1702, L1: 0.0292, D(G(y),y): 0.2975)) = 0.2268
+===> Epoch[1](122/4851): Loss_D: 0.4139 (range (r-r+f-f+): 0.54, 0.82, 0.37, 0.7, learn=True 	Loss_G: L(SSIM: 0.1774, L1: 0.0199, D(G(y),y): 0.2704)) = 0.2160
+===> Epoch[1](123/4851): Loss_D: 0.4511 (range (r-r+f-f+): 0.5, 0.71, 0.43, 0.67, learn=True 	Loss_G: L(SSIM: 0.2132, L1: 0.0316, D(G(y),y): 0.2944)) = 0.2447
+===> Epoch[1](124/4851): Loss_D: 0.3938 (range (r-r+f-f+): 0.57, 0.81, 0.42, 0.62, learn=True 	Loss_G: L(SSIM: 0.1297, L1: 0.0158, D(G(y),y): 0.2692)) = 0.1937
+===> Epoch[1](125/4851): Loss_D: 0.3977 (range (r-r+f-f+): 0.57, 0.69, 0.42, 0.71, learn=False 	Loss_G: L(SSIM: 0.1348, L1: 0.0210, D(G(y),y): 0.2436)) = 0.1835
+===> Epoch[1](126/4851): Loss_D: 0.4027 (range (r-r+f-f+): 0.59, 0.83, 0.43, 0.75, learn=False 	Loss_G: L(SSIM: 0.1883, L1: 0.0398, D(G(y),y): 0.1768)) = 0.1751
+===> Epoch[1](127/4851): Loss_D: 0.4311 (range (r-r+f-f+): 0.54, 0.74, 0.47, 0.62, learn=True 	Loss_G: L(SSIM: 0.1611, L1: 0.0421, D(G(y),y): 0.2998)) = 0.2245
+===> Epoch[1](128/4851): Loss_D: 0.3414 (range (r-r+f-f+): 0.52, 0.79, 0.43, 0.63, learn=True 	Loss_G: L(SSIM: 0.1875, L1: 0.0352, D(G(y),y): 0.2719)) = 0.2221
+===> Epoch[1](129/4851): Loss_D: 0.4127 (range (r-r+f-f+): 0.53, 0.78, 0.49, 0.71, learn=False 	Loss_G: L(SSIM: 0.1487, L1: 0.0388, D(G(y),y): 0.1915)) = 0.1646
+===> Epoch[1](130/4851): Loss_D: 0.5772 (range (r-r+f-f+): 0.5, 0.85, 0.52, 0.78, learn=True 	Loss_G: L(SSIM: 0.1581, L1: 0.0258, D(G(y),y): 0.2040)) = 0.1744
+===> Epoch[1](131/4851): Loss_D: 0.3743 (range (r-r+f-f+): 0.43, 0.66, 0.31, 0.57, learn=True 	Loss_G: L(SSIM: 0.1986, L1: 0.0210, D(G(y),y): 0.3180)) = 0.2494
+===> Epoch[1](132/4851): Loss_D: 0.3526 (range (r-r+f-f+): 0.4, 0.78, 0.32, 0.6, learn=False 	Loss_G: L(SSIM: 0.1927, L1: 0.0258, D(G(y),y): 0.3064)) = 0.2412
+===> Epoch[1](133/4851): Loss_D: 0.3497 (range (r-r+f-f+): 0.52, 0.77, 0.38, 0.61, learn=True 	Loss_G: L(SSIM: 0.2051, L1: 0.0568, D(G(y),y): 0.3418)) = 0.2661
+===> Epoch[1](134/4851): Loss_D: 0.4878 (range (r-r+f-f+): 0.62, 0.88, 0.56, 0.79, learn=True 	Loss_G: L(SSIM: 0.2279, L1: 0.0492, D(G(y),y): 0.1713)) = 0.1907
+===> Epoch[1](135/4851): Loss_D: 0.3882 (range (r-r+f-f+): 0.55, 0.76, 0.44, 0.67, learn=True 	Loss_G: L(SSIM: 0.1930, L1: 0.0587, D(G(y),y): 0.2783)) = 0.2289
+===> Epoch[1](136/4851): Loss_D: 0.3155 (range (r-r+f-f+): 0.56, 0.84, 0.35, 0.6, learn=True 	Loss_G: L(SSIM: 0.1812, L1: 0.0383, D(G(y),y): 0.3332)) = 0.2501
+===> Epoch[1](137/4851): Loss_D: 0.3283 (range (r-r+f-f+): 0.54, 0.72, 0.31, 0.58, learn=False 	Loss_G: L(SSIM: 0.1625, L1: 0.0322, D(G(y),y): 0.3167)) = 0.2331
+===> Epoch[1](138/4851): Loss_D: 0.4383 (range (r-r+f-f+): 0.59, 0.82, 0.39, 0.71, learn=False 	Loss_G: L(SSIM: 0.1724, L1: 0.0317, D(G(y),y): 0.1741)) = 0.1662
+===> Epoch[1](139/4851): Loss_D: 0.3031 (range (r-r+f-f+): 0.54, 0.82, 0.31, 0.67, learn=False 	Loss_G: L(SSIM: 0.1739, L1: 0.0367, D(G(y),y): 0.3136)) = 0.2369
+===> Epoch[1](140/4851): Loss_D: 0.4324 (range (r-r+f-f+): 0.38, 0.87, 0.41, 0.68, learn=False 	Loss_G: L(SSIM: 0.1774, L1: 0.0413, D(G(y),y): 0.1893)) = 0.1765
+===> Epoch[1](141/4851): Loss_D: 0.3778 (range (r-r+f-f+): 0.5, 0.69, 0.33, 0.61, learn=True 	Loss_G: L(SSIM: 0.1908, L1: 0.0375, D(G(y),y): 0.3575)) = 0.2665
+===> Epoch[1](142/4851): Loss_D: 0.3705 (range (r-r+f-f+): 0.63, 0.86, 0.32, 0.76, learn=False 	Loss_G: L(SSIM: 0.2279, L1: 0.0593, D(G(y),y): 0.2179)) = 0.2145
+===> Epoch[1](143/4851): Loss_D: 0.5035 (range (r-r+f-f+): 0.55, 0.86, 0.52, 0.77, learn=True 	Loss_G: L(SSIM: 0.2098, L1: 0.0406, D(G(y),y): 0.2042)) = 0.1986
+===> Epoch[1](144/4851): Loss_D: 0.4304 (range (r-r+f-f+): 0.54, 0.77, 0.43, 0.73, learn=True 	Loss_G: L(SSIM: 0.1740, L1: 0.0297, D(G(y),y): 0.4487)) = 0.3041
+===> Epoch[1](145/4851): Loss_D: 0.2626 (range (r-r+f-f+): 0.62, 0.85, 0.22, 0.61, learn=True 	Loss_G: L(SSIM: 0.2231, L1: 0.0603, D(G(y),y): 0.3273)) = 0.2671
+===> Epoch[1](146/4851): Loss_D: 0.4756 (range (r-r+f-f+): 0.43, 0.79, 0.4, 0.73, learn=True 	Loss_G: L(SSIM: 0.2263, L1: 0.0632, D(G(y),y): 0.2030)) = 0.2065
+===> Epoch[1](147/4851): Loss_D: 0.3444 (range (r-r+f-f+): 0.5, 0.81, 0.26, 0.59, learn=True 	Loss_G: L(SSIM: 0.2443, L1: 0.0399, D(G(y),y): 0.2485)) = 0.2362
+===> Epoch[1](148/4851): Loss_D: 0.6146 (range (r-r+f-f+): 0.59, 0.98, 0.6, 0.92, learn=False 	Loss_G: L(SSIM: 0.3442, L1: 0.0606, D(G(y),y): 0.0658)) = 0.1908
+===> Epoch[1](149/4851): Loss_D: 0.7099 (range (r-r+f-f+): 0.66, 1.1, 0.55, 1.0, learn=True 	Loss_G: L(SSIM: 0.2132, L1: 0.0348, D(G(y),y): 0.1346)) = 0.1650
+===> Epoch[1](150/4851): Loss_D: 0.2275 (range (r-r+f-f+): 0.57, 0.9, 0.23, 0.63, learn=True 	Loss_G: L(SSIM: 0.1845, L1: 0.0389, D(G(y),y): 0.5092)) = 0.3395
+===> Epoch[1](151/4851): Loss_D: 0.2129 (range (r-r+f-f+): 0.69, 0.88, 0.21, 0.69, learn=False 	Loss_G: L(SSIM: 0.2329, L1: 0.0677, D(G(y),y): 0.3744)) = 0.2954
+===> Epoch[1](152/4851): Loss_D: 0.2769 (range (r-r+f-f+): 0.58, 0.83, 0.3, 0.63, learn=False 	Loss_G: L(SSIM: 0.2113, L1: 0.0717, D(G(y),y): 0.3281)) = 0.2628
+===> Epoch[1](153/4851): Loss_D: 0.3314 (range (r-r+f-f+): 0.38, 0.72, 0.17, 0.7, learn=False 	Loss_G: L(SSIM: 0.2583, L1: 0.0881, D(G(y),y): 0.3842)) = 0.3128
+===> Epoch[1](154/4851): Loss_D: 0.4079 (range (r-r+f-f+): 0.51, 0.78, 0.45, 0.72, learn=False 	Loss_G: L(SSIM: 0.2060, L1: 0.0765, D(G(y),y): 0.2008)) = 0.1969
+===> Epoch[1](155/4851): Loss_D: 0.3338 (range (r-r+f-f+): 0.42, 0.8, 0.2, 0.69, learn=True 	Loss_G: L(SSIM: 0.2997, L1: 0.1438, D(G(y),y): 0.3520)) = 0.3181
+===> Epoch[1](156/4851): Loss_D: 0.3568 (range (r-r+f-f+): 0.52, 1.0, 0.39, 0.72, learn=True 	Loss_G: L(SSIM: 0.2708, L1: 0.1146, D(G(y),y): 0.3584)) = 0.3068
+===> Epoch[1](157/4851): Loss_D: 0.2991 (range (r-r+f-f+): 0.57, 0.82, 0.27, 0.77, learn=False 	Loss_G: L(SSIM: 0.2583, L1: 0.0808, D(G(y),y): 0.3054)) = 0.2730
+===> Epoch[1](158/4851): Loss_D: 0.3862 (range (r-r+f-f+): 0.44, 0.83, 0.37, 0.7, learn=True 	Loss_G: L(SSIM: 0.2885, L1: 0.1167, D(G(y),y): 0.2702)) = 0.2708
+===> Epoch[1](159/4851): Loss_D: 0.5844 (range (r-r+f-f+): 0.57, 0.94, 0.53, 1.0, learn=True 	Loss_G: L(SSIM: 0.2865, L1: 0.0933, D(G(y),y): 0.1942)) = 0.2307
+===> Epoch[1](160/4851): Loss_D: 0.4903 (range (r-r+f-f+): 0.49, 0.71, 0.44, 0.76, learn=True 	Loss_G: L(SSIM: 0.2808, L1: 0.0706, D(G(y),y): 0.2718)) = 0.2658
+===> Epoch[1](161/4851): Loss_D: 0.3174 (range (r-r+f-f+): 0.53, 0.86, 0.29, 0.63, learn=True 	Loss_G: L(SSIM: 0.2349, L1: 0.0662, D(G(y),y): 0.3506)) = 0.2843
+===> Epoch[1](162/4851): Loss_D: 0.2917 (range (r-r+f-f+): 0.63, 0.9, 0.27, 0.62, learn=False 	Loss_G: L(SSIM: 0.3842, L1: 0.0832, D(G(y),y): 0.2954)) = 0.3248
+===> Epoch[1](163/4851): Loss_D: 0.2984 (range (r-r+f-f+): 0.62, 0.96, 0.32, 0.62, learn=False 	Loss_G: L(SSIM: 0.1628, L1: 0.0347, D(G(y),y): 0.2715)) = 0.2107
+===> Epoch[1](164/4851): Loss_D: 0.3765 (range (r-r+f-f+): 0.48, 0.92, 0.35, 0.78, learn=False 	Loss_G: L(SSIM: 0.1887, L1: 0.0229, D(G(y),y): 0.2420)) = 0.2070
+===> Epoch[1](165/4851): Loss_D: 0.5014 (range (r-r+f-f+): 0.59, 0.8, 0.4, 0.75, learn=True 	Loss_G: L(SSIM: 0.1920, L1: 0.0397, D(G(y),y): 0.3223)) = 0.2496
+===> Epoch[1](166/4851): Loss_D: 0.2352 (range (r-r+f-f+): 0.61, 0.78, 0.3, 0.47, learn=True 	Loss_G: L(SSIM: 0.2513, L1: 0.0574, D(G(y),y): 0.4136)) = 0.3227
+===> Epoch[1](167/4851): Loss_D: 0.3840 (range (r-r+f-f+): 0.55, 0.83, 0.38, 0.68, learn=True 	Loss_G: L(SSIM: 0.2175, L1: 0.0288, D(G(y),y): 0.2405)) = 0.2196
+===> Epoch[1](168/4851): Loss_D: 0.4129 (range (r-r+f-f+): 0.63, 0.87, 0.48, 0.71, learn=True 	Loss_G: L(SSIM: 0.1651, L1: 0.0296, D(G(y),y): 0.3525)) = 0.2520
+===> Epoch[1](169/4851): Loss_D: 0.3900 (range (r-r+f-f+): 0.55, 0.76, 0.43, 0.65, learn=True 	Loss_G: L(SSIM: 0.1407, L1: 0.0233, D(G(y),y): 0.2761)) = 0.2026
+===> Epoch[1](170/4851): Loss_D: 0.3957 (range (r-r+f-f+): 0.51, 0.63, 0.35, 0.63, learn=True 	Loss_G: L(SSIM: 0.2598, L1: 0.0729, D(G(y),y): 0.2045)) = 0.2228
+===> Epoch[1](171/4851): Loss_D: 0.3069 (range (r-r+f-f+): 0.49, 0.79, 0.31, 0.5, learn=True 	Loss_G: L(SSIM: 0.2919, L1: 0.1119, D(G(y),y): 0.2851)) = 0.2795
+===> Epoch[1](172/4851): Loss_D: 0.7478 (range (r-r+f-f+): 0.67, 0.93, 0.59, 0.98, learn=True 	Loss_G: L(SSIM: 0.3092, L1: 0.1026, D(G(y),y): 0.1183)) = 0.2034
+===> Epoch[1](173/4851): Loss_D: 0.4847 (range (r-r+f-f+): 0.55, 0.84, 0.44, 0.75, learn=True 	Loss_G: L(SSIM: 0.2820, L1: 0.1084, D(G(y),y): 0.2400)) = 0.2523
+===> Epoch[1](174/4851): Loss_D: 0.5201 (range (r-r+f-f+): 0.54, 0.69, 0.47, 0.75, learn=True 	Loss_G: L(SSIM: 0.2699, L1: 0.1353, D(G(y),y): 0.2706)) = 0.2635
+===> Epoch[1](175/4851): Loss_D: 0.5255 (range (r-r+f-f+): 0.54, 0.82, 0.53, 0.82, learn=True 	Loss_G: L(SSIM: 0.2588, L1: 0.0856, D(G(y),y): 0.1965)) = 0.2190
+===> Epoch[1](176/4851): Loss_D: 0.3022 (range (r-r+f-f+): 0.56, 0.83, 0.34, 0.74, learn=True 	Loss_G: L(SSIM: 0.2431, L1: 0.0635, D(G(y),y): 0.3659)) = 0.2955
+===> Epoch[1](177/4851): Loss_D: 0.4830 (range (r-r+f-f+): 0.41, 0.64, 0.46, 0.6, learn=False 	Loss_G: L(SSIM: 0.1815, L1: 0.0679, D(G(y),y): 0.2330)) = 0.2016
+===> Epoch[1](178/4851): Loss_D: 0.4506 (range (r-r+f-f+): 0.38, 0.65, 0.39, 0.56, learn=True 	Loss_G: L(SSIM: 0.1886, L1: 0.0456, D(G(y),y): 0.3119)) = 0.2431
+===> Epoch[1](179/4851): Loss_D: 0.2993 (range (r-r+f-f+): 0.5, 0.74, 0.34, 0.56, learn=True 	Loss_G: L(SSIM: 0.2149, L1: 0.0463, D(G(y),y): 0.3639)) = 0.2810
+===> Epoch[1](180/4851): Loss_D: 0.5500 (range (r-r+f-f+): 0.65, 0.94, 0.57, 0.79, learn=True 	Loss_G: L(SSIM: 0.2006, L1: 0.0283, D(G(y),y): 0.1091)) = 0.1463
+===> Epoch[1](181/4851): Loss_D: 0.3433 (range (r-r+f-f+): 0.54, 0.83, 0.38, 0.68, learn=True 	Loss_G: L(SSIM: 0.1699, L1: 0.0234, D(G(y),y): 0.3844)) = 0.2698
+===> Epoch[1](182/4851): Loss_D: 0.3470 (range (r-r+f-f+): 0.47, 0.74, 0.38, 0.69, learn=True 	Loss_G: L(SSIM: 0.1792, L1: 0.0340, D(G(y),y): 0.3194)) = 0.2421
+===> Epoch[1](183/4851): Loss_D: 0.4853 (range (r-r+f-f+): 0.59, 0.85, 0.52, 0.77, learn=True 	Loss_G: L(SSIM: 0.1753, L1: 0.0381, D(G(y),y): 0.1911)) = 0.1763
+===> Epoch[1](184/4851): Loss_D: 0.3641 (range (r-r+f-f+): 0.46, 0.69, 0.43, 0.61, learn=True 	Loss_G: L(SSIM: 0.1904, L1: 0.0258, D(G(y),y): 0.3324)) = 0.2532
+===> Epoch[1](185/4851): Loss_D: 0.3204 (range (r-r+f-f+): 0.6, 0.88, 0.44, 0.59, learn=False 	Loss_G: L(SSIM: 0.2114, L1: 0.0231, D(G(y),y): 0.2506)) = 0.2216
+===> Epoch[1](186/4851): Loss_D: 0.5059 (range (r-r+f-f+): 0.54, 0.91, 0.43, 0.81, learn=True 	Loss_G: L(SSIM: 0.2152, L1: 0.0290, D(G(y),y): 0.2156)) = 0.2061
+===> Epoch[1](187/4851): Loss_D: 0.4003 (range (r-r+f-f+): 0.56, 0.76, 0.4, 0.67, learn=True 	Loss_G: L(SSIM: 0.2296, L1: 0.0286, D(G(y),y): 0.2826)) = 0.2461
+===> Epoch[1](188/4851): Loss_D: 0.3055 (range (r-r+f-f+): 0.63, 0.89, 0.37, 0.6, learn=True 	Loss_G: L(SSIM: 0.1893, L1: 0.0311, D(G(y),y): 0.3230)) = 0.2483
+===> Epoch[1](189/4851): Loss_D: 0.3979 (range (r-r+f-f+): 0.51, 0.82, 0.41, 0.63, learn=False 	Loss_G: L(SSIM: 0.1601, L1: 0.0243, D(G(y),y): 0.2109)) = 0.1787
+===> Epoch[1](190/4851): Loss_D: 0.5729 (range (r-r+f-f+): 0.43, 0.73, 0.48, 0.72, learn=False 	Loss_G: L(SSIM: 0.1354, L1: 0.0235, D(G(y),y): 0.1499)) = 0.1371

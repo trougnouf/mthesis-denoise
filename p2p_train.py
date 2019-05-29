@@ -66,9 +66,9 @@ parser.add_argument('--models_dir', default='models', type=str, help='Directory 
 parser.add_argument('--lr_gamma', default=.75, type=float, help='Learning rate decrease rate for plateau, StepLR (default: 0.75)')
 parser.add_argument('--lr_step_size', default=5, type=int, help='Step size for StepLR, patience for plateau scheduler')
 parser.add_argument('--model', default='Hulb128Net', type=str, help='Model type (UNet, Resnet, Hul160Net, Hul128Net)')
-parser.add_argument('--D_ratio_0', default=0.9, type=float, help='How often D learns compared to G initially ( (0,1])')
-parser.add_argument('--D_ratio_1', default=0.33, type=float, help='How often D learns compared to G when D is in use ( (0,1])')
-parser.add_argument('--D_ratio_2', default=0.1, type=float, help='How often D learns compared to G when D is too good ( (0,1])')
+parser.add_argument('--D_ratio_0', default=0.98, type=float, help='How often D learns compared to G initially ( (0,1])')
+parser.add_argument('--D_ratio_1', default=0.5, type=float, help='How often D learns compared to G when D is in use ( (0,1])')
+parser.add_argument('--D_ratio_2', default=0.02, type=float, help='How often D learns compared to G when D is too good ( (0,1])')
 parser.add_argument('--lr_min', default=0.00000005, type=float, help='Minimum learning rate (training stops when both lr are below threshold, default: 0.00000005)')
 parser.add_argument('--min_ssim_l', default=0.12, type=float, help='Minimum SSIM score before using GAN loss')
 parser.add_argument('--post_fail_ssim_num', default=25, type=int, help='How many times SSIM is used exclusively when min_ssim_l threshold is not met')
@@ -264,7 +264,6 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         cleanimg, noisyimg = batch[0].to(device), batch[1].to(device)
         # generate clean image ("fake")
         optimizer_g.zero_grad()
-        optimizer_d.zero_grad()
         gnoisyimg = net_g(noisyimg)
         # compute SSIM # no longer any reason to have it here
         loss_g_ssim = criterionSSIM(gnoisyimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up], cleanimg[:,:,loss_crop_lb:loss_crop_up, loss_crop_lb:loss_crop_up])
@@ -307,7 +306,6 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         loss_D_real.backward()
 
         pred_fake = net_d(fake_ab.detach())
-        pred_fake_for_G = net_d(fake_ab)
         loss_D_fake = criterionGAN(pred_fake,
                                    gen_target_probabilities(False, pred_fake.shape, device, args.invert_probabilities, False or args.very_noisy_probabilities))
         loss_D_fake.backward()
@@ -327,6 +325,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             generator_learns = update_generator_learns()
             continue
         ## train generator ##
+        optimizer_d.zero_grad()
         #set_requires_grad(net_d, False)
 
         loss_g_item_str = 'L(SSIM: {:.4f}'.format(loss_g_ssim)
@@ -336,6 +335,7 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         else:
             loss_g_L1 = float('nan')
         if use_D:
+            pred_fake = net_d(fake_ab)
             weight_ssim = weight_ssim_1
             weight_L1 = weight_L1_1
             #if not retain_graph:
@@ -343,7 +343,8 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
             if args.debug_D:
                 print("pred_fake")
                 print(pred_fake)
-            loss_g_gan = criterionGAN(pred_fake_for_G, gen_target_probabilities(True, pred_fake.shape, device, args.invert_probabilities, False or args.very_noisy_probabilities))
+            #loss_g_gan = criterionGAN(pred_fake_for_G, gen_target_probabilities(True, pred_fake.shape, device, args.invert_probabilities, False or args.very_noisy_probabilities))
+            loss_g_gan = criterionGAN(pred_fake, gen_target_probabilities(True, pred_fake.shape, device, args.invert_probabilities, False or args.very_noisy_probabilities))
             loss_g_item_str += ', D(G(y),y): {:.4f})'.format(loss_g_gan.item())
         else:
             weight_ssim = args.weight_ssim_0
