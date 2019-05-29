@@ -348,11 +348,14 @@ for epoch in range(args.epoch_count, args.niter + args.niter_decay + 1):
         else:
             weight_ssim = args.weight_ssim_0
             weight_L1 = args.weight_L1_0
-        loss_g = loss_g_ssim * weight_ssim
-        if use_D:
-            loss_g += loss_g_gan * (1-weight_ssim - weight_L1)
-        if use_L1:
-            loss_g += loss_g_L1 * weight_L1
+        if use_D and weight_ssim == 0 and weight_L1 == 0:
+            loss_g = loss_g_gan
+        else:
+            loss_g = loss_g_ssim * weight_ssim
+            if use_D:
+                loss_g += loss_g_gan * (1-weight_ssim - weight_L1)
+            if use_L1:
+                loss_g += loss_g_L1 * weight_L1
         loss_g_item = loss_g.item()
         loss_g.backward()
         loss_g_item_str += ') = '+'{:.4f}'.format(loss_g_item)

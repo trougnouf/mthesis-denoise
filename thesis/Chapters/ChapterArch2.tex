@@ -40,7 +40,7 @@ Balanced initialization is crucial as experimental work has shown that using the
 
 The network is still highly susceptible to failure after initialization. Common issues are overconfidence (with eventual mode collapse where the network outputs the same result), vanishing gradients, and indecision, therefore a good balance must be maintained all along the training process. We provide the discriminator's \ac{MSE} loss with noisy labels as recommended in \cite{gantechniques}\cite{gantutorial} (minus 0 to 0.05 probabilities on real images) to prevent overconfidence. There is typically a 0.33 training ratio between the discriminator and the generator, the imbalance ensures that the two networks are not constantly trying to overcome each other's latest update. This ratio is lowered to 0.1 when the discriminator gets too accurate (95\%), and it is increased to 0.9 when the discriminator has approximately 50\% or below accuracy. (50\% is the ideal target but it often indicates an indecisive discriminator.)
 % should investigate: https://arxiv.org/abs/1803.07422 (Patch-Based Image Inpainting with Generative Adversarial Networks)
-The (c)GAN training procedure is summarized in algorithm \ref{alg:gantrain}.
+The (c)GAN training procedure is summarized in algorithm \ref{alg:gantrain}. The variables (losses and predictions) are tensors which may contain any number of scalars as well as the whole computation graph (history) and gradients needed to perform the backpropagation.
 
 \begin{algorithm}
 \caption{(c)GAN training procedure}
