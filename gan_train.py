@@ -104,7 +104,7 @@ class Generator:
         self.p = printer
         self.loss = 1
         self.weight_SSIM = weight_SSIM
-        if weight_SSIM > 0:
+        if weight_SSIM > 0 or compute_SSIM_anyway:
             self.criterion_SSIM = pytorch_ssim.SSIM().to(device)
         self.weight_L1 = weight_L1
         if weight_L1 > 0:
