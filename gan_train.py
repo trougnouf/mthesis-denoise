@@ -57,6 +57,7 @@ parser.add_argument('--threads', type=int, default=8, help='Number of threads fo
 parser.add_argument('--min_lr', type=float, default=0.00000005, help='Minimum learning rate (ends training)')
 parser.add_argument('--not_conditional', action='store_true', help='Regular GAN instead of cGAN')
 parser.add_argument('--epochs', type=int, default=9001, help='Number of epochs (ends training)')
+parser.add_argument('--compute_ssim_anyway', action='store_true', help='Compute and display SSIM loss even if not used')
 
 args = parser.parse_args()
 
@@ -99,7 +100,7 @@ class Generator:
     def __init__(self, network = 'Hulb128Net', weights_dict_path = None, model_path = None,
                  device = 'cuda:0', weight_SSIM = default_weight_SSIM,
                  weight_L1 = default_weight_L1, activation = 'PReLU', funit = 32,
-                 beta1 = default_beta1, lr = default_lr, printer = None):
+                 beta1 = default_beta1, lr = default_lr, printer = None, compute_SSIM_anyway):
         self.p = printer
         self.loss = 1
         self.weight_SSIM = weight_SSIM
@@ -127,6 +128,7 @@ class Generator:
         self.scheduler = lr_scheduler.ReduceLROnPlateau(self.optimizer, factor=0.75, verbose=True, threshold=1e-8, patience=5)
         self.device = device
         self.loss = {'SSIM': 1, 'L1': 1, 'D': 1, 'weighted': 1}
+        self.compute_SSIM_anyway = compute_SSIM_anyway
 
     def get_loss(self, pretty_printed=False):
         if pretty_printed:
@@ -137,11 +139,11 @@ class Generator:
         return self.model(noisy_batch)
 
     def learn(self, generated_batch_cropped, clean_batch_cropped, discriminator_predictions=None):
-        if self.weight_SSIM > 0:
+        if self.weight_SSIM > 0 or self.compute_SSIM_anyway:
             loss_SSIM = self.criterion_SSIM(generated_batch_cropped, clean_batch_cropped)
             loss_SSIM = 1-loss_SSIM
             self.loss['SSIM'] = loss_SSIM.item()
-        else:
+        if self.weight_SSIM == 0:
             loss_SSIM = torch.zeros(1).to(device)
         if self.weight_L1 > 0:
             loss_L1 = self.criterion_L1(generated_batch_cropped, clean_batch_cropped)
@@ -290,7 +292,8 @@ discriminator = Discriminator(network=args.d_network, weights_dict_path=args.d_w
 generator = Generator(network=args.g_network, weights_dict_path=args.g_weights_dict_path,
                       model_path=args.g_model_path, device=device, weight_SSIM=args.weight_SSIM,
                       weight_L1=args.weight_L1, activation=args.g_activation, funit=args.g_funit,
-                      beta1=args.beta1, lr=args.g_lr, printer=p)
+                      beta1=args.beta1, lr=args.g_lr, printer=p,
+                      compute_SSIM_anyway=args.compute_SSIM_anyway)
 
 crop_boundaries = get_crop_boundaries(DDataset.cs, DDataset.ucs, args.g_network, args.d_network)
 
