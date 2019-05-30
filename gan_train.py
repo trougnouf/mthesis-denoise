@@ -130,7 +130,7 @@ class Generator:
 
     def get_loss(self, pretty_printed=False):
         if pretty_printed:
-            return ", ".join(["%s: %.3f"%(key, val) for key,val in self.loss.items()])
+            return ", ".join(["%s: %.3f"%(key, val) if val != 1 else 'NA' for key,val in self.loss.items()])
         return self.loss
 
     def denoise_batch(self, noisy_batch):
