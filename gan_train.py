@@ -57,7 +57,7 @@ parser.add_argument('--threads', type=int, default=8, help='Number of threads fo
 parser.add_argument('--min_lr', type=float, default=0.00000005, help='Minimum learning rate (ends training)')
 parser.add_argument('--not_conditional', action='store_true', help='Regular GAN instead of cGAN')
 parser.add_argument('--epochs', type=int, default=9001, help='Number of epochs (ends training)')
-parser.add_argument('--compute_ssim_anyway', action='store_true', help='Compute and display SSIM loss even if not used')
+parser.add_argument('--compute_SSIM_anyway', action='store_true', help='Compute and display SSIM loss even if not used')
 
 args = parser.parse_args()
 
