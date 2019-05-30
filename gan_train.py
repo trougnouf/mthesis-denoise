@@ -344,7 +344,7 @@ for epoch in range(1, args.epochs):
             loss_G_SSIM_list.append(generator.get_loss()['SSIM'])
             iteration_summary += 'loss G: %s' % generator.get_loss(pretty_printed=True)
         elif frozen_generator:
-            frozen_generator = discriminator.get_loss() < 0.5
+            frozen_generator = discriminator.get_loss() > 0.5
         p.print(iteration_summary)
 
     p.print("Epoch %u summary:" % epoch)
