@@ -175,6 +175,7 @@ class Discriminator:
                  activation='PReLU', funit=24, beta1=default_beta1,
                  lr = default_lr, not_conditional = False, printer=None):
         self.p = printer
+        self.device = device
         self.loss = 1
         self.loss_function = loss_function
         if loss_function == 'MSE':
