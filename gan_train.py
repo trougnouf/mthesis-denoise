@@ -127,7 +127,9 @@ class Generator:
         self.device = device
         self.loss = {'SSIM': 1, 'L1': 1, 'D': 1, 'weighted': 1}
 
-    def get_loss(self):
+    def get_loss(self, pretty_printed=False):
+        if pretty_printed:
+            return ", ".join(["%s: %.3f"%(key, val) for key,val in self.loss.items()])
         return self.loss
 
     def denoise_batch(self, noisy_batch):
@@ -329,7 +331,7 @@ for epoch in range(1, args.epochs):
                             discriminator_predictions=discriminator_predictions)
             loss_G_list.append(generator.get_loss()['weighted'])
             loss_G_SSIM_list.append(generator.get_loss()['SSIM'])
-            iteration_summary += 'loss G: %s' % str(generator.get_loss())
+            iteration_summary += 'loss G: %s' % generator.get_loss(pretty_printed=True)
         p.print(iteration_summary)
 
     p.print("Epoch %u summary:" % epoch)
