@@ -151,7 +151,7 @@ class Generator:
             loss_D = self.criterion_D(discriminator_predictions,
                                       gen_target_probabilities(True, discriminator_predictions.shape,
                                                                device=self.device, noisy=False))
-            self.loss['D'] = loss_D.item()
+            self.loss['D'] = math.sqrt(loss_D.item())
         else:
             loss_D = torch.zeros(1).to(device)
         loss = loss_SSIM * self.weight_SSIM + loss_L1 * self.weight_L1 + loss_D * self.weight_L1
@@ -216,7 +216,7 @@ class Discriminator:
 
     def update_loss(self, loss_fake, loss_real):
         if self.loss_function == 'MSE':
-            self.loss = math.sqrt(loss_fake)+math.sqrt(loss_real)
+            self.loss = (math.sqrt(loss_fake)+math.sqrt(loss_real))/2
         else:
             p.print('Error: loss function not implemented: %s'%(self.loss_function))
 
