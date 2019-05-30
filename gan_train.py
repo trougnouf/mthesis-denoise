@@ -155,7 +155,7 @@ class Generator:
             self.loss['D'] = math.sqrt(loss_D.item())
         else:
             loss_D = torch.zeros(1).to(device)
-        loss = loss_SSIM * self.weight_SSIM + loss_L1 * self.weight_L1 + loss_D * self.weight_L1
+        loss = loss_SSIM * self.weight_SSIM + loss_L1 * self.weight_L1 + loss_D * self.weight_D
         self.loss['weighted'] = loss.item()
         loss.backward()
         self.optimizer.step()
