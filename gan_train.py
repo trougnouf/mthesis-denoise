@@ -110,7 +110,7 @@ class Generator:
             self.criterion_L1 = nn.L1Loss().to(device)
         self.weight_D = 1 - weight_SSIM - weight_L1
         if self.weight_D > 0:
-            self.criterionD = nn.MSELoss().to(device)
+            self.criterion_D = nn.MSELoss().to(device)
         if model_path is not None:
             self.model = torch.load(model_path, map_location=device)
         else:
