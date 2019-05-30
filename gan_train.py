@@ -115,7 +115,7 @@ class Generator:
             self.model = torch.load(model_path, map_location=device)
         else:
             if network == 'Hulb128Net':
-                self.model = Hulb128Net(funit=funit, activation=activation)
+                self.model = Hulb128Net(funit=funit, activation=activation).to(device)
             #elif ...
             else:
                 p.print('Error: generator network not properly specified')
@@ -187,7 +187,7 @@ class Discriminator:
             else:
                 input_channels = 6
             if network == 'Hul112Disc':
-                self.model = Hul112Disc(funit=funit, out_activation=activation, input_channels = input_channels)
+                self.model = Hul112Disc(funit=funit, out_activation=activation, input_channels = input_channels).to(device)
             # elif ...
             else:
                 p.print('Error: generator network not properly specified')
