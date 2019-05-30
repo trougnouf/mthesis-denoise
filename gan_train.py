@@ -246,7 +246,8 @@ class Discriminator:
         pred_fake = self.model(fake_batch)
         loss_fake = self.criterion(pred_fake,
                                    gen_target_probabilities(False, pred_fake.shape,
-                                                            device=self.device, noisy=False))
+                                                            device=self.device,
+                                                            noisy=self.loss < 0.25))
         loss_fake_detached = loss_fake.item()
         loss_fake.backward()
         self.predictions_range = ", ".join(["{:.2}".format(float(i)) for i in (min(pred_real), max(pred_real), min(pred_fake), max(pred_fake))])
