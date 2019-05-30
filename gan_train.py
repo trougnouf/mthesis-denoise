@@ -347,10 +347,10 @@ for epoch in range(1, args.epochs):
                                                           time.time()-start_time))
     p.print("Generator:")
     if len(loss_G_SSIM_list) > 0:
-        p.print("Average SSIM loss: %f", statistics.mean(loss_G_SSIM_list))
+        p.print("Average SSIM loss: %f" % statistics.mean(loss_G_SSIM_list))
     if len(loss_G_list) > 0:
         average_g_weighted_loss = statistics.mean(loss_G_list)
-        p.print("Average weighted loss: %f", average_g_weighted_loss)
+        p.print("Average weighted loss: %f" % average_g_weighted_loss)
         generator_learning_rate = generator.update_learning_rate(average_g_weighted_loss)
     else:
         p.print("Generator learned nothing")
