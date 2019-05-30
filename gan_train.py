@@ -240,7 +240,7 @@ class Discriminator:
         loss_real_detached = loss_real.item()
         loss_real.backward()
         pred_fake = self.model(fake_batch)
-        loss_fake = self.criterion(fake_batch,
+        loss_fake = self.criterion(pred_fake,
                                    gen_target_probabilities(False, pred_fake.shape,
                                                             device=self.device, noisy=False))
         loss_fake_detached = loss_fake.item()
