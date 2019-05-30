@@ -115,7 +115,8 @@ class Generator:
             self.model = torch.load(model_path, map_location=device)
         else:
             if network == 'Hulb128Net':
-                self.model = Hulb128Net(funit=funit, activation=activation).to(device)
+                self.model = Hulb128Net(funit=funit, activation=activation)
+                self.model = self.model.to(device)
             #elif ...
             else:
                 p.print('Error: generator network not properly specified')
@@ -195,6 +196,7 @@ class Discriminator:
             else:
                 p.print('Error: generator network not properly specified')
                 exit(1)
+            self.model = self.model.to(device)
             if weights_dict_path is not None:
                 self.model.load_state_dict(torch.load(weights_dict_path))
         self.optimizer = optim.Adam(self.model.parameters(), lr=lr, betas=(beta1, 0.999))
