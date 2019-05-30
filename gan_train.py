@@ -116,13 +116,13 @@ class Generator:
         else:
             if network == 'Hulb128Net':
                 self.model = Hulb128Net(funit=funit, activation=activation)
-                self.model = self.model.to(device)
             #elif ...
             else:
                 p.print('Error: generator network not properly specified')
                 exit(1)
             if weights_dict_path is not None:
                 self.model.load_state_dict(torch.load(weights_dict_path))
+        self.model = self.model.to(device)
         self.optimizer = optim.Adam(self.model.parameters(), lr=lr, betas=(beta1, 0.999))
         self.scheduler = lr_scheduler.ReduceLROnPlateau(self.optimizer, factor=0.75, verbose=True, threshold=1e-8, patience=5)
         self.device = device
@@ -191,7 +191,7 @@ class Discriminator:
             else:
                 input_channels = 6
             if network == 'Hul112Disc':
-                self.model = Hul112Disc(funit=funit, out_activation=activation, input_channels = input_channels).to(device)
+                self.model = Hul112Disc(funit=funit, out_activation=activation, input_channels = input_channels)
             # elif ...
             else:
                 p.print('Error: generator network not properly specified')
