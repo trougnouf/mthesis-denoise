@@ -323,7 +323,9 @@ for epoch in range(1, args.epochs):
         generator_learns = (not discriminator_learns) or (discriminator.get_loss() < random.random())
         if generator_learns:
             if discriminator_learns:
-                iteration_summary += ',\t '
+                iteration_summary += ', '
+            while len(iteration_summary) < 100:
+                iteration_summary += ' '
             if use_D:
                 discriminator_predictions = discriminator.discriminate_batch(
                     generated_batch_cropped=generated_batch_cropped,
