@@ -98,9 +98,9 @@ class Printer:
 
 class Generator:
     def __init__(self, network = 'Hulb128Net', weights_dict_path = None, model_path = None,
-                 device = 'cuda:0', weight_SSIM = default_weight_SSIM,
-                 weight_L1 = default_weight_L1, activation = 'PReLU', funit = 32,
-                 beta1 = default_beta1, lr = default_lr, printer = None, compute_SSIM_anyway):
+                 device = 'cuda:0', weight_SSIM=default_weight_SSIM,
+                 weight_L1=default_weight_L1, activation='PReLU', funit=32,
+                 beta1=default_beta1, lr=default_lr, printer=None, compute_SSIM_anyway=False):
         self.p = printer
         self.loss = 1
         self.weight_SSIM = weight_SSIM
