@@ -200,6 +200,8 @@ class Hulb128Net(nn.Module):
             self.activation = nn.PReLU(init=0.01)
         elif activation == 'Sigmoid':
             self.activation = nn.Sigmoid()
+        else:
+            print('Error: unknown activation (%s)' % activation)
 
     def forward(self, x):
         # down
