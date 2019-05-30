@@ -271,7 +271,7 @@ cudnn.benchmark = True
 torch.manual_seed(123)
 torch.cuda.manual_seed(123)
 
-expname = datetime.datetime.now().isoformat()[:-10]+'_'+'_'.join(sys.argv).replace('/','-')[0:255]
+expname = datetime.datetime.now().isoformat()[:-10]+'_'+'_'.join(sys.argv).replace('/','-')[0:254]
 model_dir = os.path.join('models', expname)
 txt_path = os.path.join('results', 'train', expname)
 os.makedirs(model_dir, exist_ok=True)
