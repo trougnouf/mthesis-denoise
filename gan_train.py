@@ -58,6 +58,7 @@ parser.add_argument('--min_lr', type=float, default=0.00000005, help='Minimum le
 parser.add_argument('--not_conditional', action='store_true', help='Regular GAN instead of cGAN')
 parser.add_argument('--epochs', type=int, default=9001, help='Number of epochs (ends training)')
 parser.add_argument('--compute_SSIM_anyway', action='store_true', help='Compute and display SSIM loss even if not used')
+parser.add_argument('--freeze_generator', action='store_true', help='Freeze generator until discriminator is useful')
 
 args = parser.parse_args()
 
@@ -275,6 +276,8 @@ model_dir = os.path.join('models', expname)
 txt_path = os.path.join('results', 'train', expname)
 os.makedirs(model_dir, exist_ok=True)
 
+frozen_generator = args.freeze_generator
+
 p = Printer(file_path=os.path.join(txt_path))
 
 p.print(args)
@@ -316,7 +319,7 @@ for epoch in range(1, args.epochs):
         generated_batch = generator.denoise_batch(noisy_batch)
         generated_batch_cropped = crop_batch(generated_batch, crop_boundaries)
         # train discriminator based on its previous performance
-        discriminator_learns = discriminator.get_loss() > random.random() and use_D
+        discriminator_learns = (discriminator.get_loss() > random.random() and use_D) or frozen_generator
         if discriminator_learns:
             discriminator.learn(noisy_batch_cropped=noisy_batch_cropped,
                                 generated_batch_cropped=generated_batch_cropped,
@@ -324,7 +327,7 @@ for epoch in range(1, args.epochs):
             loss_D_list.append(discriminator.get_loss())
             iteration_summary += 'loss D: %f (%s)' % (discriminator.get_loss(), discriminator.get_predictions_range())
         # train generator if discriminator didn't learn or discriminator is somewhat useful
-        generator_learns = (not discriminator_learns) or (discriminator.get_loss() < random.random())
+        generator_learns = ((not discriminator_learns) or (discriminator.get_loss() < random.random())) and not frozen_generator
         if generator_learns:
             if discriminator_learns:
                 iteration_summary += ', '
@@ -340,6 +343,8 @@ for epoch in range(1, args.epochs):
             loss_G_list.append(generator.get_loss()['weighted'])
             loss_G_SSIM_list.append(generator.get_loss()['SSIM'])
             iteration_summary += 'loss G: %s' % generator.get_loss(pretty_printed=True)
+        elif frozen_generator:
+            frozen_generator = discriminator.get_loss() < 0.5
         p.print(iteration_summary)
 
     p.print("Epoch %u summary:" % epoch)
