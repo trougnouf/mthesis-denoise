@@ -314,7 +314,7 @@ for epoch in range(1, args.epochs):
                                 generated_batch_cropped=generated_batch_cropped,
                                 clean_batch_cropped=clean_batch_cropped)
             loss_D_list.append(discriminator.get_loss())
-            iteration_summary += 'loss D: %f (%s)' % (discriminator.get_loss(), discriminator.get_range())
+            iteration_summary += 'loss D: %f (%s)' % (discriminator.get_loss(), discriminator.get_predictions_range())
         # train generator if discriminator didn't learn or discriminator is somewhat useful
         generator_learns = (not discriminator_learns) or (discriminator.get_loss() < random.random())
         if generator_learns:
