@@ -329,6 +329,7 @@ for epoch in range(1, args.epochs):
             loss_G_list.append(discriminator.get_loss()['weighted'])
             loss_G_SSIM_list.append(discriminator.get_loss()['SSIM'])
             iteration_summary += 'loss G: %s' % str(generator.get_loss())
+        p.print(iteration_summary)
 
     p.print("Epoch %u summary:" % epoch)
     p.print("Time elapsed (s): %u (epoch), %u (total)" % (time.time()-epoch_start_time,
