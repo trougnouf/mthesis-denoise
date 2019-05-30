@@ -327,8 +327,8 @@ for epoch in range(1, args.epochs):
             generator.learn(generated_batch_cropped=generated_batch_cropped,
                             clean_batch_cropped=clean_batch_cropped,
                             discriminator_predictions=discriminator_predictions)
-            loss_G_list.append(discriminator.get_loss()['weighted'])
-            loss_G_SSIM_list.append(discriminator.get_loss()['SSIM'])
+            loss_G_list.append(generator.get_loss()['weighted'])
+            loss_G_SSIM_list.append(generator.get_loss()['SSIM'])
             iteration_summary += 'loss G: %s' % str(generator.get_loss())
         p.print(iteration_summary)
 
