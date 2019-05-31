@@ -18,8 +18,8 @@ from torch.optim import lr_scheduler
 import statistics
 import math
 import torchvision
-
-from networks.Hul import Hulb128Net, Hul112Disc
+from networks.p2p_networks import define_D
+from networks.Hul import Hulb128Net, Hul112Disc, Hulf112Disc
 
 default_train_data = ['datasets/train/NIND_128_112']
 default_beta1 = 0.5
@@ -38,7 +38,7 @@ parser.add_argument('--time_limit', type=int, default=172800, help='Time limit (
 parser.add_argument('--g_activation', type=str, default='PReLU', help='Final activation function for generator')
 parser.add_argument('--g_funit', type=int, default=32, help='Filter unit size for generator')
 parser.add_argument('--d_activation', type=str, default='PReLU', help='Final activation function for discriminator')
-parser.add_argument('--d_funit', type=int, default=24, help='Filter unit size for discriminator')
+parser.add_argument('--d_funit', type=int, default=32, help='Filter unit size for discriminator')
 parser.add_argument('--d_weights_dict_path', help='Discriminator weights dictionary')
 parser.add_argument('--g_weights_dict_path', help='Generator weights dictionary')
 parser.add_argument('--d_model_path', help='Discriminator pretrained model path')
@@ -202,7 +202,11 @@ class Discriminator:
                 input_channels = 6
             if network == 'Hul112Disc':
                 self.model = Hul112Disc(funit=funit, out_activation=activation, input_channels = input_channels)
-            # elif ...
+            elif network == 'Hulf112Disc':
+                self.model = Hulf112Disc(funit=funit, out_activation=activation, input_channels = input_channels)
+            # elif
+            elif network == 'PatchGAN':
+                self.model = net_d = define_D(input_channels, 2*funit, 'basic', gpu_id=device)
             else:
                 p.print('Error: generator network not properly specified')
                 exit(1)
@@ -272,7 +276,10 @@ class Discriminator:
                                                             noisy=self.loss < 0.25))
         loss_fake_detached = loss_fake.item()
         loss_fake.backward()
-        self.predictions_range = ", ".join(["{:.2}".format(float(i)) for i in (min(pred_real), max(pred_real), min(pred_fake), max(pred_fake))])
+        try:
+            self.predictions_range = ", ".join(["{:.2}".format(float(i)) for i in (pred_real.min(), pred_real.max(), pred_fake.min(), pred_fake.max())])
+        except:
+            self.predictions_range = '(not implemented)'
         self.update_loss(loss_fake_detached, loss_real_detached)
         self.optimizer.step()
 
@@ -363,7 +370,7 @@ for epoch in range(args.start_epoch, args.epochs):
             loss_G_SSIM_list.append(generator.get_loss()['SSIM'])
             iteration_summary += 'loss G: %s' % generator.get_loss(pretty_printed=True)
         elif frozen_generator:
-            frozen_generator = discriminator.get_loss() > 0.4
+            frozen_generator = discriminator.get_loss() > 0.33
         p.print(iteration_summary)
 
     p.print("Epoch %u summary:" % epoch)
