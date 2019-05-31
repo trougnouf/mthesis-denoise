@@ -249,9 +249,13 @@ class Discriminator:
         if 'discriminator_input' in debug_options:
             os.makedirs('dbg', exist_ok=True)
             batch_savename = os.path.join('dbg',str(time.time()))
-            real_batch_detached = real_batch.detach().cpu()
+            if self.conditional:
+                real_batch_detached = torch.cat([real_batch[:,:3,:,:], real_batch[:,3:,:,:]],0).detach().cpu()
+                fake_batch_detached = torch.cat([fake_batch[:,:3,:,:], fake_batch[:,3:,:,:]],0).detach().cpu()
+            else:
+                real_batch_detached = real_batch.detach().cpu()
+                fake_batch_detached = fake_batch.detach().cpu()
             torchvision.utils.save_image(real_batch_detached, batch_savename+'_real.png')
-            fake_batch_detached = fake_batch.detach().cpu()
             torchvision.utils.save_image(fake_batch_detached, batch_savename+'_fake.png')
 
         pred_real = self.model(real_batch)
