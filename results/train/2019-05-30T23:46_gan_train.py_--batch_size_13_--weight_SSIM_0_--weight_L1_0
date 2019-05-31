@@ -1,0 +1,4 @@
+Namespace(batch_size=13, beta1=0.5, cuda_device=0, d_activation='PReLU', d_funit=24, d_loss_function='MSE', d_lr=0.0003, d_model_path=None, d_network='Hul112Disc', d_weights_dict_path=None, epochs=9001, g_activation='PReLU', g_funit=32, g_lr=0.0003, g_model_path=None, g_network='Hulb128Net', g_weights_dict_path=None, min_lr=5e-08, not_conditional=False, test_reserve=None, threads=8, time_limit=172800, train_data=None, weight_L1=0.0, weight_SSIM=0.0)
+cmd: python3 gan_train.py --batch_size 13 --weight_SSIM 0 --weight_L1 0
+Epoch 1 batch 1/6770: loss D: 0.490971 (range (r-r+f-f+): -0.0023, -0.0012, -0.0024, -0.0015),      loss G: SSIM: 1.000, L1: 1.000, D: 1.002, weighted: 1.003
+Epoch 1 batch 2/6770: loss D: 0.487934 (range (r-r+f-f+): -0.0022, -0.0014, -0.0021, -0.0013)

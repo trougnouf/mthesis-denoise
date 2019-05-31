@@ -41,3 +41,4 @@ doodling.py
 *.tps
 *.blx
 tags.*
+dbg/

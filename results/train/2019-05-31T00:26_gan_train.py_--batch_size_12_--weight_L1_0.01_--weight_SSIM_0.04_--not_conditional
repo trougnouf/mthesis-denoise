@@ -1,0 +1,14 @@
+Namespace(batch_size=12, beta1=0.5, compute_SSIM_anyway=False, cuda_device=0, d_activation='PReLU', d_funit=24, d_loss_function='MSE', d_lr=0.0003, d_model_path=None, d_network='Hul112Disc', d_weights_dict_path=None, epochs=9001, g_activation='PReLU', g_funit=32, g_lr=0.0003, g_model_path=None, g_network='Hulb128Net', g_weights_dict_path=None, min_lr=5e-08, not_conditional=True, test_reserve=None, threads=8, time_limit=172800, train_data=None, weight_L1=0.01, weight_SSIM=0.04)
+cmd: python3 gan_train.py --batch_size 12 --weight_L1 0.01 --weight_SSIM 0.04 --not_conditional
+Epoch 1 batch 1/7335: loss D: 0.489268 (range (r-r+f-f+): -0.0025, -0.0014, -0.0022, -0.0014)
+Epoch 1 batch 2/7335:                                                                               loss G: SSIM: 0.826, L1: 0.411, D: 1.001, weighted: 0.990
+Epoch 1 batch 3/7335: loss D: 0.485927 (range (r-r+f-f+): -0.0021, -0.001, -0.0017, -0.00097)
+Epoch 1 batch 4/7335: loss D: 0.492166 (range (r-r+f-f+): -0.0016, -0.0009, -0.0019, -0.00087)
+Epoch 1 batch 5/7335: loss D: 0.488282 (range (r-r+f-f+): -0.0017, -0.00029, -0.0015, -0.00079),    loss G: SSIM: 0.793, L1: 0.342, D: 1.001, weighted: 0.987
+Epoch 1 batch 6/7335: loss D: 0.488569 (range (r-r+f-f+): -0.0016, -0.00042, -0.0013, -0.0003)
+Epoch 1 batch 7/7335:                                                                               loss G: SSIM: 0.837, L1: 0.398, D: 1.001, weighted: 0.989
+Epoch 1 batch 8/7335: loss D: 0.487014 (range (r-r+f-f+): -0.00095, 0.021, -0.0013, -2.2e-06),      loss G: SSIM: 0.884, L1: 0.407, D: 0.986, weighted: 0.963
+Epoch 1 batch 9/7335: loss D: 0.486004 (range (r-r+f-f+): -0.0012, 0.092, -0.0011, 0.03)
+Epoch 1 batch 10/7335:                                                                              loss G: SSIM: 0.807, L1: 0.438, D: 0.925, weighted: 0.849
+Epoch 1 batch 11/7335: loss D: 0.535079 (range (r-r+f-f+): -0.00099, 0.36, -0.0012, 0.4),           loss G: SSIM: 0.882, L1: 0.530, D: 0.858, weighted: 0.740
+Epoch 1 batch 12/7335: loss D: 0.554848 (range (r-r+f-f+): -0.0013, 0.77, -0.0012, 0.66)

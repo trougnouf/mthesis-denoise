@@ -1,0 +1,1015 @@
+Namespace(batch_size=11, beta1=0.5, cuda_device=0, d_activation='PReLU', d_funit=24, d_loss_function='MSE', d_lr=0.0003, d_model_path=None, d_network='Hul112Disc', d_weights_dict_path=None, epochs=9001, g_activation='PReLU', g_funit=32, g_lr=0.0003, g_model_path=None, g_network='Hulb128Net', g_weights_dict_path=None, min_lr=5e-08, not_conditional=False, test_reserve=None, threads=8, time_limit=172800, train_data=None, weight_L1=0.0, weight_SSIM=0.0)
+cmd: python3 gan_train.py --batch_size 11 --weight_SSIM 0 --weight_L1 0
+Epoch 1 batch 1/8001: loss D: 0.490198 (range (r-r+f-f+): -0.0027, -0.0014, -0.0027, -0.0014),      loss G: NA, NA, D: 1.002, weighted: 1.003
+Epoch 1 batch 2/8001: loss D: 0.490026 (range (r-r+f-f+): -0.002, -0.0016, -0.0025, -0.0013)
+Epoch 1 batch 3/8001: loss D: 0.486976 (range (r-r+f-f+): -0.0019, -0.00056, -0.0021, -0.00095)
+Epoch 1 batch 4/8001: loss D: 0.488073 (range (r-r+f-f+): -0.0016, -0.0006, -0.0017, -0.00057),     loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 5/8001:                                                                               loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 6/8001:                                                                               loss G: NA, NA, D: 0.998, weighted: 0.996
+Epoch 1 batch 7/8001: loss D: 0.497331 (range (r-r+f-f+): -0.0012, -0.0005, -0.0014, 0.052)
+Epoch 1 batch 8/8001: loss D: 0.490721 (range (r-r+f-f+): -0.0012, 0.0029, -0.0013, 0.017),         loss G: NA, NA, D: 0.980, weighted: 0.960
+Epoch 1 batch 9/8001:                                                                               loss G: NA, NA, D: 0.998, weighted: 0.996
+Epoch 1 batch 10/8001:                                                                              loss G: NA, NA, D: 0.999, weighted: 0.998
+Epoch 1 batch 11/8001:                                                                              loss G: NA, NA, D: 0.998, weighted: 0.996
+Epoch 1 batch 12/8001:                                                                              loss G: NA, NA, D: 0.991, weighted: 0.983
+Epoch 1 batch 13/8001: loss D: 0.490299 (range (r-r+f-f+): -0.0014, 0.063, -0.0011, 0.053),         loss G: NA, NA, D: 0.930, weighted: 0.866
+Epoch 1 batch 14/8001: loss D: 0.499903 (range (r-r+f-f+): -0.0012, 0.33, -0.0012, 0.21)
+Epoch 1 batch 15/8001: loss D: 0.562655 (range (r-r+f-f+): -0.0015, 0.66, -0.0013, 0.68),           loss G: NA, NA, D: 0.768, weighted: 0.590
+Epoch 1 batch 16/8001: loss D: 0.562877 (range (r-r+f-f+): -0.0011, 0.75, -0.0012, 0.7)
+Epoch 1 batch 17/8001:                                                                              loss G: NA, NA, D: 0.713, weighted: 0.508
+Epoch 1 batch 18/8001: loss D: 0.511390 (range (r-r+f-f+): -4.3e-05, 0.51, -0.00032, 0.56),         loss G: NA, NA, D: 0.546, weighted: 0.298
+Epoch 1 batch 19/8001: loss D: 0.506360 (range (r-r+f-f+): 0.28, 0.55, -0.00016, 0.71)
+Epoch 1 batch 20/8001: loss D: 0.558722 (range (r-r+f-f+): 0.0012, 1.0, 0.06, 0.99)
+Epoch 1 batch 21/8001: loss D: 0.496319 (range (r-r+f-f+): 0.38, 0.66, 0.19, 0.57)
+Epoch 1 batch 22/8001:                                                                              loss G: NA, NA, D: 0.616, weighted: 0.380
+Epoch 1 batch 23/8001: loss D: 0.499467 (range (r-r+f-f+): 0.12, 0.63, 0.24, 0.56),                 loss G: NA, NA, D: 0.653, weighted: 0.426
+Epoch 1 batch 24/8001:                                                                              loss G: NA, NA, D: 0.542, weighted: 0.294
+Epoch 1 batch 25/8001:                                                                              loss G: NA, NA, D: 0.558, weighted: 0.311
+Epoch 1 batch 26/8001:                                                                              loss G: NA, NA, D: 0.566, weighted: 0.320
+Epoch 1 batch 27/8001: loss D: 0.505028 (range (r-r+f-f+): 0.077, 0.61, 0.28, 0.63)
+Epoch 1 batch 28/8001: loss D: 0.478616 (range (r-r+f-f+): 0.19, 0.8, 0.13, 0.69)
+Epoch 1 batch 29/8001: loss D: 0.438332 (range (r-r+f-f+): 0.33, 0.78, 0.22, 0.64)
+Epoch 1 batch 30/8001: loss D: 0.510217 (range (r-r+f-f+): 0.33, 0.65, 0.2, 0.83),                  loss G: NA, NA, D: 0.621, weighted: 0.386
+Epoch 1 batch 31/8001:                                                                              loss G: NA, NA, D: 0.406, weighted: 0.165
+Epoch 1 batch 32/8001:                                                                              loss G: NA, NA, D: 0.501, weighted: 0.251
+Epoch 1 batch 33/8001:                                                                              loss G: NA, NA, D: 0.580, weighted: 0.336
+Epoch 1 batch 34/8001: loss D: 0.520614 (range (r-r+f-f+): 0.21, 0.88, 0.3, 0.87),                  loss G: NA, NA, D: 0.620, weighted: 0.385
+Epoch 1 batch 35/8001:                                                                              loss G: NA, NA, D: 0.514, weighted: 0.265
+Epoch 1 batch 36/8001:                                                                              loss G: NA, NA, D: 0.560, weighted: 0.314
+Epoch 1 batch 37/8001: loss D: 0.471134 (range (r-r+f-f+): 0.33, 0.73, 0.21, 0.6),                  loss G: NA, NA, D: 0.706, weighted: 0.498
+Epoch 1 batch 38/8001:                                                                              loss G: NA, NA, D: 0.672, weighted: 0.451
+Epoch 1 batch 39/8001: loss D: 0.538510 (range (r-r+f-f+): 0.18, 0.77, 0.36, 0.64)
+Epoch 1 batch 40/8001:                                                                              loss G: NA, NA, D: 0.622, weighted: 0.387
+Epoch 1 batch 41/8001: loss D: 0.439997 (range (r-r+f-f+): 0.24, 0.56, 0.064, 0.52),                loss G: NA, NA, D: 0.533, weighted: 0.284
+Epoch 1 batch 42/8001:                                                                              loss G: NA, NA, D: 0.583, weighted: 0.340
+Epoch 1 batch 43/8001: loss D: 0.472365 (range (r-r+f-f+): 0.23, 0.68, 0.23, 0.61),                 loss G: NA, NA, D: 0.568, weighted: 0.323
+Epoch 1 batch 44/8001:                                                                              loss G: NA, NA, D: 0.559, weighted: 0.312
+Epoch 1 batch 45/8001: loss D: 0.484973 (range (r-r+f-f+): 0.55, 0.75, 0.37, 0.75)
+Epoch 1 batch 46/8001:                                                                              loss G: NA, NA, D: 0.669, weighted: 0.448
+Epoch 1 batch 47/8001:                                                                              loss G: NA, NA, D: 0.639, weighted: 0.408
+Epoch 1 batch 48/8001: loss D: 0.435582 (range (r-r+f-f+): 0.26, 0.7, 0.22, 0.58),                  loss G: NA, NA, D: 0.726, weighted: 0.527
+Epoch 1 batch 49/8001:                                                                              loss G: NA, NA, D: 0.600, weighted: 0.361
+Epoch 1 batch 50/8001:                                                                              loss G: NA, NA, D: 0.687, weighted: 0.472
+Epoch 1 batch 51/8001:                                                                              loss G: NA, NA, D: 0.630, weighted: 0.397
+Epoch 1 batch 52/8001: loss D: 0.509023 (range (r-r+f-f+): 0.042, 0.56, -3.1e-05, 0.55)
+Epoch 1 batch 53/8001: loss D: 0.473091 (range (r-r+f-f+): 0.39, 0.64, 0.42, 0.67),                 loss G: NA, NA, D: 0.562, weighted: 0.316
+Epoch 1 batch 54/8001: loss D: 0.447322 (range (r-r+f-f+): 0.39, 0.75, 0.36, 0.59)
+Epoch 1 batch 55/8001:                                                                              loss G: NA, NA, D: 0.570, weighted: 0.325
+Epoch 1 batch 56/8001: loss D: 0.406828 (range (r-r+f-f+): 0.32, 0.69, 0.079, 0.53),                loss G: NA, NA, D: 0.703, weighted: 0.494
+Epoch 1 batch 57/8001:                                                                              loss G: NA, NA, D: 0.593, weighted: 0.351
+Epoch 1 batch 58/8001: loss D: 0.413907 (range (r-r+f-f+): 0.43, 0.73, 0.27, 0.54)
+Epoch 1 batch 59/8001:                                                                              loss G: NA, NA, D: 0.700, weighted: 0.490
+Epoch 1 batch 60/8001:                                                                              loss G: NA, NA, D: 0.639, weighted: 0.408
+Epoch 1 batch 61/8001:                                                                              loss G: NA, NA, D: 0.680, weighted: 0.463
+Epoch 1 batch 62/8001:                                                                              loss G: NA, NA, D: 0.688, weighted: 0.474
+Epoch 1 batch 63/8001: loss D: 0.349531 (range (r-r+f-f+): 0.52, 0.91, 0.18, 0.72),                 loss G: NA, NA, D: 0.695, weighted: 0.482
+Epoch 1 batch 64/8001:                                                                              loss G: NA, NA, D: 0.668, weighted: 0.447
+Epoch 1 batch 65/8001:                                                                              loss G: NA, NA, D: 0.536, weighted: 0.287
+Epoch 1 batch 66/8001:                                                                              loss G: NA, NA, D: 0.619, weighted: 0.383
+Epoch 1 batch 67/8001: loss D: 0.445488 (range (r-r+f-f+): 0.37, 0.73, 0.14, 0.61),                 loss G: NA, NA, D: 0.559, weighted: 0.313
+Epoch 1 batch 68/8001:                                                                              loss G: NA, NA, D: 0.548, weighted: 0.300
+Epoch 1 batch 69/8001:                                                                              loss G: NA, NA, D: 0.656, weighted: 0.431
+Epoch 1 batch 70/8001: loss D: 0.395999 (range (r-r+f-f+): 0.41, 0.81, 0.17, 0.67)
+Epoch 1 batch 71/8001:                                                                              loss G: NA, NA, D: 0.700, weighted: 0.490
+Epoch 1 batch 72/8001:                                                                              loss G: NA, NA, D: 0.527, weighted: 0.277
+Epoch 1 batch 73/8001:                                                                              loss G: NA, NA, D: 0.678, weighted: 0.459
+Epoch 1 batch 74/8001:                                                                              loss G: NA, NA, D: 0.489, weighted: 0.239
+Epoch 1 batch 75/8001: loss D: 0.370824 (range (r-r+f-f+): 0.45, 1.0, 0.16, 0.88),                  loss G: NA, NA, D: 0.767, weighted: 0.588
+Epoch 1 batch 76/8001: loss D: 0.345245 (range (r-r+f-f+): 0.31, 1.0, 0.14, 0.45),                  loss G: NA, NA, D: 0.580, weighted: 0.336
+Epoch 1 batch 77/8001:                                                                              loss G: NA, NA, D: 0.688, weighted: 0.473
+Epoch 1 batch 78/8001:                                                                              loss G: NA, NA, D: 0.517, weighted: 0.267
+Epoch 1 batch 79/8001:                                                                              loss G: NA, NA, D: 0.525, weighted: 0.276
+Epoch 1 batch 80/8001:                                                                              loss G: NA, NA, D: 0.461, weighted: 0.213
+Epoch 1 batch 81/8001: loss D: 0.267699 (range (r-r+f-f+): 0.75, 1.1, 0.19, 0.73),                  loss G: NA, NA, D: 0.768, weighted: 0.591
+Epoch 1 batch 82/8001:                                                                              loss G: NA, NA, D: 0.777, weighted: 0.603
+Epoch 1 batch 83/8001:                                                                              loss G: NA, NA, D: 0.689, weighted: 0.475
+Epoch 1 batch 84/8001: loss D: 0.367875 (range (r-r+f-f+): 0.37, 1.1, -0.00048, 0.55),              loss G: NA, NA, D: 0.607, weighted: 0.368
+Epoch 1 batch 85/8001:                                                                              loss G: NA, NA, D: 0.523, weighted: 0.273
+Epoch 1 batch 86/8001:                                                                              loss G: NA, NA, D: 0.501, weighted: 0.251
+Epoch 1 batch 87/8001: loss D: 0.531074 (range (r-r+f-f+): 0.019, 0.95, 0.11, 0.85)
+Epoch 1 batch 88/8001: loss D: 0.291729 (range (r-r+f-f+): 0.42, 1.0, 0.035, 0.38),                 loss G: NA, NA, D: 0.780, weighted: 0.609
+Epoch 1 batch 89/8001: loss D: 0.271554 (range (r-r+f-f+): 0.65, 1.1, 0.09, 0.46),                  loss G: NA, NA, D: 0.863, weighted: 0.744
+Epoch 1 batch 90/8001:                                                                              loss G: NA, NA, D: 0.864, weighted: 0.746
+Epoch 1 batch 91/8001:                                                                              loss G: NA, NA, D: 0.829, weighted: 0.688
+Epoch 1 batch 92/8001:                                                                              loss G: NA, NA, D: 0.769, weighted: 0.591
+Epoch 1 batch 93/8001:                                                                              loss G: NA, NA, D: 0.740, weighted: 0.547
+Epoch 1 batch 94/8001: loss D: 0.279751 (range (r-r+f-f+): 0.51, 1.1, 0.062, 0.56),                 loss G: NA, NA, D: 0.957, weighted: 0.916
+Epoch 1 batch 95/8001: loss D: 0.165686 (range (r-r+f-f+): 0.56, 0.99, -0.00025, 0.22),             loss G: NA, NA, D: 0.940, weighted: 0.884
+Epoch 1 batch 96/8001:                                                                              loss G: NA, NA, D: 0.838, weighted: 0.702
+Epoch 1 batch 97/8001:                                                                              loss G: NA, NA, D: 0.879, weighted: 0.772
+Epoch 1 batch 98/8001:                                                                              loss G: NA, NA, D: 0.908, weighted: 0.824
+Epoch 1 batch 99/8001:                                                                              loss G: NA, NA, D: 0.921, weighted: 0.849
+Epoch 1 batch 100/8001:                                                                             loss G: NA, NA, D: 0.886, weighted: 0.785
+Epoch 1 batch 101/8001:                                                                             loss G: NA, NA, D: 0.860, weighted: 0.740
+Epoch 1 batch 102/8001: loss D: 0.155327 (range (r-r+f-f+): 0.46, 1.1, -0.00046, 0.26),             loss G: NA, NA, D: 0.938, weighted: 0.880
+Epoch 1 batch 103/8001:                                                                             loss G: NA, NA, D: 0.751, weighted: 0.564
+Epoch 1 batch 104/8001:                                                                             loss G: NA, NA, D: 0.948, weighted: 0.898
+Epoch 1 batch 105/8001:                                                                             loss G: NA, NA, D: 0.833, weighted: 0.694
+Epoch 1 batch 106/8001:                                                                             loss G: NA, NA, D: 0.879, weighted: 0.772
+Epoch 1 batch 107/8001:                                                                             loss G: NA, NA, D: 0.834, weighted: 0.695
+Epoch 1 batch 108/8001: loss D: 0.255750 (range (r-r+f-f+): 0.4, 1.4, -0.00029, 0.51),              loss G: NA, NA, D: 0.878, weighted: 0.771
+Epoch 1 batch 109/8001:                                                                             loss G: NA, NA, D: 0.879, weighted: 0.773
+Epoch 1 batch 110/8001:                                                                             loss G: NA, NA, D: 0.835, weighted: 0.698
+Epoch 1 batch 111/8001:                                                                             loss G: NA, NA, D: 0.748, weighted: 0.560
+Epoch 1 batch 112/8001:                                                                             loss G: NA, NA, D: 0.778, weighted: 0.605
+Epoch 1 batch 113/8001:                                                                             loss G: NA, NA, D: 0.795, weighted: 0.632
+Epoch 1 batch 114/8001: loss D: 0.266754 (range (r-r+f-f+): 0.46, 1.2, 0.049, 0.5),                 loss G: NA, NA, D: 0.884, weighted: 0.782
+Epoch 1 batch 115/8001:                                                                             loss G: NA, NA, D: 0.890, weighted: 0.792
+Epoch 1 batch 116/8001:                                                                             loss G: NA, NA, D: 0.867, weighted: 0.751
+Epoch 1 batch 117/8001: loss D: 0.228876 (range (r-r+f-f+): 0.38, 1.0, -0.00049, 0.38)
+Epoch 1 batch 118/8001:                                                                             loss G: NA, NA, D: 0.843, weighted: 0.710
+Epoch 1 batch 119/8001:                                                                             loss G: NA, NA, D: 0.874, weighted: 0.763
+Epoch 1 batch 120/8001:                                                                             loss G: NA, NA, D: 0.855, weighted: 0.730
+Epoch 1 batch 121/8001:                                                                             loss G: NA, NA, D: 0.865, weighted: 0.748
+Epoch 1 batch 122/8001:                                                                             loss G: NA, NA, D: 0.838, weighted: 0.702
+Epoch 1 batch 123/8001:                                                                             loss G: NA, NA, D: 0.906, weighted: 0.821
+Epoch 1 batch 124/8001:                                                                             loss G: NA, NA, D: 0.867, weighted: 0.752
+Epoch 1 batch 125/8001:                                                                             loss G: NA, NA, D: 0.788, weighted: 0.621
+Epoch 1 batch 126/8001:                                                                             loss G: NA, NA, D: 0.833, weighted: 0.694
+Epoch 1 batch 127/8001:                                                                             loss G: NA, NA, D: 0.908, weighted: 0.825
+Epoch 1 batch 128/8001:                                                                             loss G: NA, NA, D: 0.806, weighted: 0.650
+Epoch 1 batch 129/8001:                                                                             loss G: NA, NA, D: 0.849, weighted: 0.721
+Epoch 1 batch 130/8001:                                                                             loss G: NA, NA, D: 0.838, weighted: 0.703
+Epoch 1 batch 131/8001:                                                                             loss G: NA, NA, D: 0.859, weighted: 0.738
+Epoch 1 batch 132/8001:                                                                             loss G: NA, NA, D: 0.840, weighted: 0.705
+Epoch 1 batch 133/8001: loss D: 0.269879 (range (r-r+f-f+): 0.6, 1.4, -0.00054, 0.44),              loss G: NA, NA, D: 0.913, weighted: 0.833
+Epoch 1 batch 134/8001:                                                                             loss G: NA, NA, D: 0.897, weighted: 0.804
+Epoch 1 batch 135/8001:                                                                             loss G: NA, NA, D: 0.856, weighted: 0.732
+Epoch 1 batch 136/8001: loss D: 0.248522 (range (r-r+f-f+): 0.41, 1.1, -0.0014, 0.42),              loss G: NA, NA, D: 0.913, weighted: 0.834
+Epoch 1 batch 137/8001: loss D: 0.245392 (range (r-r+f-f+): 0.73, 1.2, 0.11, 0.62),                 loss G: NA, NA, D: 0.914, weighted: 0.835
+Epoch 1 batch 138/8001:                                                                             loss G: NA, NA, D: 0.870, weighted: 0.757
+Epoch 1 batch 139/8001:                                                                             loss G: NA, NA, D: 0.897, weighted: 0.805
+Epoch 1 batch 140/8001: loss D: 0.302335 (range (r-r+f-f+): 0.059, 0.78, -0.0017, 0.19)
+Epoch 1 batch 141/8001: loss D: 0.271954 (range (r-r+f-f+): 0.53, 1.1, 0.035, 0.48),                loss G: NA, NA, D: 0.975, weighted: 0.951
+Epoch 1 batch 142/8001:                                                                             loss G: NA, NA, D: 0.677, weighted: 0.459
+Epoch 1 batch 143/8001: loss D: 0.258074 (range (r-r+f-f+): 0.42, 1.4, 0.098, 0.33),                loss G: NA, NA, D: 0.963, weighted: 0.928
+Epoch 1 batch 144/8001:                                                                             loss G: NA, NA, D: 0.874, weighted: 0.764
+Epoch 1 batch 145/8001: loss D: 0.259201 (range (r-r+f-f+): 0.44, 1.2, 0.017, 0.44),                loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 146/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 147/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 148/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 149/8001:                                                                             loss G: NA, NA, D: 0.975, weighted: 0.950
+Epoch 1 batch 150/8001:                                                                             loss G: NA, NA, D: 0.796, weighted: 0.633
+Epoch 1 batch 151/8001: loss D: 0.339686 (range (r-r+f-f+): 0.33, 0.89, 0.058, 0.41)
+Epoch 1 batch 152/8001:                                                                             loss G: NA, NA, D: 0.839, weighted: 0.703
+Epoch 1 batch 153/8001:                                                                             loss G: NA, NA, D: 0.871, weighted: 0.759
+Epoch 1 batch 154/8001: loss D: 0.251823 (range (r-r+f-f+): 0.47, 1.0, -0.0001, 0.34),              loss G: NA, NA, D: 0.953, weighted: 0.908
+Epoch 1 batch 155/8001:                                                                             loss G: NA, NA, D: 0.898, weighted: 0.806
+Epoch 1 batch 156/8001:                                                                             loss G: NA, NA, D: 0.815, weighted: 0.665
+Epoch 1 batch 157/8001: loss D: 0.242648 (range (r-r+f-f+): 0.6, 1.3, -0.00022, 0.58)
+Epoch 1 batch 158/8001:                                                                             loss G: NA, NA, D: 0.965, weighted: 0.932
+Epoch 1 batch 159/8001:                                                                             loss G: NA, NA, D: 0.967, weighted: 0.934
+Epoch 1 batch 160/8001:                                                                             loss G: NA, NA, D: 0.979, weighted: 0.959
+Epoch 1 batch 161/8001:                                                                             loss G: NA, NA, D: 0.901, weighted: 0.811
+Epoch 1 batch 162/8001:                                                                             loss G: NA, NA, D: 0.724, weighted: 0.523
+Epoch 1 batch 163/8001: loss D: 0.381506 (range (r-r+f-f+): 0.49, 1.4, 0.2, 0.53),                  loss G: NA, NA, D: 0.977, weighted: 0.954
+Epoch 1 batch 164/8001:                                                                             loss G: NA, NA, D: 0.971, weighted: 0.943
+Epoch 1 batch 165/8001:                                                                             loss G: NA, NA, D: 0.980, weighted: 0.961
+Epoch 1 batch 166/8001: loss D: 0.161318 (range (r-r+f-f+): 0.4, 0.97, -0.00097, -1.1e-05),         loss G: NA, NA, D: 1.000, weighted: 0.999
+Epoch 1 batch 167/8001:                                                                             loss G: NA, NA, D: 0.914, weighted: 0.835
+Epoch 1 batch 168/8001:                                                                             loss G: NA, NA, D: 0.974, weighted: 0.948
+Epoch 1 batch 169/8001:                                                                             loss G: NA, NA, D: 0.957, weighted: 0.916
+Epoch 1 batch 170/8001:                                                                             loss G: NA, NA, D: 0.939, weighted: 0.881
+Epoch 1 batch 171/8001:                                                                             loss G: NA, NA, D: 0.876, weighted: 0.768
+Epoch 1 batch 172/8001:                                                                             loss G: NA, NA, D: 0.828, weighted: 0.686
+Epoch 1 batch 173/8001:                                                                             loss G: NA, NA, D: 0.763, weighted: 0.582
+Epoch 1 batch 174/8001: loss D: 0.179137 (range (r-r+f-f+): 0.84, 1.2, 0.15, 0.37),                 loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 175/8001:                                                                             loss G: NA, NA, D: 0.994, weighted: 0.988
+Epoch 1 batch 176/8001: loss D: 0.050410 (range (r-r+f-f+): 0.78, 1.1, -0.00052, 0.022),            loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 177/8001:                                                                             loss G: NA, NA, D: 0.997, weighted: 0.994
+Epoch 1 batch 178/8001:                                                                             loss G: NA, NA, D: 0.994, weighted: 0.988
+Epoch 1 batch 179/8001:                                                                             loss G: NA, NA, D: 0.993, weighted: 0.986
+Epoch 1 batch 180/8001:                                                                             loss G: NA, NA, D: 0.994, weighted: 0.989
+Epoch 1 batch 181/8001:                                                                             loss G: NA, NA, D: 0.988, weighted: 0.976
+Epoch 1 batch 182/8001:                                                                             loss G: NA, NA, D: 0.977, weighted: 0.954
+Epoch 1 batch 183/8001:                                                                             loss G: NA, NA, D: 0.972, weighted: 0.945
+Epoch 1 batch 184/8001:                                                                             loss G: NA, NA, D: 0.967, weighted: 0.935
+Epoch 1 batch 185/8001:                                                                             loss G: NA, NA, D: 0.955, weighted: 0.912
+Epoch 1 batch 186/8001:                                                                             loss G: NA, NA, D: 0.951, weighted: 0.904
+Epoch 1 batch 187/8001:                                                                             loss G: NA, NA, D: 0.922, weighted: 0.850
+Epoch 1 batch 188/8001:                                                                             loss G: NA, NA, D: 0.910, weighted: 0.827
+Epoch 1 batch 189/8001:                                                                             loss G: NA, NA, D: 0.875, weighted: 0.766
+Epoch 1 batch 190/8001:                                                                             loss G: NA, NA, D: 0.833, weighted: 0.694
+Epoch 1 batch 191/8001:                                                                             loss G: NA, NA, D: 0.850, weighted: 0.723
+Epoch 1 batch 192/8001:                                                                             loss G: NA, NA, D: 0.828, weighted: 0.685
+Epoch 1 batch 193/8001:                                                                             loss G: NA, NA, D: 0.792, weighted: 0.627
+Epoch 1 batch 194/8001:                                                                             loss G: NA, NA, D: 0.730, weighted: 0.533
+Epoch 1 batch 195/8001:                                                                             loss G: NA, NA, D: 0.762, weighted: 0.581
+Epoch 1 batch 196/8001:                                                                             loss G: NA, NA, D: 0.767, weighted: 0.588
+Epoch 1 batch 197/8001:                                                                             loss G: NA, NA, D: 0.765, weighted: 0.586
+Epoch 1 batch 198/8001:                                                                             loss G: NA, NA, D: 0.759, weighted: 0.576
+Epoch 1 batch 199/8001:                                                                             loss G: NA, NA, D: 0.811, weighted: 0.657
+Epoch 1 batch 200/8001:                                                                             loss G: NA, NA, D: 0.815, weighted: 0.665
+Epoch 1 batch 201/8001:                                                                             loss G: NA, NA, D: 0.696, weighted: 0.485
+Epoch 1 batch 202/8001:                                                                             loss G: NA, NA, D: 0.688, weighted: 0.473
+Epoch 1 batch 203/8001:                                                                             loss G: NA, NA, D: 0.705, weighted: 0.497
+Epoch 1 batch 204/8001:                                                                             loss G: NA, NA, D: 0.665, weighted: 0.442
+Epoch 1 batch 205/8001:                                                                             loss G: NA, NA, D: 0.690, weighted: 0.476
+Epoch 1 batch 206/8001:                                                                             loss G: NA, NA, D: 0.625, weighted: 0.390
+Epoch 1 batch 207/8001:                                                                             loss G: NA, NA, D: 0.722, weighted: 0.521
+Epoch 1 batch 208/8001:                                                                             loss G: NA, NA, D: 0.704, weighted: 0.495
+Epoch 1 batch 209/8001:                                                                             loss G: NA, NA, D: 0.662, weighted: 0.439
+Epoch 1 batch 210/8001:                                                                             loss G: NA, NA, D: 0.650, weighted: 0.422
+Epoch 1 batch 211/8001: loss D: 0.302174 (range (r-r+f-f+): 0.63, 1.1, 0.29, 0.49)
+Epoch 1 batch 212/8001: loss D: 0.199268 (range (r-r+f-f+): 0.064, 0.94, -0.0012, -0.00055),        loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 213/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 214/8001: loss D: 0.110143 (range (r-r+f-f+): 0.7, 1.4, -0.0013, -0.00085),           loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 215/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 216/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 217/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 218/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 219/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 220/8001:                                                                             loss G: NA, NA, D: 0.991, weighted: 0.981
+Epoch 1 batch 221/8001:                                                                             loss G: NA, NA, D: 0.965, weighted: 0.930
+Epoch 1 batch 222/8001:                                                                             loss G: NA, NA, D: 0.913, weighted: 0.833
+Epoch 1 batch 223/8001:                                                                             loss G: NA, NA, D: 0.834, weighted: 0.696
+Epoch 1 batch 224/8001:                                                                             loss G: NA, NA, D: 0.897, weighted: 0.804
+Epoch 1 batch 225/8001:                                                                             loss G: NA, NA, D: 0.913, weighted: 0.834
+Epoch 1 batch 226/8001:                                                                             loss G: NA, NA, D: 0.926, weighted: 0.858
+Epoch 1 batch 227/8001: loss D: 0.149515 (range (r-r+f-f+): 0.58, 1.1, -0.00019, 0.25),             loss G: NA, NA, D: 0.982, weighted: 0.964
+Epoch 1 batch 228/8001:                                                                             loss G: NA, NA, D: 0.977, weighted: 0.955
+Epoch 1 batch 229/8001:                                                                             loss G: NA, NA, D: 0.955, weighted: 0.911
+Epoch 1 batch 230/8001:                                                                             loss G: NA, NA, D: 0.952, weighted: 0.906
+Epoch 1 batch 231/8001:                                                                             loss G: NA, NA, D: 0.941, weighted: 0.886
+Epoch 1 batch 232/8001:                                                                             loss G: NA, NA, D: 0.923, weighted: 0.852
+Epoch 1 batch 233/8001:                                                                             loss G: NA, NA, D: 0.928, weighted: 0.862
+Epoch 1 batch 234/8001:                                                                             loss G: NA, NA, D: 0.911, weighted: 0.829
+Epoch 1 batch 235/8001:                                                                             loss G: NA, NA, D: 0.927, weighted: 0.858
+Epoch 1 batch 236/8001:                                                                             loss G: NA, NA, D: 0.920, weighted: 0.846
+Epoch 1 batch 237/8001:                                                                             loss G: NA, NA, D: 0.925, weighted: 0.855
+Epoch 1 batch 238/8001:                                                                             loss G: NA, NA, D: 0.915, weighted: 0.837
+Epoch 1 batch 239/8001:                                                                             loss G: NA, NA, D: 0.886, weighted: 0.785
+Epoch 1 batch 240/8001:                                                                             loss G: NA, NA, D: 0.891, weighted: 0.794
+Epoch 1 batch 241/8001:                                                                             loss G: NA, NA, D: 0.862, weighted: 0.743
+Epoch 1 batch 242/8001:                                                                             loss G: NA, NA, D: 0.860, weighted: 0.740
+Epoch 1 batch 243/8001:                                                                             loss G: NA, NA, D: 0.865, weighted: 0.749
+Epoch 1 batch 244/8001:                                                                             loss G: NA, NA, D: 0.857, weighted: 0.734
+Epoch 1 batch 245/8001:                                                                             loss G: NA, NA, D: 0.863, weighted: 0.745
+Epoch 1 batch 246/8001: loss D: 0.259203 (range (r-r+f-f+): 0.0037, 1.0, -0.00079, 0.21)
+Epoch 1 batch 247/8001: loss D: 0.070796 (range (r-r+f-f+): 0.73, 1.2, -0.0012, 0.026),             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 248/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 249/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 250/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 251/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 252/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 253/8001:                                                                             loss G: NA, NA, D: 0.999, weighted: 0.999
+Epoch 1 batch 254/8001:                                                                             loss G: NA, NA, D: 0.988, weighted: 0.976
+Epoch 1 batch 255/8001:                                                                             loss G: NA, NA, D: 0.993, weighted: 0.986
+Epoch 1 batch 256/8001:                                                                             loss G: NA, NA, D: 0.983, weighted: 0.967
+Epoch 1 batch 257/8001:                                                                             loss G: NA, NA, D: 0.980, weighted: 0.961
+Epoch 1 batch 258/8001:                                                                             loss G: NA, NA, D: 0.984, weighted: 0.968
+Epoch 1 batch 259/8001:                                                                             loss G: NA, NA, D: 0.957, weighted: 0.916
+Epoch 1 batch 260/8001:                                                                             loss G: NA, NA, D: 0.963, weighted: 0.926
+Epoch 1 batch 261/8001:                                                                             loss G: NA, NA, D: 0.951, weighted: 0.903
+Epoch 1 batch 262/8001:                                                                             loss G: NA, NA, D: 0.943, weighted: 0.889
+Epoch 1 batch 263/8001:                                                                             loss G: NA, NA, D: 0.946, weighted: 0.895
+Epoch 1 batch 264/8001:                                                                             loss G: NA, NA, D: 0.926, weighted: 0.857
+Epoch 1 batch 265/8001:                                                                             loss G: NA, NA, D: 0.925, weighted: 0.855
+Epoch 1 batch 266/8001:                                                                             loss G: NA, NA, D: 0.916, weighted: 0.839
+Epoch 1 batch 267/8001:                                                                             loss G: NA, NA, D: 0.928, weighted: 0.862
+Epoch 1 batch 268/8001:                                                                             loss G: NA, NA, D: 0.911, weighted: 0.829
+Epoch 1 batch 269/8001:                                                                             loss G: NA, NA, D: 0.928, weighted: 0.861
+Epoch 1 batch 270/8001:                                                                             loss G: NA, NA, D: 0.913, weighted: 0.834
+Epoch 1 batch 271/8001:                                                                             loss G: NA, NA, D: 0.930, weighted: 0.866
+Epoch 1 batch 272/8001:                                                                             loss G: NA, NA, D: 0.936, weighted: 0.876
+Epoch 1 batch 273/8001:                                                                             loss G: NA, NA, D: 0.918, weighted: 0.842
+Epoch 1 batch 274/8001:                                                                             loss G: NA, NA, D: 0.854, weighted: 0.729
+Epoch 1 batch 275/8001:                                                                             loss G: NA, NA, D: 0.872, weighted: 0.760
+Epoch 1 batch 276/8001:                                                                             loss G: NA, NA, D: 0.869, weighted: 0.755
+Epoch 1 batch 277/8001:                                                                             loss G: NA, NA, D: 0.775, weighted: 0.600
+Epoch 1 batch 278/8001:                                                                             loss G: NA, NA, D: 0.773, weighted: 0.598
+Epoch 1 batch 279/8001:                                                                             loss G: NA, NA, D: 0.754, weighted: 0.568
+Epoch 1 batch 280/8001:                                                                             loss G: NA, NA, D: 0.753, weighted: 0.567
+Epoch 1 batch 281/8001:                                                                             loss G: NA, NA, D: 0.714, weighted: 0.510
+Epoch 1 batch 282/8001:                                                                             loss G: NA, NA, D: 0.703, weighted: 0.494
+Epoch 1 batch 283/8001:                                                                             loss G: NA, NA, D: 0.695, weighted: 0.483
+Epoch 1 batch 284/8001:                                                                             loss G: NA, NA, D: 0.697, weighted: 0.486
+Epoch 1 batch 285/8001:                                                                             loss G: NA, NA, D: 0.688, weighted: 0.474
+Epoch 1 batch 286/8001:                                                                             loss G: NA, NA, D: 0.672, weighted: 0.452
+Epoch 1 batch 287/8001:                                                                             loss G: NA, NA, D: 0.717, weighted: 0.514
+Epoch 1 batch 288/8001:                                                                             loss G: NA, NA, D: 0.676, weighted: 0.457
+Epoch 1 batch 289/8001:                                                                             loss G: NA, NA, D: 0.688, weighted: 0.473
+Epoch 1 batch 290/8001:                                                                             loss G: NA, NA, D: 0.668, weighted: 0.446
+Epoch 1 batch 291/8001:                                                                             loss G: NA, NA, D: 0.694, weighted: 0.482
+Epoch 1 batch 292/8001:                                                                             loss G: NA, NA, D: 0.646, weighted: 0.417
+Epoch 1 batch 293/8001:                                                                             loss G: NA, NA, D: 0.670, weighted: 0.449
+Epoch 1 batch 294/8001:                                                                             loss G: NA, NA, D: 0.650, weighted: 0.422
+Epoch 1 batch 295/8001:                                                                             loss G: NA, NA, D: 0.728, weighted: 0.530
+Epoch 1 batch 296/8001:                                                                             loss G: NA, NA, D: 0.644, weighted: 0.414
+Epoch 1 batch 297/8001:                                                                             loss G: NA, NA, D: 0.633, weighted: 0.400
+Epoch 1 batch 298/8001:                                                                             loss G: NA, NA, D: 0.661, weighted: 0.436
+Epoch 1 batch 299/8001:                                                                             loss G: NA, NA, D: 0.613, weighted: 0.375
+Epoch 1 batch 300/8001:                                                                             loss G: NA, NA, D: 0.610, weighted: 0.372
+Epoch 1 batch 301/8001:                                                                             loss G: NA, NA, D: 0.604, weighted: 0.365
+Epoch 1 batch 302/8001:                                                                             loss G: NA, NA, D: 0.597, weighted: 0.356
+Epoch 1 batch 303/8001:                                                                             loss G: NA, NA, D: 0.601, weighted: 0.362
+Epoch 1 batch 304/8001:                                                                             loss G: NA, NA, D: 0.612, weighted: 0.375
+Epoch 1 batch 305/8001:                                                                             loss G: NA, NA, D: 0.595, weighted: 0.354
+Epoch 1 batch 306/8001:                                                                             loss G: NA, NA, D: 0.668, weighted: 0.446
+Epoch 1 batch 307/8001:                                                                             loss G: NA, NA, D: 0.657, weighted: 0.432
+Epoch 1 batch 308/8001:                                                                             loss G: NA, NA, D: 0.597, weighted: 0.357
+Epoch 1 batch 309/8001:                                                                             loss G: NA, NA, D: 0.594, weighted: 0.353
+Epoch 1 batch 310/8001:                                                                             loss G: NA, NA, D: 0.601, weighted: 0.361
+Epoch 1 batch 311/8001:                                                                             loss G: NA, NA, D: 0.581, weighted: 0.337
+Epoch 1 batch 312/8001:                                                                             loss G: NA, NA, D: 0.577, weighted: 0.333
+Epoch 1 batch 313/8001: loss D: 0.279987 (range (r-r+f-f+): 0.76, 1.1, 0.27, 0.53),                 loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 314/8001: loss D: 0.068885 (range (r-r+f-f+): 0.73, 1.1, -0.00083, -0.00056),         loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 315/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 316/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 317/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 318/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 319/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 320/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 321/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 322/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 323/8001: loss D: 0.114079 (range (r-r+f-f+): 0.54, 1.0, -0.0011, -0.00083),          loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 324/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 325/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 326/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 327/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 328/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 329/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 330/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 331/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 332/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 333/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 334/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 335/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 336/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 337/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 338/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 339/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 340/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 341/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 342/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 343/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 344/8001: loss D: 0.135829 (range (r-r+f-f+): 0.41, 1.0, -0.00097, -0.00077),         loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 345/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 346/8001: loss D: 0.126014 (range (r-r+f-f+): 0.54, 1.3, -0.00085, -0.00041),         loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 347/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 348/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 349/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 350/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 351/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 352/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 353/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 354/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 355/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 356/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 357/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 358/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 359/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 360/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 361/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 362/8001: loss D: 0.113332 (range (r-r+f-f+): 0.65, 1.3, -0.00072, -0.00042),         loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 363/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 364/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 365/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 366/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 367/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 368/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 369/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 370/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 371/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 372/8001: loss D: 0.083959 (range (r-r+f-f+): 0.55, 1.1, -0.00058, -0.00049),         loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 373/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 374/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 375/8001: loss D: 0.137229 (range (r-r+f-f+): 0.24, 1.2, -0.00066, -0.00029),         loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 376/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 377/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 378/8001: loss D: 0.111428 (range (r-r+f-f+): 0.35, 1.3, -0.00068, -0.00041),         loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 379/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 380/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 381/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 382/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 383/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 384/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 385/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 386/8001: loss D: 0.055871 (range (r-r+f-f+): 0.85, 1.2, -0.00055, -0.00034),         loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 387/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 388/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 389/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 390/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 391/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 392/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 393/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 394/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 395/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 396/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 397/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 398/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 399/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 400/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 401/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 402/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 403/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 404/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 405/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 406/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 407/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 408/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 409/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 410/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 411/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 412/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 413/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 414/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 415/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 416/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 417/8001: loss D: 0.069845 (range (r-r+f-f+): 0.74, 1.2, -0.00068, -0.00033),         loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 418/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 419/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 420/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 421/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 422/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 423/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 424/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 425/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 426/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 427/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 428/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 429/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 430/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 431/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 432/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 433/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 434/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 435/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 436/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 437/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 438/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 439/8001: loss D: 0.089615 (range (r-r+f-f+): 0.64, 1.1, -0.00065, -0.00031),         loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 440/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 441/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 442/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 443/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 444/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 445/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 446/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 447/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 448/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 449/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 450/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 451/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 452/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 453/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 454/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 455/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 456/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 457/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 458/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 459/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 460/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 461/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 462/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 463/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 464/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 465/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 466/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 467/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 468/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 469/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 470/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 471/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 472/8001: loss D: 0.075635 (range (r-r+f-f+): 0.68, 1.0, -0.0006, -0.00022),          loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 473/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 474/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 475/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 476/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 477/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 478/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 479/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 480/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 481/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 482/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 483/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 484/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 485/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 486/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 487/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 488/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 489/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 490/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 491/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 492/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 493/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 494/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 495/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 496/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.000
+Epoch 1 batch 497/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 498/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 499/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.000
+Epoch 1 batch 500/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 501/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 502/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 503/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 504/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 505/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.000
+Epoch 1 batch 506/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.000
+Epoch 1 batch 507/8001: loss D: 0.089695 (range (r-r+f-f+): 0.82, 1.2, -0.00045, 0.015),            loss G: NA, NA, D: 0.996, weighted: 0.993
+Epoch 1 batch 508/8001:                                                                             loss G: NA, NA, D: 0.993, weighted: 0.986
+Epoch 1 batch 509/8001:                                                                             loss G: NA, NA, D: 0.995, weighted: 0.989
+Epoch 1 batch 510/8001:                                                                             loss G: NA, NA, D: 0.984, weighted: 0.967
+Epoch 1 batch 511/8001:                                                                             loss G: NA, NA, D: 0.968, weighted: 0.938
+Epoch 1 batch 512/8001: loss D: 0.130698 (range (r-r+f-f+): 0.76, 1.4, -0.00044, 0.068),            loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 513/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 514/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 515/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 516/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 517/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 518/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 519/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 520/8001: loss D: 0.141768 (range (r-r+f-f+): 0.41, 0.95, -0.00053, -0.00014),        loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 521/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 522/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 523/8001: loss D: 0.155664 (range (r-r+f-f+): 0.43, 1.0, -0.00059, -0.00041),         loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 524/8001: loss D: 0.108483 (range (r-r+f-f+): 0.42, 1.3, -0.00059, -0.00017),         loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 525/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 526/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 527/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 528/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 529/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 530/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 531/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 532/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 533/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 534/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 535/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 536/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 537/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 538/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.000
+Epoch 1 batch 539/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 540/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 541/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.000
+Epoch 1 batch 542/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.000
+Epoch 1 batch 543/8001:                                                                             loss G: NA, NA, D: 0.995, weighted: 0.991
+Epoch 1 batch 544/8001:                                                                             loss G: NA, NA, D: 0.981, weighted: 0.962
+Epoch 1 batch 545/8001:                                                                             loss G: NA, NA, D: 0.918, weighted: 0.842
+Epoch 1 batch 546/8001:                                                                             loss G: NA, NA, D: 0.936, weighted: 0.876
+Epoch 1 batch 547/8001:                                                                             loss G: NA, NA, D: 0.942, weighted: 0.888
+Epoch 1 batch 548/8001:                                                                             loss G: NA, NA, D: 0.895, weighted: 0.801
+Epoch 1 batch 549/8001:                                                                             loss G: NA, NA, D: 0.787, weighted: 0.619
+Epoch 1 batch 550/8001:                                                                             loss G: NA, NA, D: 0.769, weighted: 0.591
+Epoch 1 batch 551/8001:                                                                             loss G: NA, NA, D: 0.743, weighted: 0.553
+Epoch 1 batch 552/8001: loss D: 0.241026 (range (r-r+f-f+): 0.95, 1.4, 0.19, 0.29),                 loss G: NA, NA, D: 0.987, weighted: 0.974
+Epoch 1 batch 553/8001:                                                                             loss G: NA, NA, D: 0.950, weighted: 0.902
+Epoch 1 batch 554/8001:                                                                             loss G: NA, NA, D: 0.860, weighted: 0.739
+Epoch 1 batch 555/8001:                                                                             loss G: NA, NA, D: 0.530, weighted: 0.281
+Epoch 1 batch 556/8001:                                                                             loss G: NA, NA, D: 0.942, weighted: 0.887
+Epoch 1 batch 557/8001:                                                                             loss G: NA, NA, D: 0.935, weighted: 0.874
+Epoch 1 batch 558/8001:                                                                             loss G: NA, NA, D: 0.936, weighted: 0.876
+Epoch 1 batch 559/8001:                                                                             loss G: NA, NA, D: 0.923, weighted: 0.851
+Epoch 1 batch 560/8001: loss D: 0.251557 (range (r-r+f-f+): 0.34, 1.1, 0.09, 0.35)
+Epoch 1 batch 561/8001: loss D: 0.059007 (range (r-r+f-f+): 0.91, 1.3, -0.0013, -9.6e-05),          loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 562/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 563/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 564/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 565/8001:                                                                             loss G: NA, NA, D: 0.998, weighted: 0.996
+Epoch 1 batch 566/8001:                                                                             loss G: NA, NA, D: 0.987, weighted: 0.975
+Epoch 1 batch 567/8001:                                                                             loss G: NA, NA, D: 0.956, weighted: 0.913
+Epoch 1 batch 568/8001:                                                                             loss G: NA, NA, D: 0.941, weighted: 0.886
+Epoch 1 batch 569/8001:                                                                             loss G: NA, NA, D: 0.979, weighted: 0.959
+Epoch 1 batch 570/8001:                                                                             loss G: NA, NA, D: 0.962, weighted: 0.925
+Epoch 1 batch 571/8001: loss D: 0.303135 (range (r-r+f-f+): 0.39, 0.99, 0.059, 0.71),               loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 572/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 573/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 574/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 575/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 576/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 577/8001: loss D: 0.175143 (range (r-r+f-f+): 0.14, 0.94, -0.0013, 0.035),            loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 578/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 579/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 580/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 581/8001:                                                                             loss G: NA, NA, D: 0.995, weighted: 0.991
+Epoch 1 batch 582/8001:                                                                             loss G: NA, NA, D: 0.976, weighted: 0.953
+Epoch 1 batch 583/8001:                                                                             loss G: NA, NA, D: 0.965, weighted: 0.931
+Epoch 1 batch 584/8001:                                                                             loss G: NA, NA, D: 0.950, weighted: 0.902
+Epoch 1 batch 585/8001:                                                                             loss G: NA, NA, D: 0.855, weighted: 0.731
+Epoch 1 batch 586/8001:                                                                             loss G: NA, NA, D: 0.801, weighted: 0.641
+Epoch 1 batch 587/8001:                                                                             loss G: NA, NA, D: 0.569, weighted: 0.323
+Epoch 1 batch 588/8001:                                                                             loss G: NA, NA, D: 0.683, weighted: 0.466
+Epoch 1 batch 589/8001:                                                                             loss G: NA, NA, D: 0.618, weighted: 0.382
+Epoch 1 batch 590/8001:                                                                             loss G: NA, NA, D: 0.493, weighted: 0.243
+Epoch 1 batch 591/8001:                                                                             loss G: NA, NA, D: 0.544, weighted: 0.295
+Epoch 1 batch 592/8001:                                                                             loss G: NA, NA, D: 0.499, weighted: 0.249
+Epoch 1 batch 593/8001:                                                                             loss G: NA, NA, D: 0.429, weighted: 0.184
+Epoch 1 batch 594/8001:                                                                             loss G: NA, NA, D: 0.408, weighted: 0.166
+Epoch 1 batch 595/8001:                                                                             loss G: NA, NA, D: 0.412, weighted: 0.169
+Epoch 1 batch 596/8001:                                                                             loss G: NA, NA, D: 0.381, weighted: 0.145
+Epoch 1 batch 597/8001:                                                                             loss G: NA, NA, D: 0.364, weighted: 0.133
+Epoch 1 batch 598/8001:                                                                             loss G: NA, NA, D: 0.365, weighted: 0.133
+Epoch 1 batch 599/8001:                                                                             loss G: NA, NA, D: 0.355, weighted: 0.126
+Epoch 1 batch 600/8001:                                                                             loss G: NA, NA, D: 0.317, weighted: 0.100
+Epoch 1 batch 601/8001:                                                                             loss G: NA, NA, D: 0.295, weighted: 0.087
+Epoch 1 batch 602/8001:                                                                             loss G: NA, NA, D: 0.288, weighted: 0.083
+Epoch 1 batch 603/8001:                                                                             loss G: NA, NA, D: 0.269, weighted: 0.072
+Epoch 1 batch 604/8001:                                                                             loss G: NA, NA, D: 0.277, weighted: 0.077
+Epoch 1 batch 605/8001:                                                                             loss G: NA, NA, D: 0.258, weighted: 0.066
+Epoch 1 batch 606/8001:                                                                             loss G: NA, NA, D: 0.240, weighted: 0.058
+Epoch 1 batch 607/8001:                                                                             loss G: NA, NA, D: 0.234, weighted: 0.055
+Epoch 1 batch 608/8001:                                                                             loss G: NA, NA, D: 0.239, weighted: 0.057
+Epoch 1 batch 609/8001:                                                                             loss G: NA, NA, D: 0.224, weighted: 0.050
+Epoch 1 batch 610/8001: loss D: 0.471996 (range (r-r+f-f+): 0.59, 1.2, 0.74, 0.78),                 loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 611/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 612/8001: loss D: 0.115579 (range (r-r+f-f+): 0.59, 0.99, -0.0013, -0.0011),          loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 613/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 614/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 615/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 616/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 617/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 618/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 619/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 620/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 621/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 622/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 623/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 624/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 625/8001:                                                                             loss G: NA, NA, D: 0.990, weighted: 0.980
+Epoch 1 batch 626/8001:                                                                             loss G: NA, NA, D: 0.967, weighted: 0.935
+Epoch 1 batch 627/8001: loss D: 0.213444 (range (r-r+f-f+): 0.17, 0.95, -0.0011, 0.24),             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 628/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.000
+Epoch 1 batch 629/8001:                                                                             loss G: NA, NA, D: 0.992, weighted: 0.983
+Epoch 1 batch 630/8001:                                                                             loss G: NA, NA, D: 0.984, weighted: 0.968
+Epoch 1 batch 631/8001:                                                                             loss G: NA, NA, D: 0.975, weighted: 0.950
+Epoch 1 batch 632/8001:                                                                             loss G: NA, NA, D: 0.971, weighted: 0.942
+Epoch 1 batch 633/8001:                                                                             loss G: NA, NA, D: 0.880, weighted: 0.774
+Epoch 1 batch 634/8001: loss D: 0.382539 (range (r-r+f-f+): 0.27, 1.1, 0.36, 0.68),                 loss G: NA, NA, D: 0.993, weighted: 0.987
+Epoch 1 batch 635/8001: loss D: 0.153917 (range (r-r+f-f+): 0.5, 1.1, -0.0012, 0.25),               loss G: NA, NA, D: 0.999, weighted: 0.998
+Epoch 1 batch 636/8001: loss D: 0.094165 (range (r-r+f-f+): 0.69, 1.2, -0.0012, 0.092),             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 637/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 638/8001:                                                                             loss G: NA, NA, D: 0.999, weighted: 0.998
+Epoch 1 batch 639/8001:                                                                             loss G: NA, NA, D: 0.983, weighted: 0.967
+Epoch 1 batch 640/8001:                                                                             loss G: NA, NA, D: 0.811, weighted: 0.658
+Epoch 1 batch 641/8001:                                                                             loss G: NA, NA, D: 0.798, weighted: 0.637
+Epoch 1 batch 642/8001:                                                                             loss G: NA, NA, D: 0.678, weighted: 0.459
+Epoch 1 batch 643/8001:                                                                             loss G: NA, NA, D: 0.648, weighted: 0.420
+Epoch 1 batch 644/8001:                                                                             loss G: NA, NA, D: 0.617, weighted: 0.381
+Epoch 1 batch 645/8001:                                                                             loss G: NA, NA, D: 0.585, weighted: 0.343
+Epoch 1 batch 646/8001:                                                                             loss G: NA, NA, D: 0.539, weighted: 0.291
+Epoch 1 batch 647/8001:                                                                             loss G: NA, NA, D: 0.550, weighted: 0.302
+Epoch 1 batch 648/8001:                                                                             loss G: NA, NA, D: 0.648, weighted: 0.420
+Epoch 1 batch 649/8001:                                                                             loss G: NA, NA, D: 0.565, weighted: 0.319
+Epoch 1 batch 650/8001:                                                                             loss G: NA, NA, D: 0.552, weighted: 0.305
+Epoch 1 batch 651/8001:                                                                             loss G: NA, NA, D: 0.507, weighted: 0.257
+Epoch 1 batch 652/8001:                                                                             loss G: NA, NA, D: 0.509, weighted: 0.259
+Epoch 1 batch 653/8001:                                                                             loss G: NA, NA, D: 0.444, weighted: 0.198
+Epoch 1 batch 654/8001:                                                                             loss G: NA, NA, D: 0.445, weighted: 0.198
+Epoch 1 batch 655/8001:                                                                             loss G: NA, NA, D: 0.459, weighted: 0.211
+Epoch 1 batch 656/8001:                                                                             loss G: NA, NA, D: 0.448, weighted: 0.201
+Epoch 1 batch 657/8001:                                                                             loss G: NA, NA, D: 0.407, weighted: 0.166
+Epoch 1 batch 658/8001:                                                                             loss G: NA, NA, D: 0.388, weighted: 0.151
+Epoch 1 batch 659/8001:                                                                             loss G: NA, NA, D: 0.362, weighted: 0.131
+Epoch 1 batch 660/8001:                                                                             loss G: NA, NA, D: 0.365, weighted: 0.133
+Epoch 1 batch 661/8001:                                                                             loss G: NA, NA, D: 0.378, weighted: 0.143
+Epoch 1 batch 662/8001:                                                                             loss G: NA, NA, D: 0.417, weighted: 0.174
+Epoch 1 batch 663/8001:                                                                             loss G: NA, NA, D: 0.388, weighted: 0.150
+Epoch 1 batch 664/8001:                                                                             loss G: NA, NA, D: 0.384, weighted: 0.148
+Epoch 1 batch 665/8001:                                                                             loss G: NA, NA, D: 0.352, weighted: 0.124
+Epoch 1 batch 666/8001:                                                                             loss G: NA, NA, D: 0.343, weighted: 0.118
+Epoch 1 batch 667/8001:                                                                             loss G: NA, NA, D: 0.314, weighted: 0.099
+Epoch 1 batch 668/8001:                                                                             loss G: NA, NA, D: 0.309, weighted: 0.096
+Epoch 1 batch 669/8001:                                                                             loss G: NA, NA, D: 0.299, weighted: 0.090
+Epoch 1 batch 670/8001:                                                                             loss G: NA, NA, D: 0.300, weighted: 0.090
+Epoch 1 batch 671/8001:                                                                             loss G: NA, NA, D: 0.264, weighted: 0.070
+Epoch 1 batch 672/8001:                                                                             loss G: NA, NA, D: 0.264, weighted: 0.070
+Epoch 1 batch 673/8001:                                                                             loss G: NA, NA, D: 0.286, weighted: 0.082
+Epoch 1 batch 674/8001: loss D: 0.464081 (range (r-r+f-f+): 0.67, 1.0, 0.69, 0.76)
+Epoch 1 batch 675/8001: loss D: 0.143938 (range (r-r+f-f+): 0.33, 1.2, -0.00065, -0.00037),         loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 676/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 677/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 678/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 679/8001: loss D: 0.055430 (range (r-r+f-f+): 0.73, 1.2, -0.00067, -0.00018),         loss G: NA, NA, D: 1.000, weighted: 1.000
+Epoch 1 batch 680/8001:                                                                             loss G: NA, NA, D: 0.969, weighted: 0.938
+Epoch 1 batch 681/8001:                                                                             loss G: NA, NA, D: 0.793, weighted: 0.628
+Epoch 1 batch 682/8001:                                                                             loss G: NA, NA, D: 0.715, weighted: 0.511
+Epoch 1 batch 683/8001:                                                                             loss G: NA, NA, D: 0.669, weighted: 0.447
+Epoch 1 batch 684/8001:                                                                             loss G: NA, NA, D: 0.637, weighted: 0.405
+Epoch 1 batch 685/8001:                                                                             loss G: NA, NA, D: 0.589, weighted: 0.347
+Epoch 1 batch 686/8001:                                                                             loss G: NA, NA, D: 0.544, weighted: 0.296
+Epoch 1 batch 687/8001:                                                                             loss G: NA, NA, D: 0.527, weighted: 0.277
+Epoch 1 batch 688/8001:                                                                             loss G: NA, NA, D: 0.570, weighted: 0.325
+Epoch 1 batch 689/8001:                                                                             loss G: NA, NA, D: 0.511, weighted: 0.261
+Epoch 1 batch 690/8001:                                                                             loss G: NA, NA, D: 0.489, weighted: 0.239
+Epoch 1 batch 691/8001: loss D: 0.430980 (range (r-r+f-f+): 0.045, 1.1, 0.5, 0.52),                 loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 692/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 693/8001: loss D: 0.145109 (range (r-r+f-f+): 0.45, 1.0, -0.0015, -0.0013),           loss G: NA, NA, D: 1.002, weighted: 1.003
+Epoch 1 batch 694/8001:                                                                             loss G: NA, NA, D: 1.002, weighted: 1.003
+Epoch 1 batch 695/8001:                                                                             loss G: NA, NA, D: 1.002, weighted: 1.003
+Epoch 1 batch 696/8001:                                                                             loss G: NA, NA, D: 1.002, weighted: 1.003
+Epoch 1 batch 697/8001:                                                                             loss G: NA, NA, D: 1.002, weighted: 1.003
+Epoch 1 batch 698/8001: loss D: 0.173761 (range (r-r+f-f+): 0.083, 1.4, -0.0018, -0.0016),          loss G: NA, NA, D: 1.002, weighted: 1.003
+Epoch 1 batch 699/8001:                                                                             loss G: NA, NA, D: 1.002, weighted: 1.003
+Epoch 1 batch 700/8001:                                                                             loss G: NA, NA, D: 1.002, weighted: 1.003
+Epoch 1 batch 701/8001:                                                                             loss G: NA, NA, D: 1.002, weighted: 1.003
+Epoch 1 batch 702/8001:                                                                             loss G: NA, NA, D: 1.002, weighted: 1.003
+Epoch 1 batch 703/8001:                                                                             loss G: NA, NA, D: 1.002, weighted: 1.003
+Epoch 1 batch 704/8001: loss D: 0.170572 (range (r-r+f-f+): 0.3, 1.2, -0.0017, -0.0016),            loss G: NA, NA, D: 1.002, weighted: 1.003
+Epoch 1 batch 705/8001: loss D: 0.148995 (range (r-r+f-f+): 0.71, 1.4, -0.0016, -0.0014),           loss G: NA, NA, D: 1.002, weighted: 1.003
+Epoch 1 batch 706/8001:                                                                             loss G: NA, NA, D: 1.002, weighted: 1.003
+Epoch 1 batch 707/8001:                                                                             loss G: NA, NA, D: 1.002, weighted: 1.003
+Epoch 1 batch 708/8001:                                                                             loss G: NA, NA, D: 1.002, weighted: 1.003
+Epoch 1 batch 709/8001:                                                                             loss G: NA, NA, D: 1.002, weighted: 1.003
+Epoch 1 batch 710/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 711/8001: loss D: 0.110670 (range (r-r+f-f+): 0.98, 1.3, -0.0015, -0.0014),           loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 712/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 713/8001: loss D: 0.085760 (range (r-r+f-f+): 0.72, 1.2, -0.0015, -0.0015)
+Epoch 1 batch 714/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 715/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 716/8001: loss D: 0.141575 (range (r-r+f-f+): 0.45, 0.95, -0.0015, -0.0014),          loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 717/8001: loss D: 0.090095 (range (r-r+f-f+): 0.75, 1.3, -0.0014, -0.0014),           loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 718/8001: loss D: 0.052212 (range (r-r+f-f+): 0.81, 1.2, -0.0014, -0.0014),           loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 719/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 720/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 721/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 722/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 723/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 724/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 725/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 726/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 727/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 728/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 729/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 730/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 731/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 732/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 733/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 734/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 735/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 736/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 737/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 738/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 739/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 740/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 741/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 742/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 743/8001: loss D: 0.088780 (range (r-r+f-f+): 0.47, 1.1, -0.0014, -0.0013),           loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 744/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 745/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 746/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 747/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 748/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 749/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 750/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 751/8001: loss D: 0.040092 (range (r-r+f-f+): 0.85, 1.1, -0.0013, -0.0012),           loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 752/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 753/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 754/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 755/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 756/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 757/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 758/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 759/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 760/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 761/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 762/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 763/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 764/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 765/8001: loss D: 0.094066 (range (r-r+f-f+): 0.5, 1.1, -0.0013, -0.0012),            loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 766/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 767/8001: loss D: 0.102997 (range (r-r+f-f+): 0.89, 1.3, -0.0013, -0.0012)
+Epoch 1 batch 768/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 769/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 770/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 771/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 772/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 773/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 774/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 775/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 776/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 777/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 778/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 779/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 780/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 781/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 782/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 783/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 784/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 785/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 786/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 787/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 788/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 789/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 790/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 791/8001: loss D: 0.062310 (range (r-r+f-f+): 0.76, 1.2, -0.0013, -0.0012)
+Epoch 1 batch 792/8001: loss D: 0.079055 (range (r-r+f-f+): 0.54, 1.1, -0.0013, -0.0012),           loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 793/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 794/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 795/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 796/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 797/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 798/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 799/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 800/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 801/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 802/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 803/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 804/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 805/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 806/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 807/8001: loss D: 0.061023 (range (r-r+f-f+): 0.8, 1.1, -0.0012, -0.0011),            loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 808/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 809/8001: loss D: 0.051009 (range (r-r+f-f+): 0.84, 1.1, -0.0012, -0.001),            loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 810/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 811/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 812/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 813/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 814/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 815/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 816/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 817/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 818/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 819/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 820/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 821/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 822/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 823/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 824/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 825/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 826/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 827/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 828/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 829/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 830/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 831/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 832/8001: loss D: 0.100318 (range (r-r+f-f+): 0.48, 1.1, -0.0011, -0.00087),          loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 833/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 834/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 835/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 836/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 837/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 838/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 839/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 840/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 841/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 842/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 843/8001: loss D: 0.106073 (range (r-r+f-f+): 0.52, 1.3, -0.00083, -0.00017),         loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 844/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 845/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 846/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 847/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 848/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.000
+Epoch 1 batch 849/8001:                                                                             loss G: NA, NA, D: 0.987, weighted: 0.975
+Epoch 1 batch 850/8001:                                                                             loss G: NA, NA, D: 0.950, weighted: 0.903
+Epoch 1 batch 851/8001:                                                                             loss G: NA, NA, D: 0.654, weighted: 0.428
+Epoch 1 batch 852/8001:                                                                             loss G: NA, NA, D: 0.651, weighted: 0.424
+Epoch 1 batch 853/8001:                                                                             loss G: NA, NA, D: 0.705, weighted: 0.497
+Epoch 1 batch 854/8001:                                                                             loss G: NA, NA, D: 0.387, weighted: 0.150
+Epoch 1 batch 855/8001:                                                                             loss G: NA, NA, D: 0.449, weighted: 0.202
+Epoch 1 batch 856/8001:                                                                             loss G: NA, NA, D: 0.250, weighted: 0.062
+Epoch 1 batch 857/8001:                                                                             loss G: NA, NA, D: 0.235, weighted: 0.055
+Epoch 1 batch 858/8001:                                                                             loss G: NA, NA, D: 0.359, weighted: 0.129
+Epoch 1 batch 859/8001:                                                                             loss G: NA, NA, D: 0.359, weighted: 0.129
+Epoch 1 batch 860/8001:                                                                             loss G: NA, NA, D: 0.238, weighted: 0.057
+Epoch 1 batch 861/8001:                                                                             loss G: NA, NA, D: 0.227, weighted: 0.051
+Epoch 1 batch 862/8001:                                                                             loss G: NA, NA, D: 0.420, weighted: 0.176
+Epoch 1 batch 863/8001:                                                                             loss G: NA, NA, D: 0.258, weighted: 0.066
+Epoch 1 batch 864/8001:                                                                             loss G: NA, NA, D: 0.290, weighted: 0.084
+Epoch 1 batch 865/8001:                                                                             loss G: NA, NA, D: 0.429, weighted: 0.184
+Epoch 1 batch 866/8001: loss D: 0.409415 (range (r-r+f-f+): 0.93, 1.2, 0.5, 0.97)
+Epoch 1 batch 867/8001:                                                                             loss G: NA, NA, D: 0.972, weighted: 0.944
+Epoch 1 batch 868/8001:                                                                             loss G: NA, NA, D: 0.949, weighted: 0.901
+Epoch 1 batch 869/8001:                                                                             loss G: NA, NA, D: 0.887, weighted: 0.787
+Epoch 1 batch 870/8001:                                                                             loss G: NA, NA, D: 0.846, weighted: 0.716
+Epoch 1 batch 871/8001:                                                                             loss G: NA, NA, D: 0.821, weighted: 0.674
+Epoch 1 batch 872/8001: loss D: 0.261430 (range (r-r+f-f+): 0.39, 1.0, -0.0012, 0.37),              loss G: NA, NA, D: 0.996, weighted: 0.993
+Epoch 1 batch 873/8001: loss D: 0.113922 (range (r-r+f-f+): 0.64, 0.98, -0.0013, 0.082),            loss G: NA, NA, D: 1.001, weighted: 1.001
+Epoch 1 batch 874/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 875/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.001
+Epoch 1 batch 876/8001:                                                                             loss G: NA, NA, D: 1.000, weighted: 1.000
+Epoch 1 batch 877/8001:                                                                             loss G: NA, NA, D: 0.997, weighted: 0.995
+Epoch 1 batch 878/8001:                                                                             loss G: NA, NA, D: 0.990, weighted: 0.980
+Epoch 1 batch 879/8001:                                                                             loss G: NA, NA, D: 0.997, weighted: 0.994
+Epoch 1 batch 880/8001:                                                                             loss G: NA, NA, D: 0.970, weighted: 0.941
+Epoch 1 batch 881/8001:                                                                             loss G: NA, NA, D: 0.917, weighted: 0.841
+Epoch 1 batch 882/8001:                                                                             loss G: NA, NA, D: 0.875, weighted: 0.765
+Epoch 1 batch 883/8001:                                                                             loss G: NA, NA, D: 0.851, weighted: 0.724
+Epoch 1 batch 884/8001:                                                                             loss G: NA, NA, D: 0.836, weighted: 0.698
+Epoch 1 batch 885/8001:                                                                             loss G: NA, NA, D: 0.810, weighted: 0.656
+Epoch 1 batch 886/8001: loss D: 0.224479 (range (r-r+f-f+): 0.64, 0.86, 0.11, 0.35),                loss G: NA, NA, D: 0.971, weighted: 0.942
+Epoch 1 batch 887/8001:                                                                             loss G: NA, NA, D: 0.943, weighted: 0.889
+Epoch 1 batch 888/8001:                                                                             loss G: NA, NA, D: 0.921, weighted: 0.849
+Epoch 1 batch 889/8001: loss D: 0.247192 (range (r-r+f-f+): -0.00029, 1.0, -0.00035, 0.25)
+Epoch 1 batch 890/8001:                                                                             loss G: NA, NA, D: 0.985, weighted: 0.971
+Epoch 1 batch 891/8001:                                                                             loss G: NA, NA, D: 0.934, weighted: 0.873
+Epoch 1 batch 892/8001:                                                                             loss G: NA, NA, D: 0.864, weighted: 0.747
+Epoch 1 batch 893/8001: loss D: 0.106963 (range (r-r+f-f+): 0.89, 1.2, 0.074, 0.21),                loss G: NA, NA, D: 0.992, weighted: 0.983
+Epoch 1 batch 894/8001:                                                                             loss G: NA, NA, D: 0.895, weighted: 0.802
+Epoch 1 batch 895/8001:                                                                             loss G: NA, NA, D: 0.905, weighted: 0.819
+Epoch 1 batch 896/8001:                                                                             loss G: NA, NA, D: 0.843, weighted: 0.710
+Epoch 1 batch 897/8001:                                                                             loss G: NA, NA, D: 0.808, weighted: 0.654
+Epoch 1 batch 898/8001:                                                                             loss G: NA, NA, D: 0.834, weighted: 0.695
+Epoch 1 batch 899/8001:                                                                             loss G: NA, NA, D: 0.754, weighted: 0.568
+Epoch 1 batch 900/8001:                                                                             loss G: NA, NA, D: 0.672, weighted: 0.452
+Epoch 1 batch 901/8001:                                                                             loss G: NA, NA, D: 0.678, weighted: 0.459
+Epoch 1 batch 902/8001:                                                                             loss G: NA, NA, D: 0.635, weighted: 0.403
+Epoch 1 batch 903/8001:                                                                             loss G: NA, NA, D: 0.616, weighted: 0.379
+Epoch 1 batch 904/8001:                                                                             loss G: NA, NA, D: 0.606, weighted: 0.368
+Epoch 1 batch 905/8001:                                                                             loss G: NA, NA, D: 0.596, weighted: 0.356
+Epoch 1 batch 906/8001:                                                                             loss G: NA, NA, D: 0.596, weighted: 0.355
+Epoch 1 batch 907/8001:                                                                             loss G: NA, NA, D: 0.582, weighted: 0.338
+Epoch 1 batch 908/8001:                                                                             loss G: NA, NA, D: 0.574, weighted: 0.330
+Epoch 1 batch 909/8001: loss D: 0.288951 (range (r-r+f-f+): 0.87, 1.2, 0.38, 0.44)
+Epoch 1 batch 910/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 911/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 912/8001: loss D: 0.073438 (range (r-r+f-f+): 0.7, 1.0, -0.00093, -0.00076),          loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 913/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 914/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 915/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 916/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 917/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 918/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 919/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 920/8001: loss D: 0.067539 (range (r-r+f-f+): 0.75, 1.1, -0.0013, -0.001),            loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 921/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 922/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 923/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 924/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 925/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 926/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 927/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 928/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 929/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 930/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 931/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 932/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 933/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 934/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 935/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 936/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 937/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 938/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 939/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 940/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 941/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 942/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 943/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 944/8001: loss D: 0.040709 (range (r-r+f-f+): 0.86, 1.1, -0.0013, -0.0008),           loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 945/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 946/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 947/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.003
+Epoch 1 batch 948/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 949/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 950/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 951/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 952/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 953/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 954/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 955/8001: loss D: 0.060245 (range (r-r+f-f+): 0.74, 1.0, -0.0013, -0.001),            loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 956/8001: loss D: 0.048368 (range (r-r+f-f+): 0.79, 1.1, -0.0013, -0.0011),           loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 957/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 958/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 959/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 960/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 961/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 962/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 963/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 964/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 965/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 966/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 967/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 968/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 969/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 970/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 971/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 972/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 973/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 974/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 975/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 976/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 977/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 978/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 979/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 980/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 981/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 982/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 983/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 984/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 985/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 986/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 987/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 988/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 989/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 990/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 991/8001: loss D: 0.037987 (range (r-r+f-f+): 0.89, 1.1, -0.0013, -0.00074),          loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 992/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 993/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 994/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 995/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 996/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 997/8001: loss D: 0.083748 (range (r-r+f-f+): 0.55, 1.1, -0.0012, -0.0011),           loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 998/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 999/8001:                                                                             loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 1000/8001:                                                                            loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 1001/8001:                                                                            loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 1002/8001:                                                                            loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 1003/8001:                                                                            loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 1004/8001:                                                                            loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 1005/8001:                                                                            loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 1006/8001: loss D: 0.078202 (range (r-r+f-f+): 0.67, 1.1, -0.0013, -0.0011),          loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 1007/8001:                                                                            loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 1008/8001:                                                                            loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 1009/8001:                                                                            loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 1010/8001:                                                                            loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 1011/8001:                                                                            loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 1012/8001:                                                                            loss G: NA, NA, D: 1.001, weighted: 1.002
+Epoch 1 batch 1013/8001:                                                                            loss G: NA, NA, D: 1.001, weighted: 1.002

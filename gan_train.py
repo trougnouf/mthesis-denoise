@@ -17,6 +17,7 @@ from train_utils import get_crop_boundaries, gen_target_probabilities
 from torch.optim import lr_scheduler
 import statistics
 import math
+import torchvision
 
 from networks.Hul import Hulb128Net, Hul112Disc
 
@@ -50,6 +51,7 @@ parser.add_argument('--weight_SSIM', type=float, default=default_weight_SSIM, he
 parser.add_argument('--weight_L1', type=float, default=default_weight_L1, help='Weight on L1 term in objective')
 parser.add_argument('--test_reserve', nargs='*', help='Space separated list of image sets to be reserved for testing')
 parser.add_argument('--train_data', nargs='*', help="(space-separated) Path(s) to the pre-cropped training data (default: %s)"%(" ".join(default_train_data)))
+parser.add_argument('--debug_options', nargs='*', help="(space-separated) Debug options (available: discriminator_input)")
 parser.add_argument('--cuda_device', default=0, type=int, help='Device number (default: 0, typically 0-3, -1 for CPU)')
 parser.add_argument('--d_network', type=str, default=default_d_network, help='Discriminator network (default: %s)'%default_d_network)
 parser.add_argument('--g_network', type=str, default=default_g_network, help='Generator network (default: %s)'%default_g_network)
@@ -77,6 +79,10 @@ if args.cuda_device >= 0 and torch.cuda.is_available():
     device = torch.device("cuda:"+str(args.cuda_device))
 else:
     device = torch.device('cpu')
+if args.debug_options is None or args.debug_options == []:
+    debug_options = []
+else:
+    debug_options = args.debug_options
 
 
 # classes
@@ -240,6 +246,14 @@ class Discriminator:
         else:
             real_batch = clean_batch_cropped
             fake_batch = generated_batch_cropped.detach()
+        if 'discriminator_input' in debug_options:
+            os.makedirs('dbg', exist_ok=True)
+            batch_savename = os.path.join('dbg',str(time.time()))
+            real_batch_detached = real_batch.detach().cpu()
+            torchvision.utils.save_image(real_batch_detached, batch_savename+'_real.png')
+            fake_batch_detached = fake_batch.detach().cpu()
+            torchvision.utils.save_image(fake_batch_detached, batch_savename+'_fake.png')
+
         pred_real = self.model(real_batch)
         loss_real = self.criterion(pred_real,
                                    gen_target_probabilities(True, pred_real.shape,
@@ -258,7 +272,7 @@ class Discriminator:
         self.optimizer.step()
 
     def save_model(self, model_dir, epoch):
-        save_path = os.path.join(model_dir, 'generator_%u.pt' % epoch)
+        save_path = os.path.join(model_dir, 'discriminator_%u.pt' % epoch)
         torch.save(self.model.state_dict(), save_path)
 
 
