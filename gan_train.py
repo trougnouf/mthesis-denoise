@@ -61,7 +61,7 @@ parser.add_argument('--not_conditional', action='store_true', help='Regular GAN 
 parser.add_argument('--epochs', type=int, default=9001, help='Number of epochs (ends training)')
 parser.add_argument('--compute_SSIM_anyway', action='store_true', help='Compute and display SSIM loss even if not used')
 parser.add_argument('--freeze_generator', action='store_true', help='Freeze generator until discriminator is useful')
-parser.add_argument('--starting_epach', default=1, type=int, help='Starting epoch (cosmetics)')
+parser.add_argument('--start_epoch', default=1, type=int, help='Starting epoch (cosmetics)')
 
 args = parser.parse_args()
 
@@ -325,7 +325,7 @@ generator_learning_rate = args.g_lr
 discriminator_learning_rate = args.d_lr
 
 start_time = time.time()
-for epoch in range(args.starting_epoch, args.epochs):
+for epoch in range(args.start_epoch, args.epochs):
     loss_D_list = []
     loss_G_list = []
     loss_G_SSIM_list = []
