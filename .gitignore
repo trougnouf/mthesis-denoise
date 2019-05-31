@@ -5,7 +5,8 @@ old
 .idea
 .crop_ds_2.sh.swp
 .test.py.swp
-models/*/model_*.pth
+*.pth
+*.pt
 doodling
 results/test/*/*.jpg
 results/*.xz

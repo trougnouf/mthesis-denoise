@@ -206,3 +206,78 @@ Epoch 1 batch 203/8001:                                                         
 Epoch 1 batch 204/8001:                                                                             loss G: SSIM: 0.315, L1: 0.166, D: 0.568, weighted: 0.313
 Epoch 1 batch 205/8001:                                                                             loss G: SSIM: 0.332, L1: 0.166, D: 0.552, weighted: 0.303
 Epoch 1 batch 206/8001:                                                                             loss G: SSIM: 0.318, L1: 0.146, D: 0.544, weighted: 0.293
+Epoch 1 batch 207/8001:                                                                             loss G: SSIM: 0.304, L1: 0.093, D: 0.516, weighted: 0.265
+Epoch 1 batch 208/8001: loss D: 0.504598 (range (r-r+f-f+): 0.3, 0.59, 0.32, 0.61)
+Epoch 1 batch 209/8001:                                                                             loss G: SSIM: 0.293, L1: 0.128, D: 0.526, weighted: 0.272
+Epoch 1 batch 210/8001:                                                                             loss G: SSIM: 0.272, L1: 0.158, D: 0.521, weighted: 0.266
+Epoch 1 batch 211/8001:                                                                             loss G: SSIM: 0.299, L1: 0.207, D: 0.503, weighted: 0.260
+Epoch 1 batch 212/8001: loss D: 0.488709 (range (r-r+f-f+): 0.29, 0.5, 0.27, 0.5)
+Epoch 1 batch 213/8001: loss D: 0.493122 (range (r-r+f-f+): 0.29, 0.67, 0.29, 0.67)
+Epoch 1 batch 214/8001: loss D: 0.488147 (range (r-r+f-f+): 0.46, 0.65, 0.46, 0.64)
+Epoch 1 batch 215/8001:                                                                             loss G: SSIM: 0.301, L1: 0.128, D: 0.516, weighted: 0.266
+Epoch 1 batch 216/8001:                                                                             loss G: SSIM: 0.300, L1: 0.090, D: 0.526, weighted: 0.272
+Epoch 1 batch 217/8001: loss D: 0.487532 (range (r-r+f-f+): 0.4, 0.58, 0.4, 0.54),                  loss G: SSIM: 0.266, L1: 0.103, D: 0.529, weighted: 0.268
+Epoch 1 batch 218/8001:                                                                             loss G: SSIM: 0.232, L1: 0.121, D: 0.551, weighted: 0.280
+Epoch 1 batch 219/8001: loss D: 0.496141 (range (r-r+f-f+): 0.33, 0.57, 0.32, 0.56),                loss G: SSIM: 0.191, L1: 0.104, D: 0.516, weighted: 0.243
+Epoch 1 batch 220/8001:                                                                             loss G: SSIM: 0.283, L1: 0.087, D: 0.566, weighted: 0.301
+Epoch 1 batch 221/8001:                                                                             loss G: SSIM: 0.280, L1: 0.115, D: 0.509, weighted: 0.256
+Epoch 1 batch 222/8001: loss D: 0.497800 (range (r-r+f-f+): 0.34, 0.62, 0.33, 0.6),                 loss G: SSIM: 0.280, L1: 0.083, D: 0.507, weighted: 0.253
+Epoch 1 batch 223/8001: loss D: 0.484370 (range (r-r+f-f+): 0.39, 0.58, 0.38, 0.56)
+Epoch 1 batch 224/8001: loss D: 0.498309 (range (r-r+f-f+): 0.36, 0.68, 0.36, 0.66)
+Epoch 1 batch 225/8001: loss D: 0.478042 (range (r-r+f-f+): 0.35, 0.61, 0.33, 0.58)
+Epoch 1 batch 226/8001: loss D: 0.489562 (range (r-r+f-f+): 0.33, 0.59, 0.33, 0.59)
+Epoch 1 batch 227/8001:                                                                             loss G: SSIM: 0.236, L1: 0.124, D: 0.568, weighted: 0.295
+Epoch 1 batch 228/8001: loss D: 0.495501 (range (r-r+f-f+): 0.37, 0.59, 0.36, 0.59),                loss G: SSIM: 0.235, L1: 0.106, D: 0.507, weighted: 0.245
+Epoch 1 batch 229/8001: loss D: 0.476307 (range (r-r+f-f+): 0.4, 0.56, 0.37, 0.54),                 loss G: SSIM: 0.265, L1: 0.097, D: 0.535, weighted: 0.272
+Epoch 1 batch 230/8001: loss D: 0.489010 (range (r-r+f-f+): 0.43, 0.51, 0.43, 0.53),                loss G: SSIM: 0.196, L1: 0.111, D: 0.513, weighted: 0.242
+Epoch 1 batch 231/8001: loss D: 0.491049 (range (r-r+f-f+): 0.46, 0.55, 0.45, 0.58)
+Epoch 1 batch 232/8001:                                                                             loss G: SSIM: 0.233, L1: 0.114, D: 0.497, weighted: 0.237
+Epoch 1 batch 233/8001: loss D: 0.490758 (range (r-r+f-f+): 0.36, 0.65, 0.35, 0.66)
+Epoch 1 batch 234/8001:                                                                             loss G: SSIM: 0.235, L1: 0.106, D: 0.543, weighted: 0.273
+Epoch 1 batch 235/8001:                                                                             loss G: SSIM: 0.219, L1: 0.070, D: 0.516, weighted: 0.247
+Epoch 1 batch 236/8001:                                                                             loss G: SSIM: 0.194, L1: 0.061, D: 0.543, weighted: 0.263
+Epoch 1 batch 237/8001:                                                                             loss G: SSIM: 0.206, L1: 0.080, D: 0.532, weighted: 0.257
+Epoch 1 batch 238/8001: loss D: 0.490897 (range (r-r+f-f+): 0.41, 0.57, 0.41, 0.57)
+Epoch 1 batch 239/8001:                                                                             loss G: SSIM: 0.218, L1: 0.060, D: 0.530, weighted: 0.257
+Epoch 1 batch 240/8001:                                                                             loss G: SSIM: 0.186, L1: 0.099, D: 0.510, weighted: 0.237
+Epoch 1 batch 241/8001: loss D: 0.496786 (range (r-r+f-f+): 0.22, 0.8, 0.22, 0.76),                 loss G: SSIM: 0.207, L1: 0.057, D: 0.528, weighted: 0.253
+Epoch 1 batch 242/8001:                                                                             loss G: SSIM: 0.117, L1: 0.105, D: 0.474, weighted: 0.197
+Epoch 1 batch 243/8001:                                                                             loss G: SSIM: 0.264, L1: 0.063, D: 0.466, weighted: 0.219
+Epoch 1 batch 244/8001: loss D: 0.493088 (range (r-r+f-f+): 0.42, 0.65, 0.41, 0.66),                loss G: SSIM: 0.374, L1: 0.225, D: 0.530, weighted: 0.296
+Epoch 1 batch 245/8001:                                                                             loss G: SSIM: 0.264, L1: 0.218, D: 0.548, weighted: 0.289
+Epoch 1 batch 246/8001:                                                                             loss G: SSIM: 0.237, L1: 0.201, D: 0.494, weighted: 0.240
+Epoch 1 batch 247/8001:                                                                             loss G: SSIM: 0.283, L1: 0.124, D: 0.516, weighted: 0.262
+Epoch 1 batch 248/8001: loss D: 0.484295 (range (r-r+f-f+): 0.34, 0.55, 0.34, 0.55),                loss G: SSIM: 0.220, L1: 0.083, D: 0.543, weighted: 0.269
+Epoch 1 batch 249/8001: loss D: 0.482075 (range (r-r+f-f+): 0.32, 0.64, 0.36, 0.59),                loss G: SSIM: 0.245, L1: 0.104, D: 0.528, weighted: 0.263
+Epoch 1 batch 250/8001: loss D: 0.492653 (range (r-r+f-f+): 0.46, 0.58, 0.45, 0.59)
+Epoch 1 batch 251/8001: loss D: 0.486663 (range (r-r+f-f+): 0.4, 0.55, 0.38, 0.55)
+Epoch 1 batch 252/8001:                                                                             loss G: SSIM: 0.155, L1: 0.086, D: 0.519, weighted: 0.238
+Epoch 1 batch 253/8001: loss D: 0.499518 (range (r-r+f-f+): 0.39, 0.59, 0.41, 0.6)
+Epoch 1 batch 254/8001:                                                                             loss G: SSIM: 0.202, L1: 0.090, D: 0.504, weighted: 0.236
+Epoch 1 batch 255/8001: loss D: 0.495272 (range (r-r+f-f+): 0.33, 0.69, 0.35, 0.67)
+Epoch 1 batch 256/8001:                                                                             loss G: SSIM: 0.268, L1: 0.128, D: 0.573, weighted: 0.306
+Epoch 1 batch 257/8001:                                                                             loss G: SSIM: 0.210, L1: 0.088, D: 0.590, weighted: 0.308
+Epoch 1 batch 258/8001:                                                                             loss G: SSIM: 0.287, L1: 0.077, D: 0.561, weighted: 0.297
+Epoch 1 batch 259/8001:                                                                             loss G: SSIM: 0.164, L1: 0.090, D: 0.598, weighted: 0.305
+Epoch 1 batch 260/8001:                                                                             loss G: SSIM: 0.218, L1: 0.051, D: 0.582, weighted: 0.300
+Epoch 1 batch 261/8001:                                                                             loss G: SSIM: 0.225, L1: 0.042, D: 0.530, weighted: 0.257
+Epoch 1 batch 262/8001:                                                                             loss G: SSIM: 0.267, L1: 0.053, D: 0.586, weighted: 0.313
+Epoch 1 batch 263/8001: loss D: 0.497730 (range (r-r+f-f+): 0.22, 0.47, 0.21, 0.47)
+Epoch 1 batch 264/8001:                                                                             loss G: SSIM: 0.208, L1: 0.047, D: 0.524, weighted: 0.250
+Epoch 1 batch 265/8001:                                                                             loss G: SSIM: 0.192, L1: 0.046, D: 0.508, weighted: 0.234
+Epoch 1 batch 266/8001:                                                                             loss G: SSIM: 0.187, L1: 0.054, D: 0.505, weighted: 0.231
+Epoch 1 batch 267/8001:                                                                             loss G: SSIM: 0.185, L1: 0.064, D: 0.507, weighted: 0.233
+Epoch 1 batch 268/8001: loss D: 0.492517 (range (r-r+f-f+): 0.39, 0.61, 0.42, 0.6)
+Epoch 1 batch 269/8001:                                                                             loss G: SSIM: 0.212, L1: 0.074, D: 0.512, weighted: 0.243
+Epoch 1 batch 270/8001:                                                                             loss G: SSIM: 0.279, L1: 0.220, D: 0.515, weighted: 0.266
+Epoch 1 batch 271/8001:                                                                             loss G: SSIM: 0.185, L1: 0.122, D: 0.531, weighted: 0.254
+Epoch 1 batch 272/8001:                                                                             loss G: SSIM: 0.229, L1: 0.085, D: 0.510, weighted: 0.245
+Epoch 1 batch 273/8001: loss D: 0.506729 (range (r-r+f-f+): 0.32, 0.65, 0.33, 0.67),                loss G: SSIM: 0.192, L1: 0.049, D: 0.525, weighted: 0.248
+Epoch 1 batch 274/8001: loss D: 0.484974 (range (r-r+f-f+): 0.39, 0.48, 0.38, 0.48)
+Epoch 1 batch 275/8001:                                                                             loss G: SSIM: 0.275, L1: 0.154, D: 0.517, weighted: 0.263
+Epoch 1 batch 276/8001: loss D: 0.493273 (range (r-r+f-f+): 0.41, 0.62, 0.42, 0.6)
+Epoch 1 batch 277/8001: loss D: 0.491490 (range (r-r+f-f+): 0.35, 0.53, 0.37, 0.53)
+Epoch 1 batch 278/8001: loss D: 0.471744 (range (r-r+f-f+): 0.46, 0.57, 0.4, 0.56),                 loss G: SSIM: 0.256, L1: 0.141, D: 0.546, weighted: 0.282
+Epoch 1 batch 279/8001: loss D: 0.492716 (range (r-r+f-f+): 0.34, 0.54, 0.35, 0.6)
+Epoch 1 batch 280/8001: loss D: 0.490605 (range (r-r+f-f+): 0.36, 0.58, 0.38, 0.57)
+Epoch 1 batch 281/8001: loss D: 0.487605 (range (r-r+f-f+): 0.49, 0.69, 0.48, 0.69)
