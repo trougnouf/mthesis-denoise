@@ -42,6 +42,8 @@ The network is still highly susceptible to failure after initialization. Common 
 % should investigate: https://arxiv.org/abs/1803.07422 (Patch-Based Image Inpainting with Generative Adversarial Networks)
 The (c)GAN training procedure is summarized in algorithm \ref{alg:gantrain}. The variables (losses and predictions) are tensors which may contain any number of scalars as well as the whole computation graph (history) and gradients needed to perform the backpropagation.
 
+%TODO mix of L1 and SSIM: cite https://pdfs.semanticscholar.org/0434/70c64627c074e1a7634a2508ee7e4ec98cd7.pdf
+
 \begin{algorithm}
 \caption{(c)GAN training procedure}
 \label{alg:gantrain}

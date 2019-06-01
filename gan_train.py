@@ -55,7 +55,7 @@ parser.add_argument('--debug_options', nargs='*', help="(space-separated) Debug 
 parser.add_argument('--cuda_device', default=0, type=int, help='Device number (default: 0, typically 0-3, -1 for CPU)')
 parser.add_argument('--d_network', type=str, default=default_d_network, help='Discriminator network (default: %s)'%default_d_network)
 parser.add_argument('--g_network', type=str, default=default_g_network, help='Generator network (default: %s)'%default_g_network)
-parser.add_argument('--threads', type=int, default=8, help='Number of threads for data loader to use')
+parser.add_argument('--threads', type=int, default=6, help='Number of threads for data loader to use')
 parser.add_argument('--min_lr', type=float, default=0.00000005, help='Minimum learning rate (ends training)')
 parser.add_argument('--not_conditional', action='store_true', help='Regular GAN instead of cGAN')
 parser.add_argument('--epochs', type=int, default=9001, help='Number of epochs (ends training)')
@@ -103,14 +103,37 @@ class Printer:
 
 # TODO generic model class to implement common functions
 
+class Model:
+    def __init__(self, save_dict=True, device='cuda:0', printer=None):
+        if printer is None:
+            self.print = print
+        else:
+            self.print = printer.print
+        self.loss = 1
+        self.save_dict = save_dict
+        self.device = device
 
-class Generator:
+    def update_learning_rate(self, avg_loss):
+        self.scheduler.step(metrics=avg_loss)
+        lr = self.optimizer.param_groups[0]['lr']
+        p.print('Learning rate: %f' % lr)
+        return lr
+
+    def save_model(self, model_dir, epoch):
+        save_path = os.path.join(model_dir, 'generator_%u.pt' % epoch)
+        if self.save_dict:
+            torch.save(self.model.state_dict(), save_path)
+        else:
+            torch.save(self.model, save_path+'h')
+
+
+class Generator(Model):
     def __init__(self, network = 'Hulb128Net', weights_dict_path = None, model_path = None,
                  device = 'cuda:0', weight_SSIM=default_weight_SSIM,
                  weight_L1=default_weight_L1, activation='PReLU', funit=32,
-                 beta1=default_beta1, lr=default_lr, printer=None, compute_SSIM_anyway=False):
-        self.p = printer
-        self.loss = 1
+                 beta1=default_beta1, lr=default_lr, printer=None, compute_SSIM_anyway=False,
+                 save_dict=True):
+        Model.__init__(self, save_dict, device, printer)
         self.weight_SSIM = weight_SSIM
         if weight_SSIM > 0 or compute_SSIM_anyway:
             self.criterion_SSIM = pytorch_ssim.SSIM().to(device)
@@ -127,7 +150,7 @@ class Generator:
                 self.model = Hulb128Net(funit=funit, activation=activation)
             #elif ...
             else:
-                p.print('Error: generator network not properly specified')
+                self.print('Error: generator network not properly specified')
                 exit(1)
             if weights_dict_path is not None:
                 self.model.load_state_dict(torch.load(weights_dict_path))
@@ -171,23 +194,13 @@ class Generator:
         self.optimizer.step()
         self.optimizer.zero_grad()
 
-    def update_learning_rate(self, avg_loss):
-        self.scheduler.step(metrics=avg_loss)
-        lr = self.optimizer.param_groups[0]['lr']
-        p.print('Learning rate: %f' % lr)
-        return lr
 
-    def save_model(self, model_dir, epoch):
-        save_path = os.path.join(model_dir, 'generator_%u.pt' % epoch)
-        torch.save(self.model.state_dict(), save_path)
-
-
-class Discriminator:
+class Discriminator(Model):
     def __init__(self, network='Hul112Disc', weights_dict_path=None,
                  model_path=None, device='cuda:0', loss_function='MSE',
                  activation='PReLU', funit=24, beta1=default_beta1,
-                 lr = default_lr, not_conditional = False, printer=None):
-        self.p = printer
+                 lr = default_lr, not_conditional = False, printer=None, save_dict=True):
+        Model.__init__(self, save_dict, device, printer)
         self.device = device
         self.loss = 1
         self.loss_function = loss_function
@@ -208,7 +221,7 @@ class Discriminator:
             elif network == 'PatchGAN':
                 self.model = net_d = define_D(input_channels, 2*funit, 'basic', gpu_id=device)
             else:
-                p.print('Error: generator network not properly specified')
+                self.print('Error: generator network not properly specified')
                 exit(1)
         if weights_dict_path is not None:
             self.model.load_state_dict(torch.load(weights_dict_path))
@@ -217,12 +230,6 @@ class Discriminator:
         self.conditional = not not_conditional
         self.predictions_range = None
         self.scheduler = lr_scheduler.ReduceLROnPlateau(self.optimizer, factor=0.75, verbose=True, threshold=1e-8, patience=5)
-
-    def update_learning_rate(self, avg_loss):
-        self.scheduler.step(metrics=avg_loss)
-        lr = self.optimizer.param_groups[0]['lr']
-        p.print('Learning rate: %f' % lr)
-        return lr
 
     def get_loss(self):
         return self.loss
@@ -234,7 +241,7 @@ class Discriminator:
         if self.loss_function == 'MSE':
             self.loss = (math.sqrt(loss_fake)+math.sqrt(loss_real))/2
         else:
-            p.print('Error: loss function not implemented: %s'%(self.loss_function))
+            self.print('Error: loss function not implemented: %s'%(self.loss_function))
 
     def discriminate_batch(self, generated_batch_cropped, noisy_batch_cropped=None):
         if self.conditional:
@@ -282,10 +289,6 @@ class Discriminator:
             self.predictions_range = '(not implemented)'
         self.update_loss(loss_fake_detached, loss_real_detached)
         self.optimizer.step()
-
-    def save_model(self, model_dir, epoch):
-        save_path = os.path.join(model_dir, 'discriminator_%u.pt' % epoch)
-        torch.save(self.model.state_dict(), save_path)
 
 
 def crop_batch(batch, boundaries):
