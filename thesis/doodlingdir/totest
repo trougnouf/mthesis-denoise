@@ -1,3 +1,5 @@
+discriminator_advantage
+
 to test:
 done - no BN (test at home?) SELU
 

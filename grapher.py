@@ -10,7 +10,8 @@ import json
 
 # generate results from trained model with python denoise_dir.py --model_subdir <model>
 # python grapher.py --mode keywords --components p2p
-# add min date
+# TODO add min date
+# history:
 
 # Params
 parser = argparse.ArgumentParser(description='Grapher')
@@ -29,6 +30,7 @@ parser.add_argument('--run', default=None, type=int, help="Generate a single gra
 parser.add_argument('--noshow', action='store_true')
 parser.add_argument('--nojson', action='store_true')
 parser.add_argument('--mode', default='std', help='std, keywords, all')
+#parser.add_argument('--blacklist', nargs='*', help='Space separated list of experiments that should be avoided')
 args = parser.parse_args()
 
 data = dict()
@@ -43,9 +45,12 @@ if args.mode == 'std':
     else:
         components = ['Noisy', 'NIND:X-T1 (U-Net)', 'NIND (GAN)', 'NIND (cGAN)', 'SIDD (U-Net)', 'BM3D', 'NIND:X-T1+C500D (U-Net)', 'NIND:X-T1+C500D + SIDD (U-Net)', 'NIND:X-T1 ISO6400-only (U-Net)', 'Artificial noise on NIND:X-T1 (U-Net)', 'Reconstruct noise on NIND:X-T1 (U-Net)', 'NIND:X-T1 (Red-Net)']
 else:
-    components = ['GT']
+    #components = ['GT']
+    components = ['Noisy input', 'BM3D'] # TODO BM3D should be optional
     for experiment in os.listdir(args.res_dir):
         if args.mode == 'all':
+            if experiment == 'GT' or experiment == 'Noisy input' or 'bm3d' in experiment:
+                continue
             components.append(experiment)
         elif args.mode == 'keywords':
             for keyword in args.components:
@@ -86,11 +91,11 @@ def find_relevant_experiments(component):
     if component == 'Noisy':
         return add_exp_to_data('GT')
     for experiment in experiments:
-        if args.mode != 'std':
-            if experiment == component:
-                add_exp_to_data(experiment)
-        elif 'bm3d' in experiment:
+        if 'bm3d' in experiment:
             if component == 'BM3D':
+                add_exp_to_data(experiment)
+        elif args.mode != 'std':
+            if experiment == component:
                 add_exp_to_data(experiment)
         elif 'p2p' in experiment:
             if 'not_conditional' in experiment:

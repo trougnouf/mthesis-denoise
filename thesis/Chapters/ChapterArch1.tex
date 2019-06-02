@@ -16,7 +16,7 @@ A loss function is applied to the output of the last layer, its gradient with re
 \begin{figure}
   \begin{center}
     \includegraphics{gfx/Convolutional_Neural_Network_with_Color_Image_Filter.png}
-    \caption{A filter is applied to the first 3-channels (RGB) input of an image in a convolutional neural network. The same filter is applied across all channels of the whole image as shown, and many of these filters are applied to form the following layer's feature map (I.e. its channels). Illustration by Wikimedia Commons user Cecbur (CC-BY-SA-4.0 license)}
+    \caption[Standard convolution]{A filter is applied to the first 3-channels (RGB) input of an image in a convolutional neural network. The same filter is applied across all channels of the whole image as shown, and many of these filters are applied to form the following layer's feature map (I.e. its channels). Illustration by Wikimedia Commons user Cecbur (CC-BY-SA-4.0 license)}
     \label{fig:convolutionfilter}
   \end{center}
 \end{figure}
@@ -52,14 +52,14 @@ We designed a multi-scale architecture somewhat similar to U-Net whose aim is to
 \begin{figure}
   \begin{center}
     \animategraphics[width=\textwidth/3*2]{1}{gfx/dilation/frame-}{0}{8}
-    \caption{Dilated convolution (dilation=2). Illustration by GitHub user vdumoulin (MIT license)}
+    \caption[Dilated convolution]{Dilated convolution (dilation=2). Illustration by GitHub user vdumoulin (MIT license)}
     \label{fig:dilated}
   \end{center}
 \end{figure}
 \begin{figure}
   \begin{center}
   \input{gfx/convstr3}    
-    \caption{3x3 convolution with stride=3}
+    \caption[Strided convolution]{3x3 convolution with stride=3}
     \label{fig:str3}
   \end{center}
 \end{figure}

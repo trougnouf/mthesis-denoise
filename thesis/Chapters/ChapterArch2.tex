@@ -13,9 +13,9 @@ The discriminating network differs from the generative networks presented in cha
 \begin{itemize}
   \item A \ac{GAN} is the simplest approach introduced in \cite{gan}. A generator is called with a given input, then the discriminator trains on a mini-batch made of the generated data and another mini-batch containing ground-truth data.
 
-A \ac{GAN} does not necessarily need clean-noisy pairs of images because it only receives one image at a time. However, this feature may lead the generator to learn a mapping which has the features required to trick the discriminator without being related to the input image. For this reason we often combine the discriminator loss with a conventional loss function such as SSIM or L1 (and these losses do require a pair of clean-noisy images). The GAN could still be used for semi-supervised learning by training with conventional losses and a paired dataset until satisfying performance is met, then training further with a non-paired dataset using the GAN only. This could be beneficial for specialized images which would be tricky to include in a paired dataset, such as those depicting moving subjects or human faces.
+A \ac{GAN} does not necessarily need clean-noisy pairs of images because it only receives one image at a time. However, this feature may lead the generator to learn a mapping which has the features required to trick the discriminator without being related to the input image. For this reason we often combine the discriminator loss with a conventional loss function such as SSIM or L1 (and these losses do require a pair of clean-noisy images). The GAN could still be used for semi-supervised learning by training with conventional losses and a paired dataset until satisfying performance is met, then training further with a non-paired dataset using the GAN only. This could be beneficial for specialized images which would be tricky to include in a paired dataset, such as those depicting moving subjects and living faces.
 
-While it may seem counter-intuitive to train the discriminator with mini-batches of only one label at a time, this phenomenon may be explained with the use of Batch Normalization which keeps running statistics and normalizes the activations on the given batch, it could therefore perform better given low-variance input data. \cite{gantechniques}\cite{bn} % TODO Our data is fed as a mix of different ISO values and could explain why the generator does not perform as well with BN
+While it may seem counter-intuitive to train the discriminator with mini-batches of only one label at a time, this practice may be justified with the use of Batch Normalization which keeps running statistics and normalizes the activations on the given batch, it could therefore perform better given low-variance input data. \cite{gantechniques}\cite{bn} % TODO Our data is fed as a mix of different ISO values and could explain why the generator does not perform as well with BN
   \item \ac{cGAN} are \acsp{GAN} which take two inputs, the generated data and typically a label that describes it. An approach often used in image generation is to concatenate the corrupted image with the generated input and feed these image pairs as the input data rather than using a label. \cite{pix2pix}\cite{cyclegan}\cite{pix2pixhd}. The benefit of potentially semi-supervised learning is no longer present but the discriminator is built-in with a correlative loss and the network is less likely to require a conventional loss function. While the conditional discriminator needs paired data to learn, a generator can still learn from unmatched data with a pretrained conditional discriminator.
 \end{itemize}
 CycleGAN\cite{cyclegan} is a popular approach which enforces cyclic consistency, that is, the network must be able to regenerate the corrupted observation back from the generated one. We believe this approach would not function well for the problem of image denoising because of the random nature of noise, whereas CycleGAN applications tend to have simple outlines as the corrupted observation.
@@ -29,9 +29,9 @@ The \ac{GAN}'s log-based \ac{BCE} loss suffers from vanishing gradient where the
 We explored the aforementioned methods, namely \ac{cGAN} and \ac{GAN}, \ac{DCGAN}, and \ac{LSGAN}. Our generator architectures are the U-Net \cite{unet} and Hulbnet mentioned in chapter \ref{chap:Arch1}. For the discriminator classifier we have experienced with PatchGAN \cite{pix2pix} as well as our HulDisc architectures.
 
 
-PatchGAN is a convolutional classifier intended to capture high-frequency details on small patches and leave the low-frequencies up to the $\ell 1$ loss.  Isola et al. use $256\times 256$ input images in their experiment and the resulting overlapping patches have a $70 \times 70$ pixels area. Although the network can scale to different crop sizes, it is shown to generate undesirable artifacts when training on smaller images.
+PatchGAN is a convolutional classifier intended to capture high-frequency details on small patches and leave the low-frequencies up to the $\ell 1$ loss. The network architecture is made up of five convolutions with $4 \times 4$ kernel and 1 to 2 stride. The last layer returns one feature per patch instead of a single feature for the whole image. The overlapping patches have a $70 \times 70$ pixels receptive field, and it is up to the chosen loss \ac{MSE} function to reconciliate these losses into a single value.
 
-HulDisc uses much the same architecture as the HulbNet generator but without the expanding part and with the addition of Batch Normalization. Our main discriminator focuses on a $112\times 112$ crops, which allows for an undiscriminated-against 8-pixels per side border off the $128^2$-pixels generated images. The network is fully convolutive and encodes the whole image down to a single pixel/feature, with stride convolutions (stride=3) downscaling the crops from 102 to 34 and from 18 to 6 pixels, the rest being dense combinations of standard 3x3 convolutions and dilated convolutions (dilation=2) followed with \ac{PReLU} and \acl{BN}. We experimented with different combinations before getting to this configuration, namely the use of batch normalization, different (or no) activation functions, the use of a final pooling layer, the effect of mixed losses, the use of a bottleneck 1x1 convolution layer, and different numbers of filters.
+HulDisc uses much the same architecture as the HulbNet generator but without the expanding half and with the addition of Batch Normalization. Our main discriminator focuses on a $112\times 112$ crops, which allows for an undiscriminated-against 8-pixels per side border off the $128^2$-pixels generated images. The network is fully convolutional and encodes the whole image down to a single pixel/feature, with stride convolutions (stride=3) downscaling the crops from 102 to 34 and from 18 to 6 pixels, the rest being dense combinations of standard 3x3 convolutions and dilated convolutions (dilation=2) followed with \ac{PReLU} and \acl{BN}. We experimented with different combinations before getting to this configuration, namely the use of batch normalization, different (or no) activation functions, the use of a final pooling layer, the effect of mixed losses, the use of a bottleneck 1x1 convolution layer, and different numbers of filters.
 
 \section{Method}
 The discriminator is trained on the generated input as soon as the network is initialized, but the generator uses only conventional loss functions (namely \ac{SSIM} and $\ell 1$) until a set \ac{SSIM} threshold is met. From this point the loss function is a weighted combination of the discriminator's \ac{MSE} loss (0.75), the \ac{SSIM} index (0.20) which ensures stability and image quality, and the $\ell 1$ loss (0.05) which provides some smoothness to prevent excessive high-frequency details caused by the discriminator. 
@@ -49,35 +49,37 @@ The (c)GAN training procedure is summarized in algorithm \ref{alg:gantrain}. The
 \label{alg:gantrain}
 \begin{algorithmic}[1]
 \FORALL{clean\_batch, noisy\_batch $\in$ Dataset}
-\STATE ADAM\_optimizer\_D.clear\_gradient()
-\STATE ADAM\_optimizer\_G.clear\_gradient()
-\STATE \COMMENT{Generate a denoised ("fake") images batch}
-\STATE generated\_batch $\leftarrow$ network\_G(noisy\_batch)
+\STATE generated\_batch $\leftarrow$ generator(noisy\_batch) \COMMENT{Denoised}
 \STATE \COMMENT{Train the discriminator}
-\IF{network\_D.is\_conditional}
+\IF{discriminator learns}
+\STATE \COMMENT{discriminator learns = discriminator's previous normalized loss > random[0,1]}
+\STATE ADAM\_optimizer\_D.clear\_gradient()
+\IF{discriminator.is\_conditional}
 \STATE fake\_minibatch $\leftarrow$ concatenate(
 \STATE \quad remove\_borders(noisy\_batch),
-\STATE \quad remove\_borders(generated\_batch).detach\_from\_graph())
+\STATE \quad remove\_borders(generated\_batch))
 \STATE real\_minibatch $\leftarrow$ concatenate(
 \STATE \quad remove\_borders(noisy\_batch),
 \STATE \quad remove\_borders(clean\_batch))
 \ELSE
-\STATE fake\_minibatch $\leftarrow$ remove\_borders(generated\_batch).detach\_from\_graph()
+\STATE fake\_minibatch $\leftarrow$ remove\_borders(generated\_batch)
 \STATE real\_minibatch $\leftarrow$ remove\_borders(clean\_batch)
 \ENDIF
-\STATE predictions\_on\_real\_data $\leftarrow$ network\_D(real\_minibatch)
+\STATE predictions\_on\_real\_data $\leftarrow$ discriminator(real\_minibatch)
 \STATE loss\_real\_D $\leftarrow$ \ac{MSE}(
 \STATE \quad predictions\_on\_real\_data,
 \STATE \quad generate\_noisy\_probabilities(\TRUE))
 \STATE loss\_real\_D.backpropagate()
-\STATE predictions\_on\_fake\_data $\leftarrow$ network\_D(fake\_minibatch)
+\STATE predictions\_on\_fake\_data $\leftarrow$
+\STATE \quad discriminator(fake\_minibatch.detach\_from\_graph())
 \STATE loss\_fake\_D $\leftarrow$ \ac{MSE}(predictions\_on\_fake\_data, \FALSE)
 \STATE loss\_fake\_D.backpropagate()
-\IF{discriminator\_learns}
-\STATE \COMMENT{Whether the discriminator learns depends on randomness and a ratio determined by its previous performance}
 \STATE ADAM\_optimizer\_D.update\_weights()
 \ENDIF
 \STATE \COMMENT{Train the generator}
+\IF{generator learns}
+\STATE \COMMENT{generator learns = discriminator didn't learn or discriminator's last normalized loss < random[0,1]}
+\STATE predictions\_on\_fake\_data $\leftarrow$ discriminator(fake\_minibatch)
 \STATE loss\_G\_GAN $\leftarrow$ \ac{MSE}(predictions\_on\_fake\_data, \TRUE)
 \STATE loss\_G\_SSIM $\leftarrow$ \ac{SSIM}(
 \STATE \quad remove\_borders(generated\_batch),
@@ -91,6 +93,8 @@ The (c)GAN training procedure is summarized in algorithm \ref{alg:gantrain}. The
 \STATE \quad $+$ loss\_G\_$\ell 1 \times$ weight\_loss\_$\ell 1$
 \STATE loss\_G\_weighted.backpropagate()
 \STATE ADAM\_optimizer\_G.update\_weights()
+\STATE ADAM\_optimizer\_G.clear\_gradient()
+\ENDIF
 \ENDFOR
 \end{algorithmic}
 \end{algorithm}

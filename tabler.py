@@ -48,6 +48,7 @@ def tablemaker(datafn='data.json', blacklistimages=None, whitelistimages=None):
         tbl = tbl[:-1]+'\n'
     print(tbl)
     print('\n')
+tablemaker('data.json', blacklistimages='C500D')
 tablemaker('data1.json', blacklistimages='C500D')
 tablemaker('data1.json', whitelistimages='C500D')
 tablemaker('data2.json')

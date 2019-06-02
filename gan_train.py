@@ -62,6 +62,7 @@ parser.add_argument('--epochs', type=int, default=9001, help='Number of epochs (
 parser.add_argument('--compute_SSIM_anyway', action='store_true', help='Compute and display SSIM loss even if not used')
 parser.add_argument('--freeze_generator', action='store_true', help='Freeze generator until discriminator is useful')
 parser.add_argument('--start_epoch', default=1, type=int, help='Starting epoch (cosmetics)')
+parser.add_argument('--discriminator_advantage', type=float, default=0.0, help='Desired discriminator correct prediction ratio is 0.5+advantage')
 
 args = parser.parse_args()
 
@@ -348,7 +349,7 @@ for epoch in range(args.start_epoch, args.epochs):
         generated_batch = generator.denoise_batch(noisy_batch)
         generated_batch_cropped = crop_batch(generated_batch, crop_boundaries)
         # train discriminator based on its previous performance
-        discriminator_learns = (discriminator.get_loss() > random.random() and use_D) or frozen_generator
+        discriminator_learns = ((discriminator.get_loss()-args.discriminator_advantage) > random.random() and use_D) or frozen_generator
         if discriminator_learns:
             discriminator.learn(noisy_batch_cropped=noisy_batch_cropped,
                                 generated_batch_cropped=generated_batch_cropped,
@@ -356,7 +357,7 @@ for epoch in range(args.start_epoch, args.epochs):
             loss_D_list.append(discriminator.get_loss())
             iteration_summary += 'loss D: %f (%s)' % (discriminator.get_loss(), discriminator.get_predictions_range())
         # train generator if discriminator didn't learn or discriminator is somewhat useful
-        generator_learns = ((not discriminator_learns) or (discriminator.get_loss() < random.random())) and not frozen_generator
+        generator_learns = ((not discriminator_learns) or ((discriminator.get_loss()-args.discriminator_advantage) < random.random())) and not frozen_generator
         if generator_learns:
             if discriminator_learns:
                 iteration_summary += ', '

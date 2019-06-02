@@ -111,7 +111,7 @@ NIND:X-T1 (\ac{RED-Net})                   & 0.940          & 0.923          & 0
 \begin{figure*}[!htbp]
 \centering
 \includegraphics[width=1\linewidth]{gfx/comp/stefantiek.jpg}
-\caption[caption for stefantiek]{Denoising stefantiek. 1: ISO200 ground-truth (1/20s), 2: high ISO (1/1900s), 3: 2 denoised using U-Net model trained with NIND, 4: 2 denoised using U-Net model trained with \ac{SIDD} (320-sets), 5: 2 denoised using \ac{BM3D} ($\sigma=90$\footnoteref{sigmanote})}
+\caption[Denoising stefantiek (visual comparison)]{Denoising stefantiek. 1: ISO200 ground-truth (1/20s), 2: high ISO (1/1900s), 3: 2 denoised using U-Net model trained with NIND, 4: 2 denoised using U-Net model trained with \ac{SIDD} (320-sets), 5: 2 denoised using \ac{BM3D} ($\sigma=90$\footnoteref{sigmanote})}
 \label{fig:stefantiek}
 \end{figure*}
 
@@ -125,14 +125,14 @@ NIND:X-T1 (\ac{RED-Net})                   & 0.940          & 0.923          & 0
 \begin{figure*}[!htbp]
 \centering
 \includegraphics[width=1\linewidth]{gfx/comp/txt.jpg}
-\caption[caption for sepiktext]{Denoising text present on MuseeL-Sepik-C500D. 1: ISO200 ground-truth (2s), 2: high ISO (1/30s), 3: 2 denoised using U-Net model trained with NIND:X-T1, 4: 2 denoised using U-Net model trained with \ac{SIDD} (320-sets), 5: 2 denoised using BM3D ($\sigma=99$\footnoteref{sigmanote})}
+\caption[Denoising text present on sepiktext (visual comparison)]{Denoising text present on MuseeL-Sepik-C500D. 1: ISO200 ground-truth (2s), 2: high ISO (1/30s), 3: 2 denoised using U-Net model trained with NIND:X-T1, 4: 2 denoised using U-Net model trained with \ac{SIDD} (320-sets), 5: 2 denoised using BM3D ($\sigma=99$\footnoteref{sigmanote})}
 \label{fig:text}
 \end{figure*}
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=1\linewidth]{gfx/comp/comp-noisy-nind-bm3d30.jpg}
-\caption[pigeoncaption]{Comparison between a noisy ISO6400 crop (top), one denoised with a model trained on \ac{NIND} (middle), and one on which \ac{BM3D} ($\sigma=30$) has been applied (bottom). Our model appears to perform well on dynamic scenes despite having been trained on static scenes.}
+\caption[Denoising of an unpaired "high-speed" image]{Comparison between a noisy ISO6400 crop (top), one denoised with a model trained on \ac{NIND} (middle), and one on which \ac{BM3D} ($\sigma=30$) has been applied (bottom). Our model appears to perform well on dynamic scenes despite having been trained on static scenes.}
 \label{fig:visualpigeons}
 \end{figure}
 
@@ -150,17 +150,34 @@ In addition to the aforementioned results based on \ac{SSIM}, we have subjective
 
 \section{GAN Denoising}\label{sec:GAN Denoising}
 
-First followed the pix2pix approach which uses PatchGAN discriminator and U-Net generator to turn rough sketches into realistic images. The result show high-frequency details using PatchGAN. We were unable to balance PatchGAN with other loss functions to get good results, the high-frequencies were always too prominent and the \ac{SSIM} index not as high that obtained with \ac{BM3D}  (show graph w/ GAN/cGAN vs the rest)
+We first tried following the pix2pix approach (whose typical use-case is rough sketches to photorealistic images) of performing image to image translation using a PatchGAN discriminator and a U-Net generator \cite{pix2pix} with 1:3 training ratio. The discriminator handles high-frequency details and low-frequencies are handled by the $\ell 1$ loss. We were unable to obtain satisfying performance after experimenting with different loss balances, we found that the denoising performance was subpar to that of \ac{BM3D} and of our previous U-Net network; high-frequencies tend to be exaggerated in low-frequency areas and high frequency details are not properly recovered, often resulting in an overall poor \ac{SSIM} index. Figure \ref{fig:p2p-def} illustrates the denoising performance obtained using a 0.25 $\ell 1$ multiplier.
 
-Some improvement were made with careful fine-tuning of the learning environment. TODO list these and graph
+\begin{figure}[!htbp]
+  \begin{center}
+    \includegraphics[width=1\linewidth]{gfx/comp/p2p_def.jpg}
+    \caption[Initial (c)GAN denoising (visual comparison)]{Comparison of standard pix2pix \cite{pix2pix} applied to image denoising with other methods on a crop from image NIND\_MuseeL-Bobo\_ISOH2. 1: ISO200 ground-truth crop (SSIM: 1.00), 2: ISOH2 noisy crop (SSIM: 0.151), 3: Denoised image with a single U-Net network trained on the \ac{NIND} (SSIM: 0.810), 4: Denoised image with a standard pix2pix network trained on the \ac{NIND} with $0.25\times\ell 1$ (SSIM: 0.672), 5: Denoised image with a pix2pix network trained on the \ac{NIND} with the following adjustments: minimum of 35 iterations with $\text{loss}_\text{SSIM} < 0.125$ before using the discriminator with $\text{loss}_G=0.5 \text{loss}_D + 0.4 \text{loss}_\text{SSIM} + 0.1 \text{loss}_{\ell 1}$ (SSIM: 0.794),6: Denoised with \ac{BM3D} using $\sigma=99$ (SSIM: 0.694)}
+    \label{fig:p2p-def}
+  \end{center}
+\end{figure}
 
-At the same time U-Net loses too much border which is either easily discriminated against or does not leave a large enough crop for the discriminator to make up meaningful results. We thus designed both a generator and a discriminator which follow the same design ideas (alas the discriminator is cut in half and loses many of the dense connections (TODO name?)), and tested specific components for their respective use-cases.
+Some improvement were made with careful fine-tuning of the learning environment. We added the \ac{SSIM} loss used in single-network training and tested different balances between the $\ell 1$, \ac{SSIM}, and discriminative losses. We tried training the generator without applying a discriminative loss until a SSIM threshold is met for a given number of consecutive iterations, and we tried training a non conditional network. Figure \ref{fig:p2p-comp-1} shows performance on the "stefantiek" set using different settings on a non conditional network (as well as the baseline network performance without these adjustments). We observe particularly poor performance when the discriminative loss has a high weight (weight\_D = 0.9), as well as when we start using the discriminative loss early on before the generator has learned to properly denoise with the conventional loss functions (min\_SSIM=0.3). The GAN network obtains reasonable performance when the generator is pretrained to achieve a \ac{SSIM} loss of 0.125 to 0.15. The greatest performance shown occurs when the generator has to obtain $\text{loss}_\text{SSIM} < 0.125$ for 35 consecutive iterations before using the discriminator as half of the overall loss. A crop denoised with this model (5) is shown beside one trained with standard pix2pix \ac{cGAN} (4) on Figure \ref{p2p-def}.
 
-we created the HulbDisc architecture to work on multi-scale and 
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=1\linewidth]{gfx/graphs/p2p-comp-1.pdf}
+\caption{Denoising performance of the non conditional GAN with varying settings on the "stefantiek" set over increased ISO values}
+\label{fig:p2p-comp-1}
+\end{figure}
+
+Network like \cite{pix2pixhd} which processes multiple scales to capture high-frequencies and smooth textures. Instead of dividing up the images into different resolutions or using multiple networks, we followed an approach similar to that of DenseNet \cite{densenet} which concatenates multiple channels together from different layers (as opposed to summing the features \cite{resnet}), allowing layers to contain different types of features captured with different convolutions. Some of the convolutions thus capture a wider receptive field using dilation while other focus on local details.
+
+At the same time we wanted to replace the U-Net network which loses too much border that is either easily discriminated against or does not leave a large enough crop for the discriminator to make up meaningful results. We thus designed both a generator and a discriminator which follow the same design ideas (alas the discriminator is cut in half and loses many of the dense connections), and tested specific components for their respective use-cases.
 
 The two architectures were trained separately to assess and optimize their individual performance before working together. The generator is typically trained using the same framework as that of section \ref{sec:CNN Denoising}, while the discriminator main tests involve discriminating between clean and noisy crops from the dataset without receiving the conditional input. This test is not as robust as training with the result of a static generator but it allows us to quickly get a preview of the discriminator's performance whereas it would not always be able to learn from scratch given a well trained generator.
 
+Batch Normalization did not appear beneficial to 
 Generator: BN vs noBN vs noBN no activation
+
 
 Discriminator: 
 
