@@ -197,6 +197,9 @@ class Generator(Model):
         self.optimizer.step()
         self.optimizer.zero_grad()
 
+    def zero_grad(self):
+        self.optimizer.zero_grad()
+
 
 class Discriminator(Model):
     def __init__(self, network='Hul112Disc', weights_dict_path=None,
@@ -294,7 +297,6 @@ class Discriminator(Model):
         self.update_loss(loss_fake_detached, loss_real_detached)
         self.optimizer.step()
 
-
 def crop_batch(batch, boundaries):
     return batch[:, :, boundaries[0]:boundaries[1], boundaries[0]:boundaries[1]]
 
@@ -377,8 +379,10 @@ for epoch in range(args.start_epoch, args.epochs):
             loss_G_list.append(generator.get_loss()['weighted'])
             loss_G_SSIM_list.append(generator.get_loss()['SSIM'])
             iteration_summary += 'loss G: %s' % generator.get_loss(pretty_printed=True)
-        elif frozen_generator:
-            frozen_generator = discriminator.get_loss() > 0.33
+        else:
+            generator.zero_grad()
+            if frozen_generator:
+                frozen_generator = discriminator.get_loss() > 0.33
         p.print(iteration_summary)
 
     p.print("Epoch %u summary:" % epoch)

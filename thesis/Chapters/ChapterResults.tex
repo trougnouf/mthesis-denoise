@@ -184,6 +184,7 @@ The two architectures were trained separately to assess and optimize their indiv
 
 Batch Normalization appeared to hamper learning on the generative networks, often yielding worse color rendition and lowering the \ac{SSIM} index (which does not appear to be very sensible to color accuracy). We trained a generative network for an epoch with and without Batch Normalization to finally determine whether \ac{BN} should be removed from the generative network. Figure \ref{fig:gen-BN} shows the resulting learning curve, which allows us to confidently remove \ac{BN} from the generative architecture (which is now called "HulbNet". We also trained a network for an epoch to determine whether not using a final loss function as is commonly done (TODO cite) would yield better performance than \ac{PReLU}, but we found it better to continue ending with an activation function.
 
+% TODO fix imbalance
 % TODO explicitly mention loss
 \begin{figure}[!htbp]
 \centering
