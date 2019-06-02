@@ -222,7 +222,7 @@ class Discriminator(Model):
             elif network == 'PatchGAN':
                 self.model = net_d = define_D(input_channels, 2*funit, 'basic', gpu_id=device)
             else:
-                self.print('Error: generator network not properly specified')
+                self.print('Error: discriminator network not properly specified')
                 exit(1)
         if weights_dict_path is not None:
             self.model.load_state_dict(torch.load(weights_dict_path))
