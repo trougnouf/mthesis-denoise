@@ -353,7 +353,7 @@ for epoch in range(args.start_epoch, args.epochs):
         generated_batch = generator.denoise_batch(noisy_batch)
         generated_batch_cropped = crop_batch(generated_batch, crop_boundaries)
         # train discriminator based on its previous performance
-        discriminator_learns = ((discriminator.get_loss()-args.discriminator_advantage) > random.random() and use_D) or frozen_generator
+        discriminator_learns = ((discriminator.get_loss()+args.discriminator_advantage) > random.random() and use_D) or frozen_generator
         if discriminator_learns:
             discriminator.learn(noisy_batch_cropped=noisy_batch_cropped,
                                 generated_batch_cropped=generated_batch_cropped,
@@ -361,7 +361,7 @@ for epoch in range(args.start_epoch, args.epochs):
             loss_D_list.append(discriminator.get_loss())
             iteration_summary += 'loss D: %f (%s)' % (discriminator.get_loss(), discriminator.get_predictions_range())
         # train generator if discriminator didn't learn or discriminator is somewhat useful
-        generator_learns = ((not discriminator_learns) or ((discriminator.get_loss()-args.discriminator_advantage) < random.random())) and not frozen_generator
+        generator_learns = ((not discriminator_learns) or ((discriminator.get_loss()+args.discriminator_advantage) < random.random())) and not frozen_generator
         if generator_learns:
             if discriminator_learns:
                 iteration_summary += ', '
