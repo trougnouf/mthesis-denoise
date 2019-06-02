@@ -2,6 +2,7 @@ Hulb128Net: BN vs noBN  results/train/2019-05-23-Hulb128Net-BN  results/train/20
 (might be improved if we batch same noise but too much variance atm)
 
 # over 1 epoch
+
 Hulb128Act = {"No BN, PReLU": "results/train/2019-05-23-Hulb128Net-BN",
 "BN, PReLU": "results/train/2019-05-23-Hulb128Net-NoBN",
 "No BN, no final activation": "results/train/2019-05-23-Hulb128Net-NoBN-NoAct"}
@@ -37,11 +38,16 @@ invert_probabilities:
 'results/train/2019-05-26-Hulb128Net-Hul112Disc-0.95_lossgan-fixed'
 'results/train/2019-05-26-Hulb128Net-Hul112Disc-invert_probabilities_0.95_lossgan-fixed'
 
+
+
 noisy_probabilities
 results/train/2019-05-28-Hulb128Disc-very_noisy_probabilities
 results/train/2019-05-28-Hulb128Disc-std_noisy_probabilities
+
+p2p_train fixed on 05/28 23h04
 
 final_cgans:
 2019-05-31T23\:53_gan_train.py_--weight_SSIM_0.2_--weight_L1_0.05_--cuda_device_1_--batch_size_18_--d_network_PatchGAN 
 2019-05-31T23\:48_gan_train.py_--batch_size_18_--cuda_device_2_--weight_SSIM_0.2_--weight_L1_0.05_--d_funit_32_--d_weights_dict_path_models-2019-05-31T15\:52_gan_train.py_--batch_size_18_--cuda_device_2_--weight_SSIM_0.2_--weight_L1_0.05_--d_funit_32_--d_we
 results/train/2019-06-01T00:03_gan_train.py_--weight_L1_0.2_--weight_SSIM_0.8_--d_network_PatchGAN_--batch_size_18
+2019-06-02T15\:05_gan_train.py_--weight_SSIM_0.2_--weight_L1_0.05_--cuda_device_1_--batch_size_18_--d_funit_31_--d_network_Hulf112Disc

@@ -17,14 +17,18 @@ def make_markers_dict(components):
             i = 0
     return markersdict
 
-def parse_log_file(path, smoothing_factor = 1):
+def parse_log_file(path, smoothing_factor = 1, pre=None, post=None):
     data = []
     i = 0
     t = 0
     with open(path, 'r') as f:
         for l in f.readlines():
             added_data = False
-            if 'Epoch' in l and 'nan' not in l:
+            if pre is not None:
+                if pre in l and post in l:
+                    t += float(l.split(pre)[1].split(post)[0])
+                    added_data = True
+            elif 'Epoch' in l and 'nan' not in l:
                 t += float(l.split(':')[-1])
                 added_data = True
             elif 'loss = ' in l and 'time = ' not in l:

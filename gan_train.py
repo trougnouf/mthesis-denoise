@@ -29,6 +29,7 @@ default_weight_L1 = 0.05
 default_test_reserve = ['ursulines-red stefantiek', 'ursulines-building', 'MuseeL-Bobo', 'CourtineDeVillersDebris', 'C500D', 'Pen-pile']
 default_d_network = 'Hul112Disc'
 default_g_network = 'Hulb128Net'
+default_patience = 3
 
 # Training settings
 
@@ -63,6 +64,7 @@ parser.add_argument('--compute_SSIM_anyway', action='store_true', help='Compute 
 parser.add_argument('--freeze_generator', action='store_true', help='Freeze generator until discriminator is useful')
 parser.add_argument('--start_epoch', default=1, type=int, help='Starting epoch (cosmetics)')
 parser.add_argument('--discriminator_advantage', type=float, default=0.0, help='Desired discriminator correct prediction ratio is 0.5+advantage')
+parser.add_argument('--patience', type=int, default=default_patience, help='Number of epochs without improvements before scheduler updates learning rate')
 
 args = parser.parse_args()
 
@@ -133,7 +135,7 @@ class Generator(Model):
                  device = 'cuda:0', weight_SSIM=default_weight_SSIM,
                  weight_L1=default_weight_L1, activation='PReLU', funit=32,
                  beta1=default_beta1, lr=default_lr, printer=None, compute_SSIM_anyway=False,
-                 save_dict=True):
+                 save_dict=True, patience=default_patience):
         Model.__init__(self, save_dict, device, printer)
         self.weight_SSIM = weight_SSIM
         if weight_SSIM > 0 or compute_SSIM_anyway:
@@ -157,7 +159,7 @@ class Generator(Model):
                 self.model.load_state_dict(torch.load(weights_dict_path))
         self.model = self.model.to(device)
         self.optimizer = optim.Adam(self.model.parameters(), lr=lr, betas=(beta1, 0.999))
-        self.scheduler = lr_scheduler.ReduceLROnPlateau(self.optimizer, factor=0.75, verbose=True, threshold=1e-8, patience=5)
+        self.scheduler = lr_scheduler.ReduceLROnPlateau(self.optimizer, factor=0.75, verbose=True, threshold=1e-8, patience=patience)
         self.device = device
         self.loss = {'SSIM': 1, 'L1': 1, 'D': 1, 'weighted': 1}
         self.compute_SSIM_anyway = compute_SSIM_anyway
@@ -200,7 +202,8 @@ class Discriminator(Model):
     def __init__(self, network='Hul112Disc', weights_dict_path=None,
                  model_path=None, device='cuda:0', loss_function='MSE',
                  activation='PReLU', funit=24, beta1=default_beta1,
-                 lr = default_lr, not_conditional = False, printer=None, save_dict=True):
+                 lr = default_lr, not_conditional = False, printer=None, save_dict=True,
+                 patience=default_patience):
         Model.__init__(self, save_dict, device, printer)
         self.device = device
         self.loss = 1
@@ -230,7 +233,7 @@ class Discriminator(Model):
         self.optimizer = optim.Adam(self.model.parameters(), lr=lr, betas=(beta1, 0.999))
         self.conditional = not not_conditional
         self.predictions_range = None
-        self.scheduler = lr_scheduler.ReduceLROnPlateau(self.optimizer, factor=0.75, verbose=True, threshold=1e-8, patience=5)
+        self.scheduler = lr_scheduler.ReduceLROnPlateau(self.optimizer, factor=0.75, verbose=True, threshold=1e-8, patience=patience)
 
     def get_loss(self):
         return self.loss
@@ -321,12 +324,13 @@ discriminator = Discriminator(network=args.d_network, weights_dict_path=args.d_w
                               model_path=args.d_model_path, device=device,
                               loss_function=args.d_loss_function, activation=args.d_activation,
                               funit=args.d_funit, beta1=args.beta1, lr=args.d_lr,
-                              not_conditional=args.not_conditional, printer=p)
+                              not_conditional=args.not_conditional, printer=p,
+                              patience=args.patience)
 generator = Generator(network=args.g_network, weights_dict_path=args.g_weights_dict_path,
                       model_path=args.g_model_path, device=device, weight_SSIM=args.weight_SSIM,
                       weight_L1=args.weight_L1, activation=args.g_activation, funit=args.g_funit,
                       beta1=args.beta1, lr=args.g_lr, printer=p,
-                      compute_SSIM_anyway=args.compute_SSIM_anyway)
+                      compute_SSIM_anyway=args.compute_SSIM_anyway, patience=args.patience)
 
 crop_boundaries = get_crop_boundaries(DDataset.cs, DDataset.ucs, args.g_network, args.d_network)
 

@@ -79,7 +79,7 @@ NIND:X-T1 (\ac{RED-Net})                   & 0.940          & 0.923          & 0
 {Reconstruct noise on \ac{NIND}:\ac{X-T1} (U-Net)}      & 0.908          & 0.895          & 0.887          & 0.875          & 0.855          & 0.807          & 0.617          \\ \hline
 {Artificial noise on \ac{NIND}:\ac{X-T1} (U-Net)} & 0.946          & 0.879          & 0.864          & 0.836          & 0.802          & 0.716          & 0.430          \\ \hline
 \end{tabular}%
-}\caption{\ac{SSIM} index on \ac{NIND}:\ac{C500}D denoised set MuseeL-Bobo-C500D}
+}\caption{\ac{SSIM} index on \ac{NIND}:\ac{C500D} denoised set MuseeL-Bobo-C500D}
 \label{tableNINDXT1onBoboC500D}
 \end{table*}
 
@@ -160,12 +160,12 @@ We first tried following the pix2pix approach (whose typical use-case is rough s
   \end{center}
 \end{figure}
 
-Some improvement were made with careful fine-tuning of the learning environment. We added the \ac{SSIM} loss used in single-network training and tested different balances between the $\ell 1$, \ac{SSIM}, and discriminative losses. We tried training the generator without applying a discriminative loss until a SSIM threshold is met for a given number of consecutive iterations, and we tried training a non conditional network. Figure \ref{fig:p2p-comp-1} shows performance on the "stefantiek" set using different settings on a non conditional network (as well as the baseline network performance without these adjustments). We observe particularly poor performance when the discriminative loss has a high weight (weight\_D = 0.9), as well as when we start using the discriminative loss early on before the generator has learned to properly denoise with the conventional loss functions (min\_SSIM=0.3). The GAN network obtains reasonable performance when the generator is pretrained to achieve a \ac{SSIM} loss of 0.125 to 0.15. The greatest performance shown occurs when the generator has to obtain $\text{loss}_\text{SSIM} < 0.125$ for 35 consecutive iterations before using the discriminator as half of the overall loss. A crop denoised with this model (5) is shown beside one trained with standard pix2pix \ac{cGAN} (4) on Figure \ref{p2p-def}.
+Some improvement were made with careful fine-tuning of the learning environment. We added the \ac{SSIM} loss used in single-network training and tested different balances between the $\ell 1$, \ac{SSIM}, and discriminative losses. We tried training the generator without applying a discriminative loss until a SSIM threshold is met for a given number of consecutive iterations, and we tried training a non conditional network. Figure \ref{fig:p2p-comp-1} shows performance on the "stefantiek" set using different settings on a non conditional network (as well as the baseline network performance without these adjustments). We observe particularly poor performance when the discriminative loss has a high weight (weight\_D = 0.9), as well as when we start using the discriminative loss early on before the generator has learned to properly denoise with the conventional loss functions (min\_SSIM=0.3). The GAN network obtains reasonable performance when the generator is pretrained to achieve a \ac{SSIM} loss of 0.125 to 0.15. The greatest performance shown occurs when the generator has to obtain $\text{loss}_\text{SSIM} < 0.125$ for 35 consecutive iterations before using the discriminator as half of the overall loss. A crop denoised with this model (5) is shown beside one trained with standard pix2pix \ac{cGAN} (4) on Figure \ref{fig:p2p-def}.
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=1\linewidth]{gfx/graphs/p2p-comp-1.pdf}
-\caption{Denoising performance of the non conditional GAN with varying settings on the "stefantiek" set over increased ISO values}
+\caption{Denoising performance of the non conditional GAN with varying weights and schedules on the "stefantiek" set over increased ISO values}
 \label{fig:p2p-comp-1}
 \end{figure}
 
@@ -175,34 +175,43 @@ At the same time we wanted to replace the U-Net network which loses too much bor
 
 The two architectures were trained separately to assess and optimize their individual performance before working together. The generator is typically trained using the same framework as that of section \ref{sec:CNN Denoising}, while the discriminator main tests involve discriminating between clean and noisy crops from the dataset without receiving the conditional input. This test is not as robust as training with the result of a static generator but it allows us to quickly get a preview of the discriminator's performance whereas it would not always be able to learn from scratch given a well trained generator.
 
-Batch Normalization did not appear beneficial to 
-Generator: BN vs noBN vs noBN no activation
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=1\linewidth]{gfx/graphs/gen-BN.pdf}
+\caption{Generative network learning curve with and without \acl{BN}, as well as with neither \ac{BN} nor an activation function.}
+\label{fig:gen-BN}
+\end{figure}
+
+Batch Normalization appeared to hamper learning on the generative networks, often yielding worse color rendition and lowering the \ac{SSIM} index (which does not appear to be very sensible to color accuracy). We trained a generative network for an epoch with and without Batch Normalization to finally determine whether \ac{BN} should be removed from the generative network. Figure \ref{fig:gen-BN} shows the resulting learning curve, which allows us to confidently remove \ac{BN} from the generative architecture (which is now called "HulbNet". We also trained a network for an epoch to determine whether not using a final loss function as is commonly done (TODO cite) would yield better performance than \ac{PReLU}, but we found it better to continue ending with an activation function.
+
+% TODO explicitly mention loss
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=1\linewidth]{gfx/graphs/hul112disc-activ.pdf}
+\caption[Discriminative network learning curve with different final activation functions and number of filters]{Discriminative network learning curve with varying final activation functions (FA) and number of filters. One funit denotes the number of filters multiplier (with the first layer outputting two funits). The network is not conditioned and its task is to discriminate whether an image is clean or noisy. The loss is squared therefore a \ac{MSE} of 0.25 is equivalent to guessing 0.5.}
+\label{fig:hul112disc-activ}
+\end{figure}
+
+Figure \ref{fig:hul112disc-activ} shows the discriminator's learning curve classifying images as either clean or noisy. We observe that \acl{BN} is useful in the case of the discriminator, likely because its job does not entail recreating image fidelity from the input but output a single probability, and \acl{Batch Normalization} can help when given mini-batches of a single target value (line 3, 6, 7). We observe that the \ac{PReLU} activation function yields sporadically very poor performance on line 0 and 4, but performance is restored with a greater number of filters. Ending the discriminative network with a final max-pooling appears worse than a learned convolution. The different activation functions seem roughly equivalent as they overtake one other over time. Although we observe the importance of using a sufficient number of filters, we cannot conclude an actual number of needed filters from this experiment because the task is simpler than discriminating between real (baseline) and fake (denoised) images, but the real task at hand cannot be accomplished because the discriminator never catches up if there is a large discrepancy between an untrained discriminator and a pre-trained generator.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=1\linewidth]{gfx/graphs/label-smoothing.pdf}
+\caption[Discriminative network performance with noisy labels (always noisy or noisy for positive labels only)]{Discriminative network performance (\ac{MSE} loss) with noisy labels (either always noisy or noisy for positive labels only). The network attempts to discriminate images denoised by a generator which has been trained for three epochs and is continuously being updated (alas without any input from the discriminator).}
+\label{fig:label-smoothing}
+\end{figure}
+
+Following some incertitude on whether label smoothing should only be applied on positive labels as per \cite{gantechniques} or on all batches used to train the discriminator, we compared the two approaches and show the results on figure \ref{fig:label-smoothing}. The test protocol is different from the previous one in that the discriminator attempts to discriminate against images denoised by a generator which has been pre-trained for three epochs (and is continuously being updated, although it receives no feedback from the discriminator). The results we observed did not seem to differ significantly as the two discriminators would continuously overtake one other.
 
 
-Discriminator: 
+TODO (in-progress): HulbNet w/ HulDisc, HulbNet w/PatchGAN (done), HulbNet w/HulfDisc
 
-(broken crop)
-"None":
-"Sigmoid": 
-"PReLU": 
-"SELU"
-(normal crop)
-Hul112Disc\_fixed\_funit16\_finalpool
-Hulb112Disc\_fixed\_funit16\_sigmoid
-Hulb112Disc\_fixed\_funit16\_no\_activation
-Hul112Disc\_fixed\_funit16\_finalpool
-Hulb112Disc\_fixed\_funit16\_finalpool
-Hul112Disc\_fixed\_funit16
-Hul112Disc\_fixed\_funit32
-Hulb112Disc\_fixed\_funit16
-Hulb112Disc\_fixed\_funit32
+(mention that training with weight\_D >= 0.95 is not stable enough) 
 
-Combined:
+TODO: discriminator\_advantage
 
-conditional vs not conditional
+TODO conditional vs not conditional
 
-invert probabilities
+TODO invert probabilities
 
-(minitest) noisy probabilities: positive only vs both
-
-ssim0
+TODO higher - lower weights

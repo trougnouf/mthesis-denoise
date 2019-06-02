@@ -23,13 +23,13 @@ A loss function is applied to the output of the last layer, its gradient with re
 
 \textbf{Convolution layers} apply convolutions with $C$ filters (also called features) to every $\acs{k}*\acs{k}$ area in the previous layer's width and height\footnote{assuming a stride of 1}, taking in every channel and returning one value per filter. Convolutions have a receptive field that is determined by kernel size \acs{k} (typical values for $\acs{k}$ are 3 and 5). The next layer's width and height is thus reduced unless padding is applied. Given an input layer's width or height dimension $d$ and \ac{p}, a convolution layer's output size can be calculated as $d-\ac{k}+2\ac{p}+1$. Each filter is weighted and weights are learned parameters. The same stack of filters is applied on every $\ac{k}*\ac{k}$ area of a given layer, therefore \acs{CNN} have largely reduced number of weight parameters.
 
-\textbf{Activation layers} introduce non-linearity, they apply an activation function to every value in the previous layer and the resulting layer has the same shape as its input layer. We use the Sigmoid ($\phi(z)={1\over{1+e^{-z}}}$) and \ac{ReLU} ($R(z)=\max(0,z)$) activation functions. 
+\textbf{Activation layers} introduce non-linearity; they apply an activation function to every value in the previous layer and the resulting layer has the same shape as its input layer. We use the Sigmoid ($\phi(z)={1\over{1+e^{-z}}}$) and \ac{ReLU} ($R(z)=\max(0,z)$) activation functions. 
 
 % add gradient descent, BN
 
 \subsection{Loss function}
-
-The loss function assigns a score the the generated images with respect to the provided ground-truth. Loss functions need not to simply compare the difference between generated and ground-truth pixels because there is no one-to-one mapping between clean and noisy images, therefore a loss function which only focuses on the difference between pixels favors denoised images whose pixels average the many acceptable values; i.e. the network is trained to generate blurry images. \cite{pix2pix}
+% therefore and however are not interchangeable but they are used the same way with the punctuation sort of like that yeah they should never have as pace on either side words
+The loss function assigns a score to the generated images with respect to the provided ground-truth. A loss function should not simply compare the difference between generated and ground-truth pixels because there is no one-to-one mapping between clean and noisy images. Therefore, a loss function which only focuses on the difference between pixels favors denoised images whose pixels average the many acceptable values; i.e. the network is trained to generate blurry images. \cite{pix2pix}
 
 The \ac{MSE} (or $\ell 2$) measures the average squared difference between the generated and ground-truth pixels, it is a simple yet effective loss function. Similarly the $\ell 1$ loss measures the sum of the absolute differences between ground-truth and generated pixels, this typically favors blurrier results. The \ac{SSIM} index is another metric which puts weights on structural information that is more likely to be perceived in images, namely local changes in luminance, contrast, and structure. A loss may also be learned such as the discriminator in a \ac{GAN}.
 
