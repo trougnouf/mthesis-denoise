@@ -321,7 +321,7 @@ p.print("cmd: python3 "+" ".join(sys.argv))
 DDataset = DenoisingDataset(train_data, test_reserve=test_reserve)
 data_loader = DataLoader(dataset=DDataset, num_workers=args.threads, drop_last=True,
                          batch_size=args.batch_size, shuffle=True)
-
+# TODO make this optional
 discriminator = Discriminator(network=args.d_network, weights_dict_path=args.d_weights_dict_path,
                               model_path=args.d_model_path, device=device,
                               loss_function=args.d_loss_function, activation=args.d_activation,
@@ -403,7 +403,7 @@ for epoch in range(args.start_epoch, args.epochs):
         p.print("Average normalized loss: %f" % (average_d_loss))
         discriminator_learning_rate = discriminator.update_learning_rate(average_d_loss)
     generator.save_model(model_dir, epoch)
-    discriminator.save_model(model_dir, epoch)
+    discriminator.save_model(model_dir, epoch)  # TODO make this optional
     if args.time_limit < time.time() - start_time:
         p.print("Time is up")
         exit(0)

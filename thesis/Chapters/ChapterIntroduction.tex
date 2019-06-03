@@ -18,17 +18,23 @@ The use of deep learning to solve the denoising problem by directly generating t
 
 Some specialized work has shown that neural networks obtain state-of-the-art performance when trained with real data \cite{learningtoseeinthedark}\cite{microscopynoise}. We sought to assess the potential of deep learning applied to the denoising problem by expanding on this previous work through a dataset of images produced with various levels of ISO noise. This dataset can be used to train neural network models for general purpose denoising of high quality images.
 
-Our work introduces an open dataset of DSLR-like\footnote{\label{largesensornote}We define a DSLR-like camera as one produced with an APS-C (25.1x16.7 mm) or larger sensor such as those present in most DSLR and mirrorless cameras} image sets with various levels of real noise caused by the digital sensor's increased ISO sensitivity. The dataset is large enough to be used for training and varies in content in order to model a great variety of scenes. Each scene was captured at multiple noise levels, with an average of 6 images per set, such that a model may be trained for blind denoising on the base ISO as well as beyond the highest ISO value of the camera by feeding it crops that have a random noise value.
+Our work introduces an open dataset of DSLR-like\footnote{\label{largesensornote}We define a DSLR-like camera as one produced with an APS-C (25.1x16.7 mm) or larger sensor such as those present in most DSLR and mirrorless cameras.} image sets with various levels of real noise caused by the digital sensor's increased ISO sensitivity. The dataset is large enough to be used for training and varies in content in order to model a great variety of scenes. Each scene was captured at multiple noise levels, with an average of 6 images per set, such that a model may be trained for blind denoising on the base ISO as well as beyond the highest ISO value of the camera by feeding it crops that have a random noise value.
 
 The images in a set are all pixel-aligned. Some of the scenes include multiple ground-truth images which may be sampled at random during training; these would prevent the model from learning to reconstruct the random noise it has seen on one ground-truth, thus making it more difficult to overfit the noise. Overexposed areas are avoided in the ground-truth images because details are lost when the sensor is saturated and this could potentially give an advantage to higher ISO images in which the sensor is not necessarily saturated (notably in ISO-invariant cameras and high ISO pictures that are brightened using software).
 
 The dataset is published in sRGB format on Wikimedia Commons, which is an open-platform that promotes continuous discussion and contribution.
 
 %ADDED
-We trained several convolutional neural network architectures presented in the literature, namely DnCNN \cite{dncnn}, \ac{RED-Net}, and U-Net \cite{unet}, and analysed different proposed methods such as DnCNN \cite{dncnn}'s residual learning. 
+
+We trained several convolutional neural network architectures presented in the literature, namely DnCNN \cite{dncnn}, \ac{RED-Net}, and U-Net \cite{unet}, and we analyzed different methods such as DnCNN \cite{dncnn}'s proposed residual learning. These models and methods show state-of-the-art results when presented with synthetic noise, but their performance on real photographic noise removal remained untested until now due to the lack of an appropriate dataset.
+ % test data and architectures
 
 In most tests a U-Net model was trained with the \ac{NIND} and validated over increasing ISO values; test sets were taken with the same Fujifilm X-T1, as well as a Canon EOS 500D DSLR camera to assess the generalization. We also attempted to combine other datasets with our training data to assess the potential loss in performance caused by generalization. %Do I need to list results here?% %We found good generalization which did not suffer a significant performance hit when compared to specialized models.
-Finally we investigated the use of Generative Adversarial Networks\cite{pix2pix} to solve issues such as unnatural face smoothing.
+Finally, we investigated the use of \aclp{GAN} \cite{pix2pix} which may provide a solution to specific issues such as unnatural face smoothing and unmatched data.
+
+We expect the \acl{NIND} will be useful for research and applications in image noise removal, because it provides the data needed for neural networks to outperform conventional methods. Our trained models' performance consistently exceed that of \ac{BM3D} and of models trained with artificial noise. The results we provide with generative neural networks provide a solution that is usable immediately, and the functional \acl{gan} methods we explored provide groundwork for further work and application-specific use-cases.
+% thesis statement: we expect the \acl{NIND} and the validated methods to prove useful for 
+
 %endoldintro
 
 %what/why/how (short)

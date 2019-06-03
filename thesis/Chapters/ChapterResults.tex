@@ -204,8 +204,9 @@ Figure \ref{fig:hul112disc-activ} shows the discriminator's learning curve class
 
 Following some incertitude on whether label smoothing should only be applied on positive labels as per \cite{gantechniques} or on all batches used to train the discriminator, we compared the two approaches and show the results on figure \ref{fig:label-smoothing}. The test protocol is different from the previous one in that the discriminator attempts to discriminate against images denoised by a generator which has been pre-trained for three epochs (and is continuously being updated, although it receives no feedback from the discriminator). The results we observed did not seem to differ significantly as the two discriminators would continuously overtake one other.
 
+% switching losses is bad
 
-TODO (in-progress): HulbNet w/ HulDisc, HulbNet w/PatchGAN (done), HulbNet w/HulfDisc
+TODO (in-progress): HulbNet w/ HulDisc, HulbNet w/PatchGAN, HulbNet w/HulfDisc, HulbNet alone, HulbNet w/ HulDisc with 0.1 advantage
 
 (mention that training with weight\_D >= 0.95 is not stable enough) 
 
@@ -216,3 +217,5 @@ TODO conditional vs not conditional
 TODO invert probabilities
 
 TODO higher - lower weights
+
+TODO 
