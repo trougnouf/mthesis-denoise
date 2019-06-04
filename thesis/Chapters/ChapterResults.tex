@@ -111,7 +111,7 @@ NIND:X-T1 (\ac{RED-Net})                   & 0.940          & 0.923          & 0
 \begin{figure*}[!htbp]
 \centering
 \includegraphics[width=1\linewidth]{gfx/comp/stefantiek.jpg}
-\caption[Denoising stefantiek (visual comparison)]{Denoising stefantiek. 1: ISO200 ground-truth (1/20s), 2: high ISO (1/1900s), 3: 2 denoised using U-Net model trained with NIND, 4: 2 denoised using U-Net model trained with \ac{SIDD} (320-sets), 5: 2 denoised using \ac{BM3D} ($\sigma=90$\footnoteref{sigmanote})}
+\caption[Denoising stefantiek (visual comparison)]{Denoising stefantiek. 1: ISO200 ground-truth (1/20 s), 2: high ISO (1/1900 s), 3: 2 denoised using U-Net model trained with NIND, 4: 2 denoised using U-Net model trained with \ac{SIDD} (320-sets), 5: 2 denoised using \ac{BM3D} ($\sigma=90$\footnoteref{sigmanote})}
 \label{fig:stefantiek}
 \end{figure*}
 
@@ -125,7 +125,7 @@ NIND:X-T1 (\ac{RED-Net})                   & 0.940          & 0.923          & 0
 \begin{figure*}[!htbp]
 \centering
 \includegraphics[width=1\linewidth]{gfx/comp/txt.jpg}
-\caption[Denoising text present on sepiktext (visual comparison)]{Denoising text present on MuseeL-Sepik-C500D. 1: ISO200 ground-truth (2s), 2: high ISO (1/30s), 3: 2 denoised using U-Net model trained with NIND:X-T1, 4: 2 denoised using U-Net model trained with \ac{SIDD} (320-sets), 5: 2 denoised using BM3D ($\sigma=99$\footnoteref{sigmanote})}
+\caption[Denoising text present on sepiktext (visual comparison)]{Denoising text present on MuseeL-Sepik-C500D. 1: ISO200 ground-truth (2 s), 2: high ISO (1/30 s), 3: 2 denoised using U-Net model trained with NIND:X-T1, 4: 2 denoised using U-Net model trained with \ac{SIDD} (320-sets), 5: 2 denoised using BM3D ($\sigma=99$\footnoteref{sigmanote})}
 \label{fig:text}
 \end{figure*}
 
@@ -146,7 +146,7 @@ Reconstructing the noise (Method \ref{exp:nindmakenoise}) as was suggested in \c
 
 Training a model using artificial noise added to ground-truth images (Method \ref{exp:nindart}), as is commonplace in the literature \cite{rednet}\cite{dncnn}, yields the worst performance in our tests.
 
-In addition to the aforementioned results based on \ac{SSIM}, we have subjectively tested our \ac{NIND}-trained model on single images which are not part of the dataset. The first such image is that of a dynamic outdoor scene in which a human walks towards a group of pigeons, causing them to disperse in multiple directions. This type of fast, moving scene cannot be included in the dataset due to its dynamic nature and it must be captured with settings that result in a poor quality image; a small aperture (f/11) to focus everywhere, a fast shutter speed (1/1500s) to capture the flying birds, and a maximum sensor sensitivity (ISO6400) to match the aforementioned settings. Nonetheless, we found the denoised image to be of high quality; we submitted it to the Wikimedia Commons ``Quality Images Candidates" page \cite{qic} and it was subsequently promoted to a ``Quality Image" by Wikimedia Commons reviewers. A crop of the image is provided on Figure \ref{fig:visualpigeons} with a comparison between the noisy version, one denoised with a U-Net model trained on \ac{NIND}, and a version that has been denoised using \ac{BM3D} (with $\sigma=30$ which, on average, yields the highest \ac{SSIM} in our ISO6400 test images). The BM3D version shows significant displeasing artifacts, for example on the skirt and the blue uniform panel on the right, while the model trained on \ac{NIND} smoothed these regions appropriately while retaining a greater level of useful details such as those present on the pigeons' wings.
+Figure \ref{fig:text} shows satisfying denoising performance of a model trained on \ac{X-T1} images with text recovered from a \ac{C500D} image. In addition to the aforementioned results based on \ac{SSIM}, we have subjectively tested our \ac{NIND}-trained model on single images which are not part of the dataset. The first such image is that of a dynamic outdoor scene in which a human walks towards a group of pigeons, causing them to disperse in multiple directions. This type of fast, moving scene cannot be included in the dataset due to its dynamic nature and it must be captured with settings that result in a poor quality image; a small aperture (f/11) to focus everywhere, a fast shutter speed (1/1500 s) to capture the flying birds, and a maximum sensor sensitivity (ISO6400) to match the aforementioned settings. Nonetheless, we found the denoised image to be of high quality; we submitted it to the Wikimedia Commons ``Quality Images Candidates" page \cite{qic} and it was subsequently promoted to a ``Quality Image" by Wikimedia Commons reviewers. A crop of the image is provided on Figure \ref{fig:visualpigeons} with a comparison between the noisy version, one denoised with a U-Net model trained on \ac{NIND}, and a version that has been denoised using \ac{BM3D} (with $\sigma=30$ which, on average, yields the highest \ac{SSIM} in our ISO6400 test images). The BM3D version shows significant displeasing artifacts, for example on the skirt and the blue uniform panel on the right, while the model trained on \ac{NIND} smoothed these regions appropriately while retaining a greater level of useful details such as those present on the pigeons' wings.
 
 \section{GAN Denoising}\label{sec:GAN Denoising}
 

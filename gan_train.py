@@ -124,14 +124,6 @@ class Model:
         p.print('Learning rate: %f' % lr)
         return lr
 
-    def save_model(self, model_dir, epoch):
-        save_path = os.path.join(model_dir, 'generator_%u.pt' % epoch)
-        if self.save_dict:
-            torch.save(self.model.state_dict(), save_path)
-        else:
-            torch.save(self.model, save_path+'h')
-
-
 class Generator(Model):
     def __init__(self, network = 'Hulb128Net', weights_dict_path = None, model_path = None,
                  device = 'cuda:0', weight_SSIM=default_weight_SSIM,
@@ -201,6 +193,13 @@ class Generator(Model):
 
     def zero_grad(self):
         self.optimizer.zero_grad()
+        
+    def save_model(self, model_dir, epoch):
+        save_path = os.path.join(model_dir, 'generator_%u.pt' % epoch)
+        if self.save_dict:
+            torch.save(self.model.state_dict(), save_path)
+        else:
+            torch.save(self.model, save_path+'h')
 
 
 class Discriminator(Model):
@@ -298,6 +297,13 @@ class Discriminator(Model):
             self.predictions_range = '(not implemented)'
         self.update_loss(loss_fake_detached, loss_real_detached)
         self.optimizer.step()
+        
+    def save_model(self, model_dir, epoch):
+        save_path = os.path.join(model_dir, 'discriminator_%u.pt' % epoch)
+        if self.save_dict:
+            torch.save(self.model.state_dict(), save_path)
+        else:
+            torch.save(self.model, save_path+'h')
 
 def crop_batch(batch, boundaries):
     return batch[:, :, boundaries[0]:boundaries[1], boundaries[0]:boundaries[1]]
