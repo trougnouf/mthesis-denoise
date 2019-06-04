@@ -129,7 +129,7 @@ dlerrors = []
 apiurl = 'https://commons.wikimedia.org/w/api.php'
 session = requests.Session()
 
-def get_img(bname, isoval, ext, attempts_left, datelimit, use_wget):
+def get_img(bname, isoval, ext, attempts_left, datelimit, use_wget, custom_program = None):
     def get_latest_reqimg_info(imname, datelimit):
         rparams = {
             'action': 'query',
@@ -156,35 +156,41 @@ def get_img(bname, isoval, ext, attempts_left, datelimit, use_wget):
             return False
         print('Validated %s'%(path))
         return True
-    def download(path, url, use_wget):
-        if args.use_wget:
+    def download(path, url, use_wget, custom_program = None):
+        if use_wget:
             subprocess.run(['wget', url, '-O', path])
+        elif custom_program:
+            subprocess.run([custom_program, url, '-O', path])
         else:
-            with open(fpath, 'wb') as f:
-                f.write(requests.get(url).content)
+            with open(path, 'wb') as f:
+                response = requests.get(url)
+                if response.status_code == 429: #TODO replace this with ne valid
+                    print("Error: %s (hint: try with --use_wget)" % response.reason)
+                    return
+                f.write(response.content)
                 print('Downloaded %s'%(path))
                 f.flush()
     imname = 'NIND_%s_ISO%s.%s'%(bname, isoval, ext)
     imageinfo = get_latest_reqimg_info(imname, datelimit)
     if imageinfo == 404:
         return dlerrors.append('Error: %s not found prior to %s'%(imname, datelimit))
-    os.makedirs(imname, exist_ok=True)
     fpath = os.path.join(bname, imname)
     reqsha1 = imageinfo['sha1']
     url = imageinfo['url']
     while not checkfile(fpath, reqsha1):
         if attempts_left == 0:  # negative max_attempts -> unlimited attempts
             return dlerrors.append('Error: Unable to download %s (source: %s)'%(fpath, url))
-        download(fpath, url, use_wget)
+        download(fpath, url, use_wget, custom_program)
         attempts_left -= 1
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='NIND download script')
     parser.add_argument('--datelimit', default=last_update, type=str, help='Latest date of upload, used to get a specific version of the dataset (default: %s)'%(last_update))
     parser.add_argument('--use_wget', action='store_true', help="Use wget instead of python's request library (more likely to succeed)")
+    parser.add_argument('--custom_program', help="Custom program (alternative to wget), must follow the pattern custom_program url -O path")
     parser.add_argument('--target_dir', default='datasets/NIND', type=str, help="Target directory (default: datasets/NIND)")
     parser.add_argument('--sets2dl', nargs='*', help='Space separated list of image sets to download (default: %s)'%(' '.join(imageslist.keys())))
-    parser.add_argument('--max_attempts', default=3, help='Maximum download attempts (default: 3)')
+    parser.add_argument('--max_attempts', default=3, type=int, help='Maximum download attempts (default: 3)')
     args = parser.parse_args()
     os.makedirs(args.target_dir, exist_ok=True)
     os.chdir(args.target_dir)
@@ -198,7 +204,7 @@ if __name__ == "__main__":
             bname, *isos = img.split(',')
             os.makedirs(bname, exist_ok=True)
             for isoval in isos:
-                get_img(bname, isoval, ext, attempts_left=args.max_attempts, datelimit=args.datelimit, use_wget=args.use_wget)
+                get_img(bname, isoval, ext, attempts_left=args.max_attempts, datelimit=args.datelimit, use_wget=args.use_wget, custom_program=args.custom_program)
 
     if sum(['Unable to download' in error for error in dlerrors]) > 0:
         dlerrors.append('Some errors were encountered and corrupted files may be present, you should remove them manually or run this script again.')
