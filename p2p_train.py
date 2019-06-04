@@ -1,3 +1,4 @@
+# Train a denoising (c)GAN. deprecated, use gan_train.py instead.
 from __future__ import print_function
 import argparse
 import os

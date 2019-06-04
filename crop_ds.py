@@ -1,3 +1,8 @@
+# This script crops a dataset into csxcs with overlap (ucs) using crop_img.sh
+# typical I/O:
+# inputs: datasets/NIND/<set>/NIND_<set>_ISO<val>.<ext>
+# outputs: datasets/train/NIND_<cs>_<ucs>/<set>/ISO<val>/NIND_<set>_ISO<val>_<xpos>_<ypos>_<ucs>.<ext>
+
 import os
 import argparse
 import subprocess

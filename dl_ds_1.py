@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+# NIND download script. Use --use_wget is recommended
 import os
 import requests
 import argparse

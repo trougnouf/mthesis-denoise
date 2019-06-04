@@ -1,3 +1,4 @@
+# Denoise an image: the ultimately useful test. cs and ucs should be set depending on the network (ie UNet can handle bigger, *128Net should have cs=128 ucs=112). TODO make exif and such optional
 import os
 import argparse
 import torchvision

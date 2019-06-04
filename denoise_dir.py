@@ -1,4 +1,4 @@
-# run this to test the model
+# run this to test the model: denoise a directory (datasets/test/ds_fs) and computes the SSIM score for each (using the lowest-ISO ground-truth located in the same directory), store results in results/test/<model_name>/res.txt
 
 import argparse
 import os

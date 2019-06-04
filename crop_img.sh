@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # This script crops one (FP) image into many CSxCS crops with overlap (CS>=UCS)
+# Typically called by crop_ds.py
 # input:
 CS=$1       # crop size (including overlap)
 UCS=$2      # useful crop size

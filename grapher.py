@@ -1,3 +1,4 @@
+# results collection helper
 import os
 import argparse
 import matplotlib.pyplot as plt
@@ -174,5 +175,5 @@ for image in images:
         plt.show()
 # TODO use json to handle nested dicts
 if not args.nojson:
-    with open('data.json', 'w') as f:
+    with open('res.json', 'w') as f:
         json.dump(data, f)

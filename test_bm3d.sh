@@ -1,3 +1,4 @@
+# results collection helper
 SIGMAS=(5 10 20 30 40 50 60 70 80 90 92 95 97 99)
 NOISYTESTDIR="datasets/test/tmpskull"
 TESTSETS=($(ls ${NOISYTESTDIR}))

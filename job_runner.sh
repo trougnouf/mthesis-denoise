@@ -1,4 +1,5 @@
 #!/bin/bash
+# scheduler
 while :
 do
     git pull

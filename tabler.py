@@ -1,11 +1,11 @@
-
+# results collection helper
 import json
 import statistics
 
 
 # ssim avg, min,
 
-def tablemaker(datafn='data.json', blacklistimages=None, whitelistimages=None):
+def tablemaker(datafn='res.json', blacklistimages=None, whitelistimages=None):
     with open(datafn) as f:
         data = json.load(f)
     ndata = dict()
@@ -48,7 +48,7 @@ def tablemaker(datafn='data.json', blacklistimages=None, whitelistimages=None):
         tbl = tbl[:-1]+'\n'
     print(tbl)
     print('\n')
-tablemaker('data.json', blacklistimages='C500D')
-tablemaker('data1.json', blacklistimages='C500D')
-tablemaker('data1.json', whitelistimages='C500D')
-tablemaker('data2.json')
+tablemaker('res.json', blacklistimages='C500D')
+tablemaker('res1.json', blacklistimages='C500D')
+tablemaker('res1.json', whitelistimages='C500D')
+tablemaker('res2.json')

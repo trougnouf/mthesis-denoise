@@ -1,3 +1,4 @@
+# This script deletes old models to free up space (keeps only the most recent for each training directory)
 import os
 os.chdir('models')
 

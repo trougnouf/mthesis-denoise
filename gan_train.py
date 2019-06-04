@@ -1,3 +1,5 @@
+# train a (c)GAN or standard CNN network for denoising (ie with the NIND)
+# should replace run_nn.py (TODO: no discriminator initialization if its weight is 0, add dataset options s.a. compression)
 from __future__ import print_function
 import argparse
 import os
@@ -34,7 +36,7 @@ default_patience = 3
 # Training settings
 
 parser = argparse.ArgumentParser(description='(c)GAN trainer for mthesis-denoise')
-parser.add_argument('--batch_size', type=int, default=19, help='Training batch size')
+parser.add_argument('--batch_size', type=int, default=18, help='Training batch size')
 parser.add_argument('--time_limit', type=int, default=172800, help='Time limit (ends training)')
 parser.add_argument('--g_activation', type=str, default='PReLU', help='Final activation function for generator')
 parser.add_argument('--g_funit', type=int, default=32, help='Filter unit size for generator')

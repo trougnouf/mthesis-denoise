@@ -1,3 +1,4 @@
+# train a conventional CNN to denoise images with the NIND. Soon to be deprecated, gan_train.py should handle both. Currently this supports additional options such as compression.
 import os
 import sys
 import argparse

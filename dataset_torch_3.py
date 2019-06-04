@@ -1,3 +1,5 @@
+# NIND dataset handler for pytorch. Loads the pre-cropped dataset, returns clean, noisy crops where noise value is randomized (unless specified in yval). Supports on-the-fly compression (compressionmin, compressionmax), artificial noise (sigmamin, sigmamax), and test_reserve (with exact_reserve or keyword search)
+
 import os
 from torch.utils.data import Dataset
 from PIL import Image, ImageOps
