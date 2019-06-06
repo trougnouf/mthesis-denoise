@@ -5,6 +5,7 @@ import torch
 class Hulb128Net(nn.Module):
     def __init__(self, funit=32, activation='PReLU'):
         super(Hulb128Net, self).__init__()
+        funit=int(funit)
         self.enc128to126std = nn.Sequential(
             nn.Conv2d(3, 2*funit, 3),
             nn.PReLU(init=0.01),

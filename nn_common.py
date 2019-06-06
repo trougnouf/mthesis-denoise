@@ -33,36 +33,36 @@ class Model:
         self.debug_options=debug_options
 
     @staticmethod
-    def complete_path(path):
-        def find_highest(paths):
+    def complete_path(path, keyword=''):
+        def find_highest(paths, keyword):
             best = [None, 0]
             for path in paths:
                 curval = int(path.split('_')[-1].split('.')[0])
-                if curval > best[1]:
+                if curval > best[1] and keyword in path:
                     best = [path, curval]
             return best[0]
         if os.path.isfile(path):
             return path
         elif os.path.isdir(path):
-            return find_highest(os.listdir(path))
+            return find_highest(os.listdir(path), keyword)
         elif os.path.isdir(os.path.join('models', path)):
-            return complete_path(os.path.join('models', path))
+            return complete_path(os.path.join('models', path), keyword)
         else:
             return False
 
     @staticmethod
-    def instantiate_model(model_path=None, network=None, device='cuda:0', strparameters=None, pfun=print, **parameters):
+    def instantiate_model(model_path=None, network=None, device='cuda:0', strparameters=None, pfun=print, keyword='', keyword='discriminator', **parameters):
         model = None
         if strparameters is not None and strparameters != "":
             parameters.update(dict([parameter.split('=') for parameter in strparameters.split(',')]))
         if model_path is not None:
-            path = Model.complete_path(model_path)
+            path = Model.complete_path(model_path, keyword)
             if path.endswith('.pth'):
                 model = torch.load(path, map_location=device)
             elif path.endswith('pt'):
                 assert network is not None
                 model = globals()[network](**parameters)
-                model.load_state_dict(torch.load(path))
+                model.load_state_dict(torch.load(path, map_location=device))
             else:
                 pfun('Error: unable to load invalid model path: %s'%path)
                 exit(1)
@@ -93,7 +93,7 @@ class Generator(Model):
         self.weight_D = 1 - weight_SSIM - weight_L1
         if self.weight_D > 0:
             self.criterion_D = nn.MSELoss().to(device)
-        self.model = self.instantiate_model(model_path=model_path, network=network, pfun=self.print, device=device, funit=funit)
+        self.model = self.instantiate_model(model_path=model_path, network=network, pfun=self.print, device=device, funit=funit, keyword='generator')
         self.optimizer = optim.Adam(self.model.parameters(), lr=lr, betas=(beta1, 0.999))
         self.scheduler = lr_scheduler.ReduceLROnPlateau(self.optimizer, factor=0.75, verbose=True, threshold=1e-8, patience=patience)
         self.device = device
