@@ -1,0 +1,20 @@
+Namespace(batch_size=18, beta1=0.5, compute_SSIM_anyway=False, cuda_device=0, d_activation='PReLU', d_funit=32, d_loss_function='MSE', d_lr=0.0003, d_model_path=None, d_network='Hul112Disc', debug_options=None, discriminator_advantage=0.0, epochs=9001, freeze_generator=False, g_activation='PReLU', g_funit=32, g_lr=0.000225, g_model_path='models/2019-06-06T13:15_gan_train.py_--weight_L1_0.2_--weight_SSIM_0.8_--batch_size_18_--start_epoch_64_--patience_2_--g_weights_dict_path_models-2019-06-03T07:47_gan_train.py_--weight_L1_0.2_--weight_SSIM_0.8_--d_network_PatchGAN_--batch_size_18_--start_epoch_3/generator_70.pt', g_network='Hulb128Net', min_lr=5e-08, not_conditional=False, patience=2, start_epoch=71, test_reserve=None, threads=6, time_limit=172800, train_data=None, weight_L1=0.2, weight_SSIM=0.8)
+cmd: python3 nn_train.py --weight_L1 0.2 --weight_SSIM 0.8 --batch_size 18 --start_epoch 71 --g_lr 0.000225 --patience 2 --g_model_path models/2019-06-06T13:15_gan_train.py_--weight_L1_0.2_--weight_SSIM_0.8_--batch_size_18_--start_epoch_64_--patience_2_--g_weights_dict_path_models-2019-06-03T07:47_gan_train.py_--weight_L1_0.2_--weight_SSIM_0.8_--d_network_PatchGAN_--batch_size_18_--start_epoch_3/generator_70.pt
+Epoch 71 batch 1/4890:                                                                              loss G: SSIM: 0.086, L1: 0.014, NA, weighted: 0.072
+Epoch 71 batch 2/4890:                                                                              loss G: SSIM: 0.079, L1: 0.014, NA, weighted: 0.066
+Epoch 71 batch 3/4890:                                                                              loss G: SSIM: 0.085, L1: 0.012, NA, weighted: 0.070
+Epoch 71 batch 4/4890:                                                                              loss G: SSIM: 0.079, L1: 0.012, NA, weighted: 0.065
+Epoch 71 batch 5/4890:                                                                              loss G: SSIM: 0.115, L1: 0.016, NA, weighted: 0.095
+Epoch 71 batch 6/4890:                                                                              loss G: SSIM: 0.115, L1: 0.016, NA, weighted: 0.095
+Epoch 71 batch 7/4890:                                                                              loss G: SSIM: 0.102, L1: 0.014, NA, weighted: 0.084
+Epoch 71 batch 8/4890:                                                                              loss G: SSIM: 0.096, L1: 0.013, NA, weighted: 0.080
+Epoch 71 batch 9/4890:                                                                              loss G: SSIM: 0.060, L1: 0.011, NA, weighted: 0.050
+Epoch 71 batch 10/4890:                                                                             loss G: SSIM: 0.076, L1: 0.011, NA, weighted: 0.063
+Epoch 71 batch 11/4890:                                                                             loss G: SSIM: 0.123, L1: 0.016, NA, weighted: 0.101
+Epoch 71 batch 12/4890:                                                                             loss G: SSIM: 0.115, L1: 0.015, NA, weighted: 0.095
+Epoch 71 batch 13/4890:                                                                             loss G: SSIM: 0.098, L1: 0.015, NA, weighted: 0.082
+Epoch 71 batch 14/4890:                                                                             loss G: SSIM: 0.087, L1: 0.013, NA, weighted: 0.072
+Epoch 71 batch 15/4890:                                                                             loss G: SSIM: 0.095, L1: 0.016, NA, weighted: 0.079
+Epoch 71 batch 16/4890:                                                                             loss G: SSIM: 0.099, L1: 0.014, NA, weighted: 0.082
+Epoch 71 batch 17/4890:                                                                             loss G: SSIM: 0.087, L1: 0.013, NA, weighted: 0.072
+Epoch 71 batch 18/4890:                                                                             loss G: SSIM: 0.087, L1: 0.016, NA, weighted: 0.073

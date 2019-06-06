@@ -51,7 +51,7 @@ class Model:
             return False
 
     @staticmethod
-    def instantiate_model(model_path=None, network=None, device='cuda:0', strparameters=None, pfun=print, keyword='', keyword='discriminator', **parameters):
+    def instantiate_model(model_path=None, network=None, device='cuda:0', strparameters=None, pfun=print, keyword='', **parameters):
         model = None
         if strparameters is not None and strparameters != "":
             parameters.update(dict([parameter.split('=') for parameter in strparameters.split(',')]))
@@ -114,19 +114,19 @@ class Generator(Model):
             loss_SSIM = 1-loss_SSIM
             self.loss['SSIM'] = loss_SSIM.item()
         if self.weight_SSIM == 0:
-            loss_SSIM = torch.zeros(1).to(device)
+            loss_SSIM = torch.zeros(1).to(self.device)
         if self.weight_L1 > 0:
             loss_L1 = self.criterion_L1(generated_batch_cropped, clean_batch_cropped)
             self.loss['L1'] = loss_L1.item()
         else:
-            loss_L1 = torch.zeros(1).to(device)
+            loss_L1 = torch.zeros(1).to(self.device)
         if self.weight_D > 0:
             loss_D = self.criterion_D(discriminator_predictions,
                                       gen_target_probabilities(True, discriminator_predictions.shape,
                                                                device=self.device, noisy=False))
             self.loss['D'] = math.sqrt(loss_D.item())
         else:
-            loss_D = torch.zeros(1).to(device)
+            loss_D = torch.zeros(1).to(self.device)
         loss = loss_SSIM * self.weight_SSIM + loss_L1 * self.weight_L1 + loss_D * self.weight_D
         self.loss['weighted'] = loss.item()
         loss.backward()
