@@ -165,7 +165,7 @@ def get_img(bname, isoval, ext, attempts_left, datelimit, use_wget, custom_progr
         else:
             with open(path, 'wb') as f:
                 response = requests.get(url, headers={'user-agent': 'NIND-download-script/0.0.1'})
-                if response.status_code != 200: #TODO replace this with ne valid
+                if response.status_code != 200:
                     print("Error: %s (hint: try with --use_wget)" % response.reason)
                     return
                 f.write(response.content)

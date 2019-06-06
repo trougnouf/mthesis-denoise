@@ -8,10 +8,10 @@ The \ac{NIND} is cropped in advance to speed up loading times. A crop size of 12
 An epoch consists of training the model on every crop of any ISO value for every scene, that is, a random ISO value is fed every time a crop is loaded, therefore it takes several epochs for the model to train on all of the available data. The ground-truth is also selected randomly when multiple ones are available and basic data augmentation (rotation and/or translation) is performed.
 
 \section{CNN Denoiser}\label{sec:CNN Denoiser}
-\subsubsection{Models}
+%\subsubsection{Models}
 We initially trained a DnCNN \cite{dncnn} model on our data. This model attained satisfying performance when trained to model the latent clean image instead of modeling the noise. It was further improved by using a convolution filter size of 5x5 instead of 3x3. The second architecture tested was a \ac{RED-Net} \cite{rednet} with 22-layers and a filter size of 5x5. This model obtained very good performance, albeit with an impractical runtime and memory use. We settled on a U-Net \cite{unet} architecture which provides slightly better performance with significantly lower runtime and memory use.
 
-\subsection{Experimental results}
+%\subsection{Experimental results}
 
 We compared the performance obtained with the following methods:
 
@@ -60,7 +60,7 @@ Reconstruct noise on NIND:X-T1 (U-Net)      & 0.950          & \textbf{0.926} & 
 Artificial noise on NIND:X-T1 (U-Net) & 0.963          & 0.920          & 0.899          & 0.880          & 0.810          & 0.769          & 0.531          \\ \hline
 NIND:X-T1 (\ac{RED-Net})                   & 0.940          & 0.923          & 0.915          & \textbf{0.907} & 0.892          & \textbf{0.886} & 0.842          \\ \hline
 \end{tabular}%
-}\caption{Average \ac{SSIM} index on 5 \ac{NIND}:\ac{X-T1} denoised scenes (ursulines-building, stefantiek, CourtineDeVillersDebris, MuseeL-Bobo, ursulines-red). The best performing models (to within two significant digits) are marked in bold.}
+}\caption[Average \acs{SSIM} index on 5 \acs{NIND}:\acs{X-T1} denoised scenes]{Average \acs{SSIM} index on 5 \acs{NIND}:\acs{X-T1} denoised scenes (ursulines-building, stefantiek, CourtineDeVillersDebris, MuseeL-Bobo, ursulines-red). The best performing models (to within two significant digits) are marked in bold.}
 \label{tableNINDXT1}
 \end{table*}
 
@@ -79,7 +79,7 @@ NIND:X-T1 (\ac{RED-Net})                   & 0.940          & 0.923          & 0
 {Reconstruct noise on \ac{NIND}:\ac{X-T1} (U-Net)}      & 0.908          & 0.895          & 0.887          & 0.875          & 0.855          & 0.807          & 0.617          \\ \hline
 {Artificial noise on \ac{NIND}:\ac{X-T1} (U-Net)} & 0.946          & 0.879          & 0.864          & 0.836          & 0.802          & 0.716          & 0.430          \\ \hline
 \end{tabular}%
-}\caption{\ac{SSIM} index on \ac{NIND}:\ac{C500D} denoised set MuseeL-Bobo-C500D}
+}\caption{\acs{SSIM} index on \acs{NIND}:\acs{C500D} denoised set MuseeL-Bobo-C500D}
 \label{tableNINDXT1onBoboC500D}
 \end{table*}
 
@@ -96,7 +96,7 @@ NIND:X-T1 (\ac{RED-Net})                   & 0.940          & 0.923          & 0
 \ul{NIND:X-T1 ISO6400 only (U-Net)}   & 0.857          & 0.847          & \textbf{0.847} & 0.845          & \textbf{0.843} & \textbf{0.834} & 0.802          \\ \hline
 \ul{Reconstruct noise on NIND:X-T1 (U-Net)} & 0.878          & 0.845          & 0.835          & 0.814          & 0.785          & 0.725          & 0.604          \\ \hline
 \end{tabular}%
-}\caption{Average \ac{SSIM} index on 10 \ac{NIND}:\ac{C500D} scenes denoised with models trained on \ac{NIND}:\ac{X-T1} or with \ac{BM3D}}
+}\caption{Average \acs{SSIM} index on 10 \acs{NIND}:\acs{C500D} scenes denoised with models trained on \acs{NIND}:\acs{X-T1} or with \acs{BM3D}}
 \label{tableXT1onC500D}
 \end{table*}
 
@@ -104,14 +104,14 @@ NIND:X-T1 (\ac{RED-Net})                   & 0.940          & 0.923          & 0
 \centering
 \includegraphics[width=1\linewidth]{gfx/graphs/boboc500d.pdf}
 %\input{bobo-c500d.pgf}
-\caption{Denoising performance of the MuseeL-Bobo-C500D set over increased ISO value (\ac{SSIM} values shown in Table \ref{tableNINDXT1onBoboC500D})}
+\caption[Denoising performance on the MuseeL-Bobo-C500D set over increased ISO value]{Denoising performance of different methods on the MuseeL-Bobo-C500D set over increased ISO value (\acs{SSIM} values shown in Table \ref{tableNINDXT1onBoboC500D})}
 \label{fig:boboc500d}
 \end{figure}
 
 \begin{figure*}[!htbp]
 \centering
 \includegraphics[width=1\linewidth]{gfx/comp/stefantiek.jpg}
-\caption[Denoising stefantiek (visual comparison)]{Denoising stefantiek. 1: ISO200 ground-truth (1/20 s), 2: high ISO (1/1900 s), 3: 2 denoised using U-Net model trained with NIND, 4: 2 denoised using U-Net model trained with \ac{SIDD} (320-sets), 5: 2 denoised using \ac{BM3D} ($\sigma=90$\footnoteref{sigmanote})}
+\caption[Denoising stefantiek (visual comparison)]{Denoising stefantiek. 1: ISO200 ground-truth (1/20 s), 2: high ISO (1/1900 s), 3: 2 denoised using U-Net model trained with \ac{NIND}, 4: 2 denoised using U-Net model trained with \ac{SIDD} (320-sets), 5: 2 denoised using \ac{BM3D} ($\sigma=90$\footnoteref{sigmanote})}
 \label{fig:stefantiek}
 \end{figure*}
 
@@ -125,14 +125,14 @@ NIND:X-T1 (\ac{RED-Net})                   & 0.940          & 0.923          & 0
 \begin{figure*}[!htbp]
 \centering
 \includegraphics[width=1\linewidth]{gfx/comp/txt.jpg}
-\caption[Denoising text present on sepiktext (visual comparison)]{Denoising text present on MuseeL-Sepik-C500D. 1: ISO200 ground-truth (2 s), 2: high ISO (1/30 s), 3: 2 denoised using U-Net model trained with NIND:X-T1, 4: 2 denoised using U-Net model trained with \ac{SIDD} (320-sets), 5: 2 denoised using BM3D ($\sigma=99$\footnoteref{sigmanote})}
+\caption[Denoising text present on MuseeL-Sepik-C500D (visual comparison)]{Denoising text present on MuseeL-Sepik-C500D. 1: ISO200 ground-truth (2 s), 2: high ISO (1/30 s), 3: 2 denoised using U-Net model trained with \acs{NIND}:\acs{X-T1}, 4: 2 denoised using U-Net model trained with \ac{SIDD} (320-sets), 5: 2 denoised using \acs{BM3D} ($\sigma=99$\footnoteref{sigmanote})}
 \label{fig:text}
 \end{figure*}
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=1\linewidth]{gfx/comp/comp-noisy-nind-bm3d30.jpg}
-\caption[Denoising of an unpaired "high-speed" image]{Comparison between a noisy ISO6400 crop (top), one denoised with a model trained on \ac{NIND} (middle), and one on which \ac{BM3D} ($\sigma=30$) has been applied (bottom). Our model appears to perform well on dynamic scenes despite having been trained on static scenes.}
+\caption[Denoising of an unpaired "high-speed" image (visual comparison)]{Comparison between a noisy ISO6400 crop (top), one denoised with a model trained on \ac{NIND} (middle), and one on which \ac{BM3D} ($\sigma=30$) has been applied (bottom). Our model appears to perform well on dynamic scenes despite having been trained on static scenes.}
 \label{fig:visualpigeons}
 \end{figure}
 
@@ -165,7 +165,7 @@ Some improvement were made with careful fine-tuning of the learning environment.
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=1\linewidth]{gfx/graphs/p2p-comp-1.pdf}
-\caption{Denoising performance of the non conditional GAN with varying weights and schedules on the "stefantiek" set over increased ISO values}
+\caption[Denoising performance of \acsp{GAN} on the "stefantiek" set]{Denoising performance of the non conditional GAN with varying weights and schedules on the "stefantiek" set over increased ISO values. The models appear to perform better when they are pre-trained to achieve good performance with the \acs{SSIM} loss before taking the discriminator's feedback into account, and when the discriminator's weight (1 - other weights) does not account for most of the loss function.}
 \label{fig:p2p-comp-1}
 \end{figure}
 
@@ -178,33 +178,34 @@ The two architectures were trained separately to assess and optimize their indiv
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=1\linewidth]{gfx/graphs/gen-BN.pdf}
-\caption{Generative network learning curve with and without \acl{BN}, as well as with neither \ac{BN} nor an activation function.}
+\caption[Generative network learning curve with and without batch normalization]{Generative network learning curve with and without \acl{BN} ("HulbNet"), as well as with neither \ac{BN} nor an activation function. We observe better performance when \acl{BN} is not applied and with the use of a non-linear final activation function.}
 \label{fig:gen-BN}
 \end{figure}
 
-Batch Normalization appeared to hamper learning on the generative networks, often yielding worse color rendition and lowering the \ac{SSIM} index (which does not appear to be very sensible to color accuracy). We trained a generative network for an epoch with and without Batch Normalization to finally determine whether \ac{BN} should be removed from the generative network. Figure \ref{fig:gen-BN} shows the resulting learning curve, which allows us to confidently remove \ac{BN} from the generative architecture (which is now called "HulbNet". We also trained a network for an epoch to determine whether not using a final loss function as is commonly done (TODO cite) would yield better performance than \ac{PReLU}, but we found it better to continue ending with an activation function.
+\acl{BN} appeared to hamper learning on the generative networks, often yielding worse color rendition and lowering the \ac{SSIM} index (which does not appear to be very sensible to color accuracy). We trained a generative network for an epoch with and without batch normalization to finally determine whether \ac{BN} should be removed from the generative network. Figure \ref{fig:gen-BN} shows the resulting learning curve, which allows us to confidently remove \ac{BN} from the generative architecture (which is now called "HulbNet". We also trained a network for an epoch to determine whether not using a final loss function as is sometimes done \cite{dncnn} would yield better performance than \ac{PReLU}, but we found it better to continue ending with a non-linear activation function.
 
 % TODO fix imbalance
 % TODO explicitly mention loss
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=1\linewidth]{gfx/graphs/hul112disc-activ.pdf}
-\caption[Discriminative network learning curve with different final activation functions and number of filters]{Discriminative network learning curve with varying final activation functions (FA) and number of filters. One funit denotes the number of filters multiplier (with the first layer outputting two funits). The network is not conditioned and its task is to discriminate whether an image is clean or noisy. The loss is squared therefore a \ac{MSE} of 0.25 is equivalent to guessing 0.5.}
+\caption[Discriminative network learning curve with different final activation functions and number of filters]{Discriminative network learning curve with varying final activation functions (FA) and number of filters. We observe that the discriminative network benefits greatly from \ac{BN} and that training stability and performance suffer from not having a sufficient number of filters. One funit denotes the number of filters multiplier (with the first layer outputting two funits). The network is not conditioned and its task is to discriminate whether an image is clean or noisy. The loss is squared therefore a \ac{MSE} of 0.25 is equivalent to guessing 0.5.}
 \label{fig:hul112disc-activ}
 \end{figure}
 
-Figure \ref{fig:hul112disc-activ} shows the discriminator's learning curve classifying images as either clean or noisy. We observe that \acl{BN} is useful in the case of the discriminator, likely because its job does not entail recreating image fidelity from the input but output a single probability, and \acl{Batch Normalization} can help when given mini-batches of a single target value (line 3, 6, 7). We observe that the \ac{PReLU} activation function yields sporadically very poor performance on line 0 and 4, but performance is restored with a greater number of filters. Ending the discriminative network with a final max-pooling appears worse than a learned convolution. The different activation functions seem roughly equivalent as they overtake one other over time. Although we observe the importance of using a sufficient number of filters, we cannot conclude an actual number of needed filters from this experiment because the task is simpler than discriminating between real (baseline) and fake (denoised) images, but the real task at hand cannot be accomplished because the discriminator never catches up if there is a large discrepancy between an untrained discriminator and a pre-trained generator.
+Figure \ref{fig:hul112disc-activ} shows the discriminator's learning curve classifying images as either clean or noisy. We observe that \acl{BN} is useful in the case of the discriminator, likely because its job does not entail recreating image fidelity from the input but output a single probability, and \acl{BN} can help when given mini-batches of a single target value (line 3, 6, 7). We observe that the \ac{PReLU} activation function yields sporadically very poor performance on line 0 and 4, but performance is restored with a greater number of filters. Ending the discriminative network with a final max-pooling appears worse than a learned convolution. The different activation functions seem roughly equivalent as they overtake one other over time. Although we observe the importance of using a sufficient number of filters, we cannot conclude an actual number of needed filters from this experiment because the task is simpler than discriminating between real (baseline) and fake (denoised) images, but the real task at hand cannot be accomplished because the discriminator never catches up if there is a large discrepancy between an untrained discriminator and a pre-trained generator.
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=1\linewidth]{gfx/graphs/label-smoothing.pdf}
-\caption[Discriminative network performance with noisy labels (always noisy or noisy for positive labels only)]{Discriminative network performance (\ac{MSE} loss) with noisy labels (either always noisy or noisy for positive labels only). The network attempts to discriminate images denoised by a generator which has been trained for three epochs and is continuously being updated (alas without any input from the discriminator).}
+\caption[Discriminative network performance with noisy labels (always noisy or noisy for positive labels only)]{Discriminative network performance (\ac{MSE} loss) with noisy labels (either always noisy or noisy for positive labels only). The network attempts to discriminate images denoised by a generator which has been trained for three epochs and is continuously being updated (alas without any input from the discriminator). We did not observe a notable difference in performance between the two label smoothing methods.}
 \label{fig:label-smoothing}
 \end{figure}
 
 Following some incertitude on whether label smoothing should only be applied on positive labels as per \cite{gantechniques} or on all batches used to train the discriminator, we compared the two approaches and show the results on figure \ref{fig:label-smoothing}. The test protocol is different from the previous one in that the discriminator attempts to discriminate against images denoised by a generator which has been pre-trained for three epochs (and is continuously being updated, although it receives no feedback from the discriminator). The results we observed did not seem to differ significantly as the two discriminators would continuously overtake one other.
 
 % switching losses is bad
+Using our HulbNet generative network and HulDisc discriminative network and the training method described in section \ref{sec:Adopted training method}  
 
 TODO (in-progress): HulbNet w/ HulDisc, HulbNet w/PatchGAN, HulbNet w/HulfDisc, HulbNet alone, HulbNet w/ HulDisc with 0.1 advantage
 
