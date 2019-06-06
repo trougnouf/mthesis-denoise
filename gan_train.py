@@ -330,12 +330,15 @@ DDataset = DenoisingDataset(train_data, test_reserve=test_reserve)
 data_loader = DataLoader(dataset=DDataset, num_workers=args.threads, drop_last=True,
                          batch_size=args.batch_size, shuffle=True)
 # TODO make this optional
-discriminator = Discriminator(network=args.d_network, weights_dict_path=args.d_weights_dict_path,
-                              model_path=args.d_model_path, device=device,
-                              loss_function=args.d_loss_function, activation=args.d_activation,
-                              funit=args.d_funit, beta1=args.beta1, lr=args.d_lr,
-                              not_conditional=args.not_conditional, printer=p,
-                              patience=args.patience)
+use_D = (args.weight_SSIM + args.weight_L1) < 1
+if use_D:
+    discriminator = Discriminator(network=args.d_network,
+                                  weights_dict_path=args.d_weights_dict_path,
+                                  model_path=args.d_model_path, device=device,
+                                  loss_function=args.d_loss_function, activation=args.d_activation,
+                                  funit=args.d_funit, beta1=args.beta1, lr=args.d_lr,
+                                  not_conditional=args.not_conditional, printer=p,
+                                  patience=args.patience)
 generator = Generator(network=args.g_network, weights_dict_path=args.g_weights_dict_path,
                       model_path=args.g_model_path, device=device, weight_SSIM=args.weight_SSIM,
                       weight_L1=args.weight_L1, activation=args.g_activation, funit=args.g_funit,
@@ -344,7 +347,7 @@ generator = Generator(network=args.g_network, weights_dict_path=args.g_weights_d
 
 crop_boundaries = get_crop_boundaries(DDataset.cs, DDataset.ucs, args.g_network, args.d_network)
 
-use_D = (args.weight_SSIM + args.weight_L1) < 1
+
 discriminator_predictions = None
 generator_learning_rate = args.g_lr
 discriminator_learning_rate = args.d_lr
@@ -363,7 +366,7 @@ for epoch in range(args.start_epoch, args.epochs):
         generated_batch = generator.denoise_batch(noisy_batch)
         generated_batch_cropped = crop_batch(generated_batch, crop_boundaries)
         # train discriminator based on its previous performance
-        discriminator_learns = ((discriminator.get_loss()+args.discriminator_advantage) > random.random() and use_D) or frozen_generator
+        discriminator_learns = (use_D and (discriminator.get_loss()+args.discriminator_advantage) > random.random()) or frozen_generator
         if discriminator_learns:
             discriminator.learn(noisy_batch_cropped=noisy_batch_cropped,
                                 generated_batch_cropped=generated_batch_cropped,
@@ -405,17 +408,19 @@ for epoch in range(args.start_epoch, args.epochs):
         generator_learning_rate = generator.update_learning_rate(average_g_weighted_loss)
     else:
         p.print("Generator learned nothing")
-    p.print("Discriminator:")
-    if len(loss_D_list) > 0:
-        average_d_loss = statistics.mean(loss_D_list)
-        p.print("Average normalized loss: %f" % (average_d_loss))
-        discriminator_learning_rate = discriminator.update_learning_rate(average_d_loss)
-    generator.save_model(model_dir, epoch)
-    discriminator.save_model(model_dir, epoch)  # TODO make this optional
+    if use_D:
+        p.print("Discriminator:")
+        if len(loss_D_list) > 0:
+            average_d_loss = statistics.mean(loss_D_list)
+            p.print("Average normalized loss: %f" % (average_d_loss))
+            discriminator_learning_rate = discriminator.update_learning_rate(average_d_loss)
+            discriminator.save_model(model_dir, epoch)
+    if not frozen_generator:
+        generator.save_model(model_dir, epoch)
     if args.time_limit < time.time() - start_time:
         p.print("Time is up")
         exit(0)
-    if discriminator_learning_rate < args.min_lr and generator_learning_rate < args.min_lr:
+    if (discriminator_learning_rate < args.min_lr or not use_D) and generator_learning_rate < args.min_lr:
         p.print("Minimum learning rate reached")
         exit(0)
 
