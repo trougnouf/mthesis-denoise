@@ -13,6 +13,7 @@ import graph_utils
 # python graph_logfiles.py --experiment Hul112Disc_activation --yaxis "Average MSE" --uneven_graphs
 # python graph_logfiles.py --experiment "Hul(b)128Net" --yaxis "Average 1-SSIM loss" --smoothing_factor 20 --uneven_graphs
 # python graph_logfiles.py --experiment "Label smoothing" --yaxis "Average MSE loss (discriminator)" --pre "Loss_D: " --post " (" --smoothing_factor 2500 --uneven_graphs
+# python graph_logfiles.py --experiment "cGAN training performance" --yaxis "Average SSIM loss" --pre "Average SSIM loss: " --smoothing_factor 1 --uneven_graphs
 default_smoothing_factor = 50
 
 # Params
@@ -60,6 +61,20 @@ experiments["Label smoothing"] = {
 "Noisy positive labels": "results/train/2019-05-28-Hulb128Disc-std_noisy_probabilities"
 }
 
+experiments["cGAN training performance"] = {
+"Hulf112Disc": [
+"results/train/2019-06-05T22:44_gan_train.py_--weight_SSIM_0.2_--weight_L1_0.05_--cuda_device_1_--batch_size_18_--d_funit_29_--g_funit_29_--d_network_Hulf112Disc"
+],
+"Hulf112Disc-2": ["results/train/2019-06-02T15:05_gan_train.py_--weight_SSIM_0.2_--weight_L1_0.05_--cuda_device_1_--batch_size_18_--d_funit_31_--d_network_Hulf112Disc"],
+"Hulf112Disc (0.1 advantage)": ["results/train/2019-06-05T22:44_gan_train.py_--batch_size_18_--cuda_device_2_--weight_SSIM_0.2_--weight_L1_0.05_--discriminator_advantage_0.1_--d_funit_29_--g_funit_29_--d_network_Hulf112Disc"],
+"Hul112Disc (0.1 advantage)": ["results/train/2019-06-03T07:53_gan_train.py_--batch_size_18_--cuda_device_2_--weight_SSIM_0.2_--weight_L1_0.05_--discriminator_advantage_0.1"],
+"Hulb128Net (no discriminator)": ["results/train/2019-06-01T00:03_gan_train.py_--weight_L1_0.2_--weight_SSIM_0.8_--d_network_PatchGAN_--batch_size_18", "results/train/2019-06-03T07:47_gan_train.py_--weight_L1_0.2_--weight_SSIM_0.8_--d_network_PatchGAN_--batch_size_18_--start_epoch_32_--g_weights_dict_path_models-2019-06-01T00:03_gan_train.py_--weight_L1_0.2_--weight_SSIM_0.8_--d_network_PatchGAN_--batch_size_18-generat", "results/train/2019-06-05T08:40_gan_train.py_--weight_L1_0.2_--weight_SSIM_0.8_--d_network_PatchGAN_--batch_size_18_--start_epoch_64_--g_weights_dict_path_models-2019-06-03T07:47_gan_train.py_--weight_L1_0.2_--weight_SSIM_0.8_--d_network_PatchGAN_--batch_size_18_--start"],
+"PatchGAN": ["results/train/2019-05-31T23:53_gan_train.py_--weight_SSIM_0.2_--weight_L1_0.05_--cuda_device_1_--batch_size_18_--d_network_PatchGAN"],
+"Hul112Disc": ["results/train/2019-05-31T10:56_gan_train.py_--batch_size_18_--cuda_device_2_--weight_SSIM_0.2_--weight_L1_0.05_--d_funit_32", "results/train/2019-05-31T15:52_gan_train.py_--batch_size_18_--cuda_device_2_--weight_SSIM_0.2_--weight_L1_0.05_--d_funit_32_--d_weights_dict_path_models-2019-05-31T10:56_gan_train.py_--batch_size_18_--cuda_device_2_--weight_SSIM_0.2_--weight_L1_0.05_--d_funit_32-discri", "results/train/2019-05-31T23:48_gan_train.py_--batch_size_18_--cuda_device_2_--weight_SSIM_0.2_--weight_L1_0.05_--d_funit_32_--d_weights_dict_path_models-2019-05-31T15:52_gan_train.py_--batch_size_18_--cuda_device_2_--weight_SSIM_0.2_--weight_L1_0.05_--d_funit_32_--d_we"],
+#"Not conditional Hul112Disc": ["results/train/2019-05-31T12:39_gan_train.py_--not_conditional_--weight_SSIM_0.2_--weight_L1_0.05_--cuda_device_1_--batch_size_18_--d_funit_32"],
+"U-Net (no discriminator)": ["results/train/2019-02-18T20:10_run_nn.py_--time_limit_259200_--batch_size_94_--test_reserve_ursulines-red_stefantiek_ursulines-building_MuseeL-Bobo_CourtineDeVillersDebris_MuseeL-Bobo-C500D_--skip_sizecheck_--lr_3e-4-stdlog"]
+}
+
 if args.list_experiments:
     print(experiments.keys())
     exit(0)
@@ -71,7 +86,13 @@ markers = graph_utils.make_markers_dict(components=experiment_raw.keys())
 smallest_log = None
 
 for component, path in experiment_raw.items():
-    data[component] = graph_utils.parse_log_file(path, smoothing_factor = args.smoothing_factor, pre=args.pre, post=args.post)
+    # if path is list
+    if isinstance(path, list):
+        data[component] = []
+        for logfile_path in path:
+            data[component]+=graph_utils.parse_log_file(logfile_path, smoothing_factor = args.smoothing_factor, pre=args.pre, post=args.post)
+    else:
+        data[component] = graph_utils.parse_log_file(path, smoothing_factor = args.smoothing_factor, pre=args.pre, post=args.post)
     if smallest_log is None or smallest_log > len(data[component]):
         smallest_log = len(data[component])
 for component in data:

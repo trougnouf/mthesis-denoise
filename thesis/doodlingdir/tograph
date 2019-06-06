@@ -51,3 +51,54 @@ final_cgans:
 2019-05-31T23\:48_gan_train.py_--batch_size_18_--cuda_device_2_--weight_SSIM_0.2_--weight_L1_0.05_--d_funit_32_--d_weights_dict_path_models-2019-05-31T15\:52_gan_train.py_--batch_size_18_--cuda_device_2_--weight_SSIM_0.2_--weight_L1_0.05_--d_funit_32_--d_we
 results/train/2019-06-01T00:03_gan_train.py_--weight_L1_0.2_--weight_SSIM_0.8_--d_network_PatchGAN_--batch_size_18
 2019-06-02T15\:05_gan_train.py_--weight_SSIM_0.2_--weight_L1_0.05_--cuda_device_1_--batch_size_18_--d_funit_31_--d_network_Hulf112Disc
+
+
+
+final_cgan_2:
+
+% TODO describe different letters
+
+final_cgan = {
+"Hulf112Disc": [
+"2019-06-05T22:44_gan_train.py_--weight_SSIM_0.2_--weight_L1_0.05_--cuda_device_1_--batch_size_18_--d_funit_29_--g_funit_29_--d_network_Hulf112Disc"
+],
+"Hulf112Disc-2": ["2019-06-02T15:05_gan_train.py_--weight_SSIM_0.2_--weight_L1_0.05_--cuda_device_1_--batch_size_18_--d_funit_31_--d_network_Hulf112Disc"]
+"Hulf112Disc (0.1 advantage)": ["2019-06-05T22:44_gan_train.py_--batch_size_18_--cuda_device_2_--weight_SSIM_0.2_--weight_L1_0.05_--discriminator_advantage_0.1_--d_funit_29_--g_funit_29_--d_network_Hulf112Disc"],
+"Hul112Disc (0.1 advantage)": ["2019-06-03T07:53_gan_train.py_--batch_size_18_--cuda_device_2_--weight_SSIM_0.2_--weight_L1_0.05_--discriminator_advantage_0.1"],
+"Hulb128Net (no discriminator)": ["2019-06-01T00:03_gan_train.py_--weight_L1_0.2_--weight_SSIM_0.8_--d_network_PatchGAN_--batch_size_18", "2019-06-03T07:47_gan_train.py_--weight_L1_0.2_--weight_SSIM_0.8_--d_network_PatchGAN_--batch_size_18_--start_epoch_32_--g_weights_dict_path_models-2019-06-01T00:03_gan_train.py_--weight_L1_0.2_--weight_SSIM_0.8_--d_network_PatchGAN_--batch_size_18-generat", "2019-06-05T08:40_gan_train.py_--weight_L1_0.2_--weight_SSIM_0.8_--d_network_PatchGAN_--batch_size_18_--start_epoch_64_--g_weights_dict_path_models-2019-06-03T07:47_gan_train.py_--weight_L1_0.2_--weight_SSIM_0.8_--d_network_PatchGAN_--batch_size_18_--start"],
+"PatchGAN": ["2019-05-31T23:53_gan_train.py_--weight_SSIM_0.2_--weight_L1_0.05_--cuda_device_1_--batch_size_18_--d_network_PatchGAN"],
+"Hul112Disc": ["2019-05-31T10:56_gan_train.py_--batch_size_18_--cuda_device_2_--weight_SSIM_0.2_--weight_L1_0.05_--d_funit_32", "2019-05-31T15:52_gan_train.py_--batch_size_18_--cuda_device_2_--weight_SSIM_0.2_--weight_L1_0.05_--d_funit_32_--d_weights_dict_path_models-2019-05-31T10:56_gan_train.py_--batch_size_18_--cuda_device_2_--weight_SSIM_0.2_--weight_L1_0.05_--d_funit_32-discri", "2019-05-31T23:48_gan_train.py_--batch_size_18_--cuda_device_2_--weight_SSIM_0.2_--weight_L1_0.05_--d_funit_32_--d_weights_dict_path_models-2019-05-31T15:52_gan_train.py_--batch_size_18_--cuda_device_2_--weight_SSIM_0.2_--weight_L1_0.05_--d_funit_32_--d_we"],
+"Not conditional Hul112Disc": ["2019-05-31T12:39_gan_train.py_--not_conditional_--weight_SSIM_0.2_--weight_L1_0.05_--cuda_device_1_--batch_size_18_--d_funit_32"],
+"U-Net (no discriminator)": ["2019-02-18T20:10_run_nn.py_--time_limit_259200_--batch_size_94_--test_reserve_ursulines-red_stefantiek_ursulines-building_MuseeL-Bobo_CourtineDeVillersDebris_MuseeL-Bobo-C500D_--skip_sizecheck_--lr_3e-4-stdlog"]
+}
+
+- Hulf112Disc:
+2019-06-05T22:44_gan_train.py_--weight_SSIM_0.2_--weight_L1_0.05_--cuda_device_1_--batch_size_18_--d_funit_29_--g_funit_29_--d_network_Hulf112Disc
+
+- Hulf112Disc (another, slightly more filters):
+2019-06-02T15:05_gan_train.py_--weight_SSIM_0.2_--weight_L1_0.05_--cuda_device_1_--batch_size_18_--d_funit_31_--d_network_Hulf112Disc
+
+- Hulf112Disc adv:
+2019-06-05T22:44_gan_train.py_--batch_size_18_--cuda_device_2_--weight_SSIM_0.2_--weight_L1_0.05_--discriminator_advantage_0.1_--d_funit_29_--g_funit_29_--d_network_Hulf112Disc
+
+- Hul112Disc adv:
+2019-06-03T07:53_gan_train.py_--batch_size_18_--cuda_device_2_--weight_SSIM_0.2_--weight_L1_0.05_--discriminator_advantage_0.1
+
+- Hulb128Net (no discriminator):
+2019-06-05T08:40_gan_train.py_--weight_L1_0.2_--weight_SSIM_0.8_--d_network_PatchGAN_--batch_size_18_--start_epoch_64_--g_weights_dict_path_models-2019-06-03T07:47_gan_train.py_--weight_L1_0.2_--weight_SSIM_0.8_--d_network_PatchGAN_--batch_size_18_--start
+2019-06-03T07:47_gan_train.py_--weight_L1_0.2_--weight_SSIM_0.8_--d_network_PatchGAN_--batch_size_18_--start_epoch_32_--g_weights_dict_path_models-2019-06-01T00:03_gan_train.py_--weight_L1_0.2_--weight_SSIM_0.8_--d_network_PatchGAN_--batch_size_18-generat
+2019-06-01T00:03_gan_train.py_--weight_L1_0.2_--weight_SSIM_0.8_--d_network_PatchGAN_--batch_size_18
+
+- patchgan:
+2019-05-31T23:53_gan_train.py_--weight_SSIM_0.2_--weight_L1_0.05_--cuda_device_1_--batch_size_18_--d_network_PatchGAN
+
+- Hul112Disc:
+2019-05-31T23:48_gan_train.py_--batch_size_18_--cuda_device_2_--weight_SSIM_0.2_--weight_L1_0.05_--d_funit_32_--d_weights_dict_path_models-2019-05-31T15:52_gan_train.py_--batch_size_18_--cuda_device_2_--weight_SSIM_0.2_--weight_L1_0.05_--d_funit_32_--d_we
+2019-05-31T15:52_gan_train.py_--batch_size_18_--cuda_device_2_--weight_SSIM_0.2_--weight_L1_0.05_--d_funit_32_--d_weights_dict_path_models-2019-05-31T10:56_gan_train.py_--batch_size_18_--cuda_device_2_--weight_SSIM_0.2_--weight_L1_0.05_--d_funit_32-discri
+2019-05-31T10:56_gan_train.py_--batch_size_18_--cuda_device_2_--weight_SSIM_0.2_--weight_L1_0.05_--d_funit_32
+
+- not conditional:
+2019-05-31T12:39_gan_train.py_--not_conditional_--weight_SSIM_0.2_--weight_L1_0.05_--cuda_device_1_--batch_size_18_--d_funit_32
+
+- U-Net (no discriminator):
+2019-02-18T20:10_run_nn.py_--time_limit_259200_--batch_size_94_--test_reserve_ursulines-red_stefantiek_ursulines-building_MuseeL-Bobo_CourtineDeVillersDebris_MuseeL-Bobo-C500D_--skip_sizecheck_--lr_3e-4-stdlog

@@ -3,31 +3,33 @@ import os
 import argparse
 import torchvision
 import torch
-from math import ceil, floor
+from math import ceil
 from PIL import Image, ImageOps
 from torch.utils.data import DataLoader
 from torch.utils.data import Dataset
 import time
+from nn_common import Model, default_values
 try:
 	import piexif   # TODO make it optional
 except ImportError:
 	pass
 import subprocess
 
+# TODO handle CPU
+
 parser = argparse.ArgumentParser(description='Image cropper with overlap')
-parser.add_argument('--cs', default=640, type=int, help='Tile size (model was probably trained with 128, different values will work with unknown results)')
-parser.add_argument('--ucs', default=512, type=int, help='Useful tile size (should be <=.75*cs), a smaller value may result in less grid artifacts but costs computation time')
+parser.add_argument('--cs', default=128, type=int, help='Tile size (model was probably trained with 128, different values will work with unknown results)')
+parser.add_argument('--ucs', default=112, type=int, help='Useful tile size (should be <=.75*cs), a smaller value may result in less grid artifacts but costs computation time')
 parser.add_argument('-ol', '--overlap', default=4, type=int, help='Merge crops with this much overlap (Reduces grid artifacts, may reduce sharpness between crops, costs computation time)')
 parser.add_argument('-i', '--input', default='in.jpg', type=str, help='Input image file')
 parser.add_argument('-o', '--output', default='out.tif', type=str, help='Output file with extension')
 parser.add_argument('-b', '--batch_size', type=int, default=1)  # TODO >1 is broken
 parser.add_argument('--debug', action='store_true', help='Debug (store all intermediate crops in ./dbg, display useful messages)')
-parser.add_argument('--cuda_device', default=0, type=int, help='Device number (default: 0, typically 0-3)')
+parser.add_argument('--cuda_device', default=0, type=int, help='Device number (default: 0, typically 0-3]])')
 parser.add_argument('--exif_method', default='piexif', type=str, help='How is exif data copied over? (piexif, exiftool, noexif)')
-# TODO merge these / autodetect
-parser.add_argument('--model_dir', type=str, help='directory where .th models are saved (latest .th file is autodetected)')
-parser.add_argument('--model_subdir', type=str, help='subdirectory where .th models are saved (latest .th file is autodetected, models dir is assumed)')
-parser.add_argument('--model_path', type=str, help='the specific model file path')
+parser.add_argument('--network', type=str, default=default_values['g_network'], help='Generator network (default: %s)'%default_values['g_network'])
+parser.add_argument('--model_path', help='Generator pretrained model path (.pth for model, .pt for dictionary)')
+parser.add_argument('--model_parameters', type=str, help='Model parameters with format "parameter1=value1,parameter2=value2"')
 args = parser.parse_args()
 
 torch.cuda.set_device(args.cuda_device)
@@ -79,18 +81,15 @@ class OneImageDS(Dataset):
 	def __len__(self):
 		return self.size
 
-if args.model_path:
-	model_path = args.model_path
-elif args.model_dir or args.model_subdir:
-	model_dir = args.model_dir if args.model_dir else os.path.join('models', args.model_subdir)
-	#model_path = os.path.join(args.model_dir, sorted(os.listdir(args.model_dir))[-1])
-	model_path = os.path.join(model_dir, "latest_model.pth")
-else:
-	model_path = os.path.join('models', sorted(os.listdir('models'))[-1])
-	model_path = os.path.join(model_path, sorted(os.listdir(model_path))[-1])
+#
+# Standard import
+#import importlib
+# Load "module.submodule.MyClass"
+#MyClass = getattr(importlib.import_module("module.submodule"), "MyClass")
+# Instantiate the class (pass arguments to the constructor, if needed)
+#instance = MyClass()
 
-print('loading '+ model_path)
-model = torch.load(model_path, map_location='cuda:'+str(0))
+model = Model(network=args.network, model_path=args.model_path, strparameters=args.model_parameters)
 model.eval()  # evaluation mode
 if torch.cuda.is_available():
 	model = model.cuda()
@@ -136,7 +135,7 @@ for n_count, ydat in enumerate(DLoader):
 torchvision.utils.save_image(newimg, args.output)
 if args.output[:-4] == '.jpg' and args.exif_method == 'piexif':
 	piexif.transplant(args.input, args.output)
-elif args.exif_method is not 'noexif':
+elif args.exif_method != 'noexif':
 	cmd = ['exiftool', '-TagsFromFile', args.input, args.output, '-overwrite_original']
 	subprocess.run(cmd)
 print('Elapsed time: '+str(time.time()-start_time)+' seconds')

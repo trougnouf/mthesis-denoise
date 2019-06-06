@@ -28,6 +28,9 @@ def parse_log_file(path, smoothing_factor = 1, pre=None, post=None):
                 if pre in l and post in l:
                     t += float(l.split(pre)[1].split(post)[0])
                     added_data = True
+                elif pre in l:
+                    t += float(l.split(pre)[1])
+                    added_data = True
             elif 'Epoch' in l and 'nan' not in l:
                 t += float(l.split(':')[-1])
                 added_data = True
