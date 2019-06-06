@@ -41,7 +41,7 @@ if __name__ == '__main__':
         for animg in os.listdir(aset_indir):
             inimg_path = os.path.join(aset_indir, animg)
             outimg_path = os.path.join(denoised_save_dir, animg)
-            cmd = ['python', 'denoise_image.py', '-i', inimg_path, '-o', outimg_path, '--model_path', model_path, '--network',args.network, '--model_parameters', model_parameters, '--ucs', args.ucs, '--cs', args.cs]
+            cmd = ['python', 'denoise_image.py', '-i', inimg_path, '-o', outimg_path, '--model_path', model_path, '--network',args.network, '--model_parameters', args.model_parameters, '--ucs', args.ucs, '--cs', args.cs]
             subprocess.call(cmd)
     if not args.no_scoring:
         gen_score(denoised_save_dir, args.noisy_dir)
