@@ -1,0 +1,3 @@
+Namespace(batch_size=18, beta1=0.5, compute_SSIM_anyway=False, cuda_device=1, d_activation='PReLU', d_funit=32, d_loss_function='MSE', d_lr=0.0003, d_model_path=None, d_network='Hulf112Net', d_weights_dict_path=None, debug_options=None, epochs=9001, freeze_generator=False, g_activation='PReLU', g_funit=32, g_lr=0.0003, g_model_path=None, g_network='Hulb128Net', g_weights_dict_path=None, min_lr=5e-08, not_conditional=False, start_epoch=1, test_reserve=None, threads=6, time_limit=172800, train_data=None, weight_L1=0.05, weight_SSIM=0.2)
+cmd: python3 gan_train.py --weight_SSIM 0.2 --weight_L1 0.05 --cuda_device 1 --batch_size 18 --d_network Hulf112Net
+Error: generator network not properly specified
