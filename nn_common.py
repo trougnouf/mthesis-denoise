@@ -53,7 +53,7 @@ class Model:
     @staticmethod
     def instantiate_model(model_path=None, network=None, device='cuda:0', strparameters=None, pfun=print, **parameters):
         model = None
-        if strparameters is not None:
+        if strparameters is not None and strparameters != "":
             parameters.update(dict([parameter.split('=') for parameter in strparameters.split(',')]))
         if model_path is not None:
             path = Model.complete_path(model_path)

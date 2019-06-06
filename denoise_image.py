@@ -9,6 +9,7 @@ from torch.utils.data import DataLoader
 from torch.utils.data import Dataset
 import time
 from nn_common import Model, default_values
+import torch.backends.cudnn as cudnn
 try:
 	import piexif   # TODO make it optional
 except ImportError:
@@ -33,6 +34,10 @@ parser.add_argument('--model_parameters', type=str, help='Model parameters with 
 args = parser.parse_args()
 
 torch.cuda.set_device(args.cuda_device)
+cudnn.benchmark = True
+
+torch.manual_seed(123)
+torch.cuda.manual_seed(123)
 
 class OneImageDS(Dataset):
 	def __init__(self, inimg, cs, ucs, ol):
@@ -89,7 +94,7 @@ class OneImageDS(Dataset):
 # Instantiate the class (pass arguments to the constructor, if needed)
 #instance = MyClass()
 
-model = Model(network=args.network, model_path=args.model_path, strparameters=args.model_parameters)
+model = Model.instantiate_model(network=args.network, model_path=args.model_path, strparameters=args.model_parameters)
 model.eval()  # evaluation mode
 if torch.cuda.is_available():
 	model = model.cuda()

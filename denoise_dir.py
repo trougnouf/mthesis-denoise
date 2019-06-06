@@ -17,7 +17,7 @@ def parse_args():
     parser.add_argument('--noisy_dir', default='datasets/test/ds_fs', type=str, help='directory of test dataset (or any directory containing images to be denoised), must end with [CROPSIZE]_[USEFULCROPSIZE]')
     parser.add_argument('--network', type=str, default=default_values['g_network'], help='Generator network (default: %s)'%default_values['g_network'])
     parser.add_argument('--model_path', help='Generator pretrained model path (.pth for model, .pt for dictionary)')
-    parser.add_argument('--model_parameters', type=str, help='Model parameters with format "parameter1=value1,parameter2=value2"')
+    parser.add_argument('--model_parameters', default="", type=str, help='Model parameters with format "parameter1=value1,parameter2=value2"')
     parser.add_argument('--result_dir', default='results/test', type=str, help='directory where results are saved')
     parser.add_argument('--cuda_device', default=0, type=int, help='Device number (default: 0, typically 0-3)')
     parser.add_argument('--no_scoring', action='store_true', help='Generate SSIM score and MSE loss unless this is set')
