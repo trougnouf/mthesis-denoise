@@ -11,15 +11,13 @@ results/*.xz
 lib/*/__pycache__
 *.xcf
 *.tif
-*.jpg
-!thesis/*.jpg
-*.mat
 *.JPG
+*.jpg
+*.mat
 *.pth
 tmp
 ntire
 *.png
-!thesis/*.png
 onetimescripts
 datasets
 doodling.py
