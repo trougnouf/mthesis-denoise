@@ -8,10 +8,12 @@ import torchvision
 #from networks.p2p_networks import define_D
 import os
 from networks.Hul import Hulb128Net, Hul112Disc, Hulf112Disc
+from networks.ThirdPartyNets import PatchGAN
 
 default_values = {
     'g_network': 'Hulb128Net',
     'd_network': 'Hul112Disc',
+    'd2_network': 'PatchGAN',
     'train_data': ['datasets/train/NIND_128_112'],
     'beta1': 0.5,
     'weight_SSIM': 0.2,
@@ -31,6 +33,13 @@ class Model:
         self.save_dict = save_dict
         self.device = device
         self.debug_options=debug_options
+
+    def save_model(self, model_dir, epoch, name):
+        save_path = os.path.join(model_dir, '%s_%u.pt' % (name, epoch))
+        if self.save_dict:
+            torch.save(self.model.state_dict(), save_path)
+        else:
+            torch.save(self.model, save_path+'h')
 
     @staticmethod
     def complete_path(path, keyword=''):
@@ -80,7 +89,7 @@ class Model:
 class Generator(Model):
     def __init__(self, network = default_values['g_network'], model_path = None,
                  device = 'cuda:0', weight_SSIM=default_values['weight_SSIM'],
-                 weight_L1=default_values['weight_L1'], activation='PReLU', funit=32,
+                 weight_L1=default_values['weight_L1'], weight_D2=0, activation='PReLU', funit=32,
                  beta1=default_values['beta1'], lr=default_values['lr'], printer=None, compute_SSIM_anyway=False,
                  save_dict=True, patience=default_values['patience'], debug_options=[]):
         Model.__init__(self, save_dict, device, printer, debug_options=[])
@@ -90,9 +99,12 @@ class Generator(Model):
         self.weight_L1 = weight_L1
         if weight_L1 > 0:
             self.criterion_L1 = nn.L1Loss().to(device)
-        self.weight_D = 1 - weight_SSIM - weight_L1
+        self.weight_D = 1 - weight_SSIM - weight_L1 - weight_D2
+        self.weight_D2 = weight_D2
         if self.weight_D > 0:
             self.criterion_D = nn.MSELoss().to(device)
+        if self.weight_D2 > 0:
+            self.criterion_D2 = nn.MSELoss().to(device)
         self.model = self.instantiate_model(model_path=model_path, network=network, pfun=self.print, device=device, funit=funit, keyword='generator')
         self.optimizer = optim.Adam(self.model.parameters(), lr=lr, betas=(beta1, 0.999))
         self.scheduler = lr_scheduler.ReduceLROnPlateau(self.optimizer, factor=0.75, verbose=True, threshold=1e-8, patience=patience)
@@ -108,7 +120,7 @@ class Generator(Model):
     def denoise_batch(self, noisy_batch):
         return self.model(noisy_batch)
 
-    def learn(self, generated_batch_cropped, clean_batch_cropped, discriminator_predictions=None):
+    def learn(self, generated_batch_cropped, clean_batch_cropped, discriminator_predictions=None, discriminator2_predictions=None):
         if self.weight_SSIM > 0 or self.compute_SSIM_anyway:
             loss_SSIM = self.criterion_SSIM(generated_batch_cropped, clean_batch_cropped)
             loss_SSIM = 1-loss_SSIM
@@ -127,7 +139,14 @@ class Generator(Model):
             self.loss['D'] = math.sqrt(loss_D.item())
         else:
             loss_D = torch.zeros(1).to(self.device)
-        loss = loss_SSIM * self.weight_SSIM + loss_L1 * self.weight_L1 + loss_D * self.weight_D
+        if self.weight_D2 > 0:
+            loss_D2 = self.criterion_D2(discriminator2_predictions,
+                                      gen_target_probabilities(True, discriminator2_predictions.shape,
+                                                               device=self.device, noisy=False))
+            self.loss['D2'] = math.sqrt(loss_D2.item())
+        else:
+            loss_D2 = torch.zeros(1).to(self.device)
+        loss = loss_SSIM * self.weight_SSIM + loss_L1 * self.weight_L1 + loss_D * self.weight_D + loss_D2 * self.weight_D2
         self.loss['weighted'] = loss.item()
         loss.backward()
         self.optimizer.step()
@@ -135,13 +154,6 @@ class Generator(Model):
 
     def zero_grad(self):
         self.optimizer.zero_grad()
-
-    def save_model(self, model_dir, epoch):
-        save_path = os.path.join(model_dir, 'generator_%u.pt' % epoch)
-        if self.save_dict:
-            torch.save(self.model.state_dict(), save_path)
-        else:
-            torch.save(self.model, save_path+'h')
 
 
 class Discriminator(Model):
@@ -226,13 +238,6 @@ class Discriminator(Model):
             self.predictions_range = '(not implemented)'
         self.update_loss(loss_fake_detached, loss_real_detached)
         self.optimizer.step()
-
-    def save_model(self, model_dir, epoch):
-        save_path = os.path.join(model_dir, 'discriminator_%u.pt' % epoch)
-        if self.save_dict:
-            torch.save(self.model.state_dict(), save_path)
-        else:
-            torch.save(self.model, save_path+'h')
 
 
 class Printer:
