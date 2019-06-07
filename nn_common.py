@@ -73,7 +73,7 @@ class Model:
     def update_learning_rate(self, avg_loss):
         self.scheduler.step(metrics=avg_loss)
         lr = self.optimizer.param_groups[0]['lr']
-        p.print('Learning rate: %f' % lr)
+        print('Learning rate: %f' % lr)
         return lr
 
 
