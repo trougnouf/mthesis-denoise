@@ -219,7 +219,7 @@ Following some incertitude on whether label smoothing should only be applied on 
 % switching losses is bad
 \subsubsection{System as a whole}\label{sec:System as a whole}
 
-In this section we test different configurations of our "Hul" \ac{cGAN} networks as a whole system. The performance is compared to the previously used configurations as well (U-Net alone and the PatchGAN), and we assess the visual quality of denoised images where it was previously lacking (i.e. noisy face images).
+In this section we test different configurations of our "Hul" \ac{cGAN} networks as a whole system trained according to our trained method described in section \ref{sec:Adopted training method}. The performance is compared to the previously used configurations as well (U-Net alone and the PatchGAN), and we assess the visual quality of denoised images where it was previously lacking (i.e. noisy face images).
 
 The different types of network present in this experiment are as follow:
 \begin{itemize}
@@ -233,37 +233,39 @@ The different types of network present in this experiment are as follow:
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=1\linewidth]{gfx/graphs/cgan-comp.pdf}
-\caption[cGAN training performance comparison]{
-cGAN training performance comparison. 0: The U-Net model from experiment \ref{sec:CNN Denoiser}:\ref{exp:nindxt1}, 1: Hulb128Net (without a discriminator). The following networks all use the Hulb128Net generator and a specified discriminator. 2: Hul112Disc, 3: Hulf112Disc (more filters as the network shrinks), 4: PatchGAN \cite{pix2pix}, 5: Hul112Disc which learns 10\% more often than the generator, 6: Hulf112Disc which learns 10\% more often than the generator. We observe that the increased number of filters (Hulf112Disc) destabilizes the discriminator, but performance is restored when the discriminator has more time to learn. On the other hand, giving more time to a discriminator that does not have as much capacity provides worse feedback and the result of the generator suffers. The PatchGAN's performance degenerates quickly, and the Hulb128Net alone offers greater performance than that of U-Net but further analysis shows that the \acs{cGAN} denoised images are visually superior. The \acs{SSIM} training loss is shown. Although \acs{SSIM} is not a meaningful enough factor on its own because the network could recreate a structurally different yet visually pleasing image, it provides an approximate indicator of performance and learning.}
+\caption[cGAN learning curve]{
+cGAN training performance comparison. 0: The U-Net model from experiment \ref{sec:CNN Denoiser}:\ref{exp:nindxt1}, 1: Hulb128Net (without a discriminator). The following networks all use the Hulb128Net generator and a specified discriminator. 2: Hul112Disc, 3: Hulf112Disc (more filters as the network shrinks), 4: PatchGAN \cite{pix2pix}, 5: Hul112Disc which learns 10 \% more often than the generator, 6: Hulf112Disc which learns 10 \% more often than the generator.
+Our HulbNet generator appears to outperform U-Net both as a single network and in a \acs{GAN}. Although the \acs{cGAN} system appears to perform better, that is expected because the main loss is no longer based on a correlation with the ground-truth image, and visual analysis of the results later confirm that the \acs{cGAN} system offers more visually pleasing denoising. Adding more filters to the discriminator appears to only work if the discriminator has a higher training ratio to optimize them. Likewise, a discriminator that is trained more often does not appear to offer a better feedback if its capacity is not high enough.}
 \label{fig:cgan-comp}
 \end{figure}
 
+% generate faces, graph on an image
+
+The networks' training performance is shown on figure \ref{fig:cgan-comp}. The baseline is a single generative U-Net network, and we also trained a single Hulb128Net network. The single Hulb128Net network appears to perform better than the U-Net of our previous experiments. We observe that the increased number of filters (Hulf112Disc) destabilizes the discriminator, but performance is restored when the discriminator has more time to learn. On the other hand, giving more time to a discriminator (0.1 advantage) that does not have as much capacity provides worse feedback and the result of the generator suffers. The PatchGAN's performance seems to degenerate quickly, and the Hulb128Net alone offers greater performance than that of a \acs{cGAN} pair but further analysis shows that the \acs{cGAN} denoised images are visually superior. The networks that were trained for longer benefit greatly from the additional time and exceed the performance of a single U-Net generator which maxes out at \acs{SSIM} index = 0.902. The \acs{SSIM} training loss is shown. Although \acs{SSIM} is not a meaningful enough factor on its own because the network could recreate a structurally different yet visually pleasing image, it provides an approximate indicator of performance and learning.
+
+All \ac{cGAN} networks use a $\text{loss}_{\ell 1}$ weight of 0.05 and a $\text{loss}_\text{SSIM}$ weight of 0.2. While it may be worth trying different ratios, we found that the networks quickly became unstable as the weight of the discriminative loss increased; a $\text{loss}_\text{discriminative}$ weight of 0.95 would typically not complete the first epoch.
+
+
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=1\linewidth]{gfx/graphs/cgan-comp-longer.pdf}
-\caption[cGAN training performance comparison (zoomed-out)]{
-cGAN training performance comparison. This is the same graph as Figure \ref{fig:cgan-comp} zoomed out to show that the networks that were trained for longer benefit greatly from the additional time and exceed the performance of a single U-Net generator which maxes out at \acs{SSIM} index=0.902}
-\label{fig:cgan-complonger}
+\includegraphics[width=1\linewidth,height=0.9\textheight,keepaspectratio]{gfx/comp/NIND_CourtineDeVillersDebris_ISOH2-cgan.jpg}
+\caption[Denoising CourtineDeVillersDebris with cGANs (visual comparison)]{Visual comparison of different networks' denoising performance on NIND\_CourtineDeVillersDebris\_ISOH2. 1: Ground-truth (ISO200 1/4 s, SSIM: 1.000), 2: Noisy (High ISO 1/1100 s, SSIM: 0.232), 3: HulbNet generator with no discriminator (SSIM: 0.784), 4: HulbNet generator and HulDisc discriminator (SSIM: 0.780), 5: HulbNet generator and PatchGAN discriminator (SSIM: 0.687).}
+\label{fig:cgan-wall}
 \end{figure}
 
-% generate faces, graph on an image
-% on:
+Figure \ref{fig:cgan-wall} visually shows the denoising performance of various networks. We only displayed one combination of "Hul" generator-discriminator pair because we could not discern an appreciatable difference between any of our trained models. We observe restored high frequencies in the \ac{cGAN} network, whereas the single generator does not provide as much detail. The PatchGAN offers a very sharp image but much of the generated image looks unnatural. The SSIM index does not correlate with a visually appealing result because it favors blur over details that are different from those present on the ground-truth (one-to-many mapping). This type of image benefits greatly from a discriminative loss because of its many high-frequency details.
 
 
-The networks' training performance is shown on figures \ref{cgan-comp} and \ref{cgan-complonger}. The baseline is a single generative U-Net network, and we also trained a single Hulb128Net network. The Hulb128Net network appears to perform better than the U-Net of our previous experiments. 
+%TODO (in-progress): HulbNet w/ HulDisc, HulbNet w/PatchGAN, HulbNet w/HulfDisc, HulbNet alone, HulbNet w/ HulDisc with 0.1 advantage
 
-Using our HulbNet generative network and HulDisc discriminative network and the training method described in section \ref{sec:Adopted training method}  
+%(mention that training with weight\_D >= 0.95 is not stable enough) 
 
-TODO (in-progress): HulbNet w/ HulDisc, HulbNet w/PatchGAN, HulbNet w/HulfDisc, HulbNet alone, HulbNet w/ HulDisc with 0.1 advantage
+%TODO: discriminator\_advantage
 
-(mention that training with weight\_D >= 0.95 is not stable enough) 
+%TODO conditional vs not conditional
 
-TODO: discriminator\_advantage
+%TODO invert probabilities
 
-TODO conditional vs not conditional
+%TODO higher - lower weights
 
-TODO invert probabilities
-
-TODO higher - lower weights
-
-TODO 
+%TODO 

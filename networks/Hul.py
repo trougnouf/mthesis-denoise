@@ -2,6 +2,8 @@ import torch.nn as nn
 import torch
 
 # 128 PReLU generator
+#size is determined by ((min+8)×3+8)×3+14
+#therefore input resolution can be 119+x*9
 class Hulb128Net(nn.Module):
     def __init__(self, funit=32, activation='PReLU'):
         super(Hulb128Net, self).__init__()

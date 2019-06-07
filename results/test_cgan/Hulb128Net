@@ -1,0 +1,1 @@
+/orb/Dev/mthesis-denoise/results/test/2019-06-07T07:17_nn_train.py_--weight_L1_0.2_--weight_SSIM_0.8_--batch_size_18_--start_epoch_71_--g_lr_0.000225_--patience_2_--g_model_path_models-2019-06-06T13:15_gan_train.py_--weight_L1_0.2_--weight_SSIM_0.8_--batch_size_18_--start_epoch_64_--patience_

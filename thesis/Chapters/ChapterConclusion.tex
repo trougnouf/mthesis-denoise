@@ -1,15 +1,21 @@
 \chapter{Conclusion}
-\section{Future work}
 %- Discriminator loss
 %needs to be much better
 %- multi-scale (pix2pixHD)
 
-- train a general network with specialized dataset
+We investigated the use of deep learning to solve the denoising problems on photographic images and found that convolutional neural networks outperform conventional denoising methods. State-of-the-art denoising performance is achieved with the use of quality training data; most research involves training and testing models by adding artificial noise to ground-truth data and this method results in poor performance as (TODO darmstadt author) \cite{darmstadt} and our own experiments (TODO ref exp) have shown. No such complete dataset were available prior to our research, therefore we created one and released the \acf{NIND}, a dataset of photographic ISO noise with scenes captured using multiple ISO values (and matching settings) which can be used to train a blind denoising model. We found the performance obtained with a single \acl{CNN} trained on the \ac{NIND} to be excellent on a wide variety of scenes, even dynamic ones which could not be captured in the dataset.
 
-- WGAN
+Some images remained somewhat unsatisfactory after denoising with a single U-Net model trained on the \ac{NIND}, primarily those of human faces which could look unnaturally smooth in the absence of noise. The excessive smoothing is normally caused by the conventional loss function which favors a blurry result because there is a one-to-many mapping between a noisy image and its possible denoised representations. We developed a framework to train conditional generative adversarial networks for denoising as a way to alleviate this excessive smoothing. \ac{cGAN} are expected to produce more realistic results and high-frequency features because the discriminator (which is used as a loss function) is trained to recognize generated images, rather than an exact match with the ground-truth. We found that the resulting denoised images did provide satisfyingly natural looking features on human subjects. The (c)\ac{GAN} training process is much finicky than that of a conventional convolutional neural network and the results are very similar in most cases, as such we do not consider the \ac{GAN} to be a necessary update but it provides an appreciated improvement in some edge cases. A great benefit of \acp{cGAN} is that they can be used to train the generator without paired data. In some cases the discriminator can be trained without paired data too, as is the case of \acp{GAN} and possibly \acp{cGAN} for example by feeding the discriminator with a variable-noise blurred version of the image as the corrupted observation. This process could be used to handle further issues which cannot be handled by the paired dataset.
 
-- batch same noise samples or samples from one image/noise at a time to take advantage of BN
+Further work includes finding and working with a type of images that is not well handled by the paired dataset, taking advantage of the fact that \acp{GAN} can work with unpaired data. Different types of \ac{GAN} loss functions can also be investigated. We have investigated the use of \acp{LSGAN} (\ac{MSE}) and \acp{DCGAN} (\ac{BCE}) in our work, but other types such as the \ac{WGAN} may provide greater performance and stability. The "Hul" generative and discriminative architecture we introduce provides great performance but inference remains more computationally intensive than the U-Net architecture; more assessments should be performed to determine which building blocks can be trimmed without negatively affecting performance. Likewise more tests should be performed to determine the ideal weights for each loss function in a \ac{GAN} system.
 
-further fine-tuning of the discriminator: eg BN before/after, lighter generator
 
-PatchGAN needs carefully balanced loss because high frequencies
+%- train a general network with specialized dataset
+
+%- WGAN
+
+%- batch same noise samples or samples from one image/noise at a time to take advantage of BN
+
+%further fine-tuning of the discriminator: eg BN before/after, lighter generator
+
+%PatchGAN needs carefully balanced loss because high frequencies

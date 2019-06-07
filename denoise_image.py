@@ -21,7 +21,7 @@ import subprocess
 parser = argparse.ArgumentParser(description='Image cropper with overlap')
 parser.add_argument('--cs', default=128, type=int, help='Tile size (model was probably trained with 128, different values will work with unknown results)')
 parser.add_argument('--ucs', default=112, type=int, help='Useful tile size (should be <=.75*cs), a smaller value may result in less grid artifacts but costs computation time')
-parser.add_argument('-ol', '--overlap', default=4, type=int, help='Merge crops with this much overlap (Reduces grid artifacts, may reduce sharpness between crops, costs computation time)')
+parser.add_argument('-ol', '--overlap', default=6, type=int, help='Merge crops with this much overlap (Reduces grid artifacts, may reduce sharpness between crops, costs computation time)')
 parser.add_argument('-i', '--input', default='in.jpg', type=str, help='Input image file')
 parser.add_argument('-o', '--output', default='out.tif', type=str, help='Output file with extension')
 parser.add_argument('-b', '--batch_size', type=int, default=1)  # TODO >1 is broken
@@ -94,7 +94,7 @@ class OneImageDS(Dataset):
 # Instantiate the class (pass arguments to the constructor, if needed)
 #instance = MyClass()
 
-model = Model.instantiate_model(network=args.network, model_path=args.model_path, strparameters=args.model_parameters)
+model = Model.instantiate_model(network=args.network, model_path=args.model_path, strparameters=args.model_parameters, keyword='generator')
 model.eval()  # evaluation mode
 if torch.cuda.is_available():
 	model = model.cuda()

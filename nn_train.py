@@ -122,6 +122,7 @@ if use_D2:
                                   patience=args.patience, debug_options=debug_options)
 generator = Generator(network=args.g_network, model_path=args.g_model_path, device=device,
                       weight_SSIM=args.weight_SSIM, weight_L1=args.weight_L1,
+                      weight_D2 = args.weight_D2,
                       activation=args.g_activation, funit=args.g_funit, beta1=args.beta1,
                       lr=args.g_lr, printer=p, compute_SSIM_anyway=args.compute_SSIM_anyway,
                       patience=args.patience, debug_options=debug_options)
