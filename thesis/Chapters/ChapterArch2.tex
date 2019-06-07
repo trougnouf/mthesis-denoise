@@ -24,7 +24,7 @@ The original \ac{GAN} and commonly used \ac{DCGAN} use the \ac{BCE} loss which i
 
 The \ac{GAN}'s log-based \ac{BCE} loss suffers from vanishing gradient where the discriminator's gradient reaches zero thus the generator no longer receives any information to learn. \ac{LSGAN} mitigates this issue using the \acl{MSE} loss function which penalizes samples based on their distance from the decision boundary (ie a 0.5 uncertainty gives out a loss of $0.5^2=0.25$ while a wrong 0.9 probability has a loss of $0.9^2=0.81$) and provides more stable training. \cite{lsgan}
 
-\section{Chosen GAN}
+\section{Chosen GAN}\label{HulDisc}
 
 We explored the aforementioned methods, namely \ac{cGAN} and \ac{GAN}, \ac{DCGAN}, and \ac{LSGAN}. Our generator architectures are the U-Net \cite{unet} and Hulbnet mentioned in chapter \ref{chap:Arch1}. For the discriminator classifier we have experienced with PatchGAN \cite{pix2pix} as well as our HulDisc architectures.
 
