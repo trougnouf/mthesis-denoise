@@ -1,3 +1,10 @@
+The different types of network present in this experiment are as follow:
+Hul is the base name of the network we use
+b: no batch normalization
+f: increased number of channels as the dimensions decrease
+A number representing the minimum valid input size
+Disc for discriminators or Net for generators
+
 # 6: Use Soft and Noisy Labels (done)
 #      Salimans et. al. 2016
 # 4: BatchNorm

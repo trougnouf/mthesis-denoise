@@ -148,9 +148,17 @@ Training a model using artificial noise added to ground-truth images (Method \re
 
 Figure \ref{fig:text} shows satisfying denoising performance of a model trained on \ac{X-T1} images with text recovered from a \ac{C500D} image. In addition to the aforementioned results based on \ac{SSIM}, we have subjectively tested our \ac{NIND}-trained model on single images which are not part of the dataset. The first such image is that of a dynamic outdoor scene in which a human walks towards a group of pigeons, causing them to disperse in multiple directions. This type of fast, moving scene cannot be included in the dataset due to its dynamic nature and it must be captured with settings that result in a poor quality image; a small aperture (f/11) to focus everywhere, a fast shutter speed (1/1500 s) to capture the flying birds, and a maximum sensor sensitivity (ISO6400) to match the aforementioned settings. Nonetheless, we found the denoised image to be of high quality; we submitted it to the Wikimedia Commons ``Quality Images Candidates" page \cite{qic} and it was subsequently promoted to a ``Quality Image" by Wikimedia Commons reviewers. A crop of the image is provided on Figure \ref{fig:visualpigeons} with a comparison between the noisy version, one denoised with a U-Net model trained on \ac{NIND}, and a version that has been denoised using \ac{BM3D} (with $\sigma=30$ which, on average, yields the highest \ac{SSIM} in our ISO6400 test images). The BM3D version shows significant displeasing artifacts, for example on the skirt and the blue uniform panel on the right, while the model trained on \ac{NIND} smoothed these regions appropriately while retaining a greater level of useful details such as those present on the pigeons' wings.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{GAN Denoising}\label{sec:GAN Denoising}
 
-We first tried following the pix2pix approach (whose typical use-case is rough sketches to photorealistic images) of performing image to image translation using a PatchGAN discriminator and a U-Net generator \cite{pix2pix} with 1:3 training ratio. The discriminator handles high-frequency details and low-frequencies are handled by the $\ell 1$ loss. We were unable to obtain satisfying performance after experimenting with different loss balances, we found that the denoising performance was subpar to that of \ac{BM3D} and of our previous U-Net network; high-frequencies tend to be exaggerated in low-frequency areas and high frequency details are not properly recovered, often resulting in an overall poor \ac{SSIM} index. Figure \ref{fig:p2p-def} illustrates the denoising performance obtained using a 0.25 $\ell 1$ multiplier.
+We initially trained denoising networks using the pix2pix approach (the typical use-case is generating photorealistic images from rough sketches) of performing image to image translation using a PatchGAN discriminator and a U-Net generator \cite{pix2pix}. The results were not satisfying even after applying the adjustments mentioned in section \ref{sec:Initial training method}; the PatchGAN would consistently prefer high frequencies and the denoising performance suffered. We thus designed our own HulDisc discriminator and a similar HulbNet generator and tested their individual building blocks in section \ref{sec:Components} before assessing the system as a whole and comparing it to previous approaches in section \ref{sec:System as a whole}.
+
+\subsection{PatchGAN}
+
+We first tried following the pix2pix approach using a PatchGAN discriminator and a U-Net generator \cite{pix2pix} with 1:3 training ratio. The discriminator handles high-frequency details and low-frequencies are handled by the $\ell 1$ loss. We were unable to obtain satisfying performance after experimenting with different loss balances, we found that the denoising performance was subpar to that of \ac{BM3D} and of our previous U-Net network; high-frequencies tend to be exaggerated in low-frequency areas and high frequency details are not properly recovered, often resulting in an overall poor \ac{SSIM} index. Figure \ref{fig:p2p-def} illustrates the denoising performance obtained using a 0.25 $\ell 1$ multiplier.
 
 \begin{figure}[!htbp]
   \begin{center}
@@ -169,9 +177,12 @@ Some improvement were made with careful fine-tuning of the learning environment.
 \label{fig:p2p-comp-1}
 \end{figure}
 
-Network like \cite{pix2pixhd} which processes multiple scales to capture high-frequencies and smooth textures. Instead of dividing up the images into different resolutions or using multiple networks, we followed an approach similar to that of DenseNet \cite{densenet} which concatenates multiple channels together from different layers (as opposed to summing the features \cite{resnet}), allowing layers to contain different types of features captured with different convolutions. Some of the convolutions thus capture a wider receptive field using dilation while other focus on local details.
+\subsection{Our proposed architecture}
+\subsubsection{Components}\label{sec:Components}
+Our main motivation for designing the "Hul" architectures described in sections \ref{HulbNet} and \ref{HulDisc} is the poor performance obtained with a PatchGAN discriminator; the discriminative network should not focus only on high-frequencies. We also wanted to replace the U-Net network which loses too much border that is either easily discriminated against or does not leave a large enough crop for the discriminator to make up meaningful results. We thus designed both a generator and a discriminator which follow the same design ideas (alas the discriminator is cut in half and loses many of the dense connections), and tested specific components for their respective use-cases.
+%Network like \cite{pix2pixhd} which processes multiple scales to capture high-frequencies and smooth textures. Instead of dividing up the images into different resolutions or using multiple networks, we followed an approach similar to that of DenseNet \cite{densenet} which concatenates multiple channels together from different layers (as opposed to summing the features \cite{resnet}), allowing layers to contain different types of features captured with different convolutions. Some of the convolutions thus capture a wider receptive field using dilation which has been shown to perform well in image segmentation tasks \cite{multi-scale-dilation}, while other channels focus on local details with standard convolutions.
 
-At the same time we wanted to replace the U-Net network which loses too much border that is either easily discriminated against or does not leave a large enough crop for the discriminator to make up meaningful results. We thus designed both a generator and a discriminator which follow the same design ideas (alas the discriminator is cut in half and loses many of the dense connections), and tested specific components for their respective use-cases.
+%At the same time we wanted to replace the U-Net network which loses too much border that is either easily discriminated against or does not leave a large enough crop for the discriminator to make up meaningful results. We thus designed both a generator and a discriminator which follow the same design ideas (alas the discriminator is cut in half and loses many of the dense connections), and tested specific components for their respective use-cases.
 
 The two architectures were trained separately to assess and optimize their individual performance before working together. The generator is typically trained using the same framework as that of section \ref{sec:CNN Denoising}, while the discriminator main tests involve discriminating between clean and noisy crops from the dataset without receiving the conditional input. This test is not as robust as training with the result of a static generator but it allows us to quickly get a preview of the discriminator's performance whereas it would not always be able to learn from scratch given a well trained generator.
 
@@ -182,7 +193,7 @@ The two architectures were trained separately to assess and optimize their indiv
 \label{fig:gen-BN}
 \end{figure}
 
-\acl{BN} appeared to hamper learning on the generative networks, often yielding worse color rendition and lowering the \ac{SSIM} index (which does not appear to be very sensible to color accuracy). We trained a generative network for an epoch with and without batch normalization to finally determine whether \ac{BN} should be removed from the generative network. Figure \ref{fig:gen-BN} shows the resulting learning curve, which allows us to confidently remove \ac{BN} from the generative architecture (which is now called "HulbNet". We also trained a network for an epoch to determine whether not using a final loss function as is sometimes done \cite{dncnn} would yield better performance than \ac{PReLU}, but we found it better to continue ending with a non-linear activation function.
+\acl{BN} appeared to hamper learning on the generative networks, often yielding worse color rendition and lowering the \ac{SSIM} index (which does not appear to be very sensible to color accuracy). We trained a generative network for an epoch with and without batch normalization to finally determine whether \ac{BN} should be removed from the generative network. Figure \ref{fig:gen-BN} shows the resulting learning curve, which allows us to confidently remove \ac{BN} from the generative architecture (we add the letter b such that "HulbNet" denotes a network without \ac{BN}). We also trained a network for an epoch to determine whether not using a final loss function as is sometimes done \cite{dncnn} would yield better performance than \ac{PReLU}, but we found the network performs better with a non-linear activation function.
 
 % TODO fix imbalance
 % TODO explicitly mention loss
@@ -193,6 +204,7 @@ The two architectures were trained separately to assess and optimize their indiv
 \label{fig:hul112disc-activ}
 \end{figure}
 
+% TODO add hulfdisc
 Figure \ref{fig:hul112disc-activ} shows the discriminator's learning curve classifying images as either clean or noisy. We observe that \acl{BN} is useful in the case of the discriminator, likely because its job does not entail recreating image fidelity from the input but output a single probability, and \acl{BN} can help when given mini-batches of a single target value (line 3, 6, 7). We observe that the \ac{PReLU} activation function yields sporadically very poor performance on line 0 and 4, but performance is restored with a greater number of filters. Ending the discriminative network with a final max-pooling appears worse than a learned convolution. The different activation functions seem roughly equivalent as they overtake one other over time. Although we observe the importance of using a sufficient number of filters, we cannot conclude an actual number of needed filters from this experiment because the task is simpler than discriminating between real (baseline) and fake (denoised) images, but the real task at hand cannot be accomplished because the discriminator never catches up if there is a large discrepancy between an untrained discriminator and a pre-trained generator.
 
 \begin{figure}[!htbp]
@@ -205,6 +217,28 @@ Figure \ref{fig:hul112disc-activ} shows the discriminator's learning curve class
 Following some incertitude on whether label smoothing should only be applied on positive labels as per \cite{gantechniques} or on all batches used to train the discriminator, we compared the two approaches and show the results on figure \ref{fig:label-smoothing}. The test protocol is different from the previous one in that the discriminator attempts to discriminate against images denoised by a generator which has been pre-trained for three epochs (and is continuously being updated, although it receives no feedback from the discriminator). The results we observed did not seem to differ significantly as the two discriminators would continuously overtake one other.
 
 % switching losses is bad
+\subsubsection{System as a whole}\label{sec:System as a whole}
+
+In this section we test different configurations of our "Hul" \ac{cGAN} networks as a whole system. The performance is compared to the previously used configurations as well (U-Net alone and the PatchGAN), and we assess the visual quality of denoised images where it was previously lacking (i.e. noisy face images).
+
+The different types of network present in this experiment are as follow:
+\begin{itemize}
+  \item Hul is the base name of the network we use
+  \item b: no batch normalization
+  \item f: more channels as the other dimensions decrease
+  \item A number representing the minimum valid input size
+  \item Disc for discriminators or Net for generators
+\end{itemize}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=1\linewidth]{gfx/graphs/gen-BN.pdf}
+\caption[cGAN training performance comparison]{
+cGAN training performance comparison. The \acs{SSIM} loss is shown. Although \acs{SSIM} is not a meaningful enough factor on its own because the network could recreate a structurally different yet visually pleasing image, it provides an approximate indicator of performance and learning. 
+Generative network learning curve with and without \acl{BN} ("HulbNet"), as well as with neither \ac{BN} nor an activation function. We observe better performance when \acl{BN} is not applied and with the use of a non-linear final activation function.}
+\label{fig:gen-BN}
+\end{figure}
+
 Using our HulbNet generative network and HulDisc discriminative network and the training method described in section \ref{sec:Adopted training method}  
 
 TODO (in-progress): HulbNet w/ HulDisc, HulbNet w/PatchGAN, HulbNet w/HulfDisc, HulbNet alone, HulbNet w/ HulDisc with 0.1 advantage
