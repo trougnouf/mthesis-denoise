@@ -10,7 +10,7 @@ import json
 import graph_utils
 
 # generate results from log file
-# python graph_logfiles.py --experiment Hul112Disc_activation --yaxis "Average MSE" --uneven_graphs
+# python graph_logfiles.py --experiment "Hul112Disc filters, final activation, and batch normalization" --yaxis "Average MSE loss" --uneven_graphs --pre Loss_D: --smoothing_factor 600
 # python graph_logfiles.py --experiment "Hul(b)128Net" --yaxis "Average 1-SSIM loss" --smoothing_factor 20 --uneven_graphs
 # python graph_logfiles.py --experiment "Label smoothing" --yaxis "Average MSE loss (discriminator)" --pre "Loss_D: " --post " (" --smoothing_factor 2500 --uneven_graphs
 # python graph_logfiles.py --experiment "cGAN training performance" --yaxis "Average SSIM loss during training" --pre "Average SSIM loss: " --smoothing_factor 1 --uneven_graphs --xaxis Epoch
@@ -35,7 +35,7 @@ else:
 
 experiments = dict()
 # these should be classes w/ all the parameters, oh well
-experiments['Hul112Disc_activation'] = {
+experiments['Hul112Disc filters, final activation, and batch normalization'] = {
 #    "None-bc": "results/train/2019-05-22-D_sanity_check_not_conditional_No_activation",
 #    "Sigmoid-bc": "results/train/2019-05-22-D_sanity_check_not_conditional_Sigmoid",
 #    "PReLU-bc": "results/train/2019-05-22-D_sanity_check_not_conditional",
@@ -49,8 +49,8 @@ experiments['Hul112Disc_activation'] = {
 "PReLU FA, funit=16, no BN":"results/train/2019-05-26-D_sanity_check_Hulb112Disc_fixed_funit16",
 "PReLU FA, funit=32, no BN":"results/train/2019-05-26-D_sanity_check_Hulb112Disc_fixed_funit32",
 #"LeakyReLU activations,  funit=24":"results/train/2019-05-26-D_sanity_check_Hull112Disc_fixed_funit24_LeakyReLU",
-"LeakyReLU FA, funit=24": "results/train/2019-05-26-D_sanity_check_Hul112Disc_fixed_funit24_LeakyReLU",
-"LeakyReLU FA, funit=24, final max pooling": "results/train/2019-05-26-D_sanity_check_Hul112Disc_fixed_funit24_LeakyReLU_finalpool"
+#"LeakyReLU FA, funit=24": "results/train/2019-05-26-D_sanity_check_Hul112Disc_fixed_funit24_LeakyReLU",
+#"LeakyReLU FA, funit=24, final max pooling": "results/train/2019-05-26-D_sanity_check_Hul112Disc_fixed_funit24_LeakyReLU_finalpool"
 }
 experiments['Hul(b)128Net'] = {"BN, PReLU": "results/train/2019-05-23-Hulb128Net-BN",
 "No BN, PReLU": "results/train/2019-05-23-Hulb128Net-NoBN",

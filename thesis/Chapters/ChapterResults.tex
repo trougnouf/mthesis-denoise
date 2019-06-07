@@ -173,13 +173,13 @@ Some improvement were made with careful fine-tuning of the learning environment.
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=1\linewidth]{gfx/graphs/p2p-comp-1.pdf}
-\caption[Denoising performance of \acsp{GAN} on the "stefantiek" set]{Denoising performance of the non conditional GAN with varying weights and schedules on the "stefantiek" set over increased ISO values. The models appear to perform better when they are pre-trained to achieve good performance with the \acs{SSIM} loss before taking the discriminator's feedback into account, and when the discriminator's weight (1 - other weights) does not account for most of the loss function.}
+\caption[Denoising performance of \acsp{GAN} on the "stefantiek" set]{Denoising performance of the non conditional GAN with varying weights and schedules on the "stefantiek" set over increased ISO values. The models appear to perform better when they are pre-trained to achieve good performance with the \acs{SSIM} loss before taking the discriminator's feedback into account, and when the discriminator's weight (1 - other weights) does not account for the bulk of the loss function.}
 \label{fig:p2p-comp-1}
 \end{figure}
 
 \subsection{Our proposed architecture}
 \subsubsection{Components}\label{sec:Components}
-Our main motivation for designing the "Hul" architectures described in sections \ref{HulbNet} and \ref{HulDisc} is the poor performance obtained with a PatchGAN discriminator; the discriminative network should not focus only on high-frequencies. We also wanted to replace the U-Net network which loses too much border that is either easily discriminated against or does not leave a large enough crop for the discriminator to make up meaningful results. We thus designed both a generator and a discriminator which follow the same design ideas (alas the discriminator is cut in half and loses many of the dense connections), and tested specific components for their respective use-cases.
+Our main motivation for designing the "Hul" architectures described in sections \ref{HulbNet} and \ref{HulDisc} is the poor performance obtained with a PatchGAN discriminator; the discriminative network should not focus only on high-frequencies or its feedback becomes corruptive. We also wanted to replace the U-Net generative network which loses too much border that is either easily discriminated against or that does not leave a large enough crop for the discriminator to make up meaningful results. We thus designed both a generator and a discriminator which follow the same design ideas (alas the discriminator is cut in half and thus loses many of the dense connections), and tested specific components for their respective use-cases.
 %Network like \cite{pix2pixhd} which processes multiple scales to capture high-frequencies and smooth textures. Instead of dividing up the images into different resolutions or using multiple networks, we followed an approach similar to that of DenseNet \cite{densenet} which concatenates multiple channels together from different layers (as opposed to summing the features \cite{resnet}), allowing layers to contain different types of features captured with different convolutions. Some of the convolutions thus capture a wider receptive field using dilation which has been shown to perform well in image segmentation tasks \cite{multi-scale-dilation}, while other channels focus on local details with standard convolutions.
 
 %At the same time we wanted to replace the U-Net network which loses too much border that is either easily discriminated against or does not leave a large enough crop for the discriminator to make up meaningful results. We thus designed both a generator and a discriminator which follow the same design ideas (alas the discriminator is cut in half and loses many of the dense connections), and tested specific components for their respective use-cases.
@@ -232,12 +232,25 @@ The different types of network present in this experiment are as follow:
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=1\linewidth]{gfx/graphs/gen-BN.pdf}
+\includegraphics[width=1\linewidth]{gfx/graphs/cgan-comp.pdf}
 \caption[cGAN training performance comparison]{
-cGAN training performance comparison. The \acs{SSIM} loss is shown. Although \acs{SSIM} is not a meaningful enough factor on its own because the network could recreate a structurally different yet visually pleasing image, it provides an approximate indicator of performance and learning. 
-Generative network learning curve with and without \acl{BN} ("HulbNet"), as well as with neither \ac{BN} nor an activation function. We observe better performance when \acl{BN} is not applied and with the use of a non-linear final activation function.}
-\label{fig:gen-BN}
+cGAN training performance comparison. 0: The U-Net from section experiment \ref{exp:nindxt1}, 1: Hulb128Net (without a discriminator). The following networks all use the Hulb128Net generator and a specified discriminator. 2: Hul112Disc, 3: Hulf112Disc (more filters as the network shrinks), 4: PatchGAN \cite{pix2pix}, 5: Hul112Disc which learns 10\% more often than the generator, 6: Hulf112Disc which learns 10\% more often than the generator. We observe that the increased number of filters (Hulf112Disc) destabilizes the discriminator, but performance is restored when the discriminator has more time to learn. On the other hand, giving more time to a discriminator that does not have as much capacity provides worse feedback and the result of the generator suffers. The PatchGAN's performance degenerates quickly, and the Hulb128Net alone offers greater performance than that of U-Net but further analysis shows that the \acs{cGAN} denoised images are visually superior. The \acs{SSIM} training loss is shown. Although \acs{SSIM} is not a meaningful enough factor on its own because the network could recreate a structurally different yet visually pleasing image, it provides an approximate indicator of performance and learning.}
+\label{fig:cgan-comp}
 \end{figure}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=1\linewidth]{gfx/graphs/cgan-comp-longer.pdf}
+\caption[cGAN training performance comparison (zoomed-out)]{
+cGAN training performance comparison. This is the same graph as Figure \ref{fig:cgan-comp} zoomed out to show that the networks that were trained for longer benefit greatly from the additional time and exceed the performance of a single U-Net generator which maxes out at \acs{SSIM} index=0.902}
+\label{fig:cgan-complonger}
+\end{figure}
+
+% generate faces, graph on an image
+% on:
+
+
+The networks' training performance is shown on figures \ref{cgan-comp} and \ref{cgan-complonger}. The baseline is a single generative U-Net network, and we also trained a single Hulb128Net network. The Hulb128Net network appears to perform better than
 
 Using our HulbNet generative network and HulDisc discriminative network and the training method described in section \ref{sec:Adopted training method}  
 
