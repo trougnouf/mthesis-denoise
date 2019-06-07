@@ -54,6 +54,7 @@ parser.add_argument('--compute_SSIM_anyway', action='store_true', help='Compute 
 parser.add_argument('--freeze_generator', action='store_true', help='Freeze generator until discriminator is useful')
 parser.add_argument('--start_epoch', default=1, type=int, help='Starting epoch (cosmetics)')
 parser.add_argument('--discriminator_advantage', type=float, default=0.0, help='Desired discriminator correct prediction ratio is 0.5+advantage')
+parser.add_argument('--discriminator2_advantage', type=float, default=0.0, help='Desired discriminator correct prediction ratio is 0.5+advantage')
 parser.add_argument('--patience', type=int, default=default_values['patience'], help='Number of epochs without improvements before scheduler updates learning rate')
 
 args = parser.parse_args()
@@ -157,7 +158,7 @@ for epoch in range(args.start_epoch, args.epochs):
             loss_D_list.append(discriminator.get_loss())
             iteration_summary += 'loss D: %f (%s)' % (discriminator.get_loss(), discriminator.get_predictions_range())
         # train discriminator2 based on its previous performance
-        discriminator2_learns = (use_D2 and (discriminator2.get_loss()+args.discriminator_advantage) > random.random()) or (use_D2 and frozen_generator)
+        discriminator2_learns = (use_D2 and (discriminator2.get_loss()+args.discriminator2_advantage) > random.random()) or (use_D2 and frozen_generator)
         if discriminator2_learns:
             discriminator2.learn(noisy_batch_cropped=noisy_batch_cropped,
                                 generated_batch_cropped=generated_batch_cropped,
@@ -171,9 +172,9 @@ for epoch in range(args.start_epoch, args.epochs):
         # train generator if discriminator didn't learn or discriminator is somewhat useful
         generator_learns = not frozen_generator and (
             (not discriminator_learns and not discriminator2_learns)
-            or (discriminator_learns and discriminator2_learns and (discriminator2.get_loss()+discriminator.get_loss())/2+args.discriminator_advantage < random.random())
+            or (discriminator_learns and discriminator2_learns and (discriminator2.get_loss()+args.discriminator2_advantage+discriminator.get_loss()+args.discriminator_advantage)/2 < random.random())
             or (discriminator_learns and (not discriminator2_learns) and discriminator.get_loss()+args.discriminator_advantage < random.random())
-            or (discriminator2_learns and (not discriminator_learns) and discriminator2.get_loss()+args.discriminator_advantage < random.random())
+            or (discriminator2_learns and (not discriminator_learns) and discriminator2.get_loss()+args.discriminator2_advantage < random.random())
             )
         if generator_learns:
             if discriminator_learns or discriminator2_learns:
