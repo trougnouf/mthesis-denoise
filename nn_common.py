@@ -44,7 +44,7 @@ class Model:
         if os.path.isfile(path):
             return path
         elif os.path.isdir(path):
-            return find_highest(os.listdir(path), keyword)
+            return os.path.join(path, find_highest(os.listdir(path), keyword))
         elif os.path.isdir(os.path.join('models', path)):
             return complete_path(os.path.join('models', path), keyword)
         else:

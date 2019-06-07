@@ -30,10 +30,9 @@ def parse_args():
 if __name__ == '__main__':
     args = parse_args()
     assert args.model_path is not None
-    model_path = Model.complete_path(args.model_path)
+    model_path = Model.complete_path(args.model_path, keyword='generator')
 
     sets_to_denoise = os.listdir(args.noisy_dir)
-
     denoised_save_dir=os.path.join(args.result_dir, model_path.split('/')[-2])
     os.makedirs(denoised_save_dir, exist_ok=True)
     for aset in sets_to_denoise:
