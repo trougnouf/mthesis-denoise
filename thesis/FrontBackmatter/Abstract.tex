@@ -16,6 +16,10 @@
 %\url{https://plg.uwaterloo.ca/~migod/research/beckOOPSLA.html}
 %\end{center}
 
+
+Convolutional neural networks have been the focus of research aiming to solve image denoising problems, but their performance remains unsatisfactory for most applications. These networks are trained with synthetic noise distributions that do not accurately reflect the noise captured by image sensors. Some datasets of clean-noisy image pairs have been introduced but they are usually meant for benchmarking or specific applications. We introduce the Natural Image Noise Dataset (NIND), a dataset of DSLR-like images with varying levels of ISO noise which is large enough to train models for blind denoising over a wide range of noise. We demonstrate the use of denoising models trained with the NIND and show that it significantly outperforms BM3D on ISO noise from unseen images, even when generalizing to images from a different type of camera. We expect that this dataset will prove useful for future image denoising applications. Finally we investigate the use of conditional generative adversarial networks (cGAN) which may provide better denoising performance in some edge cases that a paired dataset may not cover, and we develop a framework which provides the groundwork to train such networks as well as a pair of discriminator-generator architectures that perform well in such systems.
+
+
 \vfill
 
 %\begin{otherlanguage}{ngerman}

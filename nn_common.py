@@ -250,8 +250,11 @@ class Printer:
         if self.tostdout:
             print(msg)
         if self.tofile:
-            with open(self.file_path, 'a') as f:
-                f.write(str(msg)+'\n')
+            try:
+                with open(self.file_path, 'a') as f:
+                    f.write(str(msg)+'\n')
+            except Exception as e:
+                print('Warning: could not write to log: %s'%e)
 
 def get_crop_boundaries(cs, ucs, network=None, discriminator=None):
     if '112' in discriminator:
