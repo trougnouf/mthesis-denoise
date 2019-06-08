@@ -248,14 +248,23 @@ All \ac{cGAN} networks use a $\text{loss}_{\ell 1}$ weight of 0.05 and a $\text{
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=1\linewidth,height=0.9\textheight,keepaspectratio]{gfx/comp/NIND_CourtineDeVillersDebris_ISOH2-cgan.jpg}
+\includegraphics[width=1\linewidth,height=0.85\textheight,keepaspectratio]{gfx/comp/NIND_CourtineDeVillersDebris_ISOH2-cgan.jpg}
 \caption[Denoising CourtineDeVillersDebris with cGANs (visual comparison)]{Visual comparison of different networks' denoising performance on NIND\_CourtineDeVillersDebris\_ISOH2. 1: Ground-truth (ISO200 1/4 s, SSIM: 1.000), 2: Noisy (High ISO 1/1100 s, SSIM: 0.232), 3: HulbNet generator with no discriminator (SSIM: 0.784), 4: HulbNet generator and HulDisc discriminator (SSIM: 0.780), 5: HulbNet generator and PatchGAN discriminator (SSIM: 0.687).}
 \label{fig:cgan-wall}
 \end{figure}
 
 Figure \ref{fig:cgan-wall} visually shows the denoising performance of various \ac{cGAN} and conventional networks. We only displayed one combination of "Hul" generator-discriminator pair because we could not discern an appreciable difference between any of our trained \ac{cGAN} models. We observe restored high frequencies in the \ac{cGAN} network, whereas the single generator does not provide as much detail. The PatchGAN offers a very sharp image but much of the generated image looks unnatural (and the bricks in less chaotic parts of the image have an asymmetrical structure). The SSIM index does not correlate with a visually appealing result because it favors blur over details that are different from those present on the ground-truth (one-to-many mapping). This type of image benefits greatly from a discriminative loss because of its many high-frequency details.
 
-Face images do not provide convincing results, we obtain different results across shots and there is no clear best performing network between a single U-Net or HulbNet generator, or one of the trained \acp{cGAN}. The PatchGAN does provide more details and a superior result when the structure it generates is correct, but that is often not the case and none of the trained networks provide a consistent benefit without domain-specific training.
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=1\linewidth,height=0.75\textheight,keepaspectratio]{gfx/comp/face.jpg}
+\caption[Denoising a face with cGANs (visual comparison)]{Visual comparison of different networks' denoising performance on a human face. top-left: Noisy ISO3200 image, top-right: denoised with \ac{BM3D} ($\sigma = 20$), middle-left: denoised with a HulbNet generator and HulfDisc discriminator (with a 0.1 advantage), middle-right: denoised with a HulbNet generator and a PatchGAN discriminator, bottom-left: denoised with a HulbNet generator, bottom-right: denoised with a HulbNet generator and both a HulfDisc (0.5 weight) and PatchGAN (0.25 weight) discriminator. The skin appears too smooth on the HulbNet network alone and the HulfDisc discriminator offers marginal improvements in sharpness. The PatchGAN discriminator provides sharper but unnatural looking results (particularly on the nose and the hair). The 3-networks combination generates more natural-looking skin textures without domain-specific training.}
+\label{fig:skin}
+\end{figure}
+
+Face images are the difficult to generate satisfyingly because we are most sensitive to structural imperfections, oversmoothing, and imbalances between sharpness and smoothing. We did observe a difference between the different training methods but none of them would provide satisfying results; the "Hul" networks would result in unnaturally smooth looking skin (the discriminator providing marginal sharpness), while HulbNet combined with PatchGAN could provide sharp but unnatural results. We eventually obtained satisfying results on human skin training a generative model with two different discriminators; the generator's weighted loss is comprised of 0.05 $\ell 1$, 0.25 \ac{SSIM}, 0.25 PatchGAN discriminator, and 0.5 HulfDisc discriminator (which is given a 0.1 advantage). A sample resulting face is shown on figure \ref{fig:skin}.
+
+% Face images do not provide convincing results, we obtain different results across shots and there is no clear best performing network between a single U-Net or HulbNet generator, or one of the trained \acp{cGAN}. The PatchGAN does provide more details and a superior result when the structure it generates is correct, but that is often not the case and none of the trained networks provide a consistent benefit without domain-specific training.
 
 %TODO (in-progress): HulbNet w/ HulDisc, HulbNet w/PatchGAN, HulbNet w/HulfDisc, HulbNet alone, HulbNet w/ HulDisc with 0.1 advantage
 

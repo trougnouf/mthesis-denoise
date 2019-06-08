@@ -57,7 +57,8 @@ class Model:
         elif os.path.isdir(os.path.join('models', path)):
             return complete_path(os.path.join('models', path), keyword)
         else:
-            return False
+            print("Model path not found: %s"%path)
+            exit(0)
 
     @staticmethod
     def instantiate_model(model_path=None, network=None, device='cuda:0', strparameters=None, pfun=print, keyword='', **parameters):
