@@ -191,6 +191,8 @@ for epoch in range(args.start_epoch, args.epochs):
                 discriminator2_predictions = discriminator2.discriminate_batch(
                     generated_batch_cropped=generated_batch_cropped,
                     noisy_batch_cropped=noisy_batch_cropped)
+            else:
+                discriminator2_predictions = None
             generator.learn(generated_batch_cropped=generated_batch_cropped,
                             clean_batch_cropped=clean_batch_cropped,
                             discriminator_predictions=discriminator_predictions,
