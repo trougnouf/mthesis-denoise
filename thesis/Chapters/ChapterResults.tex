@@ -7,9 +7,11 @@ The \ac{NIND} is cropped in advance to speed up loading times. A crop size of $1
 
 An epoch consists of training the model on every crop of any ISO value for every scene. A random ISO value is fed every time a crop is loaded; therefore, it takes several epochs for the model to train on all of the available data. The ground-truth is also selected randomly when multiple ones are available and basic data augmentation (rotation and/or translation) is performed.
 
+The source code for all of our work is available on our public GitHub repository \cite{mthesis-denoise}.
+
 \section{CNN Denoiser}\label{sec:CNN Denoiser}
 %\subsubsection{Models}
-We initially trained a DnCNN \cite{dncnn} model on our data. This model attained satisfying performance when trained to model the latent clean image instead of modeling the noise. It was further improved by using a convolution filter size of $5\times 5$ instead of $3\times 3$. The second architecture tested was a \ac{RED-Net} \cite{rednet} with 22 layers and a filter size of $5\times 5$. This model obtained very good performance, albeit with an impractical runtime and memory use (). We settled on a U-Net \cite{unet} architecture which provides slightly better performance with significantly lower runtime and memory use. The U-Net model denoises an image in approximately 0.73 seconds per \ac{MP} whereas the \ac{RED-Net} with $5 \times 5$ filters takes over 12 seconds per \ac{MP} on an NVidia GeForce GTX 1070 \ac{GPU}.
+We initially trained a DnCNN \cite{dncnn} model on our data. This model attained satisfying performance when trained to model the latent clean image instead of modeling the noise. It was further improved by using a convolution filter size of $5\times 5$ instead of $3\times 3$. The second architecture tested was a \ac{RED-Net} \cite{rednet} with 22 layers and a filter size of $5\times 5$. This model obtained very good performance, albeit with an impractical runtime and memory usage. We settled on a U-Net \cite{unet} architecture which provides slightly better performance with significantly lower runtime and memory use. The U-Net model denoises an image in approximately 0.73 seconds per \ac{MP} whereas the \ac{RED-Net} with $5 \times 5$ filters takes over 12 seconds per \ac{MP} on an NVidia GeForce GTX 1070 \ac{GPU}.
 
 %\subsection{Experimental results}
 
