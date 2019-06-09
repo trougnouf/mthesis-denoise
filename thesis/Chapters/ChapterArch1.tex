@@ -70,11 +70,20 @@ We designed a multi-scale architecture somewhat similar to U-Net whose aim is to
   \item \textbf{Dense connections}: HulbNet uses concatenated filters similar to the concept introduced in DenseNet \cite{densenet}. Residual connections such as those used in \ac{RED-Net} \cite{rednet} and U-Net \cite{unet} are element-wise sum of the feature maps, as such the feature maps are combined and the network can no longer choose individual elements to learn from. Dense connections on the other hand form concatenated features, that is the receiving filter can learn from any of the features separately and features can bring new information that does not necessarily need to be strongly correlated or have matching depths; features may therefore come from filters with different receptive fields and in different parts of the network.
 \end{itemize}
 % TODO draw HulNet
-HulbNet has two main types of convolution blocks; standard convolutions are made up of two series of standard 3x3 convolutions while dilated convolution blocks have one convolution with dilation set to two. These blocks have the same effective receptive field with the height and width of the feature maps being reduced by two after each block, and so they are both applied then concatenated as the input to the next layer. The motivation behind this combination is to capture features from multiple resolutions as the dilated convolution is expected to focus more on low-frequencies and repeated standard convolutions would capture the finer details. The first layer has an additional dilated convolution with dilation of five to capture an especially wide window of $10\times 10$.
+
+\begin{figure}
+  \begin{center}
+    \scalebox{0.5}{\input{gfx/HulbNet}}
+    \caption[HulbNet architecture]{The HulbNet architecture is illustrated above. D indicates the height and width dimension when starting with a $128\times 128$ pixel crop. F denotes a ``filter unit'', which typically consists of 32 filters. This network can work with input crops of dimension $119+9\times n$ where $n \ge 0$.}
+    \label{fig:Hulb128Net}
+  \end{center}
+\end{figure}
+
+HulbNet has two main types of convolution blocks; standard convolutions are made up of two series of 3x3 convolutions while dilated convolution blocks have one convolution with dilation set to two. These blocks have the same effective receptive field with the height and width of the feature maps being reduced by two after each block, and so they are both applied then concatenated as the input to the next layer. The motivation behind this combination is to capture features from multiple resolutions as the dilated convolution is expected to focus more on low-frequencies and repeated standard convolutions would capture the finer details. The first layer has an additional dilated convolution with dilation of five to capture an especially wide window of $10\times 10$.
 
 After two blocks of each type, the feature map is downscaled by a factor of three with the aforementioned strided convolution. The strided convolution is expected to result in the most appropriate type of pooling (or combination thereof), and using a stride of 3 (which reduces the dimensions by the same factor) results in each pixel being processed exactly once, therefore, avoiding checkerboard patterns which can occur when some lines are processed more than others.
 
 The blocks and downscale operations are repeated three times (with minor adjustments based on the intended input size) resulting in a single feature stack. The network is then mirrored using transposed convolutions that replace the convolutions to grow back to the original image size. All concatenated features in the downscaling part of the network are concatenated into the input of each upscaling block. The last block features a bottleneck 1x1 convolution which reduces the number of features down to three channels.
-Each convolution is followed by a \ac{PReLU} activation. \acl{BN} was not applied because experimental results showed worse performance using it in denoised image generation.
+Each convolution is followed by a \ac{PReLU} activation and \acl{BN} was not applied because experimental results showed worse performance using it in denoised image generation. The HulbNet architecture is illustrated in figure \ref{fig:Hulb128Net}. 
 
 HulDisc is a matching discriminator network which follows the same structure as the aforementioned HulbNet but uses Batch Normalization and ends in the middle with a single probabilistic feature. % mention that we'll talk about the GAN?

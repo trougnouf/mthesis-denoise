@@ -1,5 +1,5 @@
 pad=40;
-initd=200;
+initd=256;
 x1=0;
 y1=0;
 color(yellow, .75){
