@@ -77,7 +77,7 @@
 % ********************************************************************
 % Packages with options that might require adjustments
 % ********************************************************************
-\PassOptionsToPackage{ngerman,american}{babel} % change this to your language(s), main language last
+\PassOptionsToPackage{american}{babel} % change this to your language(s), main language last
 % Spanish languages need extra options in order to work with this template
 %\PassOptionsToPackage{spanish,es-lcroman}{babel}
     \usepackage{babel}
@@ -90,7 +90,7 @@
   style=numeric-comp,%
   %style=authoryear-comp, % Author 1999, 2010
   %bibstyle=authoryear,dashed=false, % dashed: substitute rep. author with ---
-  sorting=nyt, % name, year, title
+  sorting=none,%nyt, % name, year, title
   maxbibnames=10, % default: 3, et al.
   %backref=true,%
   natbib=true % natbib compatibility mode (\citep and \citet still work)
@@ -284,3 +284,8 @@
 \usepackage{tikz}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage{pdfpages}
+\newcommand*\cleartoleftpage{%
+  \clearpage
+  \ifodd\value{page}\hbox{}\newpage\fi
+}
