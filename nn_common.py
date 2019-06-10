@@ -8,7 +8,7 @@ import torchvision
 #from networks.p2p_networks import define_D
 import os
 from networks.Hul import Hulb128Net, Hul112Disc, Hulf112Disc
-from networks.ThirdPartyNets import PatchGAN
+from networks.ThirdPartyNets import PatchGAN, UNet
 
 default_values = {
     'g_network': 'Hulb128Net',

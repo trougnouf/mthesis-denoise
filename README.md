@@ -7,7 +7,7 @@ Master thesis on natural image noise removal using Convolutional Neural Networks
 Requirements: pytorch [, exiftool]
 
 ```
-python3 denoise_image.py -i <input_image_path> [-o output_image_path] --model_dir models/2018-12-25T20:03_run_nn.py_--batch_size_94_--lr_3e-4
+python3 denoise_image.py --model_dir models/UNet-denoise-G.pth -i <input_image_path> [-o output_image_path]
 ```
 
 ## train
@@ -21,4 +21,12 @@ python3 dl_ds_1.py --use_wget   # --use_wget is much less likely to result in ha
 python3 crop_ds.py              # this will take a long time
 # batch_size 94 is for a 11GB NVidia 1080, use a lower batch_size if less memory is available
 python3 run_nn.py --lr 3e-4 --batch_size 94
+# train a single U-Net generator:
+python3 nn_train.py --g_network UNet --weight_SSIM 1 --batch_size 60
+# train a HulbNet generator and HulfDisc discriminator
+python3 nn_train.py --d_network Hulf112Disc --batch_size 10
+# list options
+python3 nn_train.py --help
 ```
+
+note that run\_nn.py contains slightly more options (such as compression and artificial noise) but it only trains one network at a time. nn\_train.py can currently train one generator and two discriminators.

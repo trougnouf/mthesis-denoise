@@ -1,7 +1,7 @@
 import torch.nn as nn
 import torch
 
-
+# WIP barely started
 
 class DDnet(nn.Module):
     def __init__(self, funit=32, activation='PReLU', lv=16):

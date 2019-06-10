@@ -16,11 +16,16 @@ except ImportError:
 	pass
 import subprocess
 
+default_cs = 128
+default_ucs = 112
+default_cs_unet = 256
+default_ucs_unet = 192
+
 # TODO handle CPU
 
 parser = argparse.ArgumentParser(description='Image cropper with overlap')
-parser.add_argument('--cs', default=128, type=int, help='Tile size (model was probably trained with 128, different values will work with unknown results)')
-parser.add_argument('--ucs', default=112, type=int, help='Useful tile size (should be <=.75*cs), a smaller value may result in less grid artifacts but costs computation time')
+parser.add_argument('--cs', type=int, help='Tile size (model was probably trained with 128, different values will work with unknown results)')
+parser.add_argument('--ucs', type=int, help='Useful tile size (should be <=.75*cs for U-Net, a smaller value may result in less grid artifacts but costs computation time')
 parser.add_argument('-ol', '--overlap', default=6, type=int, help='Merge crops with this much overlap (Reduces grid artifacts, may reduce sharpness between crops, costs computation time)')
 parser.add_argument('-i', '--input', default='in.jpg', type=str, help='Input image file')
 parser.add_argument('-o', '--output', default='out.tif', type=str, help='Output file with extension')
@@ -33,6 +38,20 @@ parser.add_argument('--model_path', help='Generator pretrained model path (.pth 
 parser.add_argument('--model_parameters', type=str, help='Model parameters with format "parameter1=value1,parameter2=value2"')
 args = parser.parse_args()
 
+assert args.model_path is not None
+if args.cs:
+	cs = args.cs
+elif 'UNet' in args.model_path:
+	cs = default_cs_unet
+else:
+	cs = default_cs
+if args.ucs:
+	ucs = args.ucs
+elif 'UNet' in args.model_path:
+	ucs = default_ucs_unet
+else:
+	ucs = default_ucs
+	
 torch.cuda.set_device(args.cuda_device)
 cudnn.benchmark = True
 
@@ -98,7 +117,7 @@ model = Model.instantiate_model(network=args.network, model_path=args.model_path
 model.eval()  # evaluation mode
 if torch.cuda.is_available():
 	model = model.cuda()
-ds = OneImageDS(args.input, args.cs, args.ucs, args.overlap)
+ds = OneImageDS(args.input, cs, ucs, args.overlap)
 # multiple workers cannot access the same PIL object without crash
 DLoader = DataLoader(dataset=ds, num_workers=0, drop_last=False, batch_size=args.batch_size, shuffle=False)
 topil = torchvision.transforms.ToPILImage()
@@ -110,9 +129,9 @@ def make_seamless_edges(tcrop, x0, y0):
 		tcrop[:,:,0:args.overlap] = tcrop[:,:,0:args.overlap].div(2)
 	if y0 != 0:#top
 		tcrop[:,0:args.overlap,:] = tcrop[:,0:args.overlap,:].div(2)
-	if x0 + args.ucs < fswidth and args.overlap:#right
+	if x0 + ucs < fswidth and args.overlap:#right
 		tcrop[:,:,-args.overlap:] = tcrop[:,:,-args.overlap:].div(2)
-	if y0 + args.ucs < fsheight and args.overlap:#bottom
+	if y0 + ucs < fsheight and args.overlap:#bottom
 		tcrop[:,-args.overlap:,:] = tcrop[:,-args.overlap:,:].div(2)
 	return tcrop
 
