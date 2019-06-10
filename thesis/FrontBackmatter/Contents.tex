@@ -28,17 +28,19 @@
     \pdfbookmark[1]{\listfigurename}{lof}
     \listoffigures
 
-    \vspace{8ex}
+    %\vspace{8ex}
 
     %*******************************************************
     % List of Tables
     %*******************************************************
     %\phantomsection
     %\addcontentsline{toc}{chapter}{\listtablename}
+    %\clearpage
+    \newpage
     \pdfbookmark[1]{\listtablename}{lot}
     \listoftables
 
-    \vspace{8ex}
+    %\vspace{8ex}
     % \newpage
 
     %*******************************************************
@@ -49,12 +51,13 @@
     %\pdfbookmark[1]{\lstlistlistingname}{lol}
     %\lstlistoflistings
 
-    \vspace{8ex}
+    %\vspace{8ex}
 
     %*******************************************************
     % Acronyms
     %*******************************************************
     %\phantomsection
+    \newpage
     \pdfbookmark[1]{Acronyms}{acronyms}
     \markboth{\spacedlowsmallcaps{Acronyms}}{\spacedlowsmallcaps{Acronyms}}
     \chapter*{Acronyms}
