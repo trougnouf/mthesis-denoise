@@ -1,0 +1,62 @@
+/* FeedBurner-form Styles*/
+.fb-container{/* Container widget*/}
+
+.fbf-text{/* intro texto */}
+
+.fbf-widget{/*form */}
+
+.fb-counter-img img{/* counter img*/
+  display:block;
+  margin:5px auto 0 auto
+}
+
+.subscription_email{/* e-mail field */
+  -webkit-box-shadow:inset 0;
+  box-shadow:inset 0;
+  font:normal 12px arial;
+  padding:5px 3px;
+  text-align:center;
+  width:79%
+}
+
+.subscription_btn{/*btn  */
+  -webkit-border-radius:3px;
+  background:#ffb76b;
+  background:-moz-linear-gradient(top,#ffb76b 0%,#ffa73d 50%,#ff7c00 51%,#ff7f04 100%);
+  background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#ffb76b),color-stop(50%,#ffa73d),color-stop(51%,#ff7c00),color-stop(100%,#ff7f04));
+  background:-webkit-linear-gradient(top,#ffb76b 0%,#ffa73d 50%,#ff7c00 51%,#ff7f04 100%);
+  background:-o-linear-gradient(top,#ffb76b 0%,#ffa73d 50%,#ff7c00 51%,#ff7f04 100%);
+  background:-ms-linear-gradient(top,#ffb76b 0%,#ffa73d 50%,#ff7c00 51%,#ff7f04 100%);
+  background:linear-gradient(to bottom,#ffb76b 0%,#ffa73d 50%,#ff7c00 51%,#ff7f04 100%);
+  border:1px solid #ffb76b;
+  border-radius:3px;
+  color:#fff;
+  cursor:pointer;
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffb76b', endColorstr='#ff7f04',GradientType=0 );
+  font:bold 12px arial;
+  padding:5px 3px;
+  width:15%
+}
+
+.subscription_btn:hover{
+  background:#ffb76b;
+  color:#f7f7f7
+}
+
+.subscription_btn:active{
+  background:#ff7f04;
+  color:#f7f7f7
+}
+
+p.fb-credits a,.fb-credits{
+  color:#84C6DF;
+  font:normal 10px arial;
+  text-align:center;
+  margin:0 auto;
+  text-decoration:none
+}
+
+img.feed-image{/* the image   */
+  float:left;
+  margin:0 5px 5px 0
+}

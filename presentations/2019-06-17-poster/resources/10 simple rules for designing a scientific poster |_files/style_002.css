@@ -1,0 +1,267 @@
+/*
+Theme Name: twentyten_molecularecologist_child
+Description: 
+Author: Tim, Brant, Nick, Dilara or Kevin
+Template: twentyten
+*/
+
+@import url("../twentyten/style.css");
+
+/* =Structure
+-------------------------------------------------------------- */
+
+/* The main theme structure */
+#access .menu-header,
+div.menu,
+#colophon,
+#branding,
+#main,
+#wrapper {
+	margin: 0 auto;
+	width: 940px;
+}
+#wrapper {
+	background: #fff;
+	margin-top: 0px;
+	padding: 5px 5px;
+}
+
+/* Structure the footer area */
+#footer-widget-area {
+	overflow: hidden;
+}
+#footer-widget-area .widget-area {
+	float: left;
+	margin-right: 5px;
+	width: 220px;
+}
+#footer-widget-area #fourth {
+	margin-right: 0;
+}
+#site-info {
+	float: left;
+	font-size: 14px;
+	font-weight: bold;
+	width: 700px;
+}
+#site-generator {
+	float: right;
+	width: 220px;
+}
+
+/* =Global Elements
+-------------------------------------------------------------- */
+a:link {
+	color: #297c78;
+}
+a:visited {
+	color: #3faba6;
+}
+a:active,
+a:hover {
+	color: #e1ae0f;
+}
+
+/* =Header
+-------------------------------------------------------------- */
+
+#header {
+	padding: 0 0 0 0;
+}
+#site-title {
+	float: left;
+	font-size: 1px;
+	line-height: 1px;
+	margin: 0 0 0 0;
+	width: 700px;
+}
+#site-title a {
+	color: #ffffff;
+	font-weight: bold;
+	text-decoration: none;
+}
+#site-description {
+	clear: right;
+	float: right;
+	font-style: italic;
+	margin: 0 0 0 0;
+	width: 220px;
+}
+
+/* This is the custom header image */
+#branding img {
+	border-top: 0px solid #ffffff;
+	border-bottom: 3px solid #ffffff;
+	display: block;
+	float: left;
+}
+
+/* =Content
+-------------------------------------------------------------- */
+#content h2 {
+	color: #000;
+	font-family: Helvetica, sans-serif;
+	font-size: 12pt;
+	line-height: 1.5em;
+	margin: 0 0 20px 0;
+}
+
+.page-title a:link,
+.page-title a:visited {
+	color: #777;
+	text-decoration: none;
+}
+.page-title a:active,
+.page-title a:hover {
+	color: #e1ae0f;
+}
+
+.entry-title a:link,
+.entry-title a:visited {
+	color: #000;
+	text-decoration: none;
+}
+.entry-title a:active,
+.entry-title a:hover {
+	color: #e1ae0f;
+}
+
+.page-link a:link,
+.page-link a:visited {
+	background: #f1f1f1;
+	color: #3faba6;
+	font-weight: normal;
+	padding: 0.5em 0.75em;
+	text-decoration: none;
+}
+.page-link a:active,
+.page-link a:hover {
+	color: #e1ae0f;
+}
+
+.entry-meta a,
+.entry-utility a {
+	color: #777;
+}
+.entry-meta a:hover,
+.entry-utility a:hover {
+	color: #e1ae0f;
+}
+
+/* =Menu
+-------------------------------------------------------------- */
+
+#access {
+	background: #4d4d4d;
+	display: block;
+	float: left;
+	width: 940px;
+}
+#access .menu-header,
+div.menu {
+	font-size: 18px;
+	margin-left: 12px;
+	width: 928px;
+}
+#access .menu-header ul,
+div.menu ul {
+	list-style: none;
+	margin: 0;
+}
+#access .menu-header li,
+div.menu li {
+	float: left;
+	position: relative;
+}
+#access a {
+	color: #ffffff;
+	display: block;
+	line-height: 38px;
+	text-decoration: none;
+}
+#access ul ul {
+	box-shadow: 0px 3px 3px rgba(0,0,0,0.2);
+	-moz-box-shadow: 0px 3px 3px rgba(0,0,0,0.2);
+	-webkit-box-shadow: 0px 3px 3px rgba(0,0,0,0.2);
+	display: none;
+	position: absolute;
+	top: 38px;
+	left: 0;
+	float: left;
+	width: 180px;
+	z-index: 99999;
+}
+#access ul ul li {
+	min-width: 180px;
+}
+#access ul ul ul {
+	left: 100%;
+	top: 0;
+}
+#access ul ul a {
+	background: #333;
+	line-height: 1em;
+	padding: 10px;
+	width: 160px;
+	height: auto;
+}
+#access li:hover > a,
+#access ul ul :hover > a {
+	background: #4d4d4d;
+	color: #e1ae0f;
+}
+#access ul li:hover > ul {
+	display: block;
+	background: #4d4d4d;
+	color: #e1ae0f;
+}
+#access ul li.current_page_item > a,
+#access ul li.current-menu-ancestor > a,
+#access ul li.current-menu-item > a,
+#access ul li.current-menu-parent > a {
+	background: #ffffff;
+	color: #3faba6;
+}
+* html #access ul li.current_page_item a,
+* html #access ul li.current-menu-ancestor a,
+* html #access ul li.current-menu-item a,
+* html #access ul li.current-menu-parent a,
+* html #access ul li a:hover {
+	background: #ffffff;
+	color: #3faba6;
+}
+
+/* = table adjustments
+-------------------------------------------------------------- */
+
+#glenntable {
+    text-align:left;
+}
+
+#glenntable table, th, td{
+border:1px solid #E7E7E7;
+padding:0;
+margin:0 0 0 0; 
+
+}
+
+#jbytable {
+	text-align:left;
+	font-family:Helvetica, sans-serif;
+	border-collapse:collapse;
+}
+
+#jbytable table, th, td{
+	border:1px solid #E7E7E7;
+}
+
+/* = blockquote
+-------------------------------------------------------------- */
+blockquote {
+  font: 1em/1.1em italic;
+  padding: 1em 1em 1em 4em;
+  background-color: #afdfdd;
+  border-top: 1px solid #afdfdd;
+  border-bottom: 1px solid #afdfdd;
+  margin: 2em;
+  }
