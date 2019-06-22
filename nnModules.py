@@ -6,6 +6,7 @@ from math import floor
 import torch.nn.functional as F
 import torch
 from networks.Hul import Hul112Disc, Hulb128Net, Hulb112Disc, Hulbs128Net, Hull112Disc
+# TODO rm (duplicate of networks/nnModules.py)
 
 def init_weights(m):
     if type(m) == nn.Linear:
@@ -192,7 +193,7 @@ class UNet(nn.Module):
         self.find_noise = find_noise
 
     def forward(self, x):
-        if self.find_noise:
+        if hasattr(self, 'find_noise') and self.find_noise:
             y = x
         x1 = self.inc(x)
         x2 = self.down1(x1)
@@ -204,7 +205,7 @@ class UNet(nn.Module):
         x = self.up3(x, x2)
         x = self.up4(x, x1)
         x = self.outc(x)
-        if self.find_noise:
+        if hasattr(self, 'find_noise') and self.find_noise:
             return y - F.sigmoid(x)
         return F.sigmoid(x)
 
