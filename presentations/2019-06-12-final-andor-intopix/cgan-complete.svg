@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
-<svg width="35cm" height="26cm" viewBox="18 -27 697 508" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="35cm" height="26cm" viewBox="18 -27 691 508" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <g>
     <polygon style="fill: none; fill-opacity:0; stroke-width: 0.2; stroke: #000000" points="240,104 301.75,131 301.75,185 240,212 "/>
     <text font-size="12.8" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="270.875" y="154">
@@ -19,7 +19,7 @@
     <polygon style="fill: #ffffff" points="579.79,140 659.581,202.723 579.79,265.445 500,202.723 "/>
     <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="579.79,140 659.581,202.723 579.79,265.445 500,202.723 "/>
     <text font-size="12.8" style="fill: #ffa500;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="579.79" y="206.623">
-      <tspan x="579.79" y="206.623">prediction (real)</tspan>
+      <tspan x="579.79" y="206.623">MSE(prediction)</tspan>
     </text>
   </g>
   <g>
@@ -79,14 +79,9 @@
     <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="37.7639,87.5 27.7639,92.5 30.2639,87.5 27.7639,82.5 "/>
   </g>
   <g>
-    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="472.826,201.56 480,201.56 480,202.722 490.264,202.722 "/>
-    <polygon style="fill: #000000" points="497.764,202.722 487.764,207.722 490.264,202.722 487.764,197.722 "/>
-    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="497.764,202.722 487.764,207.722 490.264,202.722 487.764,197.722 "/>
-  </g>
-  <g>
-    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="659.58,202.722 659.58,320 472.826,320 472.826,330.264 "/>
-    <polygon style="fill: #000000" points="472.826,337.764 467.826,327.764 472.826,330.264 477.826,327.764 "/>
-    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="472.826,337.764 467.826,327.764 472.826,330.264 477.826,327.764 "/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="472.826,201.56 480,201.56 480,202.723 490.264,202.723 "/>
+    <polygon style="fill: #000000" points="497.764,202.723 487.764,207.723 490.264,202.723 487.764,197.723 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="497.764,202.723 487.764,207.723 490.264,202.723 487.764,197.723 "/>
   </g>
   <g>
     <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 301.75 158 C 321.088,158 340.66,170.78 350.264,170.78"/>
@@ -94,26 +89,31 @@
     <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="357.764,170.78 347.764,175.78 350.264,170.78 347.764,165.78 "/>
   </g>
   <g>
-    <polygon style="fill: #ffffff" points="404.414,-25.9869 484.983,37.3479 404.414,100.683 323.844,37.3479 "/>
-    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="404.414,-25.9869 484.983,37.3479 404.414,100.683 323.844,37.3479 "/>
-    <text font-size="12.8" style="fill: #ffa500;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="404.414" y="33.2479">
-      <tspan x="404.414" y="33.2479">Structural</tspan>
-      <tspan x="404.414" y="49.2479">SIMilarity</tspan>
+    <polygon style="fill: #ffffff" points="404.413,-25.9868 484.982,37.348 404.413,100.683 323.844,37.348 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="404.413,-25.9868 484.982,37.348 404.413,100.683 323.844,37.348 "/>
+    <text font-size="12.8" style="fill: #ffa500;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="404.413" y="33.248">
+      <tspan x="404.413" y="33.248">Structural</tspan>
+      <tspan x="404.413" y="49.248">SIMilarity</tspan>
     </text>
   </g>
   <g>
-    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 177.95 87.5 C 178.778,90.2863 191.47,11.4927 354.398,6.00809"/>
-    <polygon style="fill: #000000" points="361.894,5.75576 352.068,11.0894 354.398,6.00809 351.732,1.09503 "/>
-    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="361.894,5.75576 352.068,11.0894 354.398,6.00809 351.732,1.09503 "/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 177.95 87.5 C 178.778,90.2862 191.47,11.4927 354.399,6.00809"/>
+    <polygon style="fill: #000000" points="361.895,5.75577 352.069,11.0894 354.399,6.00809 351.733,1.09503 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="361.895,5.75577 352.069,11.0894 354.399,6.00809 351.733,1.09503 "/>
   </g>
   <g>
-    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 177.95 218.333 C 416.619,248.45 277.093,155.999 357.242,75.8977"/>
-    <polygon style="fill: #000000" points="362.547,70.596 359.009,81.2015 357.242,75.8977 351.94,74.1283 "/>
-    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="362.547,70.596 359.009,81.2015 357.242,75.8977 351.94,74.1283 "/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 177.95 218.334 C 416.62,248.45 277.092,155.999 357.243,75.8977"/>
+    <polygon style="fill: #000000" points="362.548,70.596 359.009,81.2015 357.243,75.8977 351.941,74.1282 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="362.548,70.596 359.009,81.2015 357.243,75.8977 351.941,74.1282 "/>
   </g>
   <g>
-    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 484.983 37.3479 C 530.372,49.8533 977.923,384.02 482.524,340.845"/>
-    <polygon style="fill: #000000" points="475.053,340.194 485.449,336.081 482.524,340.845 484.581,346.043 "/>
-    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="475.053,340.194 485.449,336.081 482.524,340.845 484.581,346.043 "/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke-dasharray: 4; stroke: #000000" d="M 484.982 37.348 C 546,-9 539,96 491.578,44.5096"/>
+    <polygon style="fill: #000000" points="486.497,38.9928 496.949,42.9612 491.578,44.5096 489.594,49.7357 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="486.497,38.9928 496.949,42.9612 491.578,44.5096 489.594,49.7357 "/>
+  </g>
+  <g>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke-dasharray: 4; stroke: #000000" d="M 659.581 202.723 C 726,159 719,260 666.59,209.48"/>
+    <polygon style="fill: #000000" points="661.191,204.274 671.86,207.615 666.59,209.48 664.92,214.814 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="661.191,204.274 671.86,207.615 666.59,209.48 664.92,214.814 "/>
   </g>
 </svg>
