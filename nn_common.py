@@ -258,18 +258,18 @@ class Printer:
                 print('Warning: could not write to log: %s'%e)
 
 def get_crop_boundaries(cs, ucs, network=None, discriminator=None):
-    if '112' in discriminator:
-        loss_crop_lb = int((cs-112)/2)
-        loss_crop_up = cs - loss_crop_lb
-        assert (loss_crop_up - loss_crop_lb) == 112
-    elif network == 'UNet':    # UNet requires huge borders
+    # if '112' in discriminator:
+    #     loss_crop_lb = int((cs-112)/2)
+    #     loss_crop_up = cs - loss_crop_lb
+    #     assert (loss_crop_up - loss_crop_lb) == 112
+    if network == 'UNet':    # UNet requires huge borders
         loss_crop_lb = int(cs/8)
         loss_crop_up = cs-loss_crop_lb
     else:
         loss_crop_lb = int(cs/16)
         loss_crop_up = cs-loss_crop_lb
-    assert (loss_crop_up - loss_crop_lb) >= ucs
     print('Using %s as bounds'%(str((loss_crop_lb, loss_crop_up))))
+    assert (loss_crop_up - loss_crop_lb) <= ucs
     return loss_crop_lb, loss_crop_up
 
 def gen_target_probabilities(target_real, target_probabilities_shape, device=None, invert_probabilities=False, noisy = True):

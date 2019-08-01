@@ -128,7 +128,7 @@ generator = Generator(network=args.g_network, model_path=args.g_model_path, devi
                       lr=args.g_lr, printer=p, compute_SSIM_anyway=args.compute_SSIM_anyway,
                       patience=args.patience, debug_options=debug_options)
 
-crop_boundaries = get_crop_boundaries(DDataset.cs, DDataset.ucs, args.g_network, args.d_network)
+crop_boundaries = get_crop_boundaries(DDataset.cs, DDataset.ucs, network=args.g_network, discriminator=args.d_network)
 
 
 discriminator_predictions = None
