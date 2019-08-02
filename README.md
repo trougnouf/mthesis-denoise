@@ -7,7 +7,7 @@ Master thesis on natural image noise removal using Convolutional Neural Networks
 Requirements: pytorch [, exiftool]
 
 ```
-python3 denoise_image.py --model_dir models/UNet-denoise-G.pth -i <input_image_path> [-o output_image_path]
+python3 denoise_image.py --model_path models/UNet-denoise-G.pth -i <input_image_path> [-o output_image_path]
 ```
 
 ## train
