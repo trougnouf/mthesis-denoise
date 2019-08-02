@@ -21,7 +21,14 @@ default_values = {
     'lr': 0.0003,
     'test_reserve': ['ursulines-red stefantiek', 'ursulines-building', 'MuseeL-Bobo', 'CourtineDeVillersDebris', 'C500D', 'Pen-pile'],
     'patience': 3,
+    'weights': {
+        'SSIM': 0.2,
+        'L1': 0.05,
+        'D1': 0.75,
+        'D2': 0
+    }
 }
+
 
 class Model:
     def __init__(self, save_dict=True, device='cuda:0', printer=None, debug_options=[]):
@@ -89,22 +96,18 @@ class Model:
 
 class Generator(Model):
     def __init__(self, network = default_values['g_network'], model_path = None,
-                 device = 'cuda:0', weight_SSIM=default_values['weight_SSIM'],
-                 weight_L1=default_values['weight_L1'], weight_D2=0, activation='PReLU', funit=32,
+                 device = 'cuda:0', weights=default_values['weights'], activation='PReLU', funit=32,
                  beta1=default_values['beta1'], lr=default_values['lr'], printer=None, compute_SSIM_anyway=False,
                  save_dict=True, patience=default_values['patience'], debug_options=[]):
         Model.__init__(self, save_dict, device, printer, debug_options=[])
-        self.weight_SSIM = weight_SSIM
-        if weight_SSIM > 0 or compute_SSIM_anyway:
+        self.weights = weights
+        if weights['SSIM'] > 0 or compute_SSIM_anyway:
             self.criterion_SSIM = pytorch_ssim.SSIM().to(device)
-        self.weight_L1 = weight_L1
-        if weight_L1 > 0:
+        if weights['L1'] > 0:
             self.criterion_L1 = nn.L1Loss().to(device)
-        self.weight_D = 1 - weight_SSIM - weight_L1 - weight_D2
-        self.weight_D2 = weight_D2
-        if self.weight_D > 0:
+        if weights['D1'] > 0:
             self.criterion_D = nn.MSELoss().to(device)
-        if self.weight_D2 > 0:
+        if weights['D2'] > 0:
             self.criterion_D2 = nn.MSELoss().to(device)
         self.model = self.instantiate_model(model_path=model_path, network=network, pfun=self.print, device=device, funit=funit, keyword='generator')
         self.optimizer = optim.Adam(self.model.parameters(), lr=lr, betas=(beta1, 0.999))
@@ -122,32 +125,32 @@ class Generator(Model):
         return self.model(noisy_batch)
 
     def learn(self, generated_batch_cropped, clean_batch_cropped, discriminator_predictions=None, discriminator2_predictions=None):
-        if self.weight_SSIM > 0 or self.compute_SSIM_anyway:
+        if self.weights['SSIM'] > 0 or self.compute_SSIM_anyway:
             loss_SSIM = self.criterion_SSIM(generated_batch_cropped, clean_batch_cropped)
             loss_SSIM = 1-loss_SSIM
             self.loss['SSIM'] = loss_SSIM.item()
-        if self.weight_SSIM == 0:
+        if self.weights['SSIM'] == 0:
             loss_SSIM = torch.zeros(1).to(self.device)
-        if self.weight_L1 > 0:
+        if self.weights['L1'] > 0:
             loss_L1 = self.criterion_L1(generated_batch_cropped, clean_batch_cropped)
             self.loss['L1'] = loss_L1.item()
         else:
             loss_L1 = torch.zeros(1).to(self.device)
-        if self.weight_D > 0:
+        if self.weights['D1'] > 0:
             loss_D = self.criterion_D(discriminator_predictions,
                                       gen_target_probabilities(True, discriminator_predictions.shape,
                                                                device=self.device, noisy=False))
             self.loss['D'] = math.sqrt(loss_D.item())
         else:
             loss_D = torch.zeros(1).to(self.device)
-        if self.weight_D2 > 0:
+        if self.weights['D2'] > 0:
             loss_D2 = self.criterion_D2(discriminator2_predictions,
                                       gen_target_probabilities(True, discriminator2_predictions.shape,
                                                                device=self.device, noisy=False))
             self.loss['D2'] = math.sqrt(loss_D2.item())
         else:
             loss_D2 = torch.zeros(1).to(self.device)
-        loss = loss_SSIM * self.weight_SSIM + loss_L1 * self.weight_L1 + loss_D * self.weight_D + loss_D2 * self.weight_D2
+        loss = loss_SSIM * self.weights['SSIM'] + loss_L1 * self.weights['L1'] + loss_D * self.weights['D1'] + loss_D2 * self.weights['D2']
         self.loss['weighted'] = loss.item()
         loss.backward()
         self.optimizer.step()
@@ -287,3 +290,36 @@ def gen_target_probabilities(target_real, target_probabilities_shape, device=Non
         return res
     else:
         return res.to(device)
+
+
+def get_weights(args):
+    total = 0
+    weights = {'L1': None, 'SSIM': None, 'D1': None, 'D2': None}
+    if args.weight_SSIM:
+        weights['SSIM'] = args.weight_SSIM
+        total += args.weight_SSIM
+    if args.weight_L1:
+        weights['L1'] = args.weight_L1
+        total += args.weight_L1
+    if args.weight_D1:
+        weights['D1'] = args.weight_D1
+        total += args.weight_D1
+    if args.weight_D2:
+        weights['D2'] = args.weight_D2
+        total += args.weight_D2
+    if not weights['SSIM']:
+        weights['SSIM'] = default_values['weights']['SSIM']
+        total += weights['SSIM']
+    if not weights['L1']:
+        weights['L1'] = min(default_values['weights']['L1'], 1-total)
+        total += weights['L1']
+    if not weights['D1']:
+        weights['D1'] = min(default_values['weights']['D1'], 1-total)
+        total += weights['D1']
+    if not weights['D2']:
+        weights['D2'] = min(default_values['weights']['D2'], 1-total)
+        total += weights['D2']
+    assert sum(weights.values()) == 1
+    print('Loss weights: '+str(weights))
+    return weights
+

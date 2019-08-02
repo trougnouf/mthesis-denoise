@@ -13,7 +13,7 @@ from torch.utils.data import DataLoader
 import torch.backends.cudnn as cudnn
 import random
 import statistics
-from nn_common import default_values, Generator, Discriminator, Printer, get_crop_boundaries
+from nn_common import default_values, Generator, Discriminator, Printer, get_crop_boundaries, get_weights
 
 # Training settings
 
@@ -35,9 +35,10 @@ parser.add_argument('--d2_loss_function', type=str, default='MSE', help='Discrim
 parser.add_argument('--d_lr', type=float, default=default_values['lr'], help='Initial learning rate for adam (discriminator)')
 parser.add_argument('--d2_lr', type=float, default=default_values['lr'], help='Initial learning rate for adam (discriminator)')
 parser.add_argument('--g_lr', type=float, default=default_values['lr'], help='Initial learning rate for adam (generator)')
-parser.add_argument('--weight_SSIM', type=float, default=default_values['weight_SSIM'], help='Weight on SSIM term in objective')
-parser.add_argument('--weight_L1', type=float, default=default_values['weight_L1'], help='Weight on L1 term in objective')
-parser.add_argument('--weight_D2', type=float, default=0, help='Weight on Discriminator 2 term in objective')
+parser.add_argument('--weight_SSIM', type=float, help='Weight on SSIM term in objective')
+parser.add_argument('--weight_L1', type=float, help='Weight on L1 term in objective')
+parser.add_argument('--weight_D1', type=float, help='Weight on Discriminator 1 term in objective')
+parser.add_argument('--weight_D2', type=float, help='Weight on Discriminator 2 term in objective')
 parser.add_argument('--test_reserve', nargs='*', help='Space separated list of image sets to be reserved for testing')
 parser.add_argument('--train_data', nargs='*', help="(space-separated) Path(s) to the pre-cropped training data (default: %s)"%(" ".join(default_values['train_data'])))
 parser.add_argument('--debug_options', nargs='*', help="(space-separated) Debug options (available: discriminator_input)")
@@ -79,6 +80,10 @@ if args.debug_options is None or args.debug_options == []:
 else:
     debug_options = args.debug_options
 
+weights = get_weights(args)
+use_D = weights['D1'] > 0
+use_D2 = weights['D2'] > 0
+
 
 def crop_batch(batch, boundaries):
     return batch[:, :, boundaries[0]:boundaries[1], boundaries[0]:boundaries[1]]
@@ -104,9 +109,7 @@ p.print("cmd: python3 "+" ".join(sys.argv))
 DDataset = DenoisingDataset(train_data, test_reserve=test_reserve)
 data_loader = DataLoader(dataset=DDataset, num_workers=args.threads, drop_last=True,
                          batch_size=args.batch_size, shuffle=True)
-# TODO make this optional
-use_D = (args.weight_SSIM + args.weight_L1 + args.weight_D2) < 1
-use_D2 = args.weight_D2 > 0
+
 if use_D:
     discriminator = Discriminator(network=args.d_network, model_path=args.d_model_path,
                                   device=device, loss_function=args.d_loss_function,
@@ -121,9 +124,7 @@ if use_D2:
                                   beta1=args.beta1, lr=args.d2_lr,
                                   not_conditional=args.not_conditional_2, printer=p,
                                   patience=args.patience, debug_options=debug_options)
-generator = Generator(network=args.g_network, model_path=args.g_model_path, device=device,
-                      weight_SSIM=args.weight_SSIM, weight_L1=args.weight_L1,
-                      weight_D2 = args.weight_D2,
+generator = Generator(network=args.g_network, model_path=args.g_model_path, device=device,weights=weights,
                       activation=args.g_activation, funit=args.g_funit, beta1=args.beta1,
                       lr=args.g_lr, printer=p, compute_SSIM_anyway=args.compute_SSIM_anyway,
                       patience=args.patience, debug_options=debug_options)
