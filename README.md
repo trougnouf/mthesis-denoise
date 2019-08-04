@@ -21,7 +21,7 @@ python3 dl_ds_1.py --use_wget   # --use_wget is much less likely to result in ha
 python3 crop_ds.py              # this will take a long time. Do python3 crop_ds.py --cs 128 --ucs 96 with U-Net model to use all data
 # batch_size 94 is for a 11GB NVidia 1080, use a lower batch_size if less memory is available
 # train a single U-Net generator:
-python3 nn_train.py --g_network UNet --weight_SSIM 1 --batch_size 60
+python3 nn_train.py --g_network UNet --weight_SSIM 1 --batch_size 60 --train_data datasets/train/NIND_128_96
 # train a HulbNet generator and HulfDisc discriminator
 python3 nn_train.py --d_network Hulf112Disc --batch_size 10
 # list options
