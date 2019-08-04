@@ -7,7 +7,7 @@ Master thesis on natural image noise removal using Convolutional Neural Networks
 Requirements: pytorch [, exiftool]
 
 ```
-python3 denoise_image.py --model_path models/UNet-denoise-G.pth -i <input_image_path> [-o output_image_path]
+python3 denoise_image.py python3 denoise_image.py --model_path models/[model.pth] -i <input_image_path> [-o output_image_path]
 ```
 
 ## train
@@ -18,7 +18,7 @@ Note that cropping png files is currently extremely slow, therefore you may want
 
 ```bash
 python3 dl_ds_1.py --use_wget   # --use_wget is much less likely to result in half-downloaded files
-python3 crop_ds.py              # this will take a long time
+python3 crop_ds.py              # this will take a long time. Do python3 crop_ds.py --cs 128 --ucs 96 with U-Net model to use all data
 # batch_size 94 is for a 11GB NVidia 1080, use a lower batch_size if less memory is available
 # train a single U-Net generator:
 python3 nn_train.py --g_network UNet --weight_SSIM 1 --batch_size 60
