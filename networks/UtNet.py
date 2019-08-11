@@ -3,6 +3,7 @@ from torch import nn
 import torch
 
 # U-Net with transposed convolutions (consistent shape). Also w/dense concat connections (UtdNet)
+# ((((INPUTSIZE+2*BUILTINPADDING−4)÷2−4)÷2−4)÷2−4)÷2−2
 
 class UtNet(nn.Module):
     def __init__(self, funit = 64, out_activation = 'PReLU'):
@@ -163,3 +164,12 @@ class UtdNet(nn.Module):
         l = self.tconvs4(l)
         l = self.unpad(l)
         return l
+    
+def testNets():
+    at = torch.rand(10,3,136,136)
+    net = UtNet()
+    res = net(at)
+    assert at.shape == res.shape
+    net = UtdNet()
+    res = net(at)
+    assert at.shape == res.shape
