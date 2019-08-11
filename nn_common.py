@@ -7,8 +7,10 @@ import math
 import torchvision
 #from networks.p2p_networks import define_D
 import os
+import time
 from networks.Hul import Hulb128Net, Hul112Disc, Hulf112Disc
 from networks.ThirdPartyNets import PatchGAN, UNet
+from networks.UtNet import UtNet, UtdNet
 
 default_values = {
     'g_network': 'Hulb128Net',
@@ -62,7 +64,7 @@ class Model:
         elif os.path.isdir(path):
             return os.path.join(path, find_highest(os.listdir(path), keyword))
         elif os.path.isdir(os.path.join('models', path)):
-            return complete_path(os.path.join('models', path), keyword)
+            return Model.complete_path(os.path.join('models', path), keyword)
         else:
             print("Model path not found: %s"%path)
             exit(0)
@@ -267,6 +269,9 @@ def get_crop_boundaries(cs, ucs, network=None, discriminator=None):
     #     assert (loss_crop_up - loss_crop_lb) == 112
     if network == 'UNet':    # UNet requires huge borders
         loss_crop_lb = int(cs/8)
+        loss_crop_up = cs-loss_crop_lb
+    elif network == 'UtNet' or network == 'UtdNet': # mirrored in-net
+        loss_crop_lb = max(1,int(cs/32))
         loss_crop_up = cs-loss_crop_lb
     else:
         loss_crop_lb = int(cs/16)
