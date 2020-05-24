@@ -9,7 +9,7 @@ This repository contains many files from my master thesis. It is unnecessarily l
 Requirements: pytorch [, exiftool]
 
 ```
-python3 denoise_image.py python3 denoise_image.py --model_path models/[model.pth] -i <input_image_path> [-o output_image_path]
+python3 denoise_image.py --model_path models/[model.pth] -i <input_image_path> [-o output_image_path]
 ```
 
 ## train
