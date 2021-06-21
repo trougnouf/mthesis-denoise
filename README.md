@@ -2,7 +2,7 @@
 
 Master thesis on natural image noise removal using Convolutional Neural Networks. Works with the Natural Image Noise Dataset to apply to real photographs, using a UNet network architecture by default.
 
-This repository contains many files from my master thesis. It is unnecessarily large for any productive work, and is no longer maintained. **https://github.com/trougnouf/nind-denoise** is a lighter repository which should be closed instead going forward.
+This repository contains many files from my master thesis. It is unnecessarily large for any productive work, and is no longer maintained. **https://github.com/trougnouf/nind-denoise** is a lighter repository which should be used instead going forward.
 
 ## test (denoise an image)
 
